@@ -1,9 +1,17 @@
-function Dashboard() {
+import PageHeader from "../../components/dashboard/PageHeader";
+import StatGrid from "../../components/dashboard/StatGrid";
+
+const Dashboard = () => {
   return (
-    <div className="p-6 text-white">
-      <h1 className="text-3xl font-bold">Dashboard</h1>
+    <div className="space-y-8">
+      <PageHeader
+        title="Crime Analytics Dashboard"
+        subtitle="Operational Crime Analytics & AI Intelligence Overview"
+      />
+
+      <StatGrid />
     </div>
   );
-}
+};
 
 export default Dashboard;
