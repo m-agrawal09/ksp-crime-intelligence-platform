@@ -1,82 +1,118 @@
 import { NavLink } from "react-router-dom";
 import {
-  HiOutlineHome,
-  HiOutlineDocumentReport,
-} from "react-icons/hi";
-import { MdOutlineInsights } from "react-icons/md";
-import { FiMap, FiSettings } from "react-icons/fi";
-import { LuChartSpline } from "react-icons/lu";
-import { PiRobotBold } from "react-icons/pi";
-import { FaUserShield } from "react-icons/fa6";
+  RiDashboardLine,
+  RiBrainLine,
+  RiRobot2Line,
+  RiSettings4Line,
+} from "react-icons/ri";
+import { TbMapSearch, TbChartLine } from "react-icons/tb";
+import { MdOutlineAdminPanelSettings } from "react-icons/md";
+import { HiOutlineDocumentChartBar } from "react-icons/hi2";
+import { PiShieldStarFill } from "react-icons/pi";
 
 const menuItems = [
   {
     name: "Dashboard",
     path: "/",
-    icon: HiOutlineHome,
+    icon: RiDashboardLine,
   },
   {
     name: "AI Insights",
     path: "/insights",
-    icon: MdOutlineInsights,
+    icon: RiBrainLine,
   },
   {
     name: "Crime Map",
     path: "/map",
-    icon: FiMap,
+    icon: TbMapSearch,
   },
   {
     name: "Trend Forecast",
     path: "/forecast",
-    icon: LuChartSpline,
+    icon: TbChartLine,
   },
   {
     name: "Officer Performance",
     path: "/officers",
-    icon: FaUserShield,
+    icon: MdOutlineAdminPanelSettings,
   },
   {
     name: "AI Assistant",
     path: "/assistant",
-    icon: PiRobotBold,
+    icon: RiRobot2Line,
   },
   {
     name: "Reports",
     path: "/reports",
-    icon: HiOutlineDocumentReport,
+    icon: HiOutlineDocumentChartBar,
   },
   {
     name: "Settings",
     path: "/settings",
-    icon: FiSettings,
+    icon: RiSettings4Line,
   },
 ];
 
 function Sidebar() {
   return (
-    <aside className="w-72 border-r border-slate-800 bg-slate-900">
-      <nav className="flex flex-col gap-2 p-4">
-        {menuItems.map((item) => {
-          const Icon = item.icon;
+    <aside className="flex h-[calc(100vh-64px)] w-72 flex-col border-r border-[var(--color-border)] bg-[var(--color-sidebar)]">
 
-          return (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              className={({ isActive }) =>
-                `flex items-center gap-3 rounded-lg px-4 py-3 transition ${
-                  isActive
-                    ? "bg-blue-600 text-white"
-                    : "text-slate-300 hover:bg-slate-800 hover:text-white"
-                }`
-              }
-            >
-              <Icon className="text-xl" />
-              <span>{item.name}</span>
-            </NavLink>
-          );
-        })}
+      {/* Logo */}
+      <div className="border-b border-[var(--color-border)] px-6 py-6">
+        <div className="flex items-center gap-3">
+          <PiShieldStarFill className="text-4xl text-[var(--color-primary)]" />
+
+          <div>
+            <h2 className="text-xl font-bold text-[var(--color-text)]">
+              KSP
+            </h2>
+
+            <p className="text-xs uppercase tracking-widest text-[var(--color-text-muted)]">
+              Crime Intelligence
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Navigation */}
+      <nav className="flex-1 px-3 py-4">
+        <div className="space-y-2">
+          {menuItems.map((item) => {
+            const Icon = item.icon;
+
+            return (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                className={({ isActive }) =>
+                  `flex items-center gap-4 rounded-xl px-4 py-3.5 text-base font-medium transition-all duration-200 ${
+                    isActive
+                      ? "bg-[var(--color-primary)] text-white"
+                      : "text-[var(--color-text-muted)] hover:bg-[var(--color-card)] hover:text-white"
+                  }`
+                }
+              >
+                <Icon className="text-2xl" />
+
+                <span>{item.name}</span>
+              </NavLink>
+            );
+          })}
+        </div>
       </nav>
+
+      {/* Footer */}
+      <div className="border-t border-[var(--color-border)] p-5">
+        <div className="rounded-xl bg-[var(--color-card)] p-4">
+          <p className="text-sm font-semibold text-[var(--color-text)]">
+            Catalyst
+          </p>
+
+          <p className="mt-1 text-xs text-green-400">
+            ● Connected
+          </p>
+        </div>
+      </div>
     </aside>
   );
 }

@@ -1,0 +1,47 @@
+
+/* ============================
+   Police Command Center Theme
+============================ */
+
+:root {
+  /* Backgrounds */
+  --color-background: #020617;
+  --color-surface: #0f172a;
+  --color-sidebar: #111827;
+  --color-navbar: #0b1220;
+  --color-card: #1e293b;
+
+  /* Text */
+  --color-text: #f8fafc;
+  --color-text-muted: #94a3b8;
+
+  /* Brand */
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+
+  /* Status */
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+
+  /* Border */
+  --color-border: #334155;
+
+  /* Radius */
+  --radius-card: 16px;
+
+  /* Shadow */
+  --shadow-card: 0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: Inter, sans-serif;
+}
