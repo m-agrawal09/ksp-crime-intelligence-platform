@@ -1,5 +1,9 @@
 import PageHeader from "../../components/dashboard/PageHeader";
 import StatGrid from "../../components/dashboard/StatGrid";
+import TrendChart from "../../components/dashboard/TrendChart";
+
+import dashboardStats from "../../data/dashboardStats";
+import crimeTrend from "../../data/crimeTrend";
 
 const Dashboard = () => {
   return (
@@ -9,7 +13,9 @@ const Dashboard = () => {
         subtitle="Operational Crime Analytics & AI Intelligence Overview"
       />
 
-      <StatGrid />
+      <StatGrid stats={dashboardStats} />
+
+      <TrendChart data={crimeTrend} />
     </div>
   );
 };
