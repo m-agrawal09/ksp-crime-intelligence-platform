@@ -33,15 +33,15 @@ const RecentCriticalCases = ({ cases }) => {
   };
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5 flex flex-col h-[460px]">
-      <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+    <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-6 sm:p-8 flex flex-col h-[500px] shadow-lg">
+      <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
         <div className="flex items-center gap-2">
           <FaClipboardList className="text-blue-400 text-lg" />
-          <h2 className="text-md font-bold text-white uppercase tracking-wider">
+          <h2 className="text-sm font-bold text-white uppercase tracking-wider">
             Critical CCTNS Case Feed
           </h2>
         </div>
-        <span className="rounded-full bg-slate-800 px-2.5 py-0.5 font-mono text-[10px] text-slate-400">
+        <span className="rounded-full bg-slate-800 px-3 py-1 font-mono text-[10px] text-slate-400">
           Source: CaseMaster
         </span>
       </div>
@@ -50,12 +50,12 @@ const RecentCriticalCases = ({ cases }) => {
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="border-b border-slate-800 text-[10px] font-mono text-slate-500 uppercase tracking-wider">
-              <th className="py-2.5 px-3">Crime Number / CaseNo</th>
-              <th className="py-2.5 px-3">Jurisdiction (Unit)</th>
-              <th className="py-2.5 px-3">Sections & Acts</th>
-              <th className="py-2.5 px-3">Status</th>
-              <th className="py-2.5 px-3 text-right">Risk Index</th>
-              <th className="py-2.5 px-3 text-center">Inspect</th>
+              <th className="py-4 px-4">Crime Number / CaseNo</th>
+              <th className="py-4 px-4">Jurisdiction (Unit)</th>
+              <th className="py-4 px-4">Sections & Acts</th>
+              <th className="py-4 px-4">Status</th>
+              <th className="py-4 px-4 text-right">Risk Index</th>
+              <th className="py-4 px-4 text-center">Inspect</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-800/40 text-xs font-mono">
@@ -66,37 +66,37 @@ const RecentCriticalCases = ({ cases }) => {
                 <React.Fragment key={c.CaseMasterID}>
                   {/* Standard Row */}
                   <tr className="hover:bg-slate-800/30 transition-colors group">
-                    <td className="py-3 px-3">
+                    <td className="py-4 px-4">
                       <div className="font-bold text-slate-200 group-hover:text-blue-400 transition-colors">
                         {c.CaseNo}
                       </div>
-                      <div className="text-[9px] text-slate-500 mt-0.5 select-all">
+                      <div className="text-[9px] text-slate-500 mt-1 select-all">
                         {c.CrimeNo}
                       </div>
                     </td>
-                    <td className="py-3 px-3 text-slate-300">
+                    <td className="py-4 px-4 text-slate-300">
                       <div>{c.UnitName.replace(" Police Station", " PS")}</div>
-                      <div className="text-[9px] text-slate-500 mt-0.5">{c.DistrictName}</div>
+                      <div className="text-[9px] text-slate-500 mt-1">{c.DistrictName}</div>
                     </td>
-                    <td className="py-3 px-3">
-                      <div className="text-slate-300 max-w-[200px] truncate" title={c.act_sections}>
+                    <td className="py-4 px-4">
+                      <div className="text-slate-300 max-w-[280px] truncate" title={c.act_sections}>
                         {c.act_sections}
                       </div>
-                      <div className="text-[9px] text-slate-500 mt-0.5 flex items-center gap-1">
+                      <div className="text-[9px] text-slate-500 mt-1 flex items-center gap-1.5">
                         <FaCalendarAlt className="text-[8px]" /> Filed: {c.CrimeRegisteredDate}
                       </div>
                     </td>
-                    <td className="py-3 px-3">
+                    <td className="py-4 px-4">
                       <span className={`rounded-full px-2.5 py-0.5 text-[9px] tracking-wide ${getStatusColor(c.CaseStatusName)}`}>
                         {c.CaseStatusName}
                       </span>
                     </td>
-                    <td className="py-3 px-3 text-right">
+                    <td className="py-4 px-4 text-right">
                       <span className={`rounded px-1.5 py-0.5 text-[9px] tracking-wider ${getRiskBadge(c.risk_index)}`}>
                         {c.risk_index}
                       </span>
                     </td>
-                    <td className="py-3 px-3 text-center">
+                    <td className="py-4 px-4 text-center">
                       <button
                         onClick={() => toggleExpand(c.CaseMasterID)}
                         className="p-1 rounded bg-slate-800/60 hover:bg-slate-700/80 text-slate-400 hover:text-white transition-colors"
@@ -109,20 +109,20 @@ const RecentCriticalCases = ({ cases }) => {
                   {/* Expanded Inspector Drawer */}
                   {isExpanded && (
                     <tr>
-                      <td colSpan={6} className="bg-slate-950/80 px-5 py-4 border-l-2 border-l-blue-500">
+                      <td colSpan={6} className="bg-slate-950/80 px-6 py-5 border-l-4 border-l-blue-500">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 font-mono text-[11px] leading-relaxed text-slate-300">
                           {/* Case Briefing */}
                           <div className="md:col-span-2 space-y-2">
                             <span className="text-[10px] font-bold text-blue-400 uppercase tracking-wider block">
                               Case Briefing (BriefFacts)
                             </span>
-                            <p className="text-slate-400 bg-slate-900/40 p-2.5 rounded border border-slate-900">
+                            <p className="text-slate-400 bg-slate-900/40 p-3 rounded border border-slate-900">
                               {c.BriefFacts}
                             </p>
                           </div>
 
                           {/* Operational Assignments */}
-                          <div className="space-y-3 bg-slate-900/20 p-2 rounded border border-slate-900/50">
+                          <div className="space-y-3 bg-slate-900/20 p-3 rounded border border-slate-900/50">
                             <div>
                               <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block">
                                 Investigating Officer (IO)
@@ -134,7 +134,7 @@ const RecentCriticalCases = ({ cases }) => {
                               <span className="text-[9px] text-slate-500 block pl-4">KGID: {c.investigating_officer.KGID}</span>
                             </div>
 
-                            <div className="border-t border-slate-850 pt-2">
+                            <div className="border-t border-slate-850 pt-2.5">
                               <span className="text-[9px] font-bold text-slate-500 uppercase tracking-wider block">
                                 Suspects / Accused
                               </span>

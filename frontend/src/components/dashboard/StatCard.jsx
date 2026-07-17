@@ -17,7 +17,7 @@ const StatCard = ({
 
   return (
     <div
-      className={`relative overflow-hidden rounded-xl border border-slate-800 bg-slate-900/60 p-5 transition-all duration-300 hover:border-slate-700 hover:bg-slate-900/90 ${borderColor} border-l-4`}
+      className={`relative overflow-hidden rounded-xl border border-slate-800 bg-slate-900/60 p-6 lg:p-7 transition-all duration-300 hover:border-slate-700 hover:bg-slate-900/90 ${borderColor} border-l-4`}
       onMouseEnter={() => setShowMetadata(true)}
       onMouseLeave={() => setShowMetadata(false)}
     >
@@ -48,7 +48,7 @@ const StatCard = ({
 
       {/* Operational Metadata Panel (appears on hover) */}
       <div
-        className={`absolute inset-0 flex flex-col justify-between bg-slate-950/95 p-5 transition-all duration-300 ${
+        className={`absolute inset-0 flex flex-col justify-between bg-slate-950/95 p-6 lg:p-7 transition-all duration-300 ${
           showMetadata ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
         }`}
       >

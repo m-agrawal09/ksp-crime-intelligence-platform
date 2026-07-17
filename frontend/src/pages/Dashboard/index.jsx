@@ -3,7 +3,6 @@ import PageHeader from "../../components/dashboard/PageHeader";
 import StatGrid from "../../components/dashboard/StatGrid";
 import TrendChart from "../../components/dashboard/TrendChart";
 import CrimeCategoryChart from "../../components/dashboard/CrimeCategoryChart";
-import AIAlertsList from "../../components/dashboard/AIAlertsList";
 import RecentCriticalCases from "../../components/dashboard/RecentCriticalCases";
 import QuickActionsPanel from "../../components/dashboard/QuickActionsPanel";
 import { fetchDashboardData } from "../../services/dashboardService";
@@ -70,7 +69,7 @@ const Dashboard = () => {
   const { kpi_metrics, crime_trends, crime_distribution, ai_alerts, recent_critical_cases } = dashboardData;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 md:space-y-10 lg:space-y-12">
       {/* 1. Header Area */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <PageHeader
@@ -129,7 +128,7 @@ const Dashboard = () => {
       <StatGrid metrics={kpi_metrics} />
 
       {/* 4. Chart Row: Crime Trend (2/3) and Crime Category Distribution (1/3) */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <TrendChart data={crime_trends} />
         </div>
@@ -138,14 +137,9 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* 5. Details Row: AI Alerts (1/3) and Recent Critical Cases (2/3) */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-1">
-          <AIAlertsList alerts={ai_alerts} />
-        </div>
-        <div className="lg:col-span-2">
-          <RecentCriticalCases cases={recent_critical_cases} />
-        </div>
+      {/* 5. Details Row: Recent Critical Cases (Full Width) */}
+      <div className="w-full">
+        <RecentCriticalCases cases={recent_critical_cases} />
       </div>
 
       {/* 6. Command Console Panel */}

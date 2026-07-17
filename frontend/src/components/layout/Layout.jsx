@@ -10,7 +10,7 @@ function Layout() {
       <div className="flex">
         <Sidebar />
 
-        <main className="flex-1 overflow-auto p-6">
+        <main className="flex-1 overflow-auto p-6 md:p-8 lg:p-10">
           <Outlet />
         </main>
       </div>
