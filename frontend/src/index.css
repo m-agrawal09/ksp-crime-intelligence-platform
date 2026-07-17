@@ -1,2 +1,30 @@
 @import "tailwindcss";
 @import "./styles/theme.css";
+
+/* ====================================================
+   Custom Overrides for Dark-themed Leaflet Popups
+   ==================================================== */
+.dark-popup .leaflet-popup-content-wrapper {
+  background-color: #0f172a !important; /* bg-slate-900 */
+  color: #f8fafc !important; /* text-slate-50 */
+  border: 1px solid #334155 !important; /* border-slate-700 */
+  border-radius: 12px !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5) !important;
+  padding: 4px !important;
+}
+
+.dark-popup .leaflet-popup-tip {
+  background-color: #0f172a !important;
+  border-left: 1px solid #334155 !important;
+  border-bottom: 1px solid #334155 !important;
+}
+
+.dark-popup .leaflet-popup-close-button {
+  color: #94a3b8 !important;
+  font-size: 14px !important;
+  padding: 8px !important;
+}
+
+.dark-popup .leaflet-popup-close-button:hover {
+  color: #ffffff !important;
+}
