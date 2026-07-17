@@ -61,6 +61,9 @@ const CustomPieTooltip = ({ active, payload }) => {
 };
 
 const OfficerCharts = ({ monthlyTrend, categoryDistribution }) => {
+  const totalCases = categoryDistribution.reduce((sum, item) => sum + item.value, 0);
+  const sortedCategories = [...categoryDistribution].sort((a, b) => b.value - a.value);
+
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
       
@@ -148,15 +151,16 @@ const OfficerCharts = ({ monthlyTrend, categoryDistribution }) => {
           title="Distribution by Crime Head"
           subtitle="Workload breakdown by crime classification"
         >
-          <div className="h-80 w-full flex items-center justify-center">
+          {/* Donut Container with Centered Total Case Count */}
+          <div className="relative h-60 w-full flex items-center justify-center">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
                   data={categoryDistribution}
                   cx="50%"
-                  cy="45%"
-                  innerRadius={65}
-                  outerRadius={85}
+                  cy="50%"
+                  innerRadius={70}
+                  outerRadius={90}
                   paddingAngle={4}
                   dataKey="value"
                 >
@@ -165,21 +169,39 @@ const OfficerCharts = ({ monthlyTrend, categoryDistribution }) => {
                   ))}
                 </Pie>
                 <Tooltip content={<CustomPieTooltip />} />
-                <Legend
-                  verticalAlign="bottom"
-                  align="center"
-                  iconType="circle"
-                  iconSize={7}
-                  layout="horizontal"
-                  wrapperStyle={{
-                    fontSize: "9px",
-                    fontFamily: "monospace",
-                    color: "#94a3b8",
-                    paddingTop: "10px"
-                  }}
-                />
               </PieChart>
             </ResponsiveContainer>
+            
+            <div className="absolute flex flex-col items-center justify-center font-mono select-none pointer-events-none text-center">
+              <span className="text-2xl font-bold text-white leading-none">
+                {totalCases}
+              </span>
+              <span className="text-[9px] text-slate-500 uppercase tracking-widest mt-1.5 font-semibold">
+                Total Cases
+              </span>
+            </div>
+          </div>
+
+          {/* Ranked Summary Table of Categories */}
+          <div className="mt-4 border-t border-slate-800/80 pt-4 space-y-2.5 font-mono text-[11px]">
+            {sortedCategories.map((item) => {
+              const pct = totalCases > 0 ? Math.round((item.value / totalCases) * 100) : 0;
+              return (
+                <div key={item.name} className="flex justify-between items-center gap-2">
+                  <div className="flex items-center gap-2 truncate">
+                    <span
+                      className="h-1.5 w-1.5 rounded-full flex-shrink-0"
+                      style={{ backgroundColor: item.color }}
+                    />
+                    <span className="text-slate-300 truncate">{item.name}</span>
+                  </div>
+                  <span className="text-slate-800 flex-1 border-b border-dotted border-slate-800/80 mx-1 min-w-[8px]" />
+                  <span className="text-white font-bold flex-shrink-0">
+                    {item.value} <span className="text-slate-400 font-normal">({pct}%)</span>
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </ChartCard>
       </div>
