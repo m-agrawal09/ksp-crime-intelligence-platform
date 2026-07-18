@@ -69,7 +69,7 @@ const QuickActionsPanel = () => {
       icon: FaFingerprint,
       color: "text-rose-400 border-rose-500/10 hover:border-rose-500/40 hover:bg-rose-500/5 hover:shadow-rose-500/5",
       desc: "Correlate CrimeSubHead MOs against known ArrestSurrender profiles.",
-      path: "/forecast"
+      path: "/insights-forecast"
     },
     {
       id: "export_report",

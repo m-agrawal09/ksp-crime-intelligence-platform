@@ -31,7 +31,7 @@ const StatCard = ({
           </h2>
         </div>
         <div className={`rounded-lg bg-slate-800/40 p-2.5 ${color}`}>
-          <Icon className="text-xl" />
+          {Icon ? <Icon className="text-xl" /> : <FaInfoCircle className="text-xl" />}
         </div>
       </div>
 

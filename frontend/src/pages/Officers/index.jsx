@@ -1,26 +1,89 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import PageHeader from "../../components/dashboard/PageHeader";
 import OfficerHeader from "../../components/officers/OfficerHeader";
+import OfficerFilters from "../../components/officers/OfficerFilters";
+import OfficerOfTheMonthCard from "../../components/officers/OfficerOfTheMonthCard";
 import OfficerKpis from "../../components/officers/OfficerKpis";
 import OfficerCharts from "../../components/officers/OfficerCharts";
 import OfficerTimeline from "../../components/officers/OfficerTimeline";
 import OfficerWorkload from "../../components/officers/OfficerWorkload";
 import OfficerSummary from "../../components/officers/OfficerSummary";
+import AddOfficerModal from "../../components/officers/AddOfficerModal";
 import { officerService } from "../../services/officerService";
+import { recordService } from "../../services/recordService";
+import { useAuth } from "../../context/AuthContext";
+import { FaUserPlus } from "react-icons/fa";
 
 const Officers = () => {
   const [officerList, setOfficerList] = useState([]);
   const [selectedBadge, setSelectedBadge] = useState("");
   const [profile, setProfile] = useState(null);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-  // Load officer options on mount
-  useEffect(() => {
+  const [filters, setFilters] = useState({
+    search: "",
+    unit: "",
+    rank: "",
+    minClearance: ""
+  });
+
+  const { currentUser, isAdmin, registerOfficer } = useAuth();
+
+  const handleFilterChange = (name, value) => {
+    setFilters((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleResetFilters = () => {
+    setFilters({
+      search: "",
+      unit: "",
+      rank: "",
+      minClearance: ""
+    });
+  };
+
+  const reloadOfficerList = () => {
     const list = officerService.getOfficers();
     setOfficerList(list);
+    return list;
+  };
+
+  // Load officer options on mount & restrict based on role
+  useEffect(() => {
+    const list = reloadOfficerList();
     if (list.length > 0) {
-      setSelectedBadge(list[0].badgeNumber);
+      if (!isAdmin && currentUser) {
+        // Officer Mode: Find current officer's own badge number
+        const match = list.find(
+          (o) =>
+            o.badgeNumber === currentUser.badge ||
+            o.badgeNumber === currentUser.kgid ||
+            o.name.toLowerCase().includes(currentUser.name.toLowerCase())
+        );
+
+        if (match) {
+          setSelectedBadge(match.badgeNumber);
+        } else {
+          // If custom officer created without preset profile, auto-initialize
+          const newProf = officerService.addOfficer({
+            name: currentUser.name,
+            rank: currentUser.rank || "Police Inspector",
+            badgeNumber: currentUser.badge || currentUser.kgid,
+            unit: currentUser.unit || "State Range",
+            station: "Karnataka Police Command",
+            yearsOfService: "5",
+            specialArea: "Field Operations & Cyber Intelligence",
+            avatar: currentUser.avatar
+          });
+          reloadOfficerList();
+          setSelectedBadge(newProf.badgeNumber);
+        }
+      } else if (!selectedBadge) {
+        // Admin Mode: Default to first officer if not selected
+        setSelectedBadge(list[0].badgeNumber);
+      }
     }
-  }, []);
+  }, [isAdmin, currentUser]);
 
   // Sync profile when selected officer changes
   useEffect(() => {
@@ -29,6 +92,69 @@ const Officers = () => {
       setProfile(data);
     }
   }, [selectedBadge]);
+
+  const handleAddOfficer = (formData) => {
+    // 1. Create officer profile in database
+    const newProfile = officerService.addOfficer(formData);
+
+    // 2. Register officer user account in auth service
+    registerOfficer({
+      ...formData,
+      badge: newProfile.badgeNumber,
+      kgid: newProfile.badgeNumber
+    });
+
+    // 3. Reload list & select new officer
+    reloadOfficerList();
+    setSelectedBadge(newProfile.badgeNumber);
+  };
+
+  const filteredOfficerList = useMemo(() => {
+    return officerList.filter((off) => {
+      const prof = officerService.getOfficerProfile(off.badgeNumber);
+      if (!prof) return false;
+
+      if (filters.search) {
+        const q = filters.search.toLowerCase().trim();
+        const matchName = prof.name.toLowerCase().includes(q);
+        const matchBadge = prof.badgeNumber.toLowerCase().includes(q);
+        if (!matchName && !matchBadge) return false;
+      }
+
+      if (filters.unit && !prof.unit.toLowerCase().includes(filters.unit.toLowerCase())) {
+        return false;
+      }
+
+      if (filters.rank && !prof.rank.toLowerCase().includes(filters.rank.toLowerCase())) {
+        return false;
+      }
+
+      if (filters.minClearance) {
+        const rate = prof.kpis.chargesheetRate || 0;
+        if (filters.minClearance === "below80") {
+          if (rate >= 80) return false;
+        } else {
+          if (rate < Number(filters.minClearance)) return false;
+        }
+      }
+
+      return true;
+    });
+  }, [officerList, filters]);
+
+  const uniqueRanks = useMemo(() => Array.from(new Set(officerList.map((o) => o.rank).filter(Boolean))), [officerList]);
+  const uniqueUnits = useMemo(() => Array.from(new Set(officerList.map((o) => o.unit).filter(Boolean))), [officerList]);
+  const officerOfTheMonth = useMemo(() => officerService.getOfficerOfTheMonth(), [officerList]);
+
+  // Keep selectedBadge aligned with filtered list
+  useEffect(() => {
+    if (filteredOfficerList.length > 0) {
+      const exists = filteredOfficerList.some((o) => o.badgeNumber === selectedBadge);
+      if (!exists && isAdmin) {
+        setSelectedBadge(filteredOfficerList[0].badgeNumber);
+      }
+    }
+  }, [filteredOfficerList, selectedBadge, isAdmin]);
 
   if (!profile) {
     return (
@@ -46,16 +172,41 @@ const Officers = () => {
   return (
     <div className="space-y-6 md:space-y-8">
       {/* Page Title Header */}
-      <PageHeader
-        title="Officer Performance Center"
-        subtitle="Operational evaluation of investigation case logs, trial schedules, and resolution metrics"
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <PageHeader
+          title="Officer Performance Center"
+          subtitle="Operational evaluation of investigation case logs, trial schedules, and resolution metrics"
+        />
+
+        {isAdmin && (
+          <button
+            onClick={() => setIsAddModalOpen(true)}
+            className="flex items-center gap-2 rounded-xl bg-purple-600 px-5 py-3 text-xs font-mono font-bold uppercase tracking-wider text-white shadow-lg shadow-purple-500/20 hover:bg-purple-500 transition-all self-start md:self-auto active:scale-95"
+          >
+            <FaUserPlus className="text-base" />
+            <span>Add New Officer</span>
+          </button>
+        )}
+      </div>
+
+      {/* Officer of the Month Spotlight Banner */}
+      <OfficerOfTheMonthCard officer={officerOfTheMonth} />
+
+      {/* Multi-Criteria Filters Bar (Admin & Officer view) */}
+      <OfficerFilters
+        filters={filters}
+        onFilterChange={handleFilterChange}
+        onReset={handleResetFilters}
+        ranks={uniqueRanks}
+        units={uniqueUnits}
       />
 
       {/* 1. Officer Dossier Profile & Selector */}
       <OfficerHeader
         profile={profile}
-        officerList={officerList}
+        officerList={filteredOfficerList}
         onOfficerChange={setSelectedBadge}
+        allowSelector={isAdmin}
       />
 
       {/* 2. Key Operational Performance Metrics */}
@@ -80,6 +231,13 @@ const Officers = () => {
         <OfficerSummary summary={profile.summary} />
         
       </div>
+
+      {/* Add New Officer Modal (Admin right) */}
+      <AddOfficerModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onAdd={handleAddOfficer}
+      />
     </div>
   );
 };

@@ -4,43 +4,44 @@ const path = require("path");
 const fs = require("fs");
 
 // Register mock zcatalyst-sdk-node in the module cache
-const mockCatalyst = {
-    initialize: () => ({
-        datastore: () => ({
-            table: () => ({
-                getAllRows: async () => {
-                    throw new Error("Local mock datastore enabled");
-                }
-            })
-        })
-    })
-};
+// const mockCatalyst = {
+//     initialize: () => ({
+//         datastore: () => ({
+//             table: () => ({
+//                 getAllRows: async () => {
+//                     throw new Error("Local mock datastore enabled");
+//                 }
+//             })
+//         })
+//     })
+// };
 
-// Intercept require calls to zcatalyst-sdk-node
-const Module = require('module');
-const originalRequire = Module.prototype.require;
-Module.prototype.require = function(id) {
-    if (id === 'zcatalyst-sdk-node') {
-        return mockCatalyst;
-    }
-    return originalRequire.apply(this, arguments);
-};
+// // Intercept require calls to zcatalyst-sdk-node
+// const Module = require('module');
+// const originalRequire = Module.prototype.require;
+// Module.prototype.require = function(id) {
+//     if (id === 'zcatalyst-sdk-node') {
+//         return mockCatalyst;
+//     }
+//     return originalRequire.apply(this, arguments);
+// };
 
 // Set environment variables
-process.env.QUICKML_ENDPOINT = process.env.QUICKML_ENDPOINT || "https://api.catalyst.zoho.in/quickml/v1/project/mock/glm/chat";
-process.env.QUICKML_ACCESS_TOKEN = process.env.QUICKML_ACCESS_TOKEN || "YOUR_OAUTH_TOKEN";
-process.env.CATALYST_ORG_ID = process.env.CATALYST_ORG_ID || "60077759371";
+process.env.QUICKML_ENDPOINT = process.env.QUICKML_ENDPOINT || "https://api.catalyst.zoho.in/quickml/v1/project/56116000000017001/glm/chat";
+process.env.QUICKML_ACCESS_TOKEN = process.env.QUICKML_ACCESS_TOKEN || "1000.0e26964d6e4af7a82438935cde1f3d98.77d250c9050d46c136223b403c654026";
+process.env.CATALYST_ORG_ID = process.env.CATALYST_ORG_ID || "60077759815";
 
-// Load functions
+// Load functions & repository
 const chatHandler = require("./datathon-chatbot/functions/chat/index.js");
 const insightsHandler = require("./datathon-chatbot/functions/insights/index.js");
+const CrimeRepository = require("./datathon-chatbot/functions/chat/datastore.js");
 
 const PORT = 3000;
 
 const server = http.createServer(async (req, res) => {
     // Add CORS headers
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
     if (req.method === "OPTIONS") {
@@ -69,7 +70,58 @@ const server = http.createServer(async (req, res) => {
         }
     };
 
-    if (pathname === "/api/chat" && req.method === "POST") {
+    const repo = new CrimeRepository(req);
+
+    // 1. Zoho Catalyst Datastore REST API Routes: /api/records
+    if (pathname === "/api/records" && req.method === "GET") {
+        try {
+            const records = await repo.getAllCrimeRecords(parsedUrl.query);
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ success: true, data: records }));
+        } catch (err) {
+            res.writeHead(500, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ success: false, error: err.message }));
+        }
+    } else if (pathname === "/api/records" && req.method === "POST") {
+        let body = "";
+        req.on("data", chunk => { body += chunk; });
+        req.on("end", async () => {
+            try {
+                const recordData = JSON.parse(body || "{}");
+                const newRecord = await repo.createCrimeRecord(recordData);
+                res.writeHead(201, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ success: true, data: newRecord }));
+            } catch (err) {
+                res.writeHead(500, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ success: false, error: err.message }));
+            }
+        });
+    } else if (pathname.startsWith("/api/records/") && req.method === "PUT") {
+        const id = pathname.replace("/api/records/", "");
+        let body = "";
+        req.on("data", chunk => { body += chunk; });
+        req.on("end", async () => {
+            try {
+                const recordData = JSON.parse(body || "{}");
+                const updated = await repo.updateCrimeRecord(id, recordData);
+                res.writeHead(200, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ success: true, data: updated }));
+            } catch (err) {
+                res.writeHead(500, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ success: false, error: err.message }));
+            }
+        });
+    } else if (pathname.startsWith("/api/records/") && req.method === "DELETE") {
+        const id = pathname.replace("/api/records/", "");
+        try {
+            const result = await repo.deleteCrimeRecord(id);
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ success: true, data: result }));
+        } catch (err) {
+            res.writeHead(500, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ success: false, error: err.message }));
+        }
+    } else if (pathname === "/api/chat" && req.method === "POST") {
         let body = "";
         req.on("data", chunk => {
             body += chunk;

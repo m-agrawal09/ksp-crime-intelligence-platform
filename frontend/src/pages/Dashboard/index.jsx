@@ -6,18 +6,33 @@ import CrimeCategoryChart from "../../components/dashboard/CrimeCategoryChart";
 import RecentCriticalCases from "../../components/dashboard/RecentCriticalCases";
 import QuickActionsPanel from "../../components/dashboard/QuickActionsPanel";
 import { fetchDashboardData } from "../../services/dashboardService";
+import { recordService } from "../../services/recordService";
 import { FaSyncAlt } from "react-icons/fa";
+
+const DISTRICTS = [
+  "All Districts (Statewide)",
+  "Bengaluru City",
+  "Mysuru District",
+  "Mangaluru City",
+  "Hubli-Dharwad",
+  "Belagavi District",
+  "Kalaburagi District",
+  "Shivamogga",
+  "Udupi District",
+  "Davanagere",
+  "Tumakuru"
+];
 
 const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [dashboardData, setDashboardData] = useState(null);
+  const [selectedDistrict, setSelectedDistrict] = useState("ALL");
 
-  const loadData = async () => {
-    setLoading(true);
+  const loadData = async (dist = selectedDistrict) => {
     setError(null);
     try {
-      const response = await fetchDashboardData();
+      const response = await fetchDashboardData(dist);
       if (response.status === "success") {
         setDashboardData(response.data);
       } else {
@@ -32,8 +47,15 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    loadData();
-  }, []);
+    loadData(selectedDistrict);
+
+    // Subscribe to live record updates
+    const unsubscribe = recordService.subscribe(() => {
+      loadData(selectedDistrict);
+    });
+
+    return () => unsubscribe();
+  }, [selectedDistrict]);
 
   if (loading) {
     return (
@@ -76,13 +98,28 @@ const Dashboard = () => {
           title="Executive Intelligence Dashboard"
           subtitle="CCTNS Analytical Console & Automated Modus Operandi Matching"
         />
-        <button
-          onClick={loadData}
-          className="flex items-center gap-1.5 rounded-lg border border-slate-800 bg-slate-900/60 px-3 py-1.5 text-xs font-mono text-slate-400 hover:border-slate-700 hover:text-white transition-all self-start md:self-auto"
-        >
-          <FaSyncAlt className="text-[10px]" />
-          Sync Core Master
-        </button>
+        <div className="flex flex-wrap items-center gap-3 self-start md:self-auto">
+          <div className="flex items-center gap-2 bg-slate-900/80 border border-slate-800 rounded-lg px-3 py-1.5 font-mono text-xs text-slate-300">
+            <span className="text-slate-500 font-bold uppercase text-[10px]">District Filter:</span>
+            <select
+              value={selectedDistrict}
+              onChange={(e) => setSelectedDistrict(e.target.value)}
+              className="bg-transparent text-blue-400 font-bold outline-none cursor-pointer"
+            >
+              <option value="ALL" className="bg-slate-900 text-slate-200">All Districts (Statewide)</option>
+              {DISTRICTS.slice(1).map((d) => (
+                <option key={d} value={d} className="bg-slate-900 text-slate-200">{d}</option>
+              ))}
+            </select>
+          </div>
+          <button
+            onClick={() => loadData(selectedDistrict)}
+            className="flex items-center gap-1.5 rounded-lg border border-slate-800 bg-slate-900/60 px-3 py-1.5 text-xs font-mono text-slate-400 hover:border-slate-700 hover:text-white transition-all"
+          >
+            <FaSyncAlt className="text-[10px]" />
+            Sync Core Master
+          </button>
+        </div>
       </div>
 
       {/* 2. Command-Center Status Strip */}

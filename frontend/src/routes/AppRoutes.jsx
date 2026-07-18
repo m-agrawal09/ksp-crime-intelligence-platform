@@ -5,18 +5,38 @@ import Layout from "../components/layout/Layout";
 import Dashboard from "../pages/Dashboard";
 import CrimeMap from "../pages/CrimeMap";
 import Officers from "../pages/Officers";
-import Assistant from "../pages/Assistant";
+import InsightsForecast from "../pages/InsightsForecast";
 import Reports from "../pages/Reports";
+import ManageRecords from "../pages/ManageRecords";
+
+import Login from "../pages/Login";
+import Settings from "../pages/Settings";
+import ProtectedRoute from "../components/auth/ProtectedRoute";
 
 function AppRoutes() {
   return (
     <Routes>
-      <Route element={<Layout />}>
+      {/* Public Route */}
+      <Route path="/login" element={<Login />} />
+
+      {/* Protected Command Center Routes */}
+      <Route
+        element={
+          <ProtectedRoute>
+            <Layout />
+          </ProtectedRoute>
+        }
+      >
         <Route path="/" element={<Dashboard />} />
+        <Route path="/insights-forecast" element={<InsightsForecast />} />
+        <Route path="/insights" element={<InsightsForecast />} />
+        <Route path="/forecast" element={<InsightsForecast />} />
+        <Route path="/assistant" element={<InsightsForecast />} />
         <Route path="/map" element={<CrimeMap />} />
         <Route path="/officers" element={<Officers />} />
-        <Route path="/assistant" element={<Assistant />} />
+        <Route path="/records" element={<ManageRecords />} />
         <Route path="/reports" element={<Reports />} />
+        <Route path="/settings" element={<Settings />} />
       </Route>
     </Routes>
   );

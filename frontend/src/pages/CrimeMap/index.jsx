@@ -1,12 +1,22 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import PageHeader from "../../components/dashboard/PageHeader";
 import MapFilters from "../../components/crimeMap/MapFilters";
 import InteractiveMap from "../../components/crimeMap/InteractiveMap";
 import IntelligencePanel from "../../components/crimeMap/IntelligencePanel";
 import IntelligenceStrip from "../../components/crimeMap/IntelligenceStrip";
 import { crimeService } from "../../services/crimeService";
+import { recordService } from "../../services/recordService";
 
 const CrimeMap = () => {
+  const [tick, setTick] = useState(0);
+
+  useEffect(() => {
+    const unsubscribe = recordService.subscribe(() => {
+      setTick((t) => t + 1);
+    });
+    return () => unsubscribe();
+  }, []);
+
   // Query Filters state
   const [filters, setFilters] = useState({
     district: "",
@@ -65,7 +75,7 @@ const CrimeMap = () => {
   // Memoized query runs
   const filteredIncidents = useMemo(() => {
     return crimeService.getIncidents(filters);
-  }, [filters]);
+  }, [filters, tick]);
 
   const districtMetrics = useMemo(() => {
     return crimeService.getDistrictMetrics(selectedDistrict, filteredIncidents);

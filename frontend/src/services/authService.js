@@ -1,0 +1,308 @@
+/**
+ * authService.js
+ * 
+ * Stateful Authentication, Credentials, & Security PIN Client.
+ * Backed by localStorage for session persistence across browser refreshes.
+ */
+
+const USERS_STORAGE_KEY = "ksp_auth_users_v2";
+const SESSION_STORAGE_KEY = "ksp_auth_session_v2";
+const PIN_STORAGE_KEY = "ksp_security_pin_v2";
+
+const DEFAULT_SECURITY_PIN = "1122";
+
+const INITIAL_USERS = [
+  {
+    id: "u-admin",
+    username: "admin",
+    password: "admin",
+    name: "ACP Director (Admin)",
+    role: "ADMIN",
+    rank: "Command Director",
+    kgid: "KSP-ADMIN-01",
+    badge: "KSP-ADMIN-01",
+    unit: "KSP Intelligence HQ"
+  },
+  {
+    id: "u-ramesh",
+    username: "ksp.ramesh",
+    password: "Officer@123",
+    name: "Ramesh Gowda",
+    role: "OFFICER",
+    rank: "PSI",
+    kgid: "KSP-8821",
+    badge: "KSP-8821",
+    unit: "Koramangala Police Station"
+  },
+  {
+    id: "u-rajeshwari",
+    username: "ksp.rajeshwari",
+    password: "Officer@123",
+    name: "ACP Rajeshwari N.",
+    role: "OFFICER",
+    rank: "Assistant Commissioner",
+    kgid: "KSP-2015-ACP88",
+    badge: "KSP-2015-ACP88",
+    unit: "Cyber Crime Division"
+  },
+  {
+    id: "u-ravikumar",
+    username: "ksp.ravikumar",
+    password: "Officer@123",
+    name: "Insp. Ravi Kumar",
+    role: "OFFICER",
+    rank: "Police Inspector",
+    kgid: "KSP-2010-IN74",
+    badge: "KSP-2010-IN74",
+    unit: "Narcotics Control Bureau"
+  },
+  {
+    id: "u-sharanappa",
+    username: "ksp.sharanappa",
+    password: "Officer@123",
+    name: "DySP Sharanappa K.",
+    role: "OFFICER",
+    rank: "Deputy Superintendent",
+    kgid: "KSP-2008-DSP11",
+    badge: "KSP-2008-DSP11",
+    unit: "Financial Crime & Fraud Unit"
+  }
+];
+
+// Load Users
+const loadUsers = () => {
+  try {
+    const raw = localStorage.getItem(USERS_STORAGE_KEY);
+    if (!raw) {
+      localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(INITIAL_USERS));
+      return INITIAL_USERS;
+    }
+    return JSON.parse(raw);
+  } catch (err) {
+    console.error("Failed loading users from storage:", err);
+    return INITIAL_USERS;
+  }
+};
+
+const saveUsers = (users) => {
+  try {
+    localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
+  } catch (err) {
+    console.error("Failed saving users to storage:", err);
+  }
+};
+
+// Session Management
+const loadSession = () => {
+  try {
+    const raw = localStorage.getItem(SESSION_STORAGE_KEY);
+    if (raw) {
+      return JSON.parse(raw);
+    }
+    return null;
+  } catch (err) {
+    return null;
+  }
+};
+
+const saveSession = (user) => {
+  try {
+    if (user) {
+      localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(user));
+    } else {
+      localStorage.removeItem(SESSION_STORAGE_KEY);
+    }
+  } catch (err) {
+    console.error("Failed saving session:", err);
+  }
+};
+
+// PIN Management
+const loadPin = () => {
+  try {
+    const raw = localStorage.getItem(PIN_STORAGE_KEY);
+    if (!raw) {
+      localStorage.setItem(PIN_STORAGE_KEY, DEFAULT_SECURITY_PIN);
+      return DEFAULT_SECURITY_PIN;
+    }
+    return raw;
+  } catch (err) {
+    return DEFAULT_SECURITY_PIN;
+  }
+};
+
+const savePin = (pin) => {
+  try {
+    localStorage.setItem(PIN_STORAGE_KEY, pin);
+  } catch (err) {
+    console.error("Failed saving security pin:", err);
+  }
+};
+
+export const authService = {
+  getCurrentUser: () => {
+    return loadSession();
+  },
+
+  getUsers: () => {
+    return loadUsers();
+  },
+
+  loginAdmin: async (username, password) => {
+    const users = loadUsers();
+    const cleanUsername = username.trim().toLowerCase();
+    
+    const user = users.find(
+      (u) => u.username.toLowerCase() === cleanUsername && u.role === "ADMIN"
+    );
+
+    if (!user) {
+      throw new Error("Invalid Admin ID or username.");
+    }
+
+    if (user.password !== password) {
+      throw new Error("Incorrect Admin password.");
+    }
+
+    saveSession(user);
+    return user;
+  },
+
+  loginOfficer: async (username, password) => {
+    const users = loadUsers();
+    const cleanUsername = username.trim().toLowerCase();
+
+    const user = users.find(
+      (u) => u.username.toLowerCase() === cleanUsername && u.role === "OFFICER"
+    );
+
+    if (!user) {
+      throw new Error("Officer account not found for this username.");
+    }
+
+    if (user.password !== password) {
+      throw new Error("Incorrect Officer password.");
+    }
+
+    saveSession(user);
+    return user;
+  },
+
+  logout: () => {
+    saveSession(null);
+  },
+
+  registerOfficerAccount: (officerData) => {
+    const users = loadUsers();
+    
+    const { username, password, name, rank, badge, kgid, unit } = officerData;
+
+    // Check username uniqueness
+    const exists = users.some(
+      (u) => u.username.toLowerCase() === username.trim().toLowerCase()
+    );
+
+    if (exists) {
+      throw new Error(`Username '${username}' is already in use by another user account.`);
+    }
+
+    const newUser = {
+      id: `u-off-${Date.now()}`,
+      username: username.trim(),
+      password: password || "Officer@123",
+      name: name || "Officer",
+      role: "OFFICER",
+      rank: rank || "PSI",
+      kgid: kgid || badge || `KSP-${Date.now().toString().slice(-4)}`,
+      badge: badge || kgid || `KSP-${Date.now().toString().slice(-4)}`,
+      unit: unit || "General Range"
+    };
+
+    const updated = [...users, newUser];
+    saveUsers(updated);
+    return newUser;
+  },
+
+  updatePassword: (userId, newPassword) => {
+    const users = loadUsers();
+    const userIndex = users.findIndex((u) => u.id === userId);
+    
+    if (userIndex === -1) {
+      throw new Error("User account not found.");
+    }
+
+    users[userIndex].password = newPassword;
+    saveUsers(users);
+
+    // If updating current active session user, update session as well
+    const current = loadSession();
+    if (current && current.id === userId) {
+      current.password = newPassword;
+      saveSession(current);
+    }
+
+    return users[userIndex];
+  },
+
+  updateUserProfile: (userId, profileData) => {
+    const users = loadUsers();
+    const userIndex = users.findIndex((u) => u.id === userId);
+
+    if (userIndex === -1) {
+      throw new Error("User account not found.");
+    }
+
+    // Check username uniqueness if changed
+    if (profileData.username && profileData.username.trim().toLowerCase() !== users[userIndex].username.toLowerCase()) {
+      const exists = users.some(
+        (u) => u.id !== userId && u.username.toLowerCase() === profileData.username.trim().toLowerCase()
+      );
+      if (exists) {
+        throw new Error(`Username '${profileData.username}' is already taken by another user.`);
+      }
+    }
+
+    const updatedUser = {
+      ...users[userIndex],
+      name: profileData.name !== undefined ? profileData.name : users[userIndex].name,
+      username: profileData.username !== undefined ? profileData.username.trim() : users[userIndex].username,
+      phone: profileData.phone !== undefined ? profileData.phone : users[userIndex].phone,
+      address: profileData.address !== undefined ? profileData.address : users[userIndex].address,
+      avatar: profileData.avatar !== undefined ? profileData.avatar : users[userIndex].avatar,
+      unit: profileData.unit !== undefined ? profileData.unit : users[userIndex].unit
+    };
+
+    if (profileData.password) {
+      updatedUser.password = profileData.password;
+    }
+
+    users[userIndex] = updatedUser;
+    saveUsers(users);
+
+    // If updating current active session user, update session
+    const current = loadSession();
+    if (current && current.id === userId) {
+      saveSession(updatedUser);
+    }
+
+    return updatedUser;
+  },
+
+  getSecurityPin: () => {
+    return loadPin();
+  },
+
+  updateSecurityPin: (newPin) => {
+    if (!newPin || newPin.trim().length < 4) {
+      throw new Error("Security PIN must be at least 4 digits.");
+    }
+    const cleanPin = newPin.trim();
+    savePin(cleanPin);
+    return cleanPin;
+  },
+
+  verifyPin: (inputPin) => {
+    const currentPin = loadPin();
+    return String(inputPin).trim() === currentPin;
+  }
+};

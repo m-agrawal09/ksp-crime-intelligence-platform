@@ -130,6 +130,66 @@ const ReportPreview = ({ reportData, onExport, onShare, onSchedule }) => {
           </div>
         </div>
 
+        <div className={doubleBorder} />
+
+        {/* 6. Filtered Database Records Table */}
+        {reportData.recordsTable && reportData.recordsTable.length > 0 && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest block">
+                V. AUDITED FIR INCIDENT REGISTERS ({reportData.recordsTable.length} FILTERED ROWS)
+              </span>
+              <span className="text-[9px] font-mono text-slate-500 uppercase">
+                Showing all matching output
+              </span>
+            </div>
+
+            <div className="overflow-x-auto rounded-lg border border-slate-800 bg-slate-950">
+              <table className="w-full text-left font-mono text-[10px]">
+                <thead className="bg-slate-900 text-slate-400 uppercase border-b border-slate-800">
+                  <tr>
+                    <th className="p-2.5">Crime No / Date</th>
+                    <th className="p-2.5">Jurisdiction (District / PS)</th>
+                    <th className="p-2.5">Category & Section</th>
+                    <th className="p-2.5">Allotted Officer</th>
+                    <th className="p-2.5">Status & Severity</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-850 text-slate-300">
+                  {reportData.recordsTable.map((r) => (
+                    <tr key={r.id || r.crimeNo} className="hover:bg-slate-900/50">
+                      <td className="p-2.5 font-bold text-blue-400">
+                        {r.crimeNo}
+                        <span className="block text-[9px] font-normal text-slate-500">{r.regDate}</span>
+                      </td>
+                      <td className="p-2.5">
+                        {r.unit}
+                        <span className="block text-[9px] text-slate-500">{r.district}</span>
+                      </td>
+                      <td className="p-2.5">
+                        {r.crimeHead}
+                        <span className="block text-[9px] text-slate-500">{r.actSections}</span>
+                      </td>
+                      <td className="p-2.5">
+                        {r.allottedOfficerName}
+                        <span className="block text-[9px] text-slate-500">{r.allottedOfficerRank}</span>
+                      </td>
+                      <td className="p-2.5">
+                        <span className={`px-1.5 py-0.5 rounded text-[8px] font-bold uppercase ${
+                          r.status === "Case Closed / Completed" ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" : "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                        }`}>
+                          {r.status}
+                        </span>
+                        <span className="block text-[9px] font-bold text-slate-400 mt-0.5">{r.severity}</span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
         <div className="border-t-2 border-dashed border-slate-800 my-8" />
 
         {/* Signatures */}
@@ -145,21 +205,21 @@ const ReportPreview = ({ reportData, onExport, onShare, onSchedule }) => {
 
       </div>
 
-      {/* 2. Actions Strip (PDF, Excel, Share, Schedule) */}
+      {/* 2. Actions Strip (Print / PDF, Excel CSV, Share, Schedule) */}
       <div className="bg-slate-900/60 border border-slate-800 p-4 rounded-xl flex flex-wrap gap-3 justify-center items-center max-w-3xl mx-auto shadow-md">
         <button
           onClick={() => onExport("PDF")}
-          className="flex items-center justify-center gap-1.5 bg-red-600 hover:bg-red-700 text-white font-mono font-bold text-xs py-2 px-4 rounded-lg transition-colors cursor-pointer"
+          className="flex items-center justify-center gap-1.5 bg-red-600 hover:bg-red-700 text-white font-mono font-bold text-xs py-2.5 px-5 rounded-lg transition-all shadow-lg shadow-red-600/20 cursor-pointer active:scale-95"
         >
-          <FaFilePdf className="text-xs" />
-          EXPORT PDF
+          <FaFilePdf className="text-sm" />
+          PRINT / SAVE AS PDF
         </button>
         <button
           onClick={() => onExport("EXCEL")}
-          className="flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-mono font-bold text-xs py-2 px-4 rounded-lg transition-colors cursor-pointer"
+          className="flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-mono font-bold text-xs py-2.5 px-5 rounded-lg transition-all shadow-lg shadow-emerald-600/20 cursor-pointer active:scale-95"
         >
-          <FaFileExcel className="text-xs" />
-          EXPORT EXCEL
+          <FaFileExcel className="text-sm" />
+          EXPORT EXCEL (CSV)
         </button>
         <button
           onClick={onShare}

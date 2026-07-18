@@ -1,7 +1,7 @@
 import React from "react";
 import { FaIdBadge, FaIdCard, FaBuilding, FaClock, FaSyncAlt } from "react-icons/fa";
 
-const OfficerHeader = ({ profile, officerList, onOfficerChange }) => {
+const OfficerHeader = ({ profile, officerList, onOfficerChange, allowSelector = true }) => {
   if (!profile) return null;
 
   return (
@@ -56,24 +56,32 @@ const OfficerHeader = ({ profile, officerList, onOfficerChange }) => {
         </div>
       </div>
 
-      {/* Select Selector Block */}
+      {/* Selector Block (Admin Switcher vs Officer Restricted Badge) */}
       <div className="w-full md:w-80 bg-slate-950/60 border border-slate-850 p-4 rounded-xl flex flex-col gap-2">
         <label className="text-[9px] font-mono font-bold tracking-widest text-slate-500 uppercase">
-          Select Active Officer Dossier
+          {allowSelector ? "Select Active Officer Dossier (Admin View)" : "Personal Performance Dossier"}
         </label>
-        <div className="relative flex items-center">
-          <select
-            value={profile.badgeNumber}
-            onChange={(e) => onOfficerChange(e.target.value)}
-            className="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-slate-700 font-mono transition-colors"
-          >
-            {officerList.map((off) => (
-              <option key={off.badgeNumber} value={off.badgeNumber}>
-                {off.name} ({off.rank.slice(0, 12)}...)
-              </option>
-            ))}
-          </select>
-        </div>
+        
+        {allowSelector ? (
+          <div className="relative flex items-center">
+            <select
+              value={profile.badgeNumber}
+              onChange={(e) => onOfficerChange(e.target.value)}
+              className="w-full bg-slate-900 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-slate-700 font-mono transition-colors"
+            >
+              {officerList.map((off) => (
+                <option key={off.badgeNumber} value={off.badgeNumber}>
+                  {off.name} ({off.rank.slice(0, 12)}...)
+                </option>
+              ))}
+            </select>
+          </div>
+        ) : (
+          <div className="px-3 py-2 rounded-lg bg-slate-900 border border-slate-850 text-xs font-mono text-purple-300 flex items-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-purple-500 animate-pulse" />
+            <span className="font-bold">Personal Dossier • Restricted View</span>
+          </div>
+        )}
       </div>
 
     </div>

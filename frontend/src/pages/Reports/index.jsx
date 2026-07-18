@@ -92,7 +92,37 @@ const Reports = () => {
   };
 
   const handleExport = (format) => {
-    alert(`[SmartBrowz Link] Exporting report as ${format}. Compiling document headers...`);
+    if (format === "PDF") {
+      window.print();
+    } else if (format === "EXCEL" || format === "CSV") {
+      if (!previewData || !previewData.recordsTable || previewData.recordsTable.length === 0) {
+        alert("No filtered records available for spreadsheet export.");
+        return;
+      }
+
+      const headers = ["Crime No", "Date", "District", "Police Station", "Category", "Act Sections", "Officer", "Complainant", "Status", "Severity"];
+      const rows = previewData.recordsTable.map((r) => [
+        `"${r.crimeNo || ""}"`,
+        `"${r.regDate || ""}"`,
+        `"${r.district || ""}"`,
+        `"${r.unit || ""}"`,
+        `"${r.crimeHead || ""}"`,
+        `"${(r.actSections || "").replace(/"/g, '""')}"`,
+        `"${r.allottedOfficerName || ""}"`,
+        `"${r.complainantName || ""}"`,
+        `"${r.status || ""}"`,
+        `"${r.severity || ""}"`
+      ]);
+
+      const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map((e) => e.join(","))].join("\n");
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `CCTNS_Filtered_Crime_Report_${Date.now().toString().slice(-6)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
   };
 
   const handleShare = () => {
@@ -104,7 +134,7 @@ const Reports = () => {
   };
 
   const handleDownload = (report) => {
-    alert(`Initiating download for document: ${report.title} (${report.size})`);
+    window.print();
   };
 
   return (

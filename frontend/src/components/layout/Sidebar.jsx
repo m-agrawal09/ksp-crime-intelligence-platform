@@ -7,7 +7,7 @@ import {
 } from "react-icons/ri";
 import { TbMapSearch, TbChartLine } from "react-icons/tb";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
-import { HiOutlineDocumentChartBar } from "react-icons/hi2";
+import { HiOutlineDocumentChartBar, HiOutlineDocumentText } from "react-icons/hi2";
 import { PiShieldStarFill } from "react-icons/pi";
 
 const menuItems = [
@@ -17,9 +17,14 @@ const menuItems = [
     icon: RiDashboardLine,
   },
   {
-    name: "AI Insights",
-    path: "/insights",
+    name: "AI Insights & Forecast",
+    path: "/insights-forecast",
     icon: RiBrainLine,
+  },
+  {
+    name: "Manage Records",
+    path: "/records",
+    icon: HiOutlineDocumentText,
   },
   {
     name: "Crime Map",
@@ -27,19 +32,9 @@ const menuItems = [
     icon: TbMapSearch,
   },
   {
-    name: "Trend Forecast",
-    path: "/forecast",
-    icon: TbChartLine,
-  },
-  {
     name: "Officer Performance",
     path: "/officers",
     icon: MdOutlineAdminPanelSettings,
-  },
-  {
-    name: "AI Assistant",
-    path: "/assistant",
-    icon: RiRobot2Line,
   },
   {
     name: "Reports",

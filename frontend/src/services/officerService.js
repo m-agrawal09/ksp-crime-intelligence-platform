@@ -1,6 +1,64 @@
 // Mock Officer Dossier Service for KSP Command Center
 
 const officersDatabase = {
+  "KSP-8821": {
+    badgeNumber: "KSP-8821",
+    name: "Ramesh Gowda",
+    rank: "PSI (Police Sub-Inspector)",
+    unit: "Koramangala Police Station",
+    station: "Bengaluru City Range",
+    yearsOfService: 7,
+    status: "On Duty",
+    avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=250&auto=format&fit=crop",
+    kpis: {
+      totalCases: 94,
+      activeCases: 12,
+      closedCases: 82,
+      chargesheetRate: 86,
+      avgInvestigationTime: 28,
+      detectionRate: 91
+    },
+    categoryDistribution: [
+      { name: "Property Offences", value: 48, color: "#3b82f6" },
+      { name: "Cyber Crimes", value: 24, color: "#a855f7" },
+      { name: "Financial Fraud", value: 14, color: "#f59e0b font-bold" },
+      { name: "Body Offences", value: 8, color: "#f43f5e" }
+    ],
+    monthlyTrend: [
+      { month: "Jan", assigned: 10, resolved: 9 },
+      { month: "Feb", assigned: 12, resolved: 11 },
+      { month: "Mar", assigned: 8, resolved: 9 },
+      { month: "Apr", assigned: 14, resolved: 12 },
+      { month: "May", assigned: 11, resolved: 10 },
+      { month: "Jun", assigned: 16, resolved: 14 }
+    ],
+    timeline: [
+      { stage: "Case Assigned", date: "2026-07-02", desc: "Commercial burglary Case CCTNS/2026/0244 allocated.", status: "completed" },
+      { stage: "Investigation Started", date: "2026-07-04", desc: "CCTV surveillance footage collected from site.", status: "completed" },
+      { stage: "Suspect Detained", date: "2026-07-12", desc: "Primary suspect detained in Koramangala.", status: "completed" }
+    ],
+    workload: {
+      highPriority: [
+        { caseNo: "CR-2026-0244", title: "Commercial Electronics Burglary", status: "Under Investigation", date: "2026-07-17" }
+      ],
+      pending: [
+        { caseNo: "CR-2026-0312", title: "Vehicle Theft Indiranagar", status: "CCTV Scan Active" }
+      ],
+      hearings: [
+        { docketNo: "DK-2026-088", court: "ACMM Court 4, Bengaluru", date: "2026-07-25", time: "10:30 AM" }
+      ],
+      recent: [
+        { caseNo: "CR-2026-0244", title: "Warehouse Break-in", assigned: "Yesterday" }
+      ]
+    },
+    summary: {
+      strongArea: "Property Crime Investigation & Patrol Tracking",
+      workloadStatus: "Optimal",
+      rating: "4.8 / 5.0",
+      aiRecommendation: "Excellent record in rapid recovery of stolen commercial property.",
+      lastUpdated: "2026-07-18 20:00 IST"
+    }
+  },
   "KSP-2015-ACP88": {
     badgeNumber: "KSP-2015-ACP88",
     name: "ACP Rajeshwari N.",
@@ -198,16 +256,198 @@ const officersDatabase = {
   }
 };
 
+const OFFICERS_STORAGE_KEY = "ksp_custom_officers_v1";
+
+const loadCustomOfficers = () => {
+  try {
+    const raw = localStorage.getItem(OFFICERS_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (err) {
+    return {};
+  }
+};
+
+const saveCustomOfficers = (customMap) => {
+  try {
+    localStorage.setItem(OFFICERS_STORAGE_KEY, JSON.stringify(customMap));
+  } catch (err) {
+    console.error("Failed saving custom officers:", err);
+  }
+};
+
+import { recordService } from "./recordService";
+
+const getAuthUserByBadgeOrName = (badgeNumber, name) => {
+  try {
+    const raw = localStorage.getItem("ksp_auth_users_v2");
+    if (!raw) return null;
+    const users = JSON.parse(raw);
+    return users.find(
+      (u) =>
+        u.badge === badgeNumber ||
+        u.kgid === badgeNumber ||
+        (u.name && name && u.name.toLowerCase().trim() === name.toLowerCase().trim())
+    );
+  } catch (err) {
+    return null;
+  }
+};
+
 export const officerService = {
   getOfficers: () => {
-    return Object.keys(officersDatabase).map(key => ({
-      badgeNumber: key,
-      name: officersDatabase[key].name,
-      rank: officersDatabase[key].rank
-    }));
+    const customMap = loadCustomOfficers();
+    const mergedMap = { ...officersDatabase, ...customMap };
+    
+    return Object.keys(mergedMap).map(key => {
+      const authUser = getAuthUserByBadgeOrName(key, mergedMap[key].name);
+      return {
+        badgeNumber: key,
+        name: authUser?.name || mergedMap[key].name,
+        rank: authUser?.rank || mergedMap[key].rank,
+        unit: authUser?.unit || mergedMap[key].unit,
+        avatar: authUser?.avatar || mergedMap[key].avatar
+      };
+    });
   },
   
   getOfficerProfile: (badgeNumber) => {
-    return officersDatabase[badgeNumber] || null;
+    const customMap = loadCustomOfficers();
+    const mergedMap = { ...officersDatabase, ...customMap };
+    const base = mergedMap[badgeNumber];
+    if (!base) return null;
+
+    // Sync avatar & user edits from auth database
+    const authUser = getAuthUserByBadgeOrName(badgeNumber, base.name);
+    const updatedAvatar = authUser?.avatar || base.avatar || "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=250&auto=format&fit=crop";
+    const updatedName = authUser?.name || base.name;
+    const updatedUnit = authUser?.unit || base.unit;
+    const updatedRank = authUser?.rank || base.rank;
+
+    // Merge live dynamic analytics from recordService
+    const liveStats = recordService.getOfficerAnalytics(updatedName);
+
+    return {
+      ...base,
+      name: updatedName,
+      unit: updatedUnit,
+      rank: updatedRank,
+      avatar: updatedAvatar,
+      kpis: {
+        ...base.kpis,
+        totalCases: liveStats.totalCases,
+        activeCases: liveStats.activeCases,
+        closedCases: liveStats.closedCases,
+        chargesheetRate: liveStats.chargesheetRate,
+        detectionRate: Math.min(98, liveStats.chargesheetRate + 5)
+      },
+      workload: {
+        ...base.workload,
+        highPriority: liveStats.highPriority.length > 0 ? liveStats.highPriority : base.workload.highPriority,
+        pending: liveStats.pending.length > 0 ? liveStats.pending : base.workload.pending,
+        recent: liveStats.recent.length > 0 ? liveStats.recent : base.workload.recent
+      }
+    };
+  },
+
+  addOfficer: (officerData) => {
+    const { name, rank, badgeNumber, unit, station, yearsOfService, specialArea, username, password, avatar } = officerData;
+    const badgeKey = badgeNumber || `KSP-2026-${Date.now().toString().slice(-4)}`;
+    
+    const newProfile = {
+      badgeNumber: badgeKey,
+      name,
+      rank: rank || "Police Inspector",
+      unit: unit || "General Crime Unit",
+      station: station || "Bengaluru Range",
+      yearsOfService: Number(yearsOfService) || 5,
+      status: "On Duty",
+      avatar: avatar || "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=250&auto=format&fit=crop",
+      username: username || "",
+      kpis: {
+        totalCases: 24,
+        activeCases: 6,
+        closedCases: 18,
+        chargesheetRate: 85,
+        avgInvestigationTime: 35,
+        detectionRate: 90
+      },
+      categoryDistribution: [
+        { name: "Property Offences", value: 12, color: "#3b82f6" },
+        { name: "Cyber Crimes", value: 8, color: "#a855f7" },
+        { name: "Financial Fraud", value: 4, color: "#f59e0b" }
+      ],
+      monthlyTrend: [
+        { month: "Jan", assigned: 4, resolved: 3 },
+        { month: "Feb", assigned: 5, resolved: 4 },
+        { month: "Mar", assigned: 3, resolved: 4 },
+        { month: "Apr", assigned: 6, resolved: 5 },
+        { month: "May", assigned: 4, resolved: 4 },
+        { month: "Jun", assigned: 5, resolved: 4 }
+      ],
+      timeline: [
+        { stage: "Officer Onboarded", date: new Date().toISOString().split("T")[0], desc: `Officer registered into CCTNS active duty roster by Admin.`, status: "completed" }
+      ],
+      workload: {
+        highPriority: [
+          { caseNo: "CR-2026-001", title: "Active Jurisdiction CCTNS Monitoring", status: "Active", date: "Today" }
+        ],
+        pending: [],
+        hearings: [],
+        recent: []
+      },
+      summary: {
+        strongArea: specialArea || "Field Investigation & Case Tracking",
+        workloadStatus: "Optimal",
+        rating: "5.0 / 5.0",
+        aiRecommendation: "Dossier initialized. Active for case assignments.",
+        lastUpdated: "Just now"
+      }
+    };
+
+    const customMap = loadCustomOfficers();
+    customMap[badgeKey] = newProfile;
+    saveCustomOfficers(customMap);
+
+    return newProfile;
+  },
+
+  getOfficerOfTheMonth: () => {
+    const customMap = loadCustomOfficers();
+    const mergedMap = { ...officersDatabase, ...customMap };
+    const list = Object.keys(mergedMap);
+    if (!list || list.length === 0) return null;
+
+    let bestOfficer = null;
+    let maxScore = -1;
+
+    list.forEach((badge) => {
+      const prof = officerService.getOfficerProfile(badge);
+      if (!prof) return;
+
+      const closed = prof.kpis?.closedCases || 0;
+      const rate = prof.kpis?.chargesheetRate || 0;
+      const score = closed * 2 + rate * 1.5;
+
+      if (score > maxScore) {
+        maxScore = score;
+        bestOfficer = {
+          badgeNumber: prof.badgeNumber,
+          name: prof.name,
+          rank: prof.rank,
+          unit: prof.unit,
+          station: prof.station || "Karnataka Police HQ",
+          yearsOfService: prof.yearsOfService || 10,
+          avatar: prof.avatar,
+          casesSolvedMonth: Math.max(12, Math.round(closed / 5) + 4),
+          totalCasesClosed: closed,
+          clearanceRate: rate,
+          detectionRate: prof.kpis?.detectionRate || 92,
+          specialArea: prof.summary?.strongArea || "Field Operations & Investigation",
+          commendation: "Awarded Director General's Honor Star for highest case resolution and investigation efficiency in previous month."
+        };
+      }
+    });
+
+    return bestOfficer;
   }
 };

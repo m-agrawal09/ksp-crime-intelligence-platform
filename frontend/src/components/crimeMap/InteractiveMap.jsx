@@ -94,8 +94,28 @@ const MapController = ({ selectedItem, setZoomLevel }) => {
   return null;
 };
 
+// Available High-Precision Map Tile Services
+const MAP_LAYERS = {
+  dark: {
+    name: "Dark Command Radar",
+    url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+    attribution: '&copy; <a href="https://carto.com/">CARTO</a> &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
+  },
+  satellite: {
+    name: "High-Precision Satellite",
+    url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    attribution: "&copy; Esri, Maxar, Earthstar Geographics, CNES/Airbus DS, USDA, USGS, AeroGRID, IGN, and the GIS User Community"
+  },
+  streets: {
+    name: "Detailed GIS Streets",
+    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }
+};
+
 const InteractiveMap = ({ incidents, selectedItem, onSelectDistrict, onSelectMarker }) => {
   const [zoomLevel, setZoomLevel] = useState(DEFAULT_ZOOM);
+  const [activeLayer, setActiveLayer] = useState("dark");
 
   // Group incidents by district for clustering at lower zoom levels
   const getDistrictClusters = () => {
@@ -118,9 +138,27 @@ const InteractiveMap = ({ incidents, selectedItem, onSelectDistrict, onSelectMar
 
   const districtClusters = getDistrictClusters();
   const showClusters = zoomLevel < 8.2;
+  const currentTile = MAP_LAYERS[activeLayer];
 
   return (
     <div className="h-full w-full rounded-xl overflow-hidden border border-slate-800 bg-slate-950 relative min-h-[500px]">
+      {/* Map Layer Switcher Control */}
+      <div className="absolute top-3 right-3 z-20 flex bg-slate-900/90 backdrop-blur border border-slate-800 rounded-lg p-1 font-mono text-[10px] shadow-xl">
+        {Object.entries(MAP_LAYERS).map(([key, layer]) => (
+          <button
+            key={key}
+            onClick={() => setActiveLayer(key)}
+            className={`px-2.5 py-1 rounded-md transition-all font-bold ${
+              activeLayer === key
+                ? "bg-blue-600 text-white shadow"
+                : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
+            }`}
+          >
+            {layer.name}
+          </button>
+        ))}
+      </div>
+
       <MapContainer
         center={KARNATAKA_CENTER}
         zoom={DEFAULT_ZOOM}
@@ -128,7 +166,7 @@ const InteractiveMap = ({ incidents, selectedItem, onSelectDistrict, onSelectMar
         className="h-full w-full z-10"
         style={{ background: "#020617" }}
       >
-        <TileLayer url={MAP_TILE_URL} attribution={MAP_ATTRIBUTION} />
+        <TileLayer key={activeLayer} url={currentTile.url} attribution={currentTile.attribution} maxZoom={19} />
         
         <MapController selectedItem={selectedItem} setZoomLevel={setZoomLevel} />
 

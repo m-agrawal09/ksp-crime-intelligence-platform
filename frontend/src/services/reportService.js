@@ -1,4 +1,4 @@
-// Mock Report Generator Service for KSP Command Center
+import { recordService } from "./recordService";
 
 const templates = [
   {
@@ -47,147 +47,67 @@ const templates = [
 
 const mockRecentReports = [
   { id: "rep-101", title: "Bengaluru_Cyber_Briefing_Q2.pdf", date: "2026-07-17 14:15", size: "1.4 MB", type: "PDF" },
-  { id: "rep-102", title: "NDPS_Mangaluru_Raid_Dossier.xlsx", date: "2026-07-16 11:22", size: "842 KB", type: "EXCEL" },
+  { id: "rep-102", title: "NDPS_Mangaluru_Raid_Dossier.csv", date: "2026-07-16 11:22", size: "842 KB", type: "EXCEL" },
   { id: "rep-103", title: "Officer_Performance_Audit_Belagavi.pdf", date: "2026-07-15 09:30", size: "2.1 MB", type: "PDF" },
-  { id: "rep-104", title: "Karnataka_Annual_FIR_Summary.xlsx", date: "2026-07-14 17:45", size: "4.8 MB", type: "EXCEL" }
+  { id: "rep-104", title: "Karnataka_Annual_FIR_Summary.csv", date: "2026-07-14 17:45", size: "4.8 MB", type: "EXCEL" }
 ];
 
 const generateReportContent = (templateId, config) => {
-  const districtName = config.district || "STATE OF KARNATAKA (ALL ZONES)";
-  const category = config.category || "ALL CRIME CLASSIFICATIONS";
-  const officerName = config.officerName || "ALL DISTRICT PERSONNEL";
+  const districtName = config.district || "";
+  const category = config.category || "";
+  const officerName = config.officerName || "";
   const scope = config.scope || "Detailed";
   const priority = config.priority || "Routine";
-  const dateRange = `${config.startDate || "2026-01-01"} TO ${config.endDate || "2026-07-17"}`;
+  const dateRange = `${config.startDate || "2026-01-01"} TO ${config.endDate || "2026-07-19"}`;
 
-  // Build dynamic content blocks depending on selected template
-  switch (templateId) {
-    case "exec_summary":
-      return {
-        title: "EXECUTIVE CRIME SUMMARY",
-        subtitle: `STRATEGIC ANOMALY BRIEFING FOR ${districtName.toUpperCase()}`,
-        classification: priority === "Critical" ? "SECRET / MOST IMMEDIATE" : "RESTRICTED",
-        date: new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" }),
-        meta: {
-          district: districtName,
-          category,
-          officer: officerName,
-          dateRange,
-          scope,
-          priority
-        },
-        summary: `This intelligence document provides an aggregated threat vector overview for ${districtName}. Specifically targeting ${category} between ${dateRange}, audit logs indicate localized variance. Under active command of ${officerName}, case detection averages continue to align with state guidelines.`,
-        kpis: [
-          { label: "TOTAL ASSIGNED FIRs", value: "14,832" },
-          { label: "UNDER ACTIVE INTAKE", value: "1,482" },
-          { label: "CHARGE-SHEET RATE", value: "78.2%" }
-        ],
-        findings: [
-          `Spike in registered ${category} complaints noticed in high-density commercial hubs within ${districtName}.`,
-          "Digital forensics indicates proxy routing setups originating from interstate borders.",
-          "Coordination with local ISP grids confirms IP location nodes are being spoofed."
-        ],
-        recommendations: [
-          "Deploy 4 additional cyber forensic specialists to the primary incident divisions.",
-          "Authorize immediate freeze of transaction assets tied to flagged ledger IDs.",
-          "Initiate joint border agency patrols under the IT Act framework."
-        ]
-      };
+  // Fetch all database records and filter using config parameters
+  const allRecords = recordService.getRecords();
+  const matchedRecords = allRecords.filter((r) => {
+    if (districtName && r.district !== districtName) return false;
+    if (category && r.crimeHead !== category) return false;
+    if (officerName && !r.allottedOfficerName?.toLowerCase().includes(officerName.toLowerCase())) return false;
+    if (config.startDate && r.regDate && r.regDate < config.startDate) return false;
+    if (config.endDate && r.regDate && r.regDate > config.endDate) return false;
+    return true;
+  });
 
-    case "district_analysis":
-      return {
-        title: "DISTRICT CRIME ANALYSIS",
-        subtitle: `GEOSPATIAL DENSITY AUDIT - ${districtName.toUpperCase()}`,
-        classification: "RESTRICTED",
-        date: new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" }),
-        meta: {
-          district: districtName,
-          category,
-          officer: "N/A - GEOSPATIAL AUDIT",
-          dateRange,
-          scope,
-          priority
-        },
-        summary: `Geospatial evaluation of crime incident clusters inside ${districtName}. Our GIS tracking identifies three active hotspots showing increased registered counts under ${category}.`,
-        kpis: [
-          { label: "HOTSPOT CLUSTERS", value: "3 Divisions" },
-          { label: "TOTAL SPATIAL CASES", value: "642" },
-          { label: "ACTIVE JURISDICTION", value: "31 Districts" }
-        ],
-        findings: [
-          `Bengaluru Central division shows a 14% elevated threat density for ${category}.`,
-          "Incident distribution correlates with urban migration and high commuter volume.",
-          "Coastal transit hubs in Mangaluru show elevated cargo scan alerts."
-        ],
-        recommendations: [
-          "Implement high-resolution CCTV camera grids at all flagged entry-point toll gates.",
-          "Redirect mobile GIS patrol vans to the Central division during peak business hours.",
-          "Establish secondary scanning loops at marine cargo terminals."
-        ]
-      };
+  const totalMatched = matchedRecords.length;
+  const activeCount = matchedRecords.filter((r) => r.status !== "Case Closed / Completed").length;
+  const closedCount = matchedRecords.filter((r) => r.status === "Case Closed / Completed").length;
+  const criticalCount = matchedRecords.filter((r) => r.severity === "CRITICAL" || r.severity === "HIGH").length;
 
-    case "officer_dossier":
-      return {
-        title: "OFFICER PERFORMANCE REPORT",
-        subtitle: `DOSSIER EVALUATION: ${officerName.toUpperCase()}`,
-        classification: "CONFIDENTIAL / INTERNAL USE ONLY",
-        date: new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" }),
-        meta: {
-          district: districtName,
-          category,
-          officer: officerName,
-          dateRange,
-          scope,
-          priority
-        },
-        summary: `Operational audit evaluating case workload, detection success rates, and charge-sheet cycles for ${officerName}. Data is pulled directly from CaseMaster registers.`,
-        kpis: [
-          { label: "TOTAL DOSSIER CASES", value: "142 Assigned" },
-          { label: "CLOSURE RATE SUCCESS", value: "92%" },
-          { label: "AVG CLOSURE TIME", value: "32 Days" }
-        ],
-        findings: [
-          `${officerName} demonstrates exceptional efficiency in handling complex corporate fraud and cyber forensic cases.`,
-          "Active caseload is currently optimal, with no pending backlog crossing 45 days.",
-          "Avg case resolution time is 13 days faster than the district average."
-        ],
-        recommendations: [
-          "Recommending officer for the Lead Technical Investigator role for upcoming banking audits.",
-          "Authorize additional support assistants to manage routine NDPS filing duties.",
-          "Nominate dossier for the President's Meritorious Service Medal."
-        ]
-      };
+  const tObj = templates.find((t) => t.id === templateId);
 
-    default:
-      return {
-        title: "INTELLIGENCE REPORT BRIEF",
-        subtitle: `${templates.find(t => t.id === templateId)?.title.toUpperCase() || "REPORT"}`,
-        classification: "RESTRICTED",
-        date: new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" }),
-        meta: {
-          district: districtName,
-          category,
-          officer: officerName,
-          dateRange,
-          scope,
-          priority
-        },
-        summary: `Standard intelligence compilation report regarding CCTNS datastore audits. Formulated for jurisdictional evaluate purposes.`,
-        kpis: [
-          { label: "REGISTERED ENTRIES", value: "14,832" },
-          { label: "AUDITED CASES", value: "488" },
-          { label: "SUCCESS RATIO", value: "86.4%" }
-        ],
-        findings: [
-          "All district registers compiled under CCTNS CAS v4.2 specifications.",
-          "No integrity logs discrepancies identified in current search loops."
-        ],
-        recommendations: [
-          "Maintain weekly automatic master data synchronization schedules.",
-          "Conduct routine backup handshakes with Zia NLP nodes."
-        ]
-      };
-  }
+  return {
+    title: tObj ? tObj.title.toUpperCase() : "CCTNS DATABASE REPORT EXPORT",
+    subtitle: `FILTERED CCTNS DATABASE AUDIT • ${districtName ? districtName.toUpperCase() : "STATEWIDE (ALL DISTRICTS)"}`,
+    classification: priority === "Critical" ? "SECRET / MOST IMMEDIATE" : "RESTRICTED",
+    date: new Date().toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" }),
+    meta: {
+      district: districtName || "ALL DISTRICTS (STATEWIDE)",
+      category: category || "ALL CRIME CATEGORIES",
+      officer: officerName || "ALL DISTRICT PERSONNEL",
+      dateRange,
+      scope,
+      priority
+    },
+    summary: `Official CCTNS database compilation for ${districtName || "Statewide Jurisdiction"}. Query filtered ${totalMatched} FIR cases matching active search criteria. Active investigations: ${activeCount}, Resolved cases: ${closedCount}, High-priority alerts: ${criticalCount}.`,
+    kpis: [
+      { label: "FILTERED FIR MATCHES", value: `${totalMatched} Records` },
+      { label: "UNDER INVESTIGATION", value: `${activeCount} Active` },
+      { label: "CASES RESOLVED", value: `${closedCount} Closed` }
+    ],
+    findings: [
+      `Database query executed across CCTNS Master Repository for ${districtName || "All Districts"}.`,
+      `${totalMatched} FIR records retrieved matching active category and temporal bounds.`,
+      `Resolution efficiency standing at ${totalMatched > 0 ? Math.round((closedCount / totalMatched) * 100) : 100}% for queried criteria.`
+    ],
+    recommendations: [
+      "Print or save as PDF for official police command distribution.",
+      "Export CSV data sheet for cross-departmental auditing."
+    ],
+    recordsTable: matchedRecords
+  };
 };
 
 export const reportService = {
@@ -196,8 +116,8 @@ export const reportService = {
   getRecentReports: () => mockRecentReports,
   
   generateReport: async (templateId, config) => {
-    // Simulate generation queue delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    // Brief compilation delay
+    await new Promise(resolve => setTimeout(resolve, 300));
     return generateReportContent(templateId, config);
   }
 };
