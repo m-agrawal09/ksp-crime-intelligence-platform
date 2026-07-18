@@ -210,49 +210,25 @@ export const assistantService = {
   },
 
   queryAssistant: async (promptText) => {
-    // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 1200));
-
-    const normalizedPrompt = promptText.trim().toLowerCase();
-    
-    // Look for exact matches in our prebuilt replies
-    if (prebuiltReplies[normalizedPrompt]) {
-      return prebuiltReplies[normalizedPrompt];
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message: promptText })
+      });
+      if (!response.ok) {
+        throw new Error(`Server returned HTTP ${response.status}`);
+      }
+      const data = await response.json();
+      if (data && data.success) {
+        return data.reply;
+      }
+      throw new Error(data.error || "Failed to retrieve intelligence data.");
+    } catch (err) {
+      console.error("Error calling assistant API:", err);
+      throw err;
     }
-
-    // Keyword matching fallback
-    if (normalizedPrompt.includes("bengaluru") || normalizedPrompt.includes("bangalore")) {
-      return prebuiltReplies["summarize crimes in bengaluru city"];
-    }
-    if (normalizedPrompt.includes("district") || normalizedPrompt.includes("hotspot") || normalizedPrompt.includes("risk")) {
-      return prebuiltReplies["show high-risk districts"];
-    }
-    if (normalizedPrompt.includes("cyber") || normalizedPrompt.includes("fraud") || normalizedPrompt.includes("phishing")) {
-      return prebuiltReplies["explain recent cyber fraud trends"];
-    }
-    if (normalizedPrompt.includes("officer") || normalizedPrompt.includes("rajeshwari") || normalizedPrompt.includes("performance")) {
-      return prebuiltReplies["generate officer performance summary"];
-    }
-    if (normalizedPrompt.includes("compare") || normalizedPrompt.includes("statistics") || normalizedPrompt.includes("vs")) {
-      return prebuiltReplies["compare crime statistics between districts"];
-    }
-    if (normalizedPrompt.includes("brief") || normalizedPrompt.includes("executive") || normalizedPrompt.includes("report")) {
-      return prebuiltReplies["draft an executive crime briefing"];
-    }
-
-    // Default reply
-    return `### KSP Command Intelligence Response
-
-I received your query: *"Data request regarding ${promptText}"*
-
-As your AI Assistant, I can provide detailed breakdowns on CCTNS logs. Here are the query keywords I recognize:
-* **"Bengaluru"**: Summarizes crimes and hotspots in the Bengaluru district.
-* **"Hotspots" or "Districts"**: Ranks high-risk locations and active case profiles.
-* **"Cyber" or "Fraud"**: Explains latest digital threat trends and prevention roadmaps.
-* **"Officer"**: Generates a performance and workload summary of top investigating officers.
-* **"Compare"**: Compares crime statistics (assigned, active, resolved) between Bengaluru and Mangaluru.
-* **"Briefing"**: Drafts a strategic executive crime briefing for senior leadership.
-
-Please type or select one of the prompts to continue.`;
   }
 };

@@ -1,0 +1,154 @@
+const catalyst = require("zcatalyst-sdk-node");
+
+const CrimeRepository = require("./datastore");
+const { generateAnalytics } = require("./analytics");
+const { detectIntent } = require("./intent");
+const { route } = require("./router");
+const { buildPrompt } = require("./prompt");
+const QuickMLService = require("./quickml");
+const { parseResponse } = require("./parser");
+
+module.exports = async (req, res) => {
+
+    try {
+
+
+        const app = catalyst.initialize(req);
+
+        const message = req.body?.message?.trim();
+
+        const {
+
+            getAnalytics,
+
+            setAnalytics
+
+            } = require("./cache");
+
+        if (!message) {
+
+            return res.status(400).send({
+
+                success: false,
+
+                error: "Message is required."
+
+            });
+
+        }
+
+        /**
+         * Load crime records.
+         */
+        const repository = new CrimeRepository(req);
+
+        let analytics = getAnalytics();
+
+if (!analytics) {
+
+    const records =
+        await repository.getCrimeAnalyticsData();
+
+    analytics =
+        generateAnalytics(records);
+
+    setAnalytics(analytics);
+
+}
+
+        /**
+         * Detect user intent.
+         */
+        const intent =
+            detectIntent(message);
+
+        /**
+         * Route request.
+         */
+        const toolResponse =
+            await route(
+
+                intent,
+
+                analytics,
+
+                message
+
+            );
+
+        /**
+         * Tool answered directly.
+         */
+        if (
+
+            toolResponse &&
+
+            toolResponse.requiresAI === false
+
+        ) {
+
+            return res.send({
+
+                success: true,
+
+                source: toolResponse.source,
+
+                reply: toolResponse.answer,
+
+                data: toolResponse.data,
+
+                timestamp: new Date().toISOString()
+
+            });
+
+        }
+
+        /**
+         * Needs AI reasoning.
+         */
+        const prompt = buildPrompt(
+
+            analytics,
+
+            message
+
+        );
+
+        const quickml =
+            new QuickMLService(app);
+
+        const response =
+            await quickml.generate(prompt);
+
+        const answer =
+            parseResponse(response);
+
+        return res.send({
+
+            success: true,
+
+            source: "quickml",
+
+            reply: answer,
+
+            timestamp: new Date().toISOString()
+
+        });
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        return res.status(500).send({
+
+            success: false,
+
+            error: error.message
+
+        });
+
+    }
+
+};

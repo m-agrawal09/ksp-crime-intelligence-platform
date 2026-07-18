@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { FaUser, FaBrain, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
+import React, { useState, useEffect, useRef } from "react";
+import { FaComments, FaTimes, FaPaperPlane, FaBrain, FaUser, FaTrash, FaTerminal, FaVolumeUp, FaVolumeMute } from "react-icons/fa";
+import { assistantService } from "../../services/assistantService";
 
 const translations = {
   "bengaluru city crime analytics summary": `### ಬೆಂಗಳೂರು ನಗರ ಅಪರಾಧ ವಿಶ್ಲೇಷಣೆ ಸಾರಾಂಶ (2026)
@@ -107,20 +108,20 @@ const getTranslation = (text, lang) => {
   return text;
 };
 
-const MessageBubble = ({ message }) => {
-  const isOfficer = message.sender === "officer";
+const FloatingMessageBubble = ({ msg, parseMarkdown }) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [lang, setLang] = useState("en");
+  const isOfficer = msg.sender === "officer";
 
-  const activeText = isOfficer ? message.text : getTranslation(message.text, lang);
+  const activeText = isOfficer ? msg.text : getTranslation(msg.text, lang);
 
   const handleSpeak = () => {
     if (isSpeaking) {
       window.speechSynthesis.cancel();
       setIsSpeaking(false);
     } else {
-      window.speechSynthesis.cancel(); // Stop any ongoing speech
-      const textToSpeak = activeText.replace(/[*#|:-]/g, " "); // Strip markdown characters for clean speech
+      window.speechSynthesis.cancel();
+      const textToSpeak = activeText.replace(/[*#|:-]/g, " ");
       const utterance = new SpeechSynthesisUtterance(textToSpeak);
       
       if (lang === "kn") {
@@ -136,15 +137,147 @@ const MessageBubble = ({ message }) => {
     }
   };
 
-  // Clean up synthesis on unmount
   useEffect(() => {
     return () => {
       window.speechSynthesis.cancel();
     };
   }, []);
 
+  return (
+    <div 
+      className={`flex gap-2.5 max-w-[85%] ${
+        isOfficer ? "ml-auto flex-row-reverse" : "mr-auto"
+      }`}
+    >
+      {/* Avatar Icon */}
+      <div className={`h-6 w-6 rounded flex items-center justify-center border flex-shrink-0 text-[10px] ${
+        isOfficer 
+          ? "bg-slate-900 border-slate-800 text-slate-400"
+          : "bg-blue-600/10 border-blue-500/30 text-blue-400"
+      }`}>
+        {isOfficer ? <FaUser /> : <FaTerminal />}
+      </div>
+
+      {/* Message Bubble */}
+      <div className={`rounded-xl border p-2.5 shadow-sm text-[10px] ${
+        isOfficer
+          ? "bg-slate-900/80 border-slate-800 text-slate-200"
+          : "bg-slate-950/80 border-slate-900 text-slate-350"
+      }`}>
+        <div className="flex items-center justify-between border-b border-slate-900/20 pb-0.5 mb-1 text-[7px] text-slate-500 tracking-wider">
+          <span>{isOfficer ? "OFFICER CONSOLE" : "AI ENGINE OUT"}</span>
+          <div className="flex items-center gap-1.5 ml-2">
+            {!isOfficer && (
+              <div className="flex items-center gap-0.5 bg-slate-900 border border-slate-800/80 rounded px-0.5">
+                <button
+                  onClick={() => { setLang("en"); window.speechSynthesis.cancel(); setIsSpeaking(false); }}
+                  className={`px-0.5 text-[6px] font-bold rounded transition-all cursor-pointer ${
+                    lang === "en" ? "bg-blue-600 text-white" : "text-slate-500 hover:text-slate-300"
+                  }`}
+                >
+                  EN
+                </button>
+                <button
+                  onClick={() => { setLang("kn"); window.speechSynthesis.cancel(); setIsSpeaking(false); }}
+                  className={`px-0.5 text-[6px] font-bold rounded transition-all cursor-pointer ${
+                    lang === "kn" ? "bg-blue-600 text-white" : "text-slate-500 hover:text-slate-300"
+                  }`}
+                >
+                  ಕನ್ನ
+                </button>
+              </div>
+            )}
+            {!isOfficer && (
+              <button 
+                onClick={handleSpeak}
+                className="text-slate-500 hover:text-blue-400 transition-colors p-0.5 cursor-pointer"
+                title={isSpeaking ? "Stop Speaking" : "Read Aloud"}
+              >
+                {isSpeaking ? <FaVolumeMute className="text-[8px]" /> : <FaVolumeUp className="text-[8px]" />}
+              </button>
+            )}
+          </div>
+        </div>
+        <div className="space-y-1">
+          {isOfficer ? (
+            <p className="leading-relaxed font-sans">{msg.text}</p>
+          ) : (
+            parseMarkdown(activeText)
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const FloatingChatWidget = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState([
+    {
+      sender: "assistant",
+      text: "👋 Welcome to KSP AI Platform. I am your Intelligence Copilot.\n\nAsk me about case files, officer performance, hotspots, or regional crime trends."
+    }
+  ]);
+  const [inputText, setInputText] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  
+  const chatEndRef = useRef(null);
+
+  // Auto-scroll to the bottom of the chat window
+  useEffect(() => {
+    if (isOpen) {
+      chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages, isTyping, isOpen]);
+
+  const handleSend = async (textToSend) => {
+    const text = textToSend || inputText.trim();
+    if (!text) return;
+
+    if (!textToSend) {
+      setInputText("");
+    }
+
+    // Add user message
+    setMessages((prev) => [...prev, { sender: "officer", text }]);
+    setIsTyping(true);
+
+    try {
+      // Query the backend function (via Vite dev server proxy)
+      const reply = await assistantService.queryAssistant(text);
+      setMessages((prev) => [...prev, { sender: "assistant", text: reply }]);
+    } catch (err) {
+      setMessages((prev) => [
+        ...prev,
+        { 
+          sender: "assistant", 
+          text: "⚠️ **System Offline:** Failed to connect to local Catalyst gateway. Verify that the server is running." 
+        }
+      ]);
+    } finally {
+      setIsTyping(false);
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
+  const clearChat = () => {
+    setMessages([
+      {
+        sender: "assistant",
+        text: "Conversation cleared. How can I assist you now with KSP intelligence?"
+      }
+    ]);
+  };
+
   // Light-weight custom parser to format mock markdown responses into clean React nodes
   const parseMarkdown = (text) => {
+    if (!text) return null;
     const lines = text.split("\n");
     const elements = [];
     let tableRows = [];
@@ -152,25 +285,24 @@ const MessageBubble = ({ message }) => {
 
     const renderTable = (rows, key) => {
       if (rows.length === 0) return null;
-      
       const headerCells = rows[0].split("|").map(c => c.trim()).filter(c => c);
       const bodyRows = rows.slice(2).map(r => r.split("|").map(c => c.trim()).filter(c => c));
 
       return (
-        <div key={key} className="my-3.5 overflow-x-auto border border-slate-800/80 rounded-xl bg-slate-950/40 shadow-inner">
-          <table className="w-full text-left border-collapse font-mono text-[10px]">
+        <div key={key} className="my-2 overflow-x-auto border border-slate-800/80 rounded-lg bg-slate-950/60 shadow-inner max-w-full">
+          <table className="w-full text-left border-collapse font-mono text-[9px]">
             <thead>
-              <tr className="border-b border-slate-800 bg-slate-900/60 text-slate-400 font-bold uppercase tracking-wider">
+              <tr className="border-b border-slate-800 bg-slate-900/60 text-slate-400 font-bold uppercase">
                 {headerCells.map((h, idx) => (
-                  <th key={idx} className="py-2.5 px-4">{h}</th>
+                  <th key={idx} className="py-1.5 px-3">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-900/40 text-slate-300">
               {bodyRows.map((row, idx) => (
-                <tr key={idx} className="hover:bg-slate-900/20 transition-colors">
+                <tr key={idx} className="hover:bg-slate-900/20">
                   {row.map((cell, cidx) => (
-                    <td key={cidx} className="py-2.5 px-4">{cell}</td>
+                    <td key={cidx} className="py-1.5 px-3">{cell}</td>
                   ))}
                 </tr>
               ))}
@@ -202,33 +334,26 @@ const MessageBubble = ({ message }) => {
 
       if (line.startsWith("###")) {
         elements.push(
-          <h3 key={i} className="text-[10px] font-bold text-blue-400 tracking-wider font-mono uppercase mt-4 mb-2 border-b border-slate-800 pb-1">
+          <h3 key={i} className="text-[10px] font-bold text-blue-400 font-mono uppercase mt-3 mb-1 border-b border-slate-800 pb-0.5">
             {parseBold(line.replace("###", "").trim())}
           </h3>
         );
       } else if (line.startsWith("####")) {
         elements.push(
-          <h4 key={i} className="text-[9px] font-bold text-slate-200 font-mono uppercase mt-3 mb-1.5">
+          <h4 key={i} className="text-[9px] font-bold text-slate-200 font-mono uppercase mt-2 mb-1">
             {parseBold(line.replace("####", "").trim())}
           </h4>
         );
       } else if (line.startsWith("*") || line.startsWith("-")) {
         elements.push(
-          <div key={i} className="flex items-start gap-2 pl-2 text-[10px] leading-relaxed text-slate-350 my-1 font-sans">
-            <span className="h-1.5 w-1.5 rounded-full bg-blue-500 mt-1.5 flex-shrink-0" />
+          <div key={i} className="flex items-start gap-1.5 pl-1 text-[10px] text-slate-300 my-0.5 font-sans leading-relaxed">
+            <span className="h-1 w-1 rounded-full bg-blue-500 mt-1.5 flex-shrink-0" />
             <span>{parseBold(line.substring(1).trim())}</span>
-          </div>
-        );
-      } else if (line.startsWith("1.") || line.startsWith("2.") || line.startsWith("3.") || line.startsWith("4.")) {
-        elements.push(
-          <div key={i} className="flex items-start gap-2 pl-2 text-[10px] leading-relaxed text-slate-355 my-1 font-sans">
-            <span className="font-mono text-blue-400 font-bold flex-shrink-0">{line.slice(0, 2)}</span>
-            <span>{parseBold(line.substring(2).trim())}</span>
           </div>
         );
       } else if (line) {
         elements.push(
-          <p key={i} className="text-[10px] leading-relaxed text-slate-400 my-2 font-sans">
+          <p key={i} className="text-[10px] leading-relaxed text-slate-400 my-1 font-sans">
             {parseBold(line)}
           </p>
         );
@@ -242,70 +367,117 @@ const MessageBubble = ({ message }) => {
     return elements;
   };
 
-  return (
-    <div className={`flex gap-3 w-full max-w-3xl ${isOfficer ? "ml-auto flex-row-reverse" : "mr-auto"}`}>
-      
-      {/* Icon Avatar */}
-      <div className={`h-8 w-8 rounded-lg flex items-center justify-center border flex-shrink-0 shadow-sm ${
-        isOfficer 
-          ? "bg-slate-900 border-slate-800 text-slate-300"
-          : "bg-blue-600/10 border-blue-500/30 text-blue-400"
-      }`}>
-        {isOfficer ? <FaUser className="text-xs" /> : <FaBrain className="text-xs animate-pulse" />}
-      </div>
+  const suggestions = [
+    { label: "Bengaluru Crime Summary", query: "Summarize crimes in Bengaluru City" },
+    { label: "High-Risk Districts", query: "Show high-risk districts" },
+    { label: "Cyber Fraud Trends", query: "Explain recent cyber fraud trends" },
+    { label: "Officer Profiles", query: "Generate officer performance summary" }
+  ];
 
-      {/* Bubble text */}
-      <div className={`flex-1 rounded-xl border p-4 shadow-md ${
-        isOfficer 
-          ? "bg-slate-900/60 border-slate-800/80 text-slate-200"
-          : "bg-slate-950/40 border-slate-850 text-slate-300"
-      }`}>
-        <div className="flex items-center justify-between border-b border-slate-900/40 pb-1 mb-1.5 text-[9px] font-mono text-slate-500 tracking-wider">
-          <span>{isOfficer ? "INVESTIGATING OFFICER" : "AI PLATFORM CONSOLE"}</span>
-          <div className="flex items-center gap-2">
-            {!isOfficer && (
-              <div className="flex items-center gap-0.5 bg-slate-900 border border-slate-800/80 rounded p-0.5">
-                <button
-                  onClick={() => { setLang("en"); window.speechSynthesis.cancel(); setIsSpeaking(false); }}
-                  className={`px-1 text-[7px] font-bold rounded transition-all cursor-pointer ${
-                    lang === "en" ? "bg-blue-600 text-white" : "text-slate-500 hover:text-slate-300"
-                  }`}
-                >
-                  EN
-                </button>
-                <button
-                  onClick={() => { setLang("kn"); window.speechSynthesis.cancel(); setIsSpeaking(false); }}
-                  className={`px-1 text-[7px] font-bold rounded transition-all cursor-pointer ${
-                    lang === "kn" ? "bg-blue-600 text-white" : "text-slate-500 hover:text-slate-300"
-                  }`}
-                >
-                  ಕನ್ನ
-                </button>
+  return (
+    <div className="fixed bottom-6 right-6 z-50 font-mono">
+      {/* Floating Chat Box Panel */}
+      {isOpen && (
+        <div className="absolute bottom-16 right-0 w-[350px] sm:w-[400px] h-[550px] bg-slate-950/95 border border-slate-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden backdrop-blur-md animate-fade-in transition-all duration-300">
+          
+          {/* Header */}
+          <div className="px-4 py-3 bg-gradient-to-r from-slate-900 to-slate-950 border-b border-slate-800 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="h-6 w-6 rounded bg-blue-600/10 border border-blue-500/30 flex items-center justify-center text-blue-400 animate-pulse">
+                <FaBrain className="text-[10px]" />
+              </div>
+              <div>
+                <div className="text-[11px] font-bold text-white tracking-wider">KSP CO-PILOT</div>
+                <div className="text-[8px] text-slate-500 font-bold uppercase tracking-wider">AI Tactical Node</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={clearChat}
+                title="Clear conversation"
+                className="text-slate-500 hover:text-rose-400 transition-colors p-1"
+              >
+                <FaTrash className="text-[10px]" />
+              </button>
+              <button 
+                onClick={() => setIsOpen(false)}
+                className="text-slate-500 hover:text-white transition-colors p-1"
+              >
+                <FaTimes className="text-[12px]" />
+              </button>
+            </div>
+          </div>
+
+          {/* Messages Container */}
+          <div className="flex-1 p-4 overflow-y-auto space-y-4 scrollbar-thin scrollbar-thumb-slate-850">
+            {messages.map((msg, index) => (
+              <FloatingMessageBubble key={index} msg={msg} parseMarkdown={parseMarkdown} />
+            ))}
+
+            {/* Typing Indicator */}
+            {isTyping && (
+              <div className="flex gap-2.5 max-w-[85%] mr-auto">
+                <div className="h-6 w-6 rounded flex items-center justify-center bg-blue-600/10 border border-blue-500/30 text-blue-400 flex-shrink-0 text-[10px]">
+                  <div className="h-2 w-2 rounded-full border border-slate-800 border-t-blue-500 animate-spin" />
+                </div>
+                <div className="rounded-xl border border-slate-900 p-2.5 bg-slate-950/80 text-slate-500 text-[8px] tracking-wider uppercase animate-pulse">
+                  Querying CCTNS analytics...
+                </div>
               </div>
             )}
-            {!isOfficer && (
-              <button 
-                onClick={handleSpeak}
-                className="text-slate-500 hover:text-blue-400 transition-colors p-0.5 cursor-pointer"
-                title={isSpeaking ? "Stop Speaking" : "Read Aloud"}
-              >
-                {isSpeaking ? <FaVolumeMute className="text-[10px]" /> : <FaVolumeUp className="text-[10px]" />}
-              </button>
-            )}
-            <span>{new Date().toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false })}</span>
-          </div>
-        </div>
-        <div className="space-y-1">
-          {isOfficer ? (
-            <p className="text-[11px] leading-relaxed font-sans">{message.text}</p>
-          ) : (
-            parseMarkdown(activeText)
-          )}
-        </div>
-      </div>
 
+            <div ref={chatEndRef} />
+          </div>
+
+          {/* Quick suggestions wrapper */}
+          <div className="px-4 py-2 border-t border-slate-900/60 bg-slate-950/50 flex flex-wrap gap-1.5 overflow-x-auto select-none">
+            {suggestions.map((sug, idx) => (
+              <button
+                key={idx}
+                onClick={() => handleSend(sug.query)}
+                className="px-2 py-1 bg-slate-900 hover:bg-slate-850 border border-slate-800/80 text-slate-400 hover:text-white rounded text-[8px] font-sans transition-all active:scale-95 whitespace-nowrap"
+              >
+                {sug.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Input Panel */}
+          <div className="p-3 border-t border-slate-900 bg-slate-950 flex items-center gap-2">
+            <textarea
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              onKeyDown={handleKeyPress}
+              placeholder="Ask copilot..."
+              className="flex-1 max-h-16 min-h-[36px] bg-slate-900/60 border border-slate-800/80 focus:border-blue-500/50 rounded-lg px-3 py-1.5 text-[10px] text-slate-200 outline-none placeholder-slate-600 resize-none font-sans scrollbar-none"
+            />
+            <button
+              onClick={() => handleSend()}
+              className="h-8 w-8 bg-blue-600 hover:bg-blue-500 active:scale-95 text-white flex items-center justify-center rounded-lg shadow-lg hover:shadow-blue-500/20 transition-all flex-shrink-0"
+            >
+              <FaPaperPlane className="text-[10px]" />
+            </button>
+          </div>
+
+        </div>
+      )}
+
+      {/* Floating Toggle Button */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        title="Open AI Command Copilot"
+        className={`h-12 w-12 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 flex items-center justify-center text-white shadow-[0_0_15px_rgba(37,99,235,0.4)] hover:shadow-[0_0_25px_rgba(37,99,235,0.6)] border border-blue-500/20 transform transition-all duration-300 hover:scale-105 active:scale-95 ${
+          isOpen ? "rotate-90 bg-rose-600 hover:bg-rose-500 shadow-rose-500/40" : ""
+        }`}
+      >
+        {isOpen ? (
+          <FaTimes className="text-base" />
+        ) : (
+          <FaComments className="text-base animate-pulse" />
+        )}
+      </button>
     </div>
   );
 };
 
-export default MessageBubble;
+export default FloatingChatWidget;

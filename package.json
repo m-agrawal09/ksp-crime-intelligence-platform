@@ -1,4 +1,10 @@
 {
+  "name": "ksp-crime-intelligence-platform",
+  "version": "1.0.0",
+  "scripts": {
+    "dev:backend": "node server.js",
+    "dev:frontend": "npm --prefix frontend run dev"
+  },
   "dependencies": {
     "lucide-react": "^1.24.0",
     "react-icons": "^5.7.0",

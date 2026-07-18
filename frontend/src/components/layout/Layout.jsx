@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
+import FloatingChatWidget from "../assistant/FloatingChatWidget";
 
 function Layout() {
   return (
@@ -14,6 +15,9 @@ function Layout() {
           <Outlet />
         </main>
       </div>
+      
+      {/* Floating Tactical AI Copilot Widget */}
+      <FloatingChatWidget />
     </div>
   );
 }
