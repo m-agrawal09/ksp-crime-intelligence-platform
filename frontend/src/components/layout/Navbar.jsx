@@ -4,6 +4,7 @@ import { FiSettings } from "react-icons/fi";
 import { FaUserShield, FaUserCheck, FaSignOutAlt } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
 import NotificationDropdown from "./NotificationDropdown";
+import kspLogo from "../../assets/images/ksp-emblem.png";
 
 function Navbar() {
   const { currentUser, isAdmin, logout } = useAuth();
@@ -15,7 +16,7 @@ function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 flex h-20 items-center justify-between border-b border-slate-800 bg-slate-950 px-8">
+    <header className="sticky top-0 z-50 flex h-20 items-center justify-between border-b border-slate-800 bg-slate-950 px-8 font-inter">
 
       {/* Left */}
       <div className="flex items-center gap-4">
@@ -24,14 +25,20 @@ function Navbar() {
           <HiBars3 className="text-3xl text-white" />
         </button>
 
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white">
-            Karnataka State Police
-          </h1>
-
-          <p className="text-sm uppercase tracking-[0.18em] text-blue-400">
-            AI Crime Intelligence Platform
-          </p>
+        <div className="flex items-center gap-3">
+          <img
+            src={kspLogo}
+            alt="Karnataka State Police Emblem"
+            className="w-10 h-10 object-contain flex-shrink-0"
+          />
+          <div>
+            <h1 className="text-base font-bold tracking-wider text-white uppercase leading-none mb-1 font-sans">
+              Karnataka State Police
+            </h1>
+            <p className="text-[10px] uppercase tracking-[0.18em] text-blue-400 font-sans leading-none">
+              AI Crime Intelligence Platform
+            </p>
+          </div>
         </div>
 
       </div>
@@ -42,15 +49,13 @@ function Navbar() {
         {/* User Badge Info */}
         {currentUser && (
           <div className="hidden sm:flex items-center gap-3 bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-1.5 font-mono text-xs">
-            <div className={`h-7 w-7 rounded-lg flex items-center justify-center text-sm font-bold ${
-              isAdmin ? "bg-blue-600 text-white" : "bg-purple-600 text-white"
-            }`}>
+            <div className="h-7 w-7 rounded-lg flex items-center justify-center text-sm font-bold bg-blue-600 text-white">
               {isAdmin ? <FaUserShield /> : <FaUserCheck />}
             </div>
             <div className="text-left">
               <div className="font-bold text-white leading-none">{currentUser.name}</div>
               <div className="text-[10px] text-slate-400 mt-1 uppercase tracking-wider">
-                {currentUser.rank} • <span className={isAdmin ? "text-blue-400 font-bold" : "text-purple-400 font-bold"}>{currentUser.role}</span>
+                {currentUser.rank} • <span className="text-blue-400 font-bold">{currentUser.role}</span>
               </div>
             </div>
           </div>

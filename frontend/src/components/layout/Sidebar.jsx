@@ -10,6 +10,8 @@ import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import { HiOutlineDocumentChartBar, HiOutlineDocumentText } from "react-icons/hi2";
 import { PiShieldStarFill } from "react-icons/pi";
 
+import kspLogo from "../../assets/images/ksp-emblem.png";
+
 const menuItems = [
   {
     name: "Dashboard",
@@ -50,60 +52,55 @@ const menuItems = [
 
 function Sidebar() {
   return (
-    <aside className="flex h-[calc(100vh-64px)] w-72 flex-col border-r border-[var(--color-border)] bg-[var(--color-sidebar)]">
+    <aside className="flex h-[calc(100vh-80px)] w-[295px] flex-col border-r border-[var(--color-border)] bg-[#0b1220] font-inter">
 
-      {/* Logo */}
-      <div className="border-b border-[var(--color-border)] px-6 py-6">
-        <div className="flex items-center gap-3">
-          <PiShieldStarFill className="text-4xl text-[var(--color-primary)]" />
-
-          <div>
-            <h2 className="text-xl font-bold text-[var(--color-text)]">
-              KSP
-            </h2>
-
-            <p className="text-xs uppercase tracking-widest text-[var(--color-text-muted)]">
-              Crime Intelligence
-            </p>
-          </div>
-        </div>
+      {/* Sidebar Header Branding (20% larger emblem and clear titles) */}
+      <div className="border-b border-[var(--color-border)] px-6 py-6 flex flex-col items-center text-center">
+        <img 
+          src={kspLogo} 
+          alt="Karnataka State Police Emblem" 
+          className="w-[78px] h-auto object-contain mb-3"
+        />
+        <h2 className="text-xs font-bold text-white uppercase tracking-wider leading-tight font-sans">
+          KARNATAKA STATE POLICE
+        </h2>
+        <p className="text-[9px] uppercase tracking-wider text-blue-400 font-sans mt-1.5 leading-normal font-bold">
+          AI CRIME INTELLIGENCE PLATFORM
+        </p>
       </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 px-3 py-4">
-        <div className="space-y-2">
-          {menuItems.map((item) => {
-            const Icon = item.icon;
+      {/* Navigation - group elements with tighter vertical spacing */}
+      <nav className="flex-grow px-3 py-5 space-y-1.5 overflow-y-auto">
+        {menuItems.map((item) => {
+          const Icon = item.icon;
 
-            return (
-              <NavLink
-                key={item.path}
-                to={item.path}
-                className={({ isActive }) =>
-                  `flex items-center gap-4 rounded-xl px-4 py-3.5 text-base font-medium transition-all duration-200 ${
-                    isActive
-                      ? "bg-[var(--color-primary)] text-white"
-                      : "text-[var(--color-text-muted)] hover:bg-[var(--color-card)] hover:text-white"
-                  }`
-                }
-              >
-                <Icon className="text-2xl" />
-
-                <span>{item.name}</span>
-              </NavLink>
-            );
-          })}
-        </div>
+          return (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={({ isActive }) =>
+                `flex h-[52px] items-center gap-3.5 rounded-lg px-4 text-[15px] font-semibold transition-all duration-200 ${
+                  isActive
+                    ? "bg-[#2563eb] text-white shadow-md shadow-blue-900/30 font-bold"
+                    : "text-[var(--color-text-muted)] hover:bg-[#0f172a] hover:text-white"
+                }`
+              }
+            >
+              <Icon className="text-[23px] flex-shrink-0" />
+              <span>{item.name}</span>
+            </NavLink>
+          );
+        })}
       </nav>
 
       {/* Footer */}
       <div className="border-t border-[var(--color-border)] p-5">
-        <div className="rounded-xl bg-[var(--color-card)] p-4">
+        <div className="rounded-lg bg-[#0f172a] p-4 border border-white/[0.03]">
           <p className="text-sm font-semibold text-[var(--color-text)]">
             Catalyst
           </p>
 
-          <p className="mt-1 text-xs text-green-400">
+          <p className="mt-1 text-xs text-green-400 font-medium">
             ● Connected
           </p>
         </div>

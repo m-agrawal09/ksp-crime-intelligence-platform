@@ -1,5 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 @import "./styles/theme.css";
+
+.font-space {
+  font-family: 'Space Grotesk', 'Space Grotesk fallback', sans-serif;
+}
+
+.font-inter {
+  font-family: 'Inter', 'Inter fallback', sans-serif;
+}
+
+.bg-blueprint {
+  background-color: #050a12;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-position: center;
+}
 
 /* ====================================================
    Custom Overrides for Dark-themed Leaflet Popups

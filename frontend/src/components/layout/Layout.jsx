@@ -11,8 +11,10 @@ function Layout() {
       <div className="flex">
         <Sidebar />
 
-        <main className="flex-1 overflow-auto p-6 md:p-8 lg:p-10">
-          <Outlet />
+        <main className="flex-grow h-[calc(100vh-80px)] overflow-y-auto py-10 px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32 flex justify-center bg-blueprint relative">
+          <div className="w-full max-w-4xl relative z-10">
+            <Outlet />
+          </div>
         </main>
       </div>
       
