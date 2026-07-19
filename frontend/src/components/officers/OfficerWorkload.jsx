@@ -5,7 +5,7 @@ const OfficerWorkload = ({ workload }) => {
   if (!workload) return null;
 
   return (
-    <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-5 shadow-lg flex flex-col h-[500px]">
+    <div className="bg-slate-900/60 border border-slate-800 rounded-[4px] py-5 px-6 shadow-lg flex flex-col h-[420px]">
       
       {/* Header */}
       <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
@@ -29,12 +29,12 @@ const OfficerWorkload = ({ workload }) => {
             <FaClipboardList className="text-[9px]" />
             <span>CRITICAL ROADMAP PATHS</span>
           </div>
-          <div className="space-y-2">
+          <div className="space-y-3">
             {workload.highPriority.map((c) => (
-              <div key={c.caseNo} className="bg-slate-950/40 border border-slate-850 p-2.5 rounded-lg">
+              <div key={c.caseNo} className="bg-slate-950/40 border border-slate-850 py-3 px-3.5 rounded-[4px]">
                 <div className="flex justify-between items-center gap-2">
                   <span className="font-bold text-slate-200">{c.caseNo}</span>
-                  <span className="text-[8px] bg-red-500/10 text-red-400 border border-red-500/20 px-1.5 rounded uppercase">
+                  <span className="text-[8px] bg-red-500/10 text-red-400 border border-red-500/20 px-1.5 rounded-[4px] uppercase">
                     {c.status}
                   </span>
                 </div>
@@ -51,9 +51,9 @@ const OfficerWorkload = ({ workload }) => {
             <FaBalanceScale className="text-[9px]" />
             <span>JUDICIAL TRIAL DOCKETS</span>
           </div>
-          <div className="space-y-2">
+          <div className="space-y-3">
             {workload.hearings.map((h) => (
-              <div key={h.docketNo} className="bg-slate-950/40 border border-slate-850 p-2.5 rounded-lg">
+              <div key={h.docketNo} className="bg-slate-950/40 border border-slate-850 py-3 px-3.5 rounded-[4px]">
                 <div className="flex justify-between items-center gap-2">
                   <span className="font-bold text-slate-200">{h.docketNo}</span>
                   <span className="text-[8px] text-blue-400">{h.time}</span>
@@ -71,9 +71,9 @@ const OfficerWorkload = ({ workload }) => {
             <FaClock className="text-[9px]" />
             <span>PENDING CLOSURES</span>
           </div>
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             {workload.pending.map((p) => (
-              <div key={p.caseNo} className="flex justify-between items-center bg-slate-950/20 border border-slate-900/60 p-2 rounded text-[9px]">
+              <div key={p.caseNo} className="flex justify-between items-center bg-slate-950/20 border border-slate-900/60 py-2.5 px-3 rounded-[4px] text-[9px]">
                 <span className="font-bold text-slate-300 truncate max-w-[120px]">{p.caseNo}: {p.title}</span>
                 <span className="text-slate-500 text-[8px]">{p.status}</span>
               </div>
@@ -87,9 +87,9 @@ const OfficerWorkload = ({ workload }) => {
             <FaClock className="text-[9px]" />
             <span>RECENT INTAKES</span>
           </div>
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             {workload.recent.map((r) => (
-              <div key={r.caseNo} className="flex justify-between items-center bg-slate-950/20 border border-slate-900/60 p-2 rounded text-[9px]">
+              <div key={r.caseNo} className="flex justify-between items-center bg-slate-950/20 border border-slate-900/60 py-2.5 px-3 rounded-[4px] text-[9px]">
                 <span className="font-bold text-slate-300 truncate max-w-[150px]">{r.caseNo}: {r.title}</span>
                 <span className="text-slate-500 text-[8px]">{r.assigned}</span>
               </div>

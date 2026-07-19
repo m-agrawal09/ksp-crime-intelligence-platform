@@ -115,7 +115,7 @@ const ManageRecords = () => {
   const handleToggleCaseClosed = (id) => {
     const rec = recordService.getRecordById(id);
     const actionText = rec?.status === "Case Closed / Completed" ? "Re-open Case Investigation" : "Mark Case Closed / Completed";
-    
+
     requestPinAuth(`${actionText} for ${rec?.crimeNo || 'FIR'}`, () => {
       recordService.toggleCaseClosed(id);
       reloadRecords();
@@ -380,19 +380,17 @@ const ManageRecords = () => {
                       {/* Status & Severity */}
                       <td className="py-3.5 px-4 border-b border-slate-800/40 font-mono">
                         <div className="flex flex-col gap-1.5 items-start">
-                          <span className={`text-[9px] font-bold px-2.5 py-0.5 rounded-[4px] border uppercase tracking-wider font-mono ${
-                            isClosed
+                          <span className={`text-[9px] font-bold px-2.5 py-0.5 rounded-[4px] border uppercase tracking-wider font-mono ${isClosed
                               ? "bg-emerald-500/5 text-emerald-400 border-emerald-500/20"
                               : "bg-amber-500/5 text-amber-400 border-amber-500/20"
-                          }`}>
+                            }`}>
                             {isClosed ? "CLOSED / COMPLETED" : r.status}
                           </span>
 
-                          <span className={`text-[8px] font-bold px-2 py-0.5 rounded-[4px] uppercase tracking-wider font-mono border ${
-                            r.severity === "CRITICAL" ? "bg-rose-500/5 text-rose-400 border-rose-500/20" :
-                            r.severity === "HIGH" ? "bg-amber-500/5 text-amber-400 border-amber-500/20" :
-                            "bg-blue-500/5 text-blue-400 border-blue-500/20"
-                          }`}>
+                          <span className={`text-[8px] font-bold px-2 py-0.5 rounded-[4px] uppercase tracking-wider font-mono border ${r.severity === "CRITICAL" ? "bg-rose-500/5 text-rose-400 border-rose-500/20" :
+                              r.severity === "HIGH" ? "bg-amber-500/5 text-amber-400 border-amber-500/20" :
+                                "bg-blue-500/5 text-blue-400 border-blue-500/20"
+                            }`}>
                             {r.severity}
                           </span>
                         </div>
@@ -422,11 +420,10 @@ const ManageRecords = () => {
                           {/* Toggle Closed Status */}
                           <button
                             onClick={() => handleToggleCaseClosed(r.id)}
-                            className={`p-2 rounded-[4px] border transition-colors ${
-                              isClosed
+                            className={`p-2 rounded-[4px] border transition-colors ${isClosed
                                 ? "border-slate-800 bg-[#0c182a] text-amber-400 hover:bg-[#201d24] hover:border-slate-700"
                                 : "border-slate-800 bg-[#0c182a] text-emerald-400 hover:bg-[#0f2122] hover:border-slate-700"
-                            }`}
+                              }`}
                             title={isClosed ? "Re-open Case Investigation" : "Mark Case Closed / Completed"}
                           >
                             {isClosed ? <FaUndo /> : <FaCheckCircle />}

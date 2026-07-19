@@ -44,7 +44,7 @@ const TrendChart = ({ data }) => {
       title="Crime Incidents Trend"
       subtitle="Monthly CCTNS CaseMaster registrations by major crime heads"
     >
-      <div className="h-80 w-full">
+      <div className="h-96 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={data}
@@ -70,20 +70,20 @@ const TrendChart = ({ data }) => {
             </defs>
 
             <CartesianGrid
-              stroke="#1e293b"
+              stroke="#0f172a"
               strokeDasharray="3 3"
               vertical={false}
             />
 
             <XAxis
               dataKey="month"
-              tick={{ fill: "#64748b", fontSize: 10, fontFamily: "monospace" }}
+              tick={{ fill: "#475569", fontSize: 10, fontFamily: "monospace" }}
               axisLine={false}
               tickLine={false}
             />
 
             <YAxis
-              tick={{ fill: "#64748b", fontSize: 10, fontFamily: "monospace" }}
+              tick={{ fill: "#475569", fontSize: 10, fontFamily: "monospace" }}
               axisLine={false}
               tickLine={false}
             />
@@ -108,7 +108,7 @@ const TrendChart = ({ data }) => {
               name="Property Offences"
               dataKey="property_offences"
               stroke="#3b82f6"
-              strokeWidth={2}
+              strokeWidth={2.5}
               fillOpacity={1}
               fill="url(#colorProperty)"
             />
@@ -118,7 +118,7 @@ const TrendChart = ({ data }) => {
               name="Body Offences"
               dataKey="body_offences"
               stroke="#f43f5e"
-              strokeWidth={2}
+              strokeWidth={2.5}
               fillOpacity={1}
               fill="url(#colorBody)"
             />
@@ -128,7 +128,7 @@ const TrendChart = ({ data }) => {
               name="Cyber Crimes"
               dataKey="cyber_crimes"
               stroke="#a855f7"
-              strokeWidth={2}
+              strokeWidth={2.5}
               fillOpacity={1}
               fill="url(#colorCyber)"
             />
@@ -138,7 +138,7 @@ const TrendChart = ({ data }) => {
               name="Financial Fraud"
               dataKey="financial_fraud"
               stroke="#f59e0b"
-              strokeWidth={2}
+              strokeWidth={2.5}
               fillOpacity={1}
               fill="url(#colorFraud)"
             />

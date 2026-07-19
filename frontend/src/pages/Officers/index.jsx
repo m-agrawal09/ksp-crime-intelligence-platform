@@ -172,7 +172,7 @@ const Officers = () => {
   return (
     <div className="space-y-6 md:space-y-8">
       {/* Page Title Header */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between px-6">
         <PageHeader
           title="Officer Performance Center"
           subtitle="Operational evaluation of investigation case logs, trial schedules, and resolution metrics"
@@ -181,7 +181,7 @@ const Officers = () => {
         {isAdmin && (
           <button
             onClick={() => setIsAddModalOpen(true)}
-            className="flex items-center gap-2 rounded-xl bg-purple-600 px-5 py-3 text-xs font-mono font-bold uppercase tracking-wider text-white shadow-lg shadow-purple-500/20 hover:bg-purple-500 transition-all self-start md:self-auto active:scale-95"
+            className="flex items-center gap-2 rounded-[4px] bg-purple-600 px-6 py-3 text-xs font-mono font-bold uppercase tracking-wider text-white hover:bg-purple-500 transition-all self-start md:self-auto active:scale-95 border-none outline-none cursor-pointer"
           >
             <FaUserPlus className="text-base" />
             <span>Add New Officer</span>
@@ -201,7 +201,7 @@ const Officers = () => {
         units={uniqueUnits}
       />
 
-      {/* 1. Officer Dossier Profile & Selector */}
+      {/* 1. Officer Dossier Profile & Selector (Merged with KPIs) */}
       <OfficerHeader
         profile={profile}
         officerList={filteredOfficerList}
@@ -209,14 +209,16 @@ const Officers = () => {
         allowSelector={isAdmin}
       />
 
-      {/* 2. Key Operational Performance Metrics */}
-      <OfficerKpis kpis={profile.kpis} />
-
-      {/* 3. Case Resolutions Trends & Category Breakdown */}
-      <OfficerCharts
-        monthlyTrend={profile.monthlyTrend}
-        categoryDistribution={profile.categoryDistribution}
-      />
+      {/* 2. Case Resolutions Trends & Category Breakdown with Navy Radial Glow */}
+      <div className="relative">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(30,58,138,0.12)_0%,transparent_75%)] pointer-events-none" />
+        <div className="relative z-10">
+          <OfficerCharts
+            monthlyTrend={profile.monthlyTrend}
+            categoryDistribution={profile.categoryDistribution}
+          />
+        </div>
+      </div>
 
       {/* 4. Timeline, Workload, & Evaluation Panels */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

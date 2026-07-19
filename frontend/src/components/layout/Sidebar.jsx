@@ -54,19 +54,21 @@ function Sidebar() {
   return (
     <aside className="flex h-[calc(100vh-80px)] w-[295px] flex-col border-r border-[var(--color-border)] bg-[#0b1220] font-inter">
 
-      {/* Sidebar Header Branding (20% larger emblem and clear titles) */}
-      <div className="border-b border-[var(--color-border)] px-6 py-6 flex flex-col items-center text-center">
+      {/* Sidebar Header Branding (Compact Branding Strip) */}
+      <div className="border-b border-[var(--color-border)] px-4 py-3 flex items-center gap-3">
         <img 
           src={kspLogo} 
           alt="Karnataka State Police Emblem" 
-          className="w-[78px] h-auto object-contain mb-3"
+          className="w-[32px] h-auto object-contain"
         />
-        <h2 className="text-xs font-bold text-white uppercase tracking-wider leading-tight font-sans">
-          KARNATAKA STATE POLICE
-        </h2>
-        <p className="text-[9px] uppercase tracking-wider text-blue-400 font-sans mt-1.5 leading-normal font-bold">
-          AI CRIME INTELLIGENCE PLATFORM
-        </p>
+        <div className="text-left leading-tight min-w-0">
+          <h2 className="text-[10px] font-bold text-white uppercase tracking-wider font-sans truncate">
+            KARNATAKA STATE POLICE
+          </h2>
+          <p className="text-[8px] uppercase tracking-wide text-blue-400 font-mono mt-0.5 leading-normal font-bold truncate">
+            CRIME INTEL PLATFORM
+          </p>
+        </div>
       </div>
 
       {/* Navigation - group elements with tighter vertical spacing */}

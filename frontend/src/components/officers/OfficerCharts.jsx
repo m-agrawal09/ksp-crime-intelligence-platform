@@ -73,7 +73,7 @@ const OfficerCharts = ({ monthlyTrend, categoryDistribution }) => {
           title="Monthly Case Resolution Trend"
           subtitle="Assigned cases vs resolved closures by month"
         >
-          <div className="h-80 w-full">
+          <div className="h-[384px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart
                 data={monthlyTrend}
@@ -152,7 +152,7 @@ const OfficerCharts = ({ monthlyTrend, categoryDistribution }) => {
           subtitle="Workload breakdown by crime classification"
         >
           {/* Donut Container with Centered Total Case Count */}
-          <div className="relative h-60 w-full flex items-center justify-center">
+          <div className="relative h-[260px] w-full flex items-center justify-center">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -183,7 +183,7 @@ const OfficerCharts = ({ monthlyTrend, categoryDistribution }) => {
           </div>
 
           {/* Ranked Summary Table of Categories */}
-          <div className="mt-4 border-t border-slate-800/80 pt-4 space-y-2.5 font-mono text-[11px]">
+          <div className="mt-6 border-t border-slate-800/80 pt-6 space-y-3 font-mono text-[11px]">
             {sortedCategories.map((item) => {
               const pct = totalCases > 0 ? Math.round((item.value / totalCases) * 100) : 0;
               return (

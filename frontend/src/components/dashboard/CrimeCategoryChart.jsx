@@ -36,19 +36,19 @@ const CrimeCategoryChart = ({ data }) => {
   return (
     <ChartCard
       title="Crime Category Distribution"
-      subtitle="CCTNS CaseMaster volume segmented by Major Crime Head and Acts"
+      subtitle="CCTNS CaseVolume segmented by Crime Head"
     >
       <div className="flex flex-col gap-6 lg:flex-row lg:items-center">
         {/* Donut Chart Container */}
-        <div className="relative h-44 w-full lg:w-2/5 flex items-center justify-center">
+        <div className="relative h-52 w-full lg:w-2/5 flex items-center justify-center flex-shrink-0">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
                 data={data}
                 dataKey="fir_count"
                 nameKey="category"
-                innerRadius={52}
-                outerRadius={70}
+                innerRadius={60}
+                outerRadius={80}
                 paddingAngle={2}
                 stroke="#0f172a"
                 strokeWidth={2}
@@ -65,34 +65,34 @@ const CrimeCategoryChart = ({ data }) => {
           </ResponsiveContainer>
           {/* Inner Text for Donut */}
           <div className="absolute flex flex-col items-center justify-center">
-            <span className="text-2xs font-mono tracking-wider text-slate-500 uppercase">Total Cases</span>
-            <span className="font-mono text-lg font-bold text-white">
+            <span className="text-[9px] font-mono tracking-widest text-slate-500 uppercase">TOTAL</span>
+            <span className="font-mono text-base font-bold text-white">
               {data.reduce((sum, item) => sum + item.fir_count, 0).toLocaleString("en-IN")}
             </span>
           </div>
         </div>
 
         {/* Detailed Progress Bars List */}
-        <div className="flex-1 space-y-3">
+        <div className="flex-1 space-y-4">
           {data.map((item, index) => (
-            <div key={item.category} className="space-y-1">
-              <div className="flex items-center justify-between text-[11px] font-mono">
+            <div key={item.category} className="space-y-1.5">
+              <div className="flex items-center justify-between text-[10px] font-mono">
                 <div className="flex items-center gap-2">
                   <span
-                    className="h-2 w-2 rounded-full"
+                    className="h-1.5 w-1.5 rounded-full"
                     style={{ backgroundColor: COLORS[index % COLORS.length] }}
                   />
-                  <span className="font-semibold text-slate-300">{item.category}</span>
+                  <span className="font-bold text-slate-400 uppercase tracking-wide">{item.category}</span>
                 </div>
-                <div className="text-slate-400">
-                  <span>{item.fir_count.toLocaleString("en-IN")}</span>
-                  <span className="text-slate-600 px-1">|</span>
+                <div className="text-slate-500 font-mono text-[9px]">
+                  <span className="text-slate-300 font-bold">{item.fir_count.toLocaleString("en-IN")}</span>
+                  <span className="text-slate-700 px-1.5">/</span>
                   <span className="text-white font-bold">{item.percentage}%</span>
                 </div>
               </div>
 
               {/* Progress bar */}
-              <div className="h-1.5 w-full rounded-full bg-slate-800 overflow-hidden">
+              <div className="h-1 w-full rounded-full bg-slate-950/40 overflow-hidden border border-slate-900/60">
                 <div
                   className="h-full rounded-full transition-all duration-500"
                   style={{
@@ -100,11 +100,6 @@ const CrimeCategoryChart = ({ data }) => {
                     backgroundColor: COLORS[index % COLORS.length]
                   }}
                 />
-              </div>
-
-              {/* Section Subtext */}
-              <div className="pl-4 text-[10px] font-mono text-slate-500">
-                {item.acts_sections}
               </div>
             </div>
           ))}

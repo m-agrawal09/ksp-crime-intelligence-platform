@@ -14,7 +14,7 @@ const OfficerFilters = ({
   };
 
   return (
-    <div className="bg-slate-900/60 border border-slate-800 p-5 rounded-xl shadow-lg space-y-4 font-sans">
+    <div className="bg-slate-900/60 border border-slate-800 pt-5 pb-5 px-6 rounded-[4px] shadow-lg space-y-4 font-sans">
       <div className="flex items-center justify-between border-b border-slate-850 pb-3">
         <div className="flex items-center gap-2">
           <div className="h-2 w-2 rounded-full bg-purple-500 animate-pulse" />
@@ -25,13 +25,13 @@ const OfficerFilters = ({
 
         <button
           onClick={onReset}
-          className="flex items-center gap-1 text-[10px] font-mono text-slate-400 hover:text-white hover:underline"
+          className="flex items-center gap-1 text-[10px] font-mono text-slate-400 hover:text-white hover:underline cursor-pointer"
         >
           <FaUndo className="text-[9px]" /> Reset Filters
         </button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Search Name or Badge */}
         <div>
           <label className="text-[10px] font-mono font-bold tracking-wider text-slate-400 uppercase mb-1 block">
@@ -44,9 +44,9 @@ const OfficerFilters = ({
               placeholder="Search name, badge..."
               value={filters.search || ""}
               onChange={handleSelectChange}
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg pl-8 pr-3 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-purple-500 font-mono transition-colors"
+              className="w-full bg-slate-950 border border-slate-800 rounded-[4px] pl-8 pr-3 py-2 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-purple-500 font-mono transition-colors"
             />
-            <FaSearch className="absolute left-2.5 top-3 text-[10px] text-slate-600" />
+            <FaSearch className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[10px] text-slate-600" />
           </div>
         </div>
 
@@ -59,7 +59,7 @@ const OfficerFilters = ({
             name="unit"
             value={filters.unit || ""}
             onChange={handleSelectChange}
-            className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500 font-mono transition-colors"
+            className="w-full bg-slate-950 border border-slate-800 rounded-[4px] px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500 font-mono transition-colors"
           >
             <option value="">-- ALL UNITS --</option>
             {units.map((u) => (
@@ -79,7 +79,7 @@ const OfficerFilters = ({
             name="rank"
             value={filters.rank || ""}
             onChange={handleSelectChange}
-            className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500 font-mono transition-colors"
+            className="w-full bg-slate-950 border border-slate-800 rounded-[4px] px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500 font-mono transition-colors"
           >
             <option value="">-- ALL RANKS --</option>
             {ranks.map((r) => (
@@ -99,7 +99,7 @@ const OfficerFilters = ({
             name="minClearance"
             value={filters.minClearance || ""}
             onChange={handleSelectChange}
-            className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500 font-mono transition-colors"
+            className="w-full bg-slate-950 border border-slate-800 rounded-[4px] px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500 font-mono transition-colors"
           >
             <option value="">-- ALL CLEARANCE RATES --</option>
             <option value="90">90%+ Top Performers</option>

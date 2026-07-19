@@ -92,72 +92,89 @@ const Dashboard = () => {
 
   return (
     <div className="space-y-12 md:space-y-16 lg:space-y-20">
-      {/* 1. Header Area */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <PageHeader
-          title="Executive Intelligence Dashboard"
-          subtitle="CCTNS Analytical Console & Automated Modus Operandi Matching"
-        />
-        <div className="flex flex-wrap items-center gap-3 self-start md:self-auto">
-          <div className="flex items-center gap-2 bg-slate-900/80 border border-slate-800 rounded-lg px-3 py-1.5 font-mono text-xs text-slate-300">
-            <span className="text-slate-500 font-bold uppercase text-[10px]">District Filter:</span>
-            <select
-              value={selectedDistrict}
-              onChange={(e) => setSelectedDistrict(e.target.value)}
-              className="bg-transparent text-blue-400 font-bold outline-none cursor-pointer"
-            >
-              <option value="ALL" className="bg-slate-900 text-slate-200">All Districts (Statewide)</option>
-              {DISTRICTS.slice(1).map((d) => (
-                <option key={d} value={d} className="bg-slate-900 text-slate-200">{d}</option>
-              ))}
-            </select>
+      {/* 1. Executive Intelligence Header & Briefing Controls */}
+      <div className="pb-6 border-b border-slate-900/60 flex flex-col gap-6">
+        
+        {/* Title and Action Controls */}
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight uppercase font-mono">
+              Executive Intelligence Dashboard
+            </h1>
+            <p className="text-xs text-slate-400 font-sans mt-1">
+              Karnataka State Police • CCTNS Analytical Briefing & Modus Operandi Console
+            </p>
           </div>
-          <button
-            onClick={() => loadData(selectedDistrict)}
-            className="flex items-center gap-1.5 rounded-lg border border-slate-800 bg-slate-900/60 px-3 py-1.5 text-xs font-mono text-slate-400 hover:border-slate-700 hover:text-white transition-all"
-          >
-            <FaSyncAlt className="text-[10px]" />
-            Sync Core Master
-          </button>
+
+          {/* Controls */}
+          <div className="flex flex-wrap items-center gap-3 self-start lg:self-auto font-mono text-[10px] sm:text-[11px]">
+            {/* Live Indicator */}
+            <div className="flex items-center gap-2 bg-[#0c0d14] border border-slate-800/40 rounded-[4px] px-3 py-2 shadow-sm">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+              </span>
+              <span className="text-[#a3a3a3] font-bold">TELEMETRY:</span>
+              <span className="text-emerald-400 font-bold uppercase">SECURE</span>
+            </div>
+
+            {/* Live Date/Time */}
+            <div className="bg-[#0c0d14] border border-slate-800/40 rounded-[4px] px-3.5 py-2 text-slate-300 font-bold shadow-sm">
+              {new Date().toLocaleDateString("en-IN", { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}
+            </div>
+
+            {/* District Filter Dropdown */}
+            <div className="flex items-center gap-2 bg-[#0c0d14] border border-slate-800/40 rounded-[4px] px-3 py-2 text-slate-300 shadow-sm">
+              <span className="text-slate-500 font-bold uppercase text-[9px]">JURISDICTION:</span>
+              <select
+                value={selectedDistrict}
+                onChange={(e) => setSelectedDistrict(e.target.value)}
+                className="bg-transparent text-blue-400 font-bold outline-none cursor-pointer text-[11px] pr-1"
+              >
+                <option value="ALL" className="bg-slate-950 text-slate-200">Statewide (All Districts)</option>
+                {DISTRICTS.slice(1).map((d) => (
+                  <option key={d} value={d} className="bg-slate-950 text-slate-200">{d}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Sync Core Master */}
+            <button
+              onClick={() => loadData(selectedDistrict)}
+              className="flex items-center gap-2 rounded-[4px] border border-slate-800/40 bg-slate-900/40 px-3.5 py-2 text-slate-400 hover:border-slate-700 hover:text-white transition-all cursor-pointer shadow-sm"
+            >
+              <FaSyncAlt className="text-[10px]" />
+              <span>SYNC CORE</span>
+            </button>
+          </div>
         </div>
-      </div>
 
-      {/* 2. Command-Center Status Strip */}
-      <div className="rounded-lg border border-slate-950 bg-slate-950/80 px-4 py-2.5 flex flex-wrap gap-x-6 gap-y-2 items-center text-[10px] font-mono tracking-wider text-slate-500 uppercase">
-        <div className="flex items-center gap-1.5">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-          </span>
-          <span className="text-slate-300 font-bold">System Status:</span>
-          <span className="text-emerald-400 font-bold">OPERATIONAL</span>
-        </div>
+        {/* Operational Status Sub-Briefing Strip (No borders, very clean) */}
+        <div className="flex flex-wrap gap-x-5 gap-y-2 items-center text-[9px] sm:text-[10px] font-mono tracking-wider text-slate-500 uppercase">
+          <div className="flex items-center gap-1.5">
+            <span className="text-slate-500">Gateway Link:</span>{" "}
+            <span className="text-slate-300 font-bold">CCTNS CAS (CONNECTED)</span>
+          </div>
 
-        <div className="hidden sm:block text-slate-700">|</div>
+          <div className="text-slate-800">|</div>
 
-        <div>
-          <span className="text-slate-500">Gateway:</span>{" "}
-          <span className="text-slate-300 font-bold">CCTNS CAS (Connected)</span>
-        </div>
+          <div>
+            <span className="text-slate-500">Active Units:</span>{" "}
+            <span className="text-slate-300 font-bold">1,024 Districts & Commands</span>
+          </div>
 
-        <div className="hidden sm:block text-slate-700">|</div>
+          <div className="text-slate-800">|</div>
 
-        <div>
-          <span className="text-slate-500">Active Jurisdiction:</span>{" "}
-          <span className="text-slate-300 font-bold">31 Districts / 1,024 Units</span>
-        </div>
+          <div>
+            <span className="text-slate-500">AI Intelligence Core:</span>{" "}
+            <span className="text-blue-400 font-bold">QuickML (ONLINE)</span>
+          </div>
 
-        <div className="hidden md:block text-slate-700">|</div>
+          <div className="text-slate-800">|</div>
 
-        <div className="hidden md:block">
-          <span className="text-slate-500">AI Engine:</span>{" "}
-          <span className="text-blue-400 font-bold">QuickML (Online)</span>
-        </div>
-
-        <div className="hidden xl:block text-slate-700">|</div>
-
-        <div className="hidden xl:block ml-auto text-[9px] text-slate-600">
-          Last Client Pull: 2026-07-17 14:26:00 IST
+          <div className="ml-auto text-[9px] text-slate-600">
+            LAST SYNC HANDSHAKE: 2026-07-17 14:26:00 IST
+          </div>
         </div>
       </div>
 

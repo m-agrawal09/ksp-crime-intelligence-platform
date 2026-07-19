@@ -81,15 +81,15 @@ const QuickActionsPanel = () => {
     }
   ];
 
-  const cardBaseStyle = "flex flex-col text-left p-5 rounded-[4px] border transition-all duration-300 group bg-slate-900/40 relative overflow-hidden min-h-[160px] shadow-sm";
+  const cardBaseStyle = "flex flex-col text-left p-5 rounded-[4px] border border-slate-800/40 hover:border-slate-800 transition-all duration-300 group bg-slate-950/20 relative overflow-hidden min-h-[160px] shadow-sm";
 
   return (
-    <div className="rounded-[4px] border border-slate-800 bg-slate-900/60 p-6 sm:p-8 flex flex-col lg:flex-row gap-6 lg:gap-8 shadow-lg">
-      {/* Console Grid */}
-      <div className="flex-1 space-y-6">
+    <div className="space-y-8">
+      {/* Section 5: Command Operations Panel */}
+      <div className="rounded-[4px] border border-slate-800/40 bg-slate-900/60 py-5 px-6 shadow-lg flex flex-col gap-6">
         <div>
-          <h2 className="text-sm font-bold text-white uppercase tracking-wider">
-            Operational Navigation Hub & Control
+          <h2 className="text-xs font-bold text-white uppercase tracking-wider font-mono">
+            Command Operations Hub
           </h2>
           <p className="text-xs text-slate-400 font-sans mt-1">
             Navigate to specialized analytical modules or execute system-wide control scripts.
@@ -117,10 +117,10 @@ const QuickActionsPanel = () => {
                   key={act.id}
                   onClick={() => handleActionClick(act.id, act.label)}
                   disabled={runningAction !== null}
-                  className={`${cardBaseStyle} ${act.color} disabled:opacity-40 disabled:cursor-not-allowed`}
+                  className={`${cardBaseStyle} ${act.color} disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer`}
                   title={act.desc}
                 >
-                  <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-slate-950/60 border border-slate-800 group-hover:border-current transition-colors text-slate-400 group-hover:text-current">
+                  <div className="flex items-center justify-center h-10 w-10 rounded-[4px] bg-slate-950/60 border border-slate-850 group-hover:border-current transition-colors text-slate-400 group-hover:text-current">
                     {iconElement}
                   </div>
                   <span className="font-mono text-[11px] font-bold tracking-wider uppercase text-slate-200 mt-4 group-hover:text-white transition-colors">
@@ -129,7 +129,7 @@ const QuickActionsPanel = () => {
                   <span className="text-[10px] leading-relaxed text-slate-400 mt-1.5 font-sans">
                     {act.desc}
                   </span>
-                  <span className="mt-auto pt-3 flex items-center justify-between text-[9px] font-mono tracking-widest text-slate-500 group-hover:text-purple-400 transition-colors uppercase">
+                  <span className="mt-auto pt-3 flex items-center justify-between text-[9px] font-mono tracking-widest text-slate-500 group-hover:text-purple-400 transition-colors uppercase border-t border-slate-900/40 mt-3">
                     <span>RUN UTILITY ⚡</span>
                   </span>
                 </button>
@@ -143,7 +143,7 @@ const QuickActionsPanel = () => {
                 className={`${cardBaseStyle} ${act.color}`}
                 title={act.desc}
               >
-                <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-slate-950/60 border border-slate-800 group-hover:border-current transition-colors text-slate-400 group-hover:text-current">
+                <div className="flex items-center justify-center h-10 w-10 rounded-[4px] bg-slate-950/60 border border-slate-850 group-hover:border-current transition-colors text-slate-400 group-hover:text-current">
                   {iconElement}
                 </div>
                 <span className="font-mono text-[11px] font-bold tracking-wider uppercase text-slate-200 mt-4 group-hover:text-white transition-colors">
@@ -152,7 +152,7 @@ const QuickActionsPanel = () => {
                 <span className="text-[10px] leading-relaxed text-slate-400 mt-1.5 font-sans">
                   {act.desc}
                 </span>
-                <span className="mt-auto pt-3 flex items-center justify-between text-[9px] font-mono tracking-widest text-slate-500 group-hover:text-current transition-colors uppercase">
+                <span className="mt-auto pt-3 flex items-center justify-between text-[9px] font-mono tracking-widest text-slate-500 group-hover:text-current transition-colors uppercase border-t border-slate-900/40 mt-3">
                   <span>LAUNCH MODULE →</span>
                 </span>
               </Link>
@@ -161,17 +161,21 @@ const QuickActionsPanel = () => {
         </div>
       </div>
 
-      {/* Terminal Outputs Console */}
-      <div className="w-full lg:w-80 rounded-[4px] border border-slate-950 bg-slate-950/80 p-5 flex flex-col font-mono text-[10px] h-40 lg:h-auto min-h-[140px] shadow-inner">
-        <div className="flex items-center gap-1.5 border-b border-slate-900 pb-2.5 mb-3 text-slate-400">
-          <FaTerminal className="text-[10px] text-blue-500 animate-pulse" />
-          <span className="font-bold tracking-wider uppercase">TELEMETRY MONITOR</span>
+      {/* Section 6: Live System Telemetry Console */}
+      <div className="rounded-[4px] border border-slate-800/40 bg-[#0c0d14] py-5 px-6 flex flex-col font-mono text-[10px] h-[240px] shadow-lg">
+        <div className="flex items-center gap-2 border-b border-slate-900/60 pb-2.5 mb-3 text-slate-400">
+          <div className="relative flex h-1.5 w-1.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-500"></span>
+          </div>
+          <span className="font-bold tracking-wider uppercase text-slate-200">Live System Telemetry Console</span>
         </div>
-        <div className="flex-1 overflow-y-auto space-y-2 scrollbar-thin pr-1 text-slate-400">
+        
+        <div className="flex-1 overflow-y-auto space-y-2.5 scrollbar-thin pr-1 text-slate-400 select-none">
           {consoleLogs.map((log, index) => (
-            <div key={index} className="leading-normal">
-              <span className="text-slate-600 font-semibold pr-1.5">[{log.timestamp}]</span>
-              <span className={log.text.startsWith("SUCCESS") ? "text-emerald-400" : log.text.startsWith("ERROR") ? "text-rose-400" : log.text.startsWith("INIT") ? "text-blue-400" : "text-slate-400"}>
+            <div key={index} className="leading-normal flex items-start gap-2 border-b border-slate-900/20 pb-1.5">
+              <span className="text-blue-400 font-bold tracking-tight">[{log.timestamp}]</span>
+              <span className={log.text.startsWith("SUCCESS") ? "text-emerald-400 font-bold" : log.text.startsWith("ERROR") ? "text-rose-400 font-bold" : log.text.startsWith("INIT") ? "text-cyan-400" : "text-slate-300"}>
                 {log.text}
               </span>
             </div>

@@ -17,26 +17,26 @@ const StatCard = ({
 
   return (
     <div
-      className={`relative overflow-hidden rounded-[4px] border border-slate-800 bg-slate-900/60 p-6 lg:p-7 transition-all duration-300 hover:border-slate-700 hover:bg-slate-900/90 ${borderColor} border-l-4`}
+      className="relative overflow-hidden rounded-[4px] border border-slate-800/50 bg-slate-900/60 p-6 lg:p-7 min-h-[152px] transition-all duration-300 hover:border-slate-700 hover:bg-slate-900/90 shadow-sm"
       onMouseEnter={() => setShowMetadata(true)}
       onMouseLeave={() => setShowMetadata(false)}
     >
       <div className="flex items-start justify-between">
         <div>
-          <span className="text-xs font-semibold tracking-wider text-slate-400 uppercase">
+          <span className="text-[10px] font-bold tracking-widest text-slate-500 uppercase font-mono">
             {title}
           </span>
-          <h2 className="mt-2 font-mono text-3xl font-bold tracking-tight text-white">
+          <h2 className="mt-3 font-mono text-4xl font-extrabold tracking-tight text-white leading-none">
             {value}
           </h2>
         </div>
-        <div className={`rounded-[2px] bg-slate-800/40 p-2.5 ${color}`}>
-          {Icon ? <Icon className="text-xl" /> : <FaInfoCircle className="text-xl" />}
+        <div className={`rounded-[2px] bg-slate-800/30 p-2.5 ${color}`}>
+          {Icon ? <Icon className="text-lg" /> : <FaInfoCircle className="text-lg" />}
         </div>
       </div>
 
-      <div className="mt-4 flex items-center justify-between">
-        <span className={`text-xs font-medium ${change.startsWith("-") ? "text-red-400" : "text-emerald-400"}`}>
+      <div className="mt-5 flex items-center justify-between">
+        <span className={`text-[11px] font-bold font-mono tracking-wide ${change.startsWith("-") ? "text-red-400" : "text-emerald-400"}`}>
           {change}
         </span>
         {subText && (

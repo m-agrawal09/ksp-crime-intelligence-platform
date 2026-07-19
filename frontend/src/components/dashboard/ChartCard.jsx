@@ -1,7 +1,7 @@
 const ChartCard = ({ title, subtitle, badge, children }) => {
   return (
-    <div className="rounded-[4px] border border-slate-800 bg-slate-900 p-6 sm:p-8">
-      <div className="mb-8 flex items-start justify-between">
+    <div className="rounded-[4px] border border-slate-800 bg-slate-900 py-5 px-6">
+      <div className="mb-6 flex items-start justify-between">
         <div>
           <h2 className="text-lg font-semibold text-white">
             {title}
