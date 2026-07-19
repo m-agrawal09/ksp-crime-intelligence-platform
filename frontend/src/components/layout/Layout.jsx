@@ -17,7 +17,7 @@ function Layout() {
           </div>
         </main>
       </div>
-      
+
       {/* Floating Tactical AI Copilot Widget */}
       <FloatingChatWidget />
     </div>

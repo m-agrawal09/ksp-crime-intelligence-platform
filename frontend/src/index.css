@@ -12,20 +12,18 @@
 
 .bg-blueprint {
   background-color: #050a12;
-  background-image: 
-    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-  background-size: 24px 24px;
-  background-position: center;
 }
 
 /* ====================================================
    Custom Overrides for Dark-themed Leaflet Popups
    ==================================================== */
 .dark-popup .leaflet-popup-content-wrapper {
-  background-color: #0f172a !important; /* bg-slate-900 */
-  color: #f8fafc !important; /* text-slate-50 */
-  border: 1px solid #334155 !important; /* border-slate-700 */
+  background-color: #0f172a !important;
+  /* bg-slate-900 */
+  color: #f8fafc !important;
+  /* text-slate-50 */
+  border: 1px solid #334155 !important;
+  /* border-slate-700 */
   border-radius: 12px !important;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5) !important;
   padding: 4px !important;
@@ -56,7 +54,13 @@
     color: #000000 !important;
   }
 
-  header, nav, aside, button, select, input, .no-print {
+  header,
+  nav,
+  aside,
+  button,
+  select,
+  input,
+  .no-print {
     display: none !important;
   }
 
@@ -66,9 +70,57 @@
     width: 100% !important;
   }
 
-  th, td {
+  th,
+  td {
     border: 1px solid #cbd5e1 !important;
     color: #000000 !important;
     padding: 6px !important;
   }
+}
+
+/* ====================================================
+   Settings Page Grainient Redesign Styles
+   ==================================================== */
+.settings-active .min-h-screen {
+  background: transparent !important;
+}
+
+.settings-active .bg-blueprint {
+  background: transparent !important;
+}
+
+.settings-active aside {
+  position: relative !important;
+  z-index: 40 !important;
+  background-color: rgba(11, 18, 32, 0.45) !important;
+  backdrop-filter: blur(12px) !important;
+  border-right: 1px solid rgba(96, 165, 250, 0.12) !important;
+}
+
+.settings-active header {
+  position: sticky !important;
+  z-index: 50 !important;
+  background-color: rgba(8, 18, 32, 0.45) !important;
+  backdrop-filter: blur(12px) !important;
+  border-bottom: 1px solid rgba(96, 165, 250, 0.12) !important;
+}
+
+.settings-active main {
+  position: relative !important;
+  z-index: 30 !important;
+}
+
+.settings-grainient-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.settings-dark-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(5, 10, 18, 0.45);
+  z-index: 2;
+  pointer-events: none;
 }
