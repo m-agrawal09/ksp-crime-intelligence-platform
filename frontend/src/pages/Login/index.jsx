@@ -52,20 +52,20 @@ const Login = () => {
 
   return (
     <div className="min-h-screen w-full bg-[#020617] text-slate-100 flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 relative overflow-hidden font-sans">
-      
+
       {/* Background LetterGlitch Animation Layer */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <LetterGlitch 
-          glitchColors={["#1e40af", "#2563eb", "#60a5fa"]} 
-          glitchSpeed={135} 
-          smooth={true} 
-          outerVignette={true} 
-          centerVignette={false} 
+        <LetterGlitch
+          glitchColors={["#1e40af", "#2563eb", "#60a5fa"]}
+          glitchSpeed={135}
+          smooth={true}
+          outerVignette={true}
+          centerVignette={false}
         />
       </div>
 
-      {/* Dark Ambient SOC Gradient Layer for Readability (rgba(2,6,23,0.72) equivalent) */}
-      <div className="absolute inset-0 z-10 bg-[#020617]/72 pointer-events-none" />
+      {/* Dark Ambient SOC Gradient Layer for Readability (rgba(2,6,23,0.60) equivalent) */}
+      <div className="absolute inset-0 z-10 bg-[#020617]/63 pointer-events-none" />
 
       {/* Background Ambient Glows */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[650px] h-[650px] bg-blue-900/10 rounded-full blur-[140px] pointer-events-none z-10" />
@@ -78,13 +78,13 @@ const Login = () => {
         transition={{ duration: 0.55, ease: "easeOut" }}
         className="w-full max-w-[580px] min-h-[695px] rounded-[14px] border border-blue-900/30 bg-[#081220]/78 backdrop-blur-xl shadow-[0_0_80px_rgba(30,64,175,0.08)] p-8 sm:p-14 flex flex-col items-center justify-center relative z-20 overflow-hidden"
       >
-        
+
         {/* Official KSP Emblem - Responsive Width */}
         <div className="flex justify-center mb-10">
-          <img 
-            src={kspLogo} 
-            alt="Karnataka State Police Emblem" 
-            className="w-[115px] md:w-[120px] h-auto object-contain max-h-[135px]" 
+          <img
+            src={kspLogo}
+            alt="Karnataka State Police Emblem"
+            className="w-[115px] md:w-[120px] h-auto object-contain max-h-[135px]"
           />
         </div>
 
@@ -108,7 +108,7 @@ const Login = () => {
 
         {/* Inner Authentication Card (max-w-[350px], bg-[#050a12]/90) */}
         <div className="w-full max-w-[350px] rounded-[6px] border border-white/[0.08] bg-[#050a12]/90 shadow-xl p-7 space-y-6">
-          
+
           {/* Card Command Header */}
           <div className="flex flex-col space-y-1 mb-2 border-b border-slate-900/60 pb-3">
             <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400">Identity Verification</h3>
@@ -119,11 +119,10 @@ const Login = () => {
             <button
               type="button"
               onClick={() => handleTabSwitch("admin")}
-              className={`h-11 rounded-[4px] flex items-center justify-center gap-2 font-bold uppercase transition-all duration-150 ${
-                activeTab === "admin"
+              className={`h-11 rounded-[4px] flex items-center justify-center gap-2 font-bold uppercase transition-all duration-150 ${activeTab === "admin"
                   ? "bg-[#2563eb] text-white shadow-md border border-[#60a5fa]/30"
                   : "bg-[#050a12] text-slate-400 hover:text-slate-200 hover:bg-[#2563eb]/10 border border-transparent"
-              }`}
+                }`}
             >
               <FaUserShield className="text-sm" />
               <span>Admin Login</span>
@@ -132,11 +131,10 @@ const Login = () => {
             <button
               type="button"
               onClick={() => handleTabSwitch("officer")}
-              className={`h-11 rounded-[4px] flex items-center justify-center gap-2 font-bold uppercase transition-all duration-150 ${
-                activeTab === "officer"
+              className={`h-11 rounded-[4px] flex items-center justify-center gap-2 font-bold uppercase transition-all duration-150 ${activeTab === "officer"
                   ? "bg-[#2563eb] text-white shadow-md border border-[#60a5fa]/30"
                   : "bg-[#050a12] text-slate-400 hover:text-slate-200 hover:bg-[#2563eb]/10 border border-transparent"
-              }`}
+                }`}
             >
               <FaUserCheck className="text-sm" />
               <span>Officer Login</span>
