@@ -12,6 +12,12 @@
 
 .bg-blueprint {
   background-color: #050a12;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-position: center;
+  background-attachment: local;
 }
 
 /* ====================================================
