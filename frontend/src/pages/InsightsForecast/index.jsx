@@ -96,7 +96,7 @@ const InsightsForecast = () => {
   };
 
   return (
-    <div className="space-y-6 md:space-y-8">
+    <div className="space-y-7 md:space-y-9">
       {/* Title Header */}
       <PageHeader
         title="AI Insights & Forecast"
@@ -104,14 +104,14 @@ const InsightsForecast = () => {
       />
 
       {/* Navigation Tabs */}
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-3">
-        <div className="flex items-center gap-2 rounded-xl bg-slate-900/80 p-1.5 border border-slate-800">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800/20 pb-4">
+        <div className="flex items-center gap-1.5 rounded-[4px] bg-slate-900/60 p-1.5 border border-slate-800/20">
           <button
             onClick={() => setActiveTab("copilot")}
-            className={`flex items-center gap-2.5 rounded-lg px-4 py-2.5 text-xs font-mono font-bold tracking-wider uppercase transition-all duration-200 ${
+            className={`flex items-center gap-2.5 rounded-md px-4 py-2.5 text-[10px] font-mono font-bold tracking-wider uppercase transition-all duration-200 ${
               activeTab === "copilot"
-                ? "bg-blue-600 text-white shadow-lg shadow-blue-500/20"
-                : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
+                ? "bg-blue-600/90 text-white shadow-md shadow-blue-500/15"
+                : "text-slate-500 hover:text-slate-300 hover:bg-slate-800/40"
             }`}
           >
             <RiRobot2Line className="text-base" />
@@ -120,10 +120,10 @@ const InsightsForecast = () => {
 
           <button
             onClick={() => setActiveTab("forecast")}
-            className={`flex items-center gap-2.5 rounded-lg px-4 py-2.5 text-xs font-mono font-bold tracking-wider uppercase transition-all duration-200 ${
+            className={`flex items-center gap-2.5 rounded-md px-4 py-2.5 text-[10px] font-mono font-bold tracking-wider uppercase transition-all duration-200 ${
               activeTab === "forecast"
-                ? "bg-purple-600 text-white shadow-lg shadow-purple-500/20"
-                : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
+                ? "bg-purple-600/90 text-white shadow-md shadow-purple-500/15"
+                : "text-slate-500 hover:text-slate-300 hover:bg-slate-800/40"
             }`}
           >
             <TbChartLine className="text-base" />
@@ -132,10 +132,10 @@ const InsightsForecast = () => {
 
           <button
             onClick={() => setActiveTab("alerts")}
-            className={`flex items-center gap-2.5 rounded-lg px-4 py-2.5 text-xs font-mono font-bold tracking-wider uppercase transition-all duration-200 ${
+            className={`flex items-center gap-2.5 rounded-md px-4 py-2.5 text-[10px] font-mono font-bold tracking-wider uppercase transition-all duration-200 ${
               activeTab === "alerts"
-                ? "bg-rose-600 text-white shadow-lg shadow-rose-500/20"
-                : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
+                ? "bg-rose-600/90 text-white shadow-md shadow-rose-500/15"
+                : "text-slate-500 hover:text-slate-300 hover:bg-slate-800/40"
             }`}
           >
             <RiAlertLine className="text-base" />
@@ -148,8 +148,8 @@ const InsightsForecast = () => {
           </button>
         </div>
 
-        <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
-          <RiBrainLine className="text-purple-400 text-base animate-pulse" />
+        <div className="flex items-center gap-2 text-[10px] font-mono text-slate-600">
+          <RiBrainLine className="text-purple-400/70 text-sm animate-pulse" />
           <span>QuickML Engine v4.2 Active</span>
         </div>
       </div>
@@ -257,12 +257,12 @@ const InsightsForecast = () => {
               </div>
 
               {/* Predictive Summary Banner */}
-              <div className="rounded-xl border border-purple-900/50 bg-slate-900/80 p-6 backdrop-blur-md">
-                <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-purple-400 flex items-center gap-2">
-                  <RiBrainLine className="text-base" /> QuickML Time-Series Forecasting Intelligence
+              <div className="rounded-[4px] border border-purple-900/20 bg-slate-900/50 p-7">
+                <h3 className="font-mono text-[10px] font-bold uppercase tracking-widest text-purple-400/80 flex items-center gap-2">
+                  <RiBrainLine className="text-sm" /> QuickML Time-Series Forecasting Intelligence
                 </h3>
-                <p className="mt-2 text-xs leading-relaxed text-slate-300 font-sans">
-                  The QuickML predictive analytics engine correlates multi-year CCTNS <code className="text-purple-300">CaseMaster</code> timestamps with geographic unit boundaries (<code className="text-purple-300">UnitID</code>). Based on seasonal variance and repeat Offence Section spikes, property theft incidents in urban police ranges are projected to rise over upcoming weekends. Tactical deployment recommendations have been dispatched to precinct shift supervisors.
+                <p className="mt-3 text-[12px] leading-relaxed text-slate-400 font-sans">
+                  The QuickML predictive analytics engine correlates multi-year CCTNS <code className="text-purple-300/80 font-mono">CaseMaster</code> timestamps with geographic unit boundaries (<code className="text-purple-300/80 font-mono">UnitID</code>). Based on seasonal variance and repeat Offence Section spikes, property theft incidents in urban police ranges are projected to rise over upcoming weekends. Tactical deployment recommendations have been dispatched to precinct shift supervisors.
                 </p>
               </div>
             </>

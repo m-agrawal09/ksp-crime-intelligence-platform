@@ -56,20 +56,20 @@ const AIAlertsList = ({ alerts, onAlertHandled }) => {
   };
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5 flex flex-col h-[460px]">
-      <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+    <div className="rounded-[4px] border border-slate-800/25 bg-slate-900/50 p-7 flex flex-col h-[520px]">
+      <div className="flex items-center justify-between border-b border-slate-800/25 pb-4 mb-5">
         <div className="flex items-center gap-2">
-          <FaBell className="text-blue-400 text-lg" />
-          <h2 className="text-md font-bold text-white uppercase tracking-wider">
+          <FaBell className="text-blue-400/80 text-base" />
+          <h2 className="text-[11px] font-bold text-white uppercase tracking-widest font-mono">
             AI Pattern Alerts
           </h2>
         </div>
-        <span className="rounded-full bg-slate-800 px-2 py-0.5 font-mono text-[10px] text-slate-400">
+        <span className="rounded-[3px] bg-slate-900/60 border border-slate-800/20 px-2.5 py-1 font-mono text-[9px] text-slate-600 uppercase tracking-wider">
           {activeAlerts.length} Active
         </span>
       </div>
 
-      <div className="flex-1 overflow-y-auto space-y-3 pr-1 scrollbar-thin">
+      <div className="flex-1 overflow-y-auto space-y-4 pr-1 scrollbar-thin">
         {activeAlerts.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-slate-500 font-mono text-xs">
             <FaCheck className="text-lg text-slate-600 mb-2" />
@@ -83,7 +83,7 @@ const AIAlertsList = ({ alerts, onAlertHandled }) => {
             return (
               <div
                 key={alert.alert_id}
-                className={`rounded-lg border border-l-4 p-3.5 transition-all ${styles.bg} ${styles.border}`}
+                className={`rounded-[4px] border border-l-4 p-4 transition-all duration-200 ${styles.bg} ${styles.border}`}
               >
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">

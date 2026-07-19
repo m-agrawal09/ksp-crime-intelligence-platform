@@ -124,10 +124,10 @@ const PredictiveForecastingCard = () => {
   }, [selectedDistrict, selectedCategory]);
 
   return (
-    <div className="bg-slate-900/80 border border-purple-500/30 rounded-2xl p-6 sm:p-8 shadow-2xl space-y-6 font-sans">
+    <div className="bg-slate-900/60 border border-purple-500/15 rounded-[4px] p-8 sm:p-10 shadow-sm space-y-7 font-sans">
       
       {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-850 pb-5">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800/15 pb-6">
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400 text-lg">
             <FaBrain className="animate-pulse" />
@@ -185,10 +185,10 @@ const PredictiveForecastingCard = () => {
         {forecastAlerts.map((fc, idx) => (
           <div
             key={fc.id || idx}
-            className="rounded-xl border border-rose-500/30 bg-slate-950/90 p-5 shadow-lg space-y-3.5 relative overflow-hidden"
+            className="rounded-[4px] border border-rose-500/15 bg-slate-950/70 p-6 shadow-sm space-y-4 relative overflow-hidden"
           >
             {/* Top Row: Location & Risk Probability Badge */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-slate-900 pb-3">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-slate-800/15 pb-3.5">
               <div className="flex items-center gap-2">
                 <FaMapMarkerAlt className="text-rose-400 text-sm flex-shrink-0" />
                 <h3 className="text-sm font-bold text-white tracking-wide font-mono">
@@ -205,7 +205,7 @@ const PredictiveForecastingCard = () => {
 
             {/* Middle Row: Crime Head & Time Window */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono text-xs">
-              <div className="flex items-center gap-2 bg-slate-900/60 p-2.5 rounded-lg border border-slate-800">
+              <div className="flex items-center gap-2 bg-slate-900/40 p-3 rounded-[3px] border border-slate-800/15">
                 <FaShieldAlt className="text-purple-400 text-xs flex-shrink-0" />
                 <div>
                   <span className="text-[9px] text-slate-500 uppercase block">CRIME CATEGORY RISK</span>
@@ -213,7 +213,7 @@ const PredictiveForecastingCard = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 bg-slate-900/60 p-2.5 rounded-lg border border-slate-800">
+              <div className="flex items-center gap-2 bg-slate-900/40 p-3 rounded-[3px] border border-slate-800/15">
                 <FaClock className="text-amber-400 text-xs flex-shrink-0" />
                 <div>
                   <span className="text-[9px] text-slate-500 uppercase block">FORECASTED HIGH-RISK TIME WINDOW</span>
@@ -223,13 +223,13 @@ const PredictiveForecastingCard = () => {
             </div>
 
             {/* Evidence Explanation */}
-            <p className="text-xs text-slate-300 font-sans leading-relaxed bg-slate-900/40 p-3 rounded-lg border border-slate-850">
+            <p className="text-xs text-slate-400 font-sans leading-relaxed bg-slate-900/30 p-3.5 rounded-[3px] border border-slate-800/15">
               <span className="text-amber-400 font-bold font-mono">AI Historical Evidence: </span>
               {fc.evidence}
             </p>
 
             {/* Tactical Patrol Recommendation Box */}
-            <div className="bg-purple-950/30 border border-purple-500/40 rounded-xl p-3.5 flex items-start gap-3">
+            <div className="bg-purple-950/20 border border-purple-500/20 rounded-[4px] p-4 flex items-start gap-3">
               <FaLightbulb className="text-amber-400 text-base flex-shrink-0 mt-0.5" />
               <div className="space-y-1">
                 <span className="text-[10px] font-mono font-bold text-purple-300 uppercase tracking-widest block">

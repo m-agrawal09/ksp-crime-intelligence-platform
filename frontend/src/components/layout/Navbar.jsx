@@ -16,7 +16,7 @@ function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 flex h-20 items-center justify-between border-b border-slate-800 bg-slate-950 px-8 font-inter">
+    <header className="sticky top-0 z-50 flex h-20 items-center justify-between border-b border-slate-800/50 bg-slate-950/98 px-8 font-inter shadow-sm shadow-black/20">
 
       {/* Left */}
       <div className="flex items-center gap-4">

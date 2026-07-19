@@ -5,6 +5,8 @@ import TrendChart from "../../components/dashboard/TrendChart";
 import CrimeCategoryChart from "../../components/dashboard/CrimeCategoryChart";
 import RecentCriticalCases from "../../components/dashboard/RecentCriticalCases";
 import QuickActionsPanel from "../../components/dashboard/QuickActionsPanel";
+import KarnatakaOverviewPanel from "../../components/dashboard/KarnatakaOverviewPanel";
+import AIInsightsBanner from "../../components/dashboard/AIInsightsBanner";
 import { fetchDashboardData } from "../../services/dashboardService";
 import { recordService } from "../../services/recordService";
 import { FaSyncAlt } from "react-icons/fa";
@@ -91,41 +93,42 @@ const Dashboard = () => {
   const { kpi_metrics, crime_trends, crime_distribution, ai_alerts, recent_critical_cases } = dashboardData;
 
   return (
-    <div className="space-y-12 md:space-y-16 lg:space-y-20">
-      {/* 1. Executive Intelligence Header & Briefing Controls */}
-      <div className="pb-6 border-b border-slate-900/60 flex flex-col gap-6">
-        
-        {/* Title and Action Controls */}
+    <div className="space-y-10">
+
+      {/* ── 1. Executive Intelligence Header ── */}
+      <div className="pb-7 border-b border-slate-900/40 flex flex-col gap-5 animate-fade-in-up">
+
+        {/* Title + Controls row */}
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight uppercase font-mono">
+            <h1 className="text-4xl font-extrabold text-white tracking-tight uppercase font-mono leading-none">
               Executive Intelligence Dashboard
             </h1>
-            <p className="text-xs text-slate-400 font-sans mt-1">
-              Karnataka State Police • CCTNS Analytical Briefing & Modus Operandi Console
+            <p className="text-xs text-slate-500 font-sans mt-2">
+              Karnataka State Police &bull; CCTNS Analytical Briefing &amp; Modus Operandi Console
             </p>
           </div>
 
           {/* Controls */}
-          <div className="flex flex-wrap items-center gap-3 self-start lg:self-auto font-mono text-[10px] sm:text-[11px]">
+          <div className="flex flex-wrap items-center gap-2.5 self-start lg:self-auto font-mono text-[10px] sm:text-[11px]">
             {/* Live Indicator */}
-            <div className="flex items-center gap-2 bg-[#0c0d14] border border-slate-800/40 rounded-[4px] px-3 py-2 shadow-sm">
+            <div className="flex items-center gap-2 bg-[#060c18] border border-slate-800/25 rounded-[4px] px-3 py-2 shadow-sm">
               <span className="relative flex h-1.5 w-1.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
               </span>
-              <span className="text-[#a3a3a3] font-bold">TELEMETRY:</span>
+              <span className="text-slate-500 font-bold">TELEMETRY:</span>
               <span className="text-emerald-400 font-bold uppercase">SECURE</span>
             </div>
 
-            {/* Live Date/Time */}
-            <div className="bg-[#0c0d14] border border-slate-800/40 rounded-[4px] px-3.5 py-2 text-slate-300 font-bold shadow-sm">
+            {/* Date */}
+            <div className="bg-[#060c18] border border-slate-800/25 rounded-[4px] px-3.5 py-2 text-slate-400 font-bold shadow-sm">
               {new Date().toLocaleDateString("en-IN", { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}
             </div>
 
-            {/* District Filter Dropdown */}
-            <div className="flex items-center gap-2 bg-[#0c0d14] border border-slate-800/40 rounded-[4px] px-3 py-2 text-slate-300 shadow-sm">
-              <span className="text-slate-500 font-bold uppercase text-[9px]">JURISDICTION:</span>
+            {/* District Filter */}
+            <div className="flex items-center gap-2 bg-[#060c18] border border-slate-800/25 rounded-[4px] px-3 py-2 text-slate-300 shadow-sm">
+              <span className="text-slate-600 font-bold uppercase text-[9px]">JURISDICTION:</span>
               <select
                 value={selectedDistrict}
                 onChange={(e) => setSelectedDistrict(e.target.value)}
@@ -138,10 +141,10 @@ const Dashboard = () => {
               </select>
             </div>
 
-            {/* Sync Core Master */}
+            {/* Sync */}
             <button
               onClick={() => loadData(selectedDistrict)}
-              className="flex items-center gap-2 rounded-[4px] border border-slate-800/40 bg-slate-900/40 px-3.5 py-2 text-slate-400 hover:border-slate-700 hover:text-white transition-all cursor-pointer shadow-sm"
+              className="flex items-center gap-2 rounded-[4px] border border-slate-800/25 bg-slate-900/30 px-3.5 py-2 text-slate-500 hover:border-slate-700/50 hover:text-white transition-all cursor-pointer shadow-sm"
             >
               <FaSyncAlt className="text-[10px]" />
               <span>SYNC CORE</span>
@@ -149,55 +152,67 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Operational Status Sub-Briefing Strip (No borders, very clean) */}
-        <div className="flex flex-wrap gap-x-5 gap-y-2 items-center text-[9px] sm:text-[10px] font-mono tracking-wider text-slate-500 uppercase">
+        {/* Status strip */}
+        <div className="flex flex-wrap gap-x-6 gap-y-2 items-center text-[9px] sm:text-[10px] font-mono tracking-wider text-slate-600 uppercase">
           <div className="flex items-center gap-1.5">
-            <span className="text-slate-500">Gateway Link:</span>{" "}
-            <span className="text-slate-300 font-bold">CCTNS CAS (CONNECTED)</span>
+            <span className="text-slate-600">Gateway Link:</span>{" "}
+            <span className="text-slate-400 font-bold">CCTNS CAS (CONNECTED)</span>
           </div>
-
-          <div className="text-slate-800">|</div>
-
+          <div className="text-slate-800/60">&bull;</div>
           <div>
-            <span className="text-slate-500">Active Units:</span>{" "}
-            <span className="text-slate-300 font-bold">1,024 Districts & Commands</span>
+            <span className="text-slate-600">Active Units:</span>{" "}
+            <span className="text-slate-400 font-bold">1,024 Districts &amp; Commands</span>
           </div>
-
-          <div className="text-slate-800">|</div>
-
+          <div className="text-slate-800/60">&bull;</div>
           <div>
-            <span className="text-slate-500">AI Intelligence Core:</span>{" "}
+            <span className="text-slate-600">AI Intelligence Core:</span>{" "}
             <span className="text-blue-400 font-bold">QuickML (ONLINE)</span>
           </div>
-
-          <div className="text-slate-800">|</div>
-
-          <div className="ml-auto text-[9px] text-slate-600">
+          <div className="ml-auto text-[9px] text-slate-700">
             LAST SYNC HANDSHAKE: 2026-07-17 14:26:00 IST
           </div>
         </div>
       </div>
 
-      {/* 3. KPI Cards Section */}
-      <StatGrid metrics={kpi_metrics} />
+      {/* ── 2. Main Grid: Left content + Right sidebar ── */}
+      <div className="grid grid-cols-1 xl:grid-cols-[1fr_288px] gap-8 items-start">
 
-      {/* 4. Chart Row: Crime Trend (2/3) and Crime Category Distribution (1/3) */}
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-        <div className="lg:col-span-2">
-          <TrendChart data={crime_trends} />
+        {/* LEFT: Primary intelligence content */}
+        <div className="space-y-8 min-w-0">
+
+          {/* KPI Cards */}
+          <div className="animate-fade-in-up" style={{ animationDelay: '60ms' }}>
+            <StatGrid metrics={kpi_metrics} />
+          </div>
+
+          {/* Chart Row: Trend (2/3) + Category (1/3) */}
+          <div className="grid grid-cols-1 gap-7 lg:grid-cols-3 animate-fade-in-up" style={{ animationDelay: '120ms' }}>
+            <div className="lg:col-span-2">
+              <TrendChart data={crime_trends} />
+            </div>
+            <div className="lg:col-span-1">
+              <CrimeCategoryChart data={crime_distribution} />
+            </div>
+          </div>
+
+          {/* Critical Cases Feed */}
+          <div className="animate-fade-in-up" style={{ animationDelay: '180ms' }}>
+            <RecentCriticalCases cases={recent_critical_cases} />
+          </div>
         </div>
-        <div className="lg:col-span-1">
-          <CrimeCategoryChart data={crime_distribution} />
+
+        {/* RIGHT: Intelligence sidebar */}
+        <div className="space-y-6 xl:sticky xl:top-10 xl:self-start animate-fade-in-up" style={{ animationDelay: '80ms' }}>
+          <KarnatakaOverviewPanel />
+          <AIInsightsBanner />
         </div>
       </div>
 
-      {/* 5. Details Row: Recent Critical Cases (Full Width) */}
-      <div className="w-full">
-        <RecentCriticalCases cases={recent_critical_cases} />
+      {/* ── 3. Command Console (full width below grid) ── */}
+      <div className="animate-fade-in-up" style={{ animationDelay: '220ms' }}>
+        <QuickActionsPanel />
       </div>
 
-      {/* 6. Command Console Panel */}
-      <QuickActionsPanel />
     </div>
   );
 };
