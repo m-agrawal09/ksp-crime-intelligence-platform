@@ -17,7 +17,7 @@ const StatCard = ({
 
   return (
     <div
-      className={`relative overflow-hidden rounded-xl border border-slate-800 bg-slate-900/60 p-6 lg:p-7 transition-all duration-300 hover:border-slate-700 hover:bg-slate-900/90 ${borderColor} border-l-4`}
+      className={`relative overflow-hidden rounded-[4px] border border-slate-800 bg-slate-900/60 p-6 lg:p-7 transition-all duration-300 hover:border-slate-700 hover:bg-slate-900/90 ${borderColor} border-l-4`}
       onMouseEnter={() => setShowMetadata(true)}
       onMouseLeave={() => setShowMetadata(false)}
     >
@@ -30,7 +30,7 @@ const StatCard = ({
             {value}
           </h2>
         </div>
-        <div className={`rounded-lg bg-slate-800/40 p-2.5 ${color}`}>
+        <div className={`rounded-[2px] bg-slate-800/40 p-2.5 ${color}`}>
           {Icon ? <Icon className="text-xl" /> : <FaInfoCircle className="text-xl" />}
         </div>
       </div>

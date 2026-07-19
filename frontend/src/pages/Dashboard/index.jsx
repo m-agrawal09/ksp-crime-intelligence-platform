@@ -91,7 +91,7 @@ const Dashboard = () => {
   const { kpi_metrics, crime_trends, crime_distribution, ai_alerts, recent_critical_cases } = dashboardData;
 
   return (
-    <div className="space-y-8 md:space-y-10 lg:space-y-12">
+    <div className="space-y-12 md:space-y-16 lg:space-y-20">
       {/* 1. Header Area */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <PageHeader

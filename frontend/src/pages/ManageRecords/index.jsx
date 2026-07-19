@@ -148,9 +148,9 @@ const ManageRecords = () => {
   }, [records]);
 
   return (
-    <div className="space-y-6 md:space-y-8">
+    <div className="flex flex-col font-inter">
       {/* Title Header */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between border-b border-slate-800/80 pb-6 mb-6 px-6">
         <PageHeader
           title="CCTNS Manage Records & FIR Console"
           subtitle="Register new First Information Reports, update case timelines, allocate investigating officers, and mark completed case closures"
@@ -158,82 +158,86 @@ const ManageRecords = () => {
 
         <button
           onClick={handleOpenCreateModal}
-          className="flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-xs font-mono font-bold uppercase tracking-wider text-white shadow-lg shadow-blue-500/20 hover:bg-blue-500 transition-all self-start md:self-auto active:scale-95"
+          className="h-11 rounded-[4px] bg-[#2563eb] hover:bg-blue-600 px-6 text-xs font-bold uppercase tracking-wider text-white flex items-center gap-2 transition-all cursor-pointer shadow-sm border-none outline-none font-space self-start md:self-auto active:scale-95"
         >
-          <FaFolderPlus className="text-base" />
+          <FaFolderPlus className="text-sm" />
           <span>Register New FIR</span>
         </button>
       </div>
 
-      {/* KPI Stats Strip */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5 flex items-center justify-between">
+      {/* KPI Summary Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        {/* Total Registered FIRs */}
+        <div className="h-[96px] rounded-[4px] border-t-2 border-t-[#2563eb] border-r border-b border-l border-slate-800 bg-[#081220] pt-[18px] pb-[18px] px-6 flex items-center justify-between shadow-sm">
           <div>
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">Total Registered FIRs</span>
-            <h3 className="font-mono text-2xl font-bold text-white mt-1">{stats.total}</h3>
+            <span className="text-[9px] font-medium uppercase tracking-widest text-slate-400">Total Registered FIRs</span>
+            <h3 className="font-mono text-3xl sm:text-[34px] font-bold text-white mt-1 leading-none">{stats.total}</h3>
           </div>
-          <div className="h-10 w-10 rounded-lg bg-blue-600/10 border border-blue-500/30 flex items-center justify-center text-blue-400">
-            <FaShieldAlt className="text-lg" />
+          <div className="h-8 w-8 rounded-[2px] bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-400 flex-shrink-0 self-center">
+            <FaShieldAlt className="text-sm" />
           </div>
         </div>
 
-        <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5 flex items-center justify-between">
+        {/* Active Investigations */}
+        <div className="h-[96px] rounded-[4px] border-t-2 border-t-[#d97706] border-r border-b border-l border-slate-800 bg-[#081220] pt-[18px] pb-[18px] px-6 flex items-center justify-between shadow-sm">
           <div>
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-400">Active Investigations</span>
-            <h3 className="font-mono text-2xl font-bold text-white mt-1">{stats.active}</h3>
+            <span className="text-[9px] font-medium uppercase tracking-widest text-amber-400">Active Investigations</span>
+            <h3 className="font-mono text-3xl sm:text-[34px] font-bold text-white mt-1 leading-none">{stats.active}</h3>
           </div>
-          <div className="h-10 w-10 rounded-lg bg-amber-600/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
-            <FaUserCheck className="text-lg" />
+          <div className="h-8 w-8 rounded-[2px] bg-amber-600/10 border border-amber-500/20 flex items-center justify-center text-amber-400 flex-shrink-0 self-center">
+            <FaUserCheck className="text-sm" />
           </div>
         </div>
 
-        <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5 flex items-center justify-between">
+        {/* Closed / Completed Cases */}
+        <div className="h-[96px] rounded-[4px] border-t-2 border-t-[#059669] border-r border-b border-l border-slate-800 bg-[#081220] pt-[18px] pb-[18px] px-6 flex items-center justify-between shadow-sm">
           <div>
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-400">Closed / Completed Cases</span>
-            <h3 className="font-mono text-2xl font-bold text-white mt-1">{stats.closed}</h3>
+            <span className="text-[9px] font-medium uppercase tracking-widest text-emerald-400">Closed / Completed Cases</span>
+            <h3 className="font-mono text-3xl sm:text-[34px] font-bold text-white mt-1 leading-none">{stats.closed}</h3>
           </div>
-          <div className="h-10 w-10 rounded-lg bg-emerald-600/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
-            <FaCheckCircle className="text-lg" />
+          <div className="h-8 w-8 rounded-[2px] bg-emerald-600/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 flex-shrink-0 self-center">
+            <FaCheckCircle className="text-sm" />
           </div>
         </div>
 
-        <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5 flex items-center justify-between">
+        {/* Critical Severity Incidents */}
+        <div className="h-[96px] rounded-[4px] border-t-2 border-t-[#e11d48] border-r border-b border-l border-slate-800 bg-[#081220] pt-[18px] pb-[18px] px-6 flex items-center justify-between shadow-sm">
           <div>
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-rose-400">Critical Severity Incidents</span>
-            <h3 className="font-mono text-2xl font-bold text-white mt-1">{stats.critical}</h3>
+            <span className="text-[9px] font-medium uppercase tracking-widest text-rose-400">Critical Severity Incidents</span>
+            <h3 className="font-mono text-3xl sm:text-[34px] font-bold text-white mt-1 leading-none">{stats.critical}</h3>
           </div>
-          <div className="h-10 w-10 rounded-lg bg-rose-600/10 border border-rose-500/30 flex items-center justify-center text-rose-400">
-            <FaExclamationTriangle className="text-lg" />
+          <div className="h-8 w-8 rounded-[2px] bg-rose-600/10 border border-rose-500/20 flex items-center justify-center text-rose-400 flex-shrink-0 self-center">
+            <FaExclamationTriangle className="text-sm" />
           </div>
         </div>
       </div>
 
-      {/* Query Filters & Search Toolbar */}
-      <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-5 space-y-4">
-        <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
-          <div className="flex items-center gap-2 font-mono text-xs font-bold text-slate-300 uppercase tracking-wider">
-            <FaFilter className="text-blue-500" />
+      {/* Query Filters & Search Toolbar (Dedicated Section) */}
+      <div className="bg-[#081220] rounded-[4px] border border-[rgba(255,255,255,0.05)] pt-[18px] pb-[18px] px-6 space-y-6 shadow-sm mb-6">
+        <div className="flex items-center justify-between border-b border-slate-800/80 pb-4">
+          <div className="flex items-center gap-2 text-xs font-bold text-slate-200 uppercase tracking-widest font-space">
+            <FaFilter className="text-[#2563eb] text-sm" />
             <span>Search & Filter FIR Records</span>
           </div>
           <button
             onClick={handleResetFilters}
-            className="text-[11px] font-mono text-slate-400 hover:text-white transition-colors"
+            className="text-[11px] font-semibold text-[#2563eb] hover:text-blue-400 transition-colors uppercase tracking-wider font-space cursor-pointer"
           >
             Reset Filters
           </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 text-xs font-mono">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6 text-xs font-mono">
           {/* Search Box */}
-          <div className="relative sm:col-span-2 lg:col-span-1">
-            <FaSearch className="absolute left-3 top-3 text-slate-500" />
+          <div className="relative sm:col-span-2 lg:col-span-2">
+            <FaSearch className="absolute left-3.5 top-3.5 text-slate-500" />
             <input
               type="text"
               name="search"
               value={filters.search}
               onChange={handleFilterChange}
-              placeholder="Search Crime No, Name, Officer..."
-              className="w-full rounded-lg bg-slate-950 border border-slate-800 pl-9 pr-3 py-2 text-slate-200 outline-none focus:border-blue-500 placeholder-slate-600"
+              placeholder="Search by FIR No, Officer, Complainant..."
+              className="w-full h-11 rounded-[4px] bg-[#0c182a] border border-slate-800 pl-10 pr-4 text-xs text-white outline-none focus:border-[#2563eb] placeholder-slate-500 transition-all font-inter"
             />
           </div>
 
@@ -243,7 +247,7 @@ const ManageRecords = () => {
               name="district"
               value={filters.district}
               onChange={handleFilterChange}
-              className="w-full rounded-lg bg-slate-950 border border-slate-800 px-3 py-2 text-slate-300 outline-none focus:border-blue-500"
+              className="w-full h-11 rounded-[4px] bg-[#0c182a] border border-slate-800 px-4 text-xs text-slate-300 outline-none focus:border-[#2563eb] transition-all font-mono"
             >
               <option value="">All District Ranges</option>
               <option value="Bengaluru City">Bengaluru City</option>
@@ -260,7 +264,7 @@ const ManageRecords = () => {
               name="category"
               value={filters.category}
               onChange={handleFilterChange}
-              className="w-full rounded-lg bg-slate-950 border border-slate-800 px-3 py-2 text-slate-300 outline-none focus:border-blue-500"
+              className="w-full h-11 rounded-[4px] bg-[#0c182a] border border-slate-800 px-4 text-xs text-slate-300 outline-none focus:border-[#2563eb] transition-all font-mono"
             >
               <option value="">All Crime Categories</option>
               <option value="Property Offences">Property Offences</option>
@@ -277,7 +281,7 @@ const ManageRecords = () => {
               name="severity"
               value={filters.severity}
               onChange={handleFilterChange}
-              className="w-full rounded-lg bg-slate-950 border border-slate-800 px-3 py-2 text-slate-300 outline-none focus:border-blue-500"
+              className="w-full h-11 rounded-[4px] bg-[#0c182a] border border-slate-800 px-4 text-xs text-slate-300 outline-none focus:border-[#2563eb] transition-all font-mono"
             >
               <option value="">All Severity Levels</option>
               <option value="CRITICAL">CRITICAL</option>
@@ -293,7 +297,7 @@ const ManageRecords = () => {
               name="status"
               value={filters.status}
               onChange={handleFilterChange}
-              className="w-full rounded-lg bg-slate-950 border border-slate-800 px-3 py-2 text-slate-300 outline-none focus:border-blue-500"
+              className="w-full h-11 rounded-[4px] bg-[#0c182a] border border-slate-800 px-4 text-xs text-slate-300 outline-none focus:border-[#2563eb] transition-all font-mono"
             >
               <option value="">All Case Statuses</option>
               <option value="ACTIVE">Active Cases</option>
@@ -307,25 +311,25 @@ const ManageRecords = () => {
       </div>
 
       {/* Main FIR Data Table */}
-      <div className="rounded-xl border border-slate-800 bg-slate-900/60 overflow-hidden shadow-xl">
+      <div className="rounded-[4px] border border-slate-800 bg-[#081220] overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse font-sans text-xs">
             <thead>
-              <tr className="border-b border-slate-800 bg-slate-950/80 font-mono text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                <th className="py-3.5 px-4">Crime No & Date</th>
-                <th className="py-3.5 px-4">Jurisdiction</th>
-                <th className="py-3.5 px-4">Crime Category & Section</th>
-                <th className="py-3.5 px-4">Complainant</th>
-                <th className="py-3.5 px-4">Allotted Officer</th>
-                <th className="py-3.5 px-4">Accused / Suspect</th>
-                <th className="py-3.5 px-4">Status & Severity</th>
-                <th className="py-3.5 px-4 text-right">Actions</th>
+              <tr className="bg-[#0c1626] font-space text-[10px] font-bold text-slate-300 uppercase tracking-wider border-b border-slate-700">
+                <th className="py-3.5 pl-6 pr-4 border-b border-slate-700">Crime No & Date</th>
+                <th className="py-3.5 px-4 border-b border-slate-700">Jurisdiction</th>
+                <th className="py-3.5 px-4 border-b border-slate-700">Crime Category & Section</th>
+                <th className="py-3.5 px-4 border-b border-slate-700">Complainant</th>
+                <th className="py-3.5 px-4 border-b border-slate-700">Allotted Officer</th>
+                <th className="py-3.5 px-4 border-b border-slate-700">Accused / Suspect</th>
+                <th className="py-3.5 px-4 border-b border-slate-700">Status & Severity</th>
+                <th className="py-3.5 pl-4 pr-6 border-b border-slate-700 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/60 text-slate-300">
               {records.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-12 text-center text-slate-500 font-mono">
+                  <td colSpan={8} className="py-16 text-center text-slate-500 font-mono">
                     No CCTNS FIR records match your filter criteria.
                   </td>
                 </tr>
@@ -334,60 +338,60 @@ const ManageRecords = () => {
                   const isClosed = r.status === "Case Closed / Completed";
 
                   return (
-                    <tr key={r.id} className="hover:bg-slate-800/40 transition-colors">
+                    <tr key={r.id} className="odd:bg-[#081220] even:bg-[#0b1424] hover:bg-[#2563eb]/5 transition-colors duration-150">
                       {/* Crime No & Date */}
-                      <td className="py-3.5 px-4 font-mono">
-                        <div className="font-bold text-blue-400 hover:underline cursor-pointer" onClick={() => handleOpenDetailModal(r)}>
+                      <td className="py-3.5 pl-6 pr-4 font-mono border-b border-slate-800/40">
+                        <div className="font-bold text-blue-400 hover:text-blue-300 cursor-pointer transition-colors text-xs" onClick={() => handleOpenDetailModal(r)}>
                           {r.crimeNo}
                         </div>
-                        <div className="text-[10px] text-slate-500 mt-0.5">Reg: {r.regDate}</div>
+                        <div className="text-[10px] text-slate-500 font-mono mt-1">Reg: {r.regDate}</div>
                       </td>
 
                       {/* Jurisdiction */}
-                      <td className="py-3.5 px-4">
-                        <div className="font-semibold text-slate-200">{r.unit}</div>
-                        <div className="text-[10px] text-slate-500 font-mono">{r.district}</div>
+                      <td className="py-3.5 px-4 border-b border-slate-800/40">
+                        <div className="font-bold text-slate-200 text-xs">{r.unit}</div>
+                        <div className="text-[10px] text-slate-500 font-mono mt-0.5">{r.district}</div>
                       </td>
 
                       {/* Category & Section */}
-                      <td className="py-3.5 px-4">
-                        <div className="font-semibold text-slate-200">{r.crimeHead}</div>
-                        <div className="text-[10px] font-mono text-purple-300 mt-0.5">{r.actSections}</div>
+                      <td className="py-3.5 px-4 border-b border-slate-800/40">
+                        <div className="font-bold text-slate-200 text-xs">{r.crimeHead}</div>
+                        <div className="text-[10px] font-mono text-purple-400 mt-1">{r.actSections}</div>
                       </td>
 
                       {/* Complainant */}
-                      <td className="py-3.5 px-4">
-                        <div className="font-medium text-slate-200">{r.complainantName}</div>
-                        <div className="text-[10px] text-slate-500 font-mono">{r.complainantPhone || "N/A"}</div>
+                      <td className="py-3.5 px-4 border-b border-slate-800/40">
+                        <div className="font-bold text-slate-200 text-xs">{r.complainantName}</div>
+                        <div className="text-[10px] text-slate-500 font-mono mt-0.5">{r.complainantPhone || "N/A"}</div>
                       </td>
 
                       {/* Allotted Officer */}
-                      <td className="py-3.5 px-4 font-mono">
-                        <div className="font-bold text-slate-200">{r.allottedOfficerName}</div>
-                        <div className="text-[10px] text-slate-500">{r.allottedOfficerRank} • {r.allottedOfficerKgid}</div>
+                      <td className="py-3.5 px-4 border-b border-slate-800/40 font-mono">
+                        <div className="font-bold text-slate-200 text-xs">{r.allottedOfficerName}</div>
+                        <div className="text-[10px] text-slate-500 font-mono mt-0.5">{r.allottedOfficerRank} • {r.allottedOfficerKgid}</div>
                       </td>
 
                       {/* Suspect */}
-                      <td className="py-3.5 px-4">
-                        <div className="font-medium text-slate-200">{r.accusedName}</div>
-                        <div className="text-[10px] font-mono text-amber-400">{r.accusedStatus}</div>
+                      <td className="py-3.5 px-4 border-b border-slate-800/40">
+                        <div className="font-bold text-slate-200 text-xs">{r.accusedName}</div>
+                        <div className="text-[10px] font-mono text-amber-500 mt-0.5">{r.accusedStatus}</div>
                       </td>
 
                       {/* Status & Severity */}
-                      <td className="py-3.5 px-4 font-mono">
-                        <div className="flex flex-col gap-1 items-start">
-                          <span className={`text-[9px] font-bold px-2 py-0.5 rounded border uppercase ${
+                      <td className="py-3.5 px-4 border-b border-slate-800/40 font-mono">
+                        <div className="flex flex-col gap-1.5 items-start">
+                          <span className={`text-[9px] font-bold px-2.5 py-0.5 rounded-[4px] border uppercase tracking-wider font-mono ${
                             isClosed
-                              ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
-                              : "bg-amber-500/10 text-amber-300 border-amber-500/30"
+                              ? "bg-emerald-500/5 text-emerald-400 border-emerald-500/20"
+                              : "bg-amber-500/5 text-amber-400 border-amber-500/20"
                           }`}>
                             {isClosed ? "CLOSED / COMPLETED" : r.status}
                           </span>
 
-                          <span className={`text-[8px] font-bold px-1.5 py-0.2 rounded uppercase ${
-                            r.severity === "CRITICAL" ? "bg-rose-500/10 text-rose-400 border border-rose-500/20" :
-                            r.severity === "HIGH" ? "bg-amber-500/10 text-amber-400 border border-amber-500/20" :
-                            "bg-blue-500/10 text-blue-400 border border-blue-500/20"
+                          <span className={`text-[8px] font-bold px-2 py-0.5 rounded-[4px] uppercase tracking-wider font-mono border ${
+                            r.severity === "CRITICAL" ? "bg-rose-500/5 text-rose-400 border-rose-500/20" :
+                            r.severity === "HIGH" ? "bg-amber-500/5 text-amber-400 border-amber-500/20" :
+                            "bg-blue-500/5 text-blue-400 border-blue-500/20"
                           }`}>
                             {r.severity}
                           </span>
@@ -395,12 +399,12 @@ const ManageRecords = () => {
                       </td>
 
                       {/* Actions */}
-                      <td className="py-3.5 px-4 text-right font-mono">
-                        <div className="flex items-center justify-end gap-1.5">
+                      <td className="py-3.5 pl-4 pr-6 text-right font-mono border-b border-slate-800/40">
+                        <div className="flex items-center justify-end gap-2.5">
                           {/* View Detail */}
                           <button
                             onClick={() => handleOpenDetailModal(r)}
-                            className="p-1.5 rounded-lg border border-slate-800 bg-slate-900 text-slate-400 hover:text-blue-400 hover:border-blue-500/40 transition-colors"
+                            className="p-2 rounded-[4px] border border-slate-800 bg-[#0c182a] text-slate-400 hover:text-blue-400 hover:bg-[#11223c] hover:border-slate-700 transition-colors"
                             title="Inspect Full FIR Dossier"
                           >
                             <FaEye />
@@ -409,7 +413,7 @@ const ManageRecords = () => {
                           {/* Edit Record */}
                           <button
                             onClick={() => handleOpenEditModal(r)}
-                            className="p-1.5 rounded-lg border border-slate-800 bg-slate-900 text-slate-400 hover:text-purple-400 hover:border-purple-500/40 transition-colors"
+                            className="p-2 rounded-[4px] border border-slate-800 bg-[#0c182a] text-slate-400 hover:text-purple-400 hover:bg-[#1b1932] hover:border-slate-700 transition-colors"
                             title="Edit Record Fields"
                           >
                             <FaEdit />
@@ -418,10 +422,10 @@ const ManageRecords = () => {
                           {/* Toggle Closed Status */}
                           <button
                             onClick={() => handleToggleCaseClosed(r.id)}
-                            className={`p-1.5 rounded-lg border transition-colors ${
+                            className={`p-2 rounded-[4px] border transition-colors ${
                               isClosed
-                                ? "border-amber-900/40 bg-amber-950/20 text-amber-400 hover:bg-amber-900/40"
-                                : "border-emerald-900/40 bg-emerald-950/20 text-emerald-400 hover:bg-emerald-900/40"
+                                ? "border-slate-800 bg-[#0c182a] text-amber-400 hover:bg-[#201d24] hover:border-slate-700"
+                                : "border-slate-800 bg-[#0c182a] text-emerald-400 hover:bg-[#0f2122] hover:border-slate-700"
                             }`}
                             title={isClosed ? "Re-open Case Investigation" : "Mark Case Closed / Completed"}
                           >
@@ -431,7 +435,7 @@ const ManageRecords = () => {
                           {/* Delete Record */}
                           <button
                             onClick={() => handleDeletePrompt(r.id)}
-                            className="p-1.5 rounded-lg border border-slate-800 bg-slate-900 text-slate-400 hover:text-rose-400 hover:border-rose-500/40 transition-colors"
+                            className="p-2 rounded-[4px] border border-slate-800 bg-[#0c182a] text-slate-400 hover:text-rose-400 hover:bg-[#24131d] hover:border-slate-700 transition-colors"
                             title="Delete FIR Record"
                           >
                             <FaTrash />

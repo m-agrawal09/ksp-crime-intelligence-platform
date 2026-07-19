@@ -18,7 +18,7 @@ const PageHeader = ({ title, subtitle }) => {
         </p>
       </div>
 
-      <div className="rounded-lg border border-slate-800 bg-slate-900 px-4 py-2 text-sm text-slate-300">
+      <div className="rounded-[4px] border border-slate-800 bg-[#081220] px-4 py-2.5 text-xs font-mono text-slate-400 shadow-sm">
         {today}
       </div>
     </div>

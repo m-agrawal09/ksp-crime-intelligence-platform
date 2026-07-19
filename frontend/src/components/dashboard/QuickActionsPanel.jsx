@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+can't import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   FaBrain,
@@ -24,7 +24,7 @@ const QuickActionsPanel = () => {
 
   const handleActionClick = async (actionId, label) => {
     if (runningAction) return;
-    
+
     setRunningAction(actionId);
     addLog(`INIT: Triggering operational function: ${actionId} (${label})...`);
 
@@ -81,10 +81,10 @@ const QuickActionsPanel = () => {
     }
   ];
 
-  const cardBaseStyle = "flex flex-col text-left p-5 rounded-xl border transition-all duration-300 group bg-slate-900/40 relative overflow-hidden min-h-[160px] shadow-sm";
+  const cardBaseStyle = "flex flex-col text-left p-5 rounded-[4px] border transition-all duration-300 group bg-slate-900/40 relative overflow-hidden min-h-[160px] shadow-sm";
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-6 sm:p-8 flex flex-col lg:flex-row gap-6 lg:gap-8 shadow-lg">
+    <div className="rounded-[4px] border border-slate-800 bg-slate-900/60 p-6 sm:p-8 flex flex-col lg:flex-row gap-6 lg:gap-8 shadow-lg">
       {/* Console Grid */}
       <div className="flex-1 space-y-6">
         <div>
@@ -162,7 +162,7 @@ const QuickActionsPanel = () => {
       </div>
 
       {/* Terminal Outputs Console */}
-      <div className="w-full lg:w-80 rounded-xl border border-slate-950 bg-slate-950/80 p-5 flex flex-col font-mono text-[10px] h-40 lg:h-auto min-h-[140px] shadow-inner">
+      <div className="w-full lg:w-80 rounded-[4px] border border-slate-950 bg-slate-950/80 p-5 flex flex-col font-mono text-[10px] h-40 lg:h-auto min-h-[140px] shadow-inner">
         <div className="flex items-center gap-1.5 border-b border-slate-900 pb-2.5 mb-3 text-slate-400">
           <FaTerminal className="text-[10px] text-blue-500 animate-pulse" />
           <span className="font-bold tracking-wider uppercase">TELEMETRY MONITOR</span>

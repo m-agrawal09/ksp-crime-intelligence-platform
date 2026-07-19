@@ -33,7 +33,7 @@ const RecentCriticalCases = ({ cases }) => {
   };
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-6 sm:p-8 flex flex-col h-[500px] shadow-lg">
+    <div className="rounded-[4px] border border-slate-800 bg-slate-900/60 p-6 sm:p-8 flex flex-col h-[500px] shadow-lg">
       <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
         <div className="flex items-center gap-2">
           <FaClipboardList className="text-blue-400 text-lg" />
