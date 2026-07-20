@@ -24,44 +24,101 @@ const getMarkerColorClass = (severity) => {
 };
 
 const createCustomMarker = (incident) => {
-  const colorClass = getMarkerColorClass(incident.severity);
+  const isCritical = incident.severity === "CRITICAL";
+  const isHigh = incident.severity === "HIGH";
+
+  const colors = {
+    CRITICAL: { dot: "#ef4444", ring: "rgba(239,68,68,0.3)", border: "#ef4444" },
+    HIGH:     { dot: "#f59e0b", ring: "rgba(245,158,11,0.3)", border: "#f59e0b" },
+    MEDIUM:   { dot: "#3b82f6", ring: "rgba(59,130,246,0.25)", border: "#3b82f6" },
+    LOW:      { dot: "#64748b", ring: "rgba(100,116,139,0.2)", border: "#64748b" },
+  };
+
+  const c = colors[incident.severity] || colors.LOW;
+  const pulseHtml = isCritical
+    ? `<span style="position:absolute;inset:-4px;border-radius:50%;background:${c.ring};animation:situationPulse 2.4s ease-in-out infinite;"></span>`
+    : "";
+
   return L.divIcon({
     className: "custom-leaflet-marker",
     html: `
-      <div class="relative flex items-center justify-center h-5 w-5">
-        <span class="animate-ping absolute inline-flex h-4 w-4 rounded-full ${colorClass} opacity-75"></span>
-        <span class="relative inline-flex rounded-full h-2.5 w-2.5 ${colorClass} border border-white"></span>
+      <div style="position:relative;display:flex;align-items:center;justify-content:center;width:18px;height:18px;">
+        ${pulseHtml}
+        <span style="
+          position:relative;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          width:9px;height:9px;
+          border-radius:50%;
+          background:${c.dot};
+          border:1.5px solid rgba(255,255,255,0.5);
+          box-shadow:0 0 6px ${c.ring};
+        "></span>
       </div>
     `,
-    iconSize: [20, 20],
-    iconAnchor: [10, 10],
-    popupAnchor: [0, -10]
+    iconSize: [18, 18],
+    iconAnchor: [9, 9],
+    popupAnchor: [0, -9]
   });
 };
 
-// Custom Cluster Marker styling based on Incident count
+// Improved cluster icon — concentric ring design
 const createClusterIcon = (districtName, count) => {
-  let sizeClass = "h-11 w-11 text-xs border-2";
-  let colorClass = "bg-blue-600/90 border-blue-500 text-white";
+  const isCritical = count > 15;
+  const isHigh = count > 6;
 
-  if (count > 15) {
-    sizeClass = "h-14 w-14 text-sm border-2 animate-pulse";
-    colorClass = "bg-red-600/90 border-red-500 text-white";
-  } else if (count > 6) {
-    sizeClass = "h-12 w-12 text-xs border-2";
-    colorClass = "bg-amber-600/90 border-amber-500 text-white";
+  let outerSize, innerSize, bg, ring, textColor, pulseClass;
+
+  if (isCritical) {
+    outerSize = 54; innerSize = 38;
+    bg = "rgba(127,29,29,0.85)";
+    ring = "rgba(239,68,68,0.5)";
+    textColor = "#fca5a5";
+    pulseClass = "situation-pulse";
+  } else if (isHigh) {
+    outerSize = 48; innerSize = 33;
+    bg = "rgba(120,53,15,0.85)";
+    ring = "rgba(245,158,11,0.4)";
+    textColor = "#fcd34d";
+    pulseClass = "";
+  } else {
+    outerSize = 43; innerSize = 30;
+    bg = "rgba(30,58,138,0.85)";
+    ring = "rgba(59,130,246,0.35)";
+    textColor = "#93c5fd";
+    pulseClass = "";
   }
 
+  const ringColor = isCritical ? "rgba(239,68,68,0.35)" : isHigh ? "rgba(245,158,11,0.3)" : "rgba(59,130,246,0.25)";
+
   return L.divIcon({
-    className: "custom-cluster-icon",
+    className: `custom-cluster-icon ${pulseClass}`,
     html: `
-      <div class="flex flex-col items-center justify-center rounded-full font-mono font-bold shadow-2xl ${sizeClass} ${colorClass}">
-        <span class="leading-none">${count}</span>
-        <span class="text-[7px] uppercase tracking-tighter opacity-80 mt-0.5">${districtName.slice(0, 3)}</span>
+      <div style="
+        position:relative;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        width:${outerSize}px;height:${outerSize}px;
+        border-radius:50%;
+        background:${ringColor};
+      ">
+        <div style="
+          display:flex;flex-direction:column;align-items:center;justify-content:center;
+          width:${innerSize}px;height:${innerSize}px;
+          border-radius:50%;
+          background:${bg};
+          border:1.5px solid ${ring};
+          box-shadow:0 4px 16px rgba(0,0,0,0.5);
+        ">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:${textColor};line-height:1;">${count}</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:6px;text-transform:uppercase;color:${textColor};opacity:0.65;letter-spacing:0.06em;margin-top:1px;">${districtName.slice(0, 3)}</span>
+        </div>
       </div>
     `,
-    iconSize: [50, 50],
-    iconAnchor: [25, 25]
+    iconSize: [outerSize, outerSize],
+    iconAnchor: [outerSize / 2, outerSize / 2]
   });
 };
 
@@ -97,19 +154,29 @@ const MapController = ({ selectedItem, setZoomLevel }) => {
 // Available High-Precision Map Tile Services
 const MAP_LAYERS = {
   dark: {
-    name: "Dark Command Radar",
+    name: "Dark",
     url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
     attribution: '&copy; <a href="https://carto.com/">CARTO</a> &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
   },
   satellite: {
-    name: "High-Precision Satellite",
+    name: "Satellite",
     url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
     attribution: "&copy; Esri, Maxar, Earthstar Geographics, CNES/Airbus DS, USDA, USGS, AeroGRID, IGN, and the GIS User Community"
   },
   streets: {
-    name: "Detailed GIS Streets",
+    name: "Streets",
     url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }
+};
+
+// Severity badge styles for popup
+const getSeverityPopupStyle = (severity) => {
+  switch (severity) {
+    case "CRITICAL": return { bg: "rgba(127,29,29,0.6)", border: "rgba(239,68,68,0.35)", text: "#fca5a5" };
+    case "HIGH":     return { bg: "rgba(120,53,15,0.6)", border: "rgba(245,158,11,0.35)", text: "#fcd34d" };
+    case "MEDIUM":   return { bg: "rgba(30,58,138,0.5)", border: "rgba(59,130,246,0.3)", text: "#93c5fd" };
+    default:         return { bg: "rgba(30,41,59,0.5)", border: "rgba(100,116,139,0.3)", text: "#94a3b8" };
   }
 };
 
@@ -140,25 +207,98 @@ const InteractiveMap = ({ incidents, selectedItem, onSelectDistrict, onSelectMar
   const showClusters = zoomLevel < 8.2;
   const currentTile = MAP_LAYERS[activeLayer];
 
+  // Compute quick stats for the floating situation overview
+  const criticalCount = incidents.filter(i => i.severity === "CRITICAL").length;
+  const highRiskCount = incidents.filter(i => i.severity === "CRITICAL" || i.severity === "HIGH").length;
+  const activeCount = incidents.filter(i => i.status === "Under Investigation" || i.status === "Suspect Apprehended").length;
+  const officersSet = new Set(incidents.map(i => i.assignedOfficer?.name).filter(Boolean));
+  const officersCount = officersSet.size;
+  const totalDistricts = districtClusters.length;
+
   return (
-    <div className="h-full w-full rounded-xl overflow-hidden border border-slate-800 bg-slate-950 relative min-h-[500px]">
-      {/* Map Layer Switcher Control */}
-      <div className="absolute top-3 right-3 z-20 flex bg-slate-900/90 backdrop-blur border border-slate-800 rounded-lg p-1 font-mono text-[10px] shadow-xl">
-        {Object.entries(MAP_LAYERS).map(([key, layer]) => (
-          <button
-            key={key}
-            onClick={() => setActiveLayer(key)}
-            className={`px-2.5 py-1 rounded-md transition-all font-bold ${
-              activeLayer === key
-                ? "bg-blue-600 text-white shadow"
-                : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
-            }`}
-          >
-            {layer.name}
-          </button>
-        ))}
+    <div className="h-full w-full rounded-xl overflow-hidden border border-slate-800/35 bg-slate-950 relative min-h-[500px]" style={{ boxShadow: "0 16px 40px rgba(0,0,0,0.5)" }}>
+
+      {/* ── Floating Situation Overview Panel (Left) ── */}
+      <div className="map-float-panel top-3 left-3" style={{ minWidth: 148 }}>
+        <div style={{
+          background: "rgba(6,13,26,0.88)",
+          border: "1px solid rgba(51,65,85,0.25)",
+          borderRadius: 10,
+          padding: "10px 12px",
+          minWidth: 148,
+        }}>
+          <div style={{
+            display: "flex", alignItems: "center", gap: 6,
+            marginBottom: 10, paddingBottom: 8,
+            borderBottom: "1px solid rgba(51,65,85,0.2)"
+          }}>
+            <span style={{
+              display: "inline-block", width: 6, height: 6,
+              borderRadius: "50%", background: "#3b82f6",
+              animation: "ping-slow 2s ease-in-out infinite", flexShrink: 0
+            }} />
+            <span style={{
+              fontFamily: "'IBM Plex Mono', monospace",
+              fontSize: 8, fontWeight: 700,
+              letterSpacing: "0.12em", textTransform: "uppercase", color: "#475569"
+            }}>Situation Overview</span>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {[
+              { label: "Active Hotspots", value: districtClusters.length, color: "#ef4444" },
+              { label: "Critical Incidents", value: criticalCount, color: "#f59e0b" },
+              { label: "Active Cases", value: activeCount, color: "#3b82f6" },
+              { label: "Officers Deployed", value: officersCount, color: "#10b981" },
+            ].map(({ label, value, color }) => (
+              <div key={label} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
+                <span style={{
+                  fontFamily: "'IBM Plex Mono', monospace",
+                  fontSize: 9, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.05em"
+                }}>{label}</span>
+                <span style={{
+                  fontFamily: "'IBM Plex Mono', monospace",
+                  fontSize: 14, fontWeight: 700, color, lineHeight: 1
+                }}>{value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
+      {/* ── Map Layer Switcher Control (Top Right) ── */}
+      <div className="map-float-panel top-3 right-3">
+        <div style={{
+          display: "flex", gap: 2,
+          background: "rgba(6,13,26,0.88)",
+          border: "1px solid rgba(51,65,85,0.25)",
+          borderRadius: 8, padding: 3,
+        }}>
+          {Object.entries(MAP_LAYERS).map(([key, layer]) => (
+            <button
+              key={key}
+              onClick={() => setActiveLayer(key)}
+              style={{
+                padding: "4px 9px",
+                borderRadius: 6,
+                fontFamily: "'IBM Plex Mono', monospace",
+                fontSize: 9,
+                fontWeight: 700,
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+                cursor: "pointer",
+                border: "none",
+                transition: "all 0.15s",
+                background: activeLayer === key ? "#2563eb" : "transparent",
+                color: activeLayer === key ? "#ffffff" : "#475569",
+              }}
+            >
+              {layer.name}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Leaflet Map ── */}
       <MapContainer
         center={KARNATAKA_CENTER}
         zoom={DEFAULT_ZOOM}
@@ -186,66 +326,110 @@ const InteractiveMap = ({ incidents, selectedItem, onSelectDistrict, onSelectMar
           ))
         ) : (
           // Render Individual Incident Pin Markers
-          incidents.map((inc) => (
-            <Marker
-              key={inc.id}
-              position={[inc.lat, inc.lng]}
-              icon={createCustomMarker(inc)}
-              eventHandlers={{
-                click: () => {
-                  onSelectMarker(inc);
-                }
-              }}
-            >
-              <Popup className="dark-popup font-mono text-xs">
-                <div className="space-y-2 p-1 max-w-[260px]">
-                  <div className="flex items-center justify-between gap-4 border-b border-slate-800 pb-1.5">
-                    <span className="font-bold text-blue-400 text-[11px]">{inc.caseNo}</span>
-                    <span className={`text-[8px] font-bold px-1.5 py-0.5 rounded uppercase ${
-                      inc.severity === "CRITICAL" ? "bg-red-500/10 text-red-400 border border-red-500/20" :
-                      inc.severity === "HIGH" ? "bg-amber-500/10 text-amber-400 border border-amber-500/20" :
-                      "bg-blue-500/10 text-blue-400 border border-blue-500/20"
-                    }`}>
-                      {inc.severity}
-                    </span>
-                  </div>
-
-                  <div className="space-y-1 text-slate-300 text-[10px]">
-                    <div className="flex items-center gap-1.5">
-                      <FaBuilding className="text-slate-500 text-[9px]" />
-                      <span>{inc.unit}</span>
+          incidents.map((inc) => {
+            const sevStyle = getSeverityPopupStyle(inc.severity);
+            return (
+              <Marker
+                key={inc.id}
+                position={[inc.lat, inc.lng]}
+                icon={createCustomMarker(inc)}
+                eventHandlers={{
+                  click: () => {
+                    onSelectMarker(inc);
+                  }
+                }}
+              >
+                <Popup className="dark-popup font-mono text-xs">
+                  <div style={{ padding: "4px 2px", minWidth: 230, maxWidth: 260, fontFamily: "'IBM Plex Mono', monospace" }}>
+                    {/* Header */}
+                    <div style={{
+                      display: "flex", alignItems: "center", justifyContent: "space-between",
+                      paddingBottom: 8, marginBottom: 10,
+                      borderBottom: "1px solid rgba(51,65,85,0.25)"
+                    }}>
+                      <span style={{ fontSize: 11, fontWeight: 700, color: "#93c5fd" }}>{inc.caseNo}</span>
+                      <span style={{
+                        fontSize: 8, fontWeight: 700, letterSpacing: "0.08em",
+                        textTransform: "uppercase", padding: "2px 7px", borderRadius: 4,
+                        background: sevStyle.bg, border: `1px solid ${sevStyle.border}`, color: sevStyle.text
+                      }}>
+                        {inc.severity}
+                      </span>
                     </div>
-                    <div className="flex items-center gap-1.5">
-                      <FaCalendarAlt className="text-slate-500 text-[9px]" />
-                      <span>Date: {inc.date}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <FaUser className="text-slate-500 text-[9px]" />
-                      <span>Officer: {inc.assignedOfficer.name}</span>
-                    </div>
-                  </div>
 
-                  <div className="bg-slate-950/80 p-2 rounded border border-slate-900 mt-2">
-                    <span className="text-[8px] font-bold text-slate-500 uppercase tracking-wider block mb-0.5">Brief Facts</span>
-                    <p className="text-[9px] leading-normal text-slate-400 font-sans line-clamp-3">
-                      {inc.briefFacts}
-                    </p>
-                  </div>
+                    {/* Details */}
+                    <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 10 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                        <span style={{ fontSize: 8, color: "#475569", width: 14, flexShrink: 0 }}>📍</span>
+                        <span style={{ fontSize: 10, color: "#cbd5e1" }}>{inc.unit}</span>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                        <span style={{ fontSize: 8, color: "#475569", width: 14, flexShrink: 0 }}>📅</span>
+                        <span style={{ fontSize: 10, color: "#94a3b8" }}>{inc.date}</span>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                        <span style={{ fontSize: 8, color: "#475569", width: 14, flexShrink: 0 }}>👤</span>
+                        <span style={{ fontSize: 10, color: "#94a3b8" }}>{inc.assignedOfficer.name}</span>
+                      </div>
+                    </div>
 
-                  <div className="text-[8px] text-slate-500 pt-1 text-right italic">
-                    Status: <span className="text-slate-300 font-bold">{inc.status}</span>
+                    {/* Brief Facts */}
+                    <div style={{
+                      background: "rgba(2,6,23,0.6)", borderRadius: 6,
+                      border: "1px solid rgba(51,65,85,0.2)", padding: "7px 9px", marginBottom: 8
+                    }}>
+                      <span style={{
+                        display: "block", fontSize: 8, fontWeight: 700,
+                        color: "#475569", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 4
+                      }}>Brief Facts</span>
+                      <p style={{ fontSize: 9, lineHeight: 1.55, color: "#64748b", fontFamily: "Inter, sans-serif",
+                        display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden"
+                      }}>
+                        {inc.briefFacts}
+                      </p>
+                    </div>
+
+                    {/* Status footer */}
+                    <div style={{ display: "flex", justifyContent: "flex-end", fontSize: 8, color: "#475569" }}>
+                      Status: <span style={{ color: "#94a3b8", fontWeight: 700, marginLeft: 4 }}>{inc.status}</span>
+                    </div>
                   </div>
-                </div>
-              </Popup>
-            </Marker>
-          ))
+                </Popup>
+              </Marker>
+            );
+          })
         )}
       </MapContainer>
 
-      {/* Embedded Map overlay showing Current View Status */}
-      <div className="absolute bottom-3 left-3 bg-slate-950/80 backdrop-blur-md px-3 py-1.5 rounded-lg border border-slate-800 z-[1000] text-[9px] font-mono tracking-wider text-slate-400">
-        VIEWPORT SCALE: <span className="text-blue-400 font-bold">{showClusters ? "DISTRICT OVERVIEW" : "STREET LEVEL MARKERS"}</span>
+      {/* ── Floating Severity Legend (Bottom Right, above attribution) ── */}
+      <div className="map-float-panel bottom-8 right-3">
+        <div className="map-severity-legend">
+          <div style={{ color: "#475569", marginBottom: 6, fontSize: 8, letterSpacing: "0.1em" }}>Severity Index</div>
+          {[
+            { label: "Critical", color: "#ef4444" },
+            { label: "High",     color: "#f59e0b" },
+            { label: "Medium",   color: "#3b82f6" },
+            { label: "Low",      color: "#475569" },
+          ].map(({ label, color }) => (
+            <div key={label} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
+              <span style={{ width: 6, height: 6, borderRadius: "50%", background: color, display: "inline-block", flexShrink: 0 }} />
+              <span style={{ color: "#64748b", fontSize: 9 }}>{label}</span>
+            </div>
+          ))}
+        </div>
       </div>
+
+      {/* ── Viewport Scale Badge (Bottom Left) ── */}
+      <div className="map-float-panel bottom-8 left-3" style={{
+        background: "rgba(6,13,26,0.82)",
+        border: "1px solid rgba(51,65,85,0.2)",
+        borderRadius: 6, padding: "4px 10px",
+        fontFamily: "'IBM Plex Mono', monospace",
+        fontSize: 9, letterSpacing: "0.08em", color: "#475569"
+      }}>
+        VIEW: <span style={{ color: "#60a5fa", fontWeight: 700 }}>{showClusters ? "DISTRICT CLUSTERS" : "STREET INCIDENTS"}</span>
+      </div>
+
     </div>
   );
 };

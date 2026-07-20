@@ -111,14 +111,14 @@ const CrimeMap = () => {
   }, [selectedMarker, selectedDistrict, filteredIncidents]);
 
   return (
-    <div className="space-y-6 md:space-y-8">
+    <div className="flex flex-col gap-5">
       {/* Page Header */}
       <PageHeader
         title="Crime Geospatial Intelligence Center"
         subtitle="GIS Radar Incident Tracking & Automated Modus Operandi Matching Console"
       />
 
-      {/* Top Intelligence Filters */}
+      {/* Command Toolbar — flat single-row filters */}
       <MapFilters
         filters={filters}
         onFilterChange={handleFilterChange}
@@ -126,9 +126,9 @@ const CrimeMap = () => {
       />
 
       {/* Main Spatial Analytics Segment */}
-      <div className="grid grid-cols-1 lg:grid-cols-10 gap-6 items-start">
-        {/* Left Side: Leaflet Radar Map (70% width) */}
-        <div className="lg:col-span-7 h-[560px] relative">
+      <div className="grid grid-cols-1 lg:grid-cols-10 gap-5 items-start">
+        {/* Left Side: Leaflet Radar Map (~70% width) */}
+        <div className="lg:col-span-7 relative" style={{ height: 680 }}>
           <InteractiveMap
             incidents={filteredIncidents}
             selectedItem={selectedItem}
@@ -137,8 +137,8 @@ const CrimeMap = () => {
           />
         </div>
 
-        {/* Right Side: Stacked Intelligence Cards (30% width) */}
-        <div className="lg:col-span-3 h-[560px] overflow-y-auto pr-1 space-y-5 scrollbar-thin">
+        {/* Right Side: Stacked Intelligence Cards (~30% width) */}
+        <div className="lg:col-span-3 overflow-y-auto pr-0.5 space-y-4 scrollbar-thin" style={{ height: 680 }}>
           <IntelligencePanel
             selectionName={selectedDistrict || "ALL DISTRICTS"}
             metrics={districtMetrics}
