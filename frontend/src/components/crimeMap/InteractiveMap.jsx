@@ -25,72 +25,75 @@ const getMarkerColorClass = (severity) => {
 
 const createCustomMarker = (incident) => {
   const isCritical = incident.severity === "CRITICAL";
-  const isHigh = incident.severity === "HIGH";
 
-  const colors = {
-    CRITICAL: { dot: "#ef4444", ring: "rgba(239,68,68,0.3)", border: "#ef4444" },
-    HIGH:     { dot: "#f59e0b", ring: "rgba(245,158,11,0.3)", border: "#f59e0b" },
-    MEDIUM:   { dot: "#3b82f6", ring: "rgba(59,130,246,0.25)", border: "#3b82f6" },
-    LOW:      { dot: "#64748b", ring: "rgba(100,116,139,0.2)", border: "#64748b" },
+  const palette = {
+    CRITICAL: { dot: "#ef4444", glow: "rgba(239,68,68,0.22)", glowDark: "rgba(239,68,68,0.1)", shadow: "rgba(239,68,68,0.5)" },
+    HIGH:     { dot: "#f59e0b", glow: "rgba(245,158,11,0.18)", glowDark: "rgba(245,158,11,0.08)", shadow: "rgba(245,158,11,0.4)" },
+    MEDIUM:   { dot: "#3b82f6", glow: "rgba(59,130,246,0.18)", glowDark: "rgba(59,130,246,0.08)", shadow: "rgba(59,130,246,0.4)" },
+    LOW:      { dot: "#64748b", glow: "rgba(100,116,139,0.12)", glowDark: "rgba(100,116,139,0.06)", shadow: "rgba(100,116,139,0.3)" },
   };
 
-  const c = colors[incident.severity] || colors.LOW;
-  const pulseHtml = isCritical
-    ? `<span style="position:absolute;inset:-4px;border-radius:50%;background:${c.ring};animation:situationPulse 2.4s ease-in-out infinite;"></span>`
-    : "";
+  const c = palette[incident.severity] || palette.LOW;
+
+  // Outer glow ring — only animates for CRITICAL
+  const glowRing = isCritical
+    ? `<span class="critical-glow-ring" style="position:absolute;inset:-5px;border-radius:50%;background:radial-gradient(circle, ${c.glow} 0%, transparent 70%);"></span>`
+    : `<span style="position:absolute;inset:-3px;border-radius:50%;background:radial-gradient(circle, ${c.glowDark} 0%, transparent 70%);"></span>`;
 
   return L.divIcon({
     className: "custom-leaflet-marker",
     html: `
-      <div style="position:relative;display:flex;align-items:center;justify-content:center;width:18px;height:18px;">
-        ${pulseHtml}
+      <div style="position:relative;display:flex;align-items:center;justify-content:center;width:20px;height:20px;">
+        ${glowRing}
         <span style="
           position:relative;
-          display:flex;
-          align-items:center;
-          justify-content:center;
+          display:block;
           width:9px;height:9px;
           border-radius:50%;
           background:${c.dot};
-          border:1.5px solid rgba(255,255,255,0.5);
-          box-shadow:0 0 6px ${c.ring};
+          border:1.5px solid rgba(255,255,255,0.55);
+          box-shadow:0 0 8px ${c.shadow}, 0 2px 6px rgba(0,0,0,0.5);
         "></span>
       </div>
     `,
-    iconSize: [18, 18],
-    iconAnchor: [9, 9],
-    popupAnchor: [0, -9]
+    iconSize: [20, 20],
+    iconAnchor: [10, 10],
+    popupAnchor: [0, -10]
   });
 };
 
-// Improved cluster icon — concentric ring design
+// Premium cluster icon — concentric ring + deep shadow design
 const createClusterIcon = (districtName, count) => {
   const isCritical = count > 15;
   const isHigh = count > 6;
 
-  let outerSize, innerSize, bg, ring, textColor, pulseClass;
+  let outerSize, innerSize, bg, borderColor, textColor, outerBg, innerShadow, pulseClass;
 
   if (isCritical) {
-    outerSize = 54; innerSize = 38;
-    bg = "rgba(127,29,29,0.85)";
-    ring = "rgba(239,68,68,0.5)";
+    outerSize = 56; innerSize = 38;
+    bg = "rgba(120,25,25,0.92)";
+    borderColor = "rgba(239,68,68,0.55)";
     textColor = "#fca5a5";
+    outerBg = "rgba(239,68,68,0.14)";
+    innerShadow = "0 4px 20px rgba(239,68,68,0.3), 0 2px 8px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.06)";
     pulseClass = "situation-pulse";
   } else if (isHigh) {
-    outerSize = 48; innerSize = 33;
-    bg = "rgba(120,53,15,0.85)";
-    ring = "rgba(245,158,11,0.4)";
+    outerSize = 50; innerSize = 34;
+    bg = "rgba(113,47,10,0.92)";
+    borderColor = "rgba(245,158,11,0.5)";
     textColor = "#fcd34d";
+    outerBg = "rgba(245,158,11,0.12)";
+    innerShadow = "0 4px 18px rgba(245,158,11,0.25), 0 2px 8px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.05)";
     pulseClass = "";
   } else {
-    outerSize = 43; innerSize = 30;
-    bg = "rgba(30,58,138,0.85)";
-    ring = "rgba(59,130,246,0.35)";
+    outerSize = 44; innerSize = 30;
+    bg = "rgba(23,52,130,0.92)";
+    borderColor = "rgba(59,130,246,0.45)";
     textColor = "#93c5fd";
+    outerBg = "rgba(59,130,246,0.1)";
+    innerShadow = "0 4px 16px rgba(59,130,246,0.2), 0 2px 8px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.05)";
     pulseClass = "";
   }
-
-  const ringColor = isCritical ? "rgba(239,68,68,0.35)" : isHigh ? "rgba(245,158,11,0.3)" : "rgba(59,130,246,0.25)";
 
   return L.divIcon({
     className: `custom-cluster-icon ${pulseClass}`,
@@ -102,18 +105,18 @@ const createClusterIcon = (districtName, count) => {
         justify-content:center;
         width:${outerSize}px;height:${outerSize}px;
         border-radius:50%;
-        background:${ringColor};
+        background:${outerBg};
       ">
         <div style="
           display:flex;flex-direction:column;align-items:center;justify-content:center;
           width:${innerSize}px;height:${innerSize}px;
           border-radius:50%;
           background:${bg};
-          border:1.5px solid ${ring};
-          box-shadow:0 4px 16px rgba(0,0,0,0.5);
+          border:1.5px solid ${borderColor};
+          box-shadow:${innerShadow};
         ">
-          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:${textColor};line-height:1;">${count}</span>
-          <span style="font-family:'IBM Plex Mono',monospace;font-size:6px;text-transform:uppercase;color:${textColor};opacity:0.65;letter-spacing:0.06em;margin-top:1px;">${districtName.slice(0, 3)}</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:${textColor};line-height:1;letter-spacing:-0.02em;">${count}</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:6px;text-transform:uppercase;color:${textColor};opacity:0.6;letter-spacing:0.08em;margin-top:1.5px;">${districtName.slice(0, 3)}</span>
         </div>
       </div>
     `,

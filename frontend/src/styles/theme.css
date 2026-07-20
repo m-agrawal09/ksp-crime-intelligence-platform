@@ -352,3 +352,65 @@ body {
   font-weight: 700;
   flex-shrink: 0;
 }
+
+/* ============================
+   Premium Map Markers — Polish
+============================ */
+
+/* Individual incident markers: smooth scale on hover */
+.custom-leaflet-marker {
+  transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+}
+.custom-leaflet-marker:hover {
+  transform: scale(1.55);
+  z-index: 9999 !important;
+}
+
+/* Cluster markers: smooth expand on hover */
+.custom-cluster-icon {
+  transition: transform 0.2s cubic-bezier(0.34, 1.4, 0.64, 1), filter 0.2s ease;
+  cursor: pointer;
+}
+.custom-cluster-icon:hover {
+  transform: scale(1.12);
+  filter: brightness(1.15);
+  z-index: 9999 !important;
+}
+
+/* Soft radial glow keyframe — used only for critical markers */
+@keyframes criticalGlow {
+  0%, 100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.2;
+    transform: scale(1.8);
+  }
+}
+
+.critical-glow-ring {
+  animation: criticalGlow 2.6s ease-in-out infinite;
+}
+
+/* Live status indicator dot */
+@keyframes liveBlink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
+.live-dot {
+  animation: liveBlink 2s ease-in-out infinite;
+}
+
+/* Timeline feed entry: fade-in stagger support */
+@keyframes feedSlideIn {
+  from { opacity: 0; transform: translateX(-6px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.feed-entry {
+  animation: feedSlideIn 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.feed-entry:nth-child(1) { animation-delay: 0ms; }
+.feed-entry:nth-child(2) { animation-delay: 50ms; }
+.feed-entry:nth-child(3) { animation-delay: 100ms; }
