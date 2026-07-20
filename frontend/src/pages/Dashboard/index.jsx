@@ -61,7 +61,7 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[70vh] font-mono text-xs text-slate-500">
+      <div className="flex flex-col items-center justify-center min-h-[70vh] text-xs text-slate-500" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
         <div className="relative mb-4">
           <div className="h-10 w-10 animate-spin rounded-full border-2 border-slate-800 border-t-blue-500" />
         </div>
@@ -93,7 +93,7 @@ const Dashboard = () => {
   const { kpi_metrics, crime_trends, crime_distribution, ai_alerts, recent_critical_cases } = dashboardData;
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-10" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
 
       {/* ── 1. Executive Intelligence Header ── */}
       <div className="pb-7 border-b border-slate-900/40 flex flex-col gap-5 animate-fade-in-up">
@@ -101,16 +101,16 @@ const Dashboard = () => {
         {/* Title + Controls row */}
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div>
-            <h1 className="text-4xl font-extrabold text-white tracking-tight uppercase font-mono leading-none">
+            <h1 className="text-3xl font-extrabold text-white leading-none" style={{ fontFamily: "'IBM Plex Mono', monospace", letterSpacing: "-0.01em" }}>
               Executive Intelligence Dashboard
             </h1>
-            <p className="text-xs text-slate-500 font-sans mt-2">
+            <p className="text-[11px] text-slate-500 mt-2 tracking-wide" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
               Karnataka State Police &bull; CCTNS Analytical Briefing &amp; Modus Operandi Console
             </p>
           </div>
 
           {/* Controls */}
-          <div className="flex flex-wrap items-center gap-2.5 self-start lg:self-auto font-mono text-[10px] sm:text-[11px]">
+          <div className="flex flex-wrap items-center gap-2.5 self-start lg:self-auto text-[10px] sm:text-[11px]" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
             {/* Live Indicator */}
             <div className="flex items-center gap-2 bg-[#060c18] border border-slate-800/25 rounded-[4px] px-3 py-2 shadow-sm">
               <span className="relative flex h-1.5 w-1.5">
@@ -153,7 +153,7 @@ const Dashboard = () => {
         </div>
 
         {/* Status strip */}
-        <div className="flex flex-wrap gap-x-6 gap-y-2 items-center text-[9px] sm:text-[10px] font-mono tracking-wider text-slate-600 uppercase">
+        <div className="flex flex-wrap gap-x-6 gap-y-2 items-center text-[9px] sm:text-[10px] tracking-wider text-slate-600 uppercase" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
           <div className="flex items-center gap-1.5">
             <span className="text-slate-600">Gateway Link:</span>{" "}
             <span className="text-slate-400 font-bold">CCTNS CAS (CONNECTED)</span>
@@ -181,12 +181,12 @@ const Dashboard = () => {
         <div className="space-y-8 min-w-0">
 
           {/* KPI Cards */}
-          <div className="animate-fade-in-up" style={{ animationDelay: '60ms' }}>
+          <div className="animate-fade-in-up mb-2" style={{ animationDelay: '60ms' }}>
             <StatGrid metrics={kpi_metrics} />
           </div>
 
           {/* Chart Row: Trend (2/3) + Category (1/3) */}
-          <div className="grid grid-cols-1 gap-7 lg:grid-cols-3 animate-fade-in-up" style={{ animationDelay: '120ms' }}>
+          <div className="grid grid-cols-1 gap-7 lg:grid-cols-3 animate-fade-in-up mt-2" style={{ animationDelay: '120ms' }}>
             <div className="lg:col-span-2">
               <TrendChart data={crime_trends} />
             </div>

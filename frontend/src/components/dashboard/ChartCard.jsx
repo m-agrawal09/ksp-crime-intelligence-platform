@@ -3,12 +3,12 @@ const ChartCard = ({ title, subtitle, badge, children }) => {
     <div className="rounded-[4px] border border-slate-800/25 bg-slate-900/50 py-7 px-8">
       <div className="mb-7 flex items-start justify-between">
         <div>
-          <h2 className="text-[11px] font-bold font-mono uppercase tracking-widest text-slate-300">
+          <h2 className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-300" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
             {title}
           </h2>
 
           {subtitle && (
-            <p className="mt-1.5 text-[11px] text-slate-500 font-sans leading-relaxed">
+            <p className="mt-1.5 text-[11px] text-slate-500 leading-relaxed" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
               {subtitle}
             </p>
           )}

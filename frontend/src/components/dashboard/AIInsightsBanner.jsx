@@ -35,7 +35,7 @@ const AIInsightsBanner = () => (
 
     {/* Header */}
     <div className="flex items-center justify-between">
-      <h2 className="text-[11px] font-bold text-white uppercase tracking-widest font-mono">
+      <h2 className="text-[10px] font-bold text-white uppercase tracking-[0.18em]" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
         AI-Powered Insights
       </h2>
       <RiBrainLine className="text-purple-400/70 text-sm animate-pulse" />
@@ -54,10 +54,10 @@ const AIInsightsBanner = () => (
               <Icon className="text-[11px]" />
             </div>
             <div>
-              <p className="text-[11px] font-sans font-semibold text-slate-300 leading-snug">
+              <p className="text-[11px] font-semibold text-slate-300 leading-snug" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
                 {item.headline}
               </p>
-              <p className="text-[9px] font-mono text-slate-600 mt-0.5 leading-relaxed">
+              <p className="text-[9px] text-slate-600 mt-0.5 leading-relaxed" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
                 {item.detail}
               </p>
             </div>
@@ -69,7 +69,8 @@ const AIInsightsBanner = () => (
     {/* Footer link */}
     <Link
       to="/insights-forecast"
-      className="flex items-center justify-center gap-1.5 w-full text-[10px] font-mono font-bold text-slate-600 hover:text-blue-400 transition-colors border-t border-slate-800/15 pt-3"
+      className="flex items-center justify-center gap-1.5 w-full text-[9px] font-bold text-slate-600 hover:text-blue-400 transition-colors border-t border-slate-800/15 pt-3 uppercase tracking-[0.14em]"
+      style={{ fontFamily: "'IBM Plex Mono', monospace" }}
     >
       View All AI Insights <FaArrowRight className="text-[9px]" />
     </Link>

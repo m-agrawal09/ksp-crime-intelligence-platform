@@ -33,23 +33,23 @@ const RecentCriticalCases = ({ cases }) => {
   };
 
   return (
-    <div className="rounded-[4px] border border-slate-800/20 bg-slate-900/50 p-8 sm:p-10 flex flex-col h-[660px] shadow-sm">
+    <div className="rounded-[4px] border border-slate-800/20 bg-slate-900/50 p-8 sm:p-10 shadow-sm w-full">
       <div className="flex items-center justify-between border-b border-slate-800/20 pb-5 mb-6">
         <div className="flex items-center gap-2.5">
           <FaClipboardList className="text-blue-400/80 text-base" />
-          <h2 className="text-[11px] font-bold text-white uppercase tracking-widest font-mono">
+          <h2 className="text-[10px] font-bold text-white uppercase tracking-[0.18em]" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
             Critical CCTNS Case Feed
           </h2>
         </div>
-        <span className="rounded-[3px] bg-slate-900/60 border border-slate-800/20 px-2.5 py-1 font-mono text-[9px] text-slate-600 uppercase tracking-wider">
+        <span className="rounded-[3px] bg-slate-900/60 border border-slate-800/20 px-2.5 py-1 text-[9px] text-slate-600 uppercase tracking-wider" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
           Source: CaseMaster
         </span>
       </div>
 
-      <div className="flex-1 overflow-auto scrollbar-thin">
+      <div className="overflow-x-auto scrollbar-thin">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="border-b border-slate-800/20 text-[9px] font-mono text-slate-600 uppercase tracking-widest">
+            <tr className="border-b border-slate-800/20 text-[9px] text-slate-600 uppercase tracking-[0.14em]" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
               <th className="py-4 px-6">Crime Number / CaseNo</th>
               <th className="py-4 px-6">Jurisdiction (Unit)</th>
               <th className="py-4 px-6">Sections & Acts</th>
@@ -58,7 +58,7 @@ const RecentCriticalCases = ({ cases }) => {
               <th className="py-4 px-6 text-center">Inspect</th>
             </tr>
           </thead>
-          <tbody className="text-xs font-mono">
+          <tbody className="text-xs" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
             {cases && cases.map((c) => {
               const isExpanded = expandedCaseId === c.CaseMasterID;
               
