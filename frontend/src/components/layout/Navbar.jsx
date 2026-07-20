@@ -16,7 +16,7 @@ function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 flex h-20 items-center justify-between border-b border-slate-800/50 bg-slate-950/98 px-8 font-inter shadow-sm shadow-black/20">
+    <header className="sticky top-0 z-50 flex h-20 items-center justify-between border-b border-slate-800 bg-slate-950/98 px-8 font-inter shadow-sm shadow-black/20">
 
       {/* Left */}
       <div className="flex items-center gap-4">
@@ -25,17 +25,17 @@ function Navbar() {
           <HiBars3 className="text-3xl text-white" />
         </button>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <img
             src={kspLogo}
             alt="Karnataka State Police Emblem"
-            className="w-10 h-10 object-contain flex-shrink-0"
+            className="w-12 h-12 object-contain flex-shrink-0"
           />
           <div>
-            <h1 className="text-base font-bold tracking-wider text-white uppercase leading-none mb-1 font-sans">
+            <h1 className="text-lg font-bold tracking-wider text-white uppercase leading-tight mb-1.5 font-sans">
               Karnataka State Police
             </h1>
-            <p className="text-[10px] uppercase tracking-[0.18em] text-blue-400 font-sans leading-none">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-blue-400 font-sans leading-normal">
               AI Crime Intelligence Platform
             </p>
           </div>

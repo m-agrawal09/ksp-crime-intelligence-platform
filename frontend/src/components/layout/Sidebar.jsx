@@ -10,8 +10,6 @@ import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import { HiOutlineDocumentChartBar, HiOutlineDocumentText } from "react-icons/hi2";
 import { PiShieldStarFill } from "react-icons/pi";
 
-import kspLogo from "../../assets/images/ksp-emblem.png";
-
 const menuItems = [
   {
     name: "Dashboard",
@@ -52,24 +50,7 @@ const menuItems = [
 
 function Sidebar() {
   return (
-    <aside className="flex h-[calc(100vh-80px)] w-[280px] flex-col border-r border-slate-800/30 bg-[#070d1a] font-inter">
-
-      {/* Sidebar Header Branding (Compact Branding Strip) */}
-      <div className="border-b border-slate-800/30 px-5 py-4 flex items-center gap-3">
-        <img 
-          src={kspLogo} 
-          alt="Karnataka State Police Emblem" 
-          className="w-[32px] h-auto object-contain"
-        />
-        <div className="text-left leading-tight min-w-0">
-          <h2 className="text-[10px] font-bold text-white uppercase tracking-wider font-sans truncate">
-            KARNATAKA STATE POLICE
-          </h2>
-          <p className="text-[8px] uppercase tracking-wide text-blue-400 font-mono mt-0.5 leading-normal font-bold truncate">
-            CRIME INTEL PLATFORM
-          </p>
-        </div>
-      </div>
+    <aside className="flex h-[calc(100vh-80px)] w-[280px] flex-col border-r border-slate-800 bg-[#070d1a] font-inter">
 
       {/* Navigation - group elements with tighter vertical spacing */}
       <nav className="flex-grow px-3 py-6 space-y-1 overflow-y-auto">
@@ -96,7 +77,7 @@ function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="border-t border-slate-800/30 p-4">
+      <div className="border-t border-slate-800 p-4">
         <div className="rounded-md bg-slate-900/40 px-4 py-3 border border-slate-800/20 flex items-center justify-between">
           <p className="text-[11px] font-bold font-mono text-slate-400 uppercase tracking-wider">
             Catalyst SDK
