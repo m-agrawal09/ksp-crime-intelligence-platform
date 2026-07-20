@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import React, { useState, useEffect, useMemo } from "react";
+import { MapContainer, TileLayer, Marker, Popup, GeoJSON, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { FaCalendarAlt, FaUser, FaBuilding } from "react-icons/fa";
@@ -183,9 +183,85 @@ const getSeverityPopupStyle = (severity) => {
   }
 };
 
+// Generates an inverted polygon mask covering the entire world except Karnataka
+const createMaskGeoJSON = (karnatakaGeoJSON) => {
+  const worldCoords = [
+    [-180, -90],
+    [-180, 90],
+    [180, 90],
+    [180, -90],
+    [-180, -90]
+  ];
+
+  const feature = karnatakaGeoJSON.features?.[0];
+  if (!feature || !feature.geometry) return null;
+
+  const rings = [worldCoords];
+
+  if (feature.geometry.type === "Polygon") {
+    feature.geometry.coordinates.forEach(ring => {
+      rings.push(ring);
+    });
+  } else if (feature.geometry.type === "MultiPolygon") {
+    feature.geometry.coordinates.forEach(poly => {
+      poly.forEach(ring => {
+        rings.push(ring);
+      });
+    });
+  }
+
+  return {
+    type: "FeatureCollection",
+    features: [{
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "Polygon",
+        coordinates: rings
+      }
+    }]
+  };
+};
+
 const InteractiveMap = ({ incidents, selectedItem, onSelectDistrict, onSelectMarker }) => {
   const [zoomLevel, setZoomLevel] = useState(DEFAULT_ZOOM);
   const [activeLayer, setActiveLayer] = useState("dark");
+
+  // Boundaries state
+  const [stateGeoJSON, setStateGeoJSON] = useState(null);
+  const [districtsGeoJSON, setDistrictsGeoJSON] = useState(null);
+  const [showMarkers, setShowMarkers] = useState(false);
+
+  // Load GeoJSON files asynchronously
+  useEffect(() => {
+    Promise.all([
+      fetch("/karnataka-state.geojson").then(res => {
+        if (!res.ok) throw new Error("State boundary GeoJSON not found");
+        return res.json();
+      }),
+      fetch("/karnataka-districts.geojson").then(res => {
+        if (!res.ok) throw new Error("District boundary GeoJSON not found");
+        return res.json();
+      })
+    ]).then(([stateData, districtsData]) => {
+      setStateGeoJSON(stateData);
+      setDistrictsGeoJSON(districtsData);
+      
+      // Delay marker fade-in slightly to stagger the load after boundary reveals
+      setTimeout(() => {
+        setShowMarkers(true);
+      }, 400);
+    }).catch(err => {
+      console.error("Error loading boundaries:", err);
+      setShowMarkers(true); // Fallback so markers show immediately
+    });
+  }, []);
+
+  // Inverted mask definition
+  const maskData = useMemo(() => {
+    if (!stateGeoJSON) return null;
+    return createMaskGeoJSON(stateGeoJSON);
+  }, [stateGeoJSON]);
 
   // Group incidents by district for clustering at lower zoom levels
   const getDistrictClusters = () => {
@@ -212,11 +288,43 @@ const InteractiveMap = ({ incidents, selectedItem, onSelectDistrict, onSelectMar
 
   // Compute quick stats for the floating situation overview
   const criticalCount = incidents.filter(i => i.severity === "CRITICAL").length;
-  const highRiskCount = incidents.filter(i => i.severity === "CRITICAL" || i.severity === "HIGH").length;
   const activeCount = incidents.filter(i => i.status === "Under Investigation" || i.status === "Suspect Apprehended").length;
   const officersSet = new Set(incidents.map(i => i.assignedOfficer?.name).filter(Boolean));
   const officersCount = officersSet.size;
-  const totalDistricts = districtClusters.length;
+
+  // Custom Layer styles
+  const maskStyle = {
+    fillColor: "#020617",
+    fillOpacity: 0.42,
+    stroke: false
+  };
+
+  const glowStyle = {
+    color: "#2563eb", // Royal blue
+    weight: 3.5,
+    opacity: 0.22,
+    fill: false,
+    lineCap: "round",
+    lineJoin: "round"
+  };
+
+  const mainStyle = {
+    color: "#06b6d4", // Cyan
+    weight: 1.25,
+    opacity: 0.8,
+    fill: false,
+    lineCap: "round",
+    lineJoin: "round"
+  };
+
+  const districtStyle = {
+    color: "rgba(255, 255, 255, 0.08)", // extremely subtle
+    weight: 0.75,
+    opacity: 0.55,
+    fill: false,
+    lineCap: "round",
+    lineJoin: "round"
+  };
 
   return (
     <div className="h-full w-full rounded-xl overflow-hidden border border-slate-800/35 bg-slate-950 relative min-h-[500px]" style={{ boxShadow: "0 16px 40px rgba(0,0,0,0.5)" }}>
@@ -313,94 +421,115 @@ const InteractiveMap = ({ incidents, selectedItem, onSelectDistrict, onSelectMar
         
         <MapController selectedItem={selectedItem} setZoomLevel={setZoomLevel} />
 
-        {showClusters ? (
-          // Render District Cluster Markers
-          districtClusters.map((cluster) => (
-            <Marker
-              key={cluster.name}
-              position={[cluster.latLng.lat, cluster.latLng.lng]}
-              icon={createClusterIcon(cluster.name, cluster.count)}
-              eventHandlers={{
-                click: () => {
-                  onSelectDistrict(cluster.name);
-                }
-              }}
-            />
-          ))
-        ) : (
-          // Render Individual Incident Pin Markers
-          incidents.map((inc) => {
-            const sevStyle = getSeverityPopupStyle(inc.severity);
-            return (
+        {/* 1. Outside world darken mask */}
+        {maskData && (
+          <GeoJSON data={maskData} style={maskStyle} interactive={false} />
+        )}
+
+        {/* 2. District subtle interior lines */}
+        {districtsGeoJSON && (
+          <GeoJSON data={districtsGeoJSON} style={districtStyle} interactive={false} />
+        )}
+
+        {/* 3. Karnataka State Outline (Glow & Sharp Stroke) */}
+        {stateGeoJSON && (
+          <>
+            <GeoJSON data={stateGeoJSON} style={glowStyle} interactive={false} />
+            <GeoJSON data={stateGeoJSON} style={mainStyle} interactive={false} />
+          </>
+        )}
+
+        {/* 4. Hotspot markers / Clusters — Fade in after boundary loaded */}
+        {showMarkers && (
+          showClusters ? (
+            // Render District Cluster Markers
+            districtClusters.map((cluster) => (
               <Marker
-                key={inc.id}
-                position={[inc.lat, inc.lng]}
-                icon={createCustomMarker(inc)}
+                key={cluster.name}
+                position={[cluster.latLng.lat, cluster.latLng.lng]}
+                icon={createClusterIcon(cluster.name, cluster.count)}
                 eventHandlers={{
                   click: () => {
-                    onSelectMarker(inc);
+                    onSelectDistrict(cluster.name);
                   }
                 }}
-              >
-                <Popup className="dark-popup font-mono text-xs">
-                  <div style={{ padding: "4px 2px", minWidth: 230, maxWidth: 260, fontFamily: "'IBM Plex Mono', monospace" }}>
-                    {/* Header */}
-                    <div style={{
-                      display: "flex", alignItems: "center", justifyContent: "space-between",
-                      paddingBottom: 8, marginBottom: 10,
-                      borderBottom: "1px solid rgba(51,65,85,0.25)"
-                    }}>
-                      <span style={{ fontSize: 11, fontWeight: 700, color: "#93c5fd" }}>{inc.caseNo}</span>
-                      <span style={{
-                        fontSize: 8, fontWeight: 700, letterSpacing: "0.08em",
-                        textTransform: "uppercase", padding: "2px 7px", borderRadius: 4,
-                        background: sevStyle.bg, border: `1px solid ${sevStyle.border}`, color: sevStyle.text
+              />
+            ))
+          ) : (
+            // Render Individual Incident Pin Markers
+            incidents.map((inc) => {
+              const sevStyle = getSeverityPopupStyle(inc.severity);
+              return (
+                <Marker
+                  key={inc.id}
+                  position={[inc.lat, inc.lng]}
+                  icon={createCustomMarker(inc)}
+                  eventHandlers={{
+                    click: () => {
+                      onSelectMarker(inc);
+                    }
+                  }}
+                >
+                  <Popup className="dark-popup font-mono text-xs">
+                    <div style={{ padding: "4px 2px", minWidth: 230, maxWidth: 260, fontFamily: "'IBM Plex Mono', monospace" }}>
+                      {/* Header */}
+                      <div style={{
+                        display: "flex", justifyContent: "space-between",
+                        paddingBottom: 8, marginBottom: 10,
+                        borderBottom: "1px solid rgba(51,65,85,0.25)"
                       }}>
-                        {inc.severity}
-                      </span>
-                    </div>
+                        <span style={{ fontSize: 11, fontWeight: 700, color: "#93c5fd" }}>{inc.caseNo}</span>
+                        <span style={{
+                          fontSize: 8, fontWeight: 700, letterSpacing: "0.08em",
+                          textTransform: "uppercase", padding: "2px 7px", borderRadius: 4,
+                          background: sevStyle.bg, border: `1px solid ${sevStyle.border}`, color: sevStyle.text
+                        }}>
+                          {inc.severity}
+                        </span>
+                      </div>
 
-                    {/* Details */}
-                    <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 10 }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                        <span style={{ fontSize: 8, color: "#475569", width: 14, flexShrink: 0 }}>📍</span>
-                        <span style={{ fontSize: 10, color: "#cbd5e1" }}>{inc.unit}</span>
+                      {/* Details */}
+                      <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 10 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                          <span style={{ fontSize: 8, color: "#475569", width: 14, flexShrink: 0 }}>📍</span>
+                          <span style={{ fontSize: 10, color: "#cbd5e1" }}>{inc.unit}</span>
+                        </div>
+                        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                          <span style={{ fontSize: 8, color: "#475569", width: 14, flexShrink: 0 }}>📅</span>
+                          <span style={{ fontSize: 10, color: "#94a3b8" }}>{inc.date}</span>
+                        </div>
+                        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                          <span style={{ fontSize: 8, color: "#475569", width: 14, flexShrink: 0 }}>👤</span>
+                          <span style={{ fontSize: 10, color: "#94a3b8" }}>{inc.assignedOfficer.name}</span>
+                        </div>
                       </div>
-                      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                        <span style={{ fontSize: 8, color: "#475569", width: 14, flexShrink: 0 }}>📅</span>
-                        <span style={{ fontSize: 10, color: "#94a3b8" }}>{inc.date}</span>
-                      </div>
-                      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                        <span style={{ fontSize: 8, color: "#475569", width: 14, flexShrink: 0 }}>👤</span>
-                        <span style={{ fontSize: 10, color: "#94a3b8" }}>{inc.assignedOfficer.name}</span>
-                      </div>
-                    </div>
 
-                    {/* Brief Facts */}
-                    <div style={{
-                      background: "rgba(2,6,23,0.6)", borderRadius: 6,
-                      border: "1px solid rgba(51,65,85,0.2)", padding: "7px 9px", marginBottom: 8
-                    }}>
-                      <span style={{
-                        display: "block", fontSize: 8, fontWeight: 700,
-                        color: "#475569", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 4
-                      }}>Brief Facts</span>
-                      <p style={{ fontSize: 9, lineHeight: 1.55, color: "#64748b", fontFamily: "Inter, sans-serif",
-                        display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden"
+                      {/* Brief Facts */}
+                      <div style={{
+                        background: "rgba(2,6,23,0.6)", borderRadius: 6,
+                        border: "1px solid rgba(51,65,85,0.2)", padding: "7px 9px", marginBottom: 8
                       }}>
-                        {inc.briefFacts}
-                      </p>
-                    </div>
+                        <span style={{
+                          display: "block", fontSize: 8, fontWeight: 700,
+                          color: "#475569", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 4
+                        }}>Brief Facts</span>
+                        <p style={{ fontSize: 9, lineHeight: 1.55, color: "#64748b", fontFamily: "Inter, sans-serif",
+                          display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden"
+                        }}>
+                          {inc.briefFacts}
+                        </p>
+                      </div>
 
-                    {/* Status footer */}
-                    <div style={{ display: "flex", justifyContent: "flex-end", fontSize: 8, color: "#475569" }}>
-                      Status: <span style={{ color: "#94a3b8", fontWeight: 700, marginLeft: 4 }}>{inc.status}</span>
+                      {/* Status footer */}
+                      <div style={{ display: "flex", justifyContent: "flex-end", fontSize: 8, color: "#475569" }}>
+                        Status: <span style={{ color: "#94a3b8", fontWeight: 700, marginLeft: 4 }}>{inc.status}</span>
+                      </div>
                     </div>
-                  </div>
-                </Popup>
-              </Marker>
-            );
-          })
+                  </Popup>
+                </Marker>
+              );
+            })
+          )
         )}
       </MapContainer>
 
