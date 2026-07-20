@@ -31,52 +31,144 @@ const MAP_LAYERS = {
 const KARNATAKA_CENTER = [14.5, 76.2];
 const PANEL_ZOOM = 6.5;
 
-// ── Cluster icon (same colour logic as InteractiveMap) ────────────────────
-const createClusterIcon = (count) => {
-  const isHigh = count > 15;
-  const isMid  = count > 6;
-  const size   = isHigh ? 36 : isMid ? 30 : 24;
-  const color  = isHigh ? "#ef4444" : isMid ? "#f59e0b" : "#3b82f6";
-  const border = isHigh ? "#dc2626" : isMid ? "#d97706" : "#2563eb";
+// ── Cluster icon (matching concentric rings layout from InteractiveMap) ─────
+const createClusterIcon = (districtName, count) => {
+  const isCritical = count > 15;
+  const isHigh = count > 6;
+
+  let outerSize, innerSize, bg, borderColor, textColor, outerBg, innerShadow, pulseClass;
+
+  if (isCritical) {
+    outerSize = 46; innerSize = 32;
+    bg = "rgba(120,25,25,0.92)";
+    borderColor = "rgba(239,68,68,0.55)";
+    textColor = "#fca5a5";
+    outerBg = "rgba(239,68,68,0.14)";
+    innerShadow = "0 2px 10px rgba(239,68,68,0.3), 0 1px 4px rgba(0,0,0,0.7), inset 0 0.5px 0 rgba(255,255,255,0.06)";
+    pulseClass = "situation-pulse";
+  } else if (isHigh) {
+    outerSize = 40; innerSize = 28;
+    bg = "rgba(113,47,10,0.92)";
+    borderColor = "rgba(245,158,11,0.5)";
+    textColor = "#fcd34d";
+    outerBg = "rgba(245,158,11,0.12)";
+    innerShadow = "0 2px 8px rgba(245,158,11,0.25), 0 1px 4px rgba(0,0,0,0.7), inset 0 0.5px 0 rgba(255,255,255,0.05)";
+    pulseClass = "";
+  } else {
+    outerSize = 34; innerSize = 24;
+    bg = "rgba(23,52,130,0.92)";
+    borderColor = "rgba(59,130,246,0.45)";
+    textColor = "#93c5fd";
+    outerBg = "rgba(59,130,246,0.1)";
+    innerShadow = "0 2px 6px rgba(59,130,246,0.2), 0 1px 4px rgba(0,0,0,0.7), inset 0 0.5px 0 rgba(255,255,255,0.05)";
+    pulseClass = "";
+  }
+
   return L.divIcon({
-    className: "",
+    className: `custom-cluster-icon ${pulseClass}`,
     html: `
       <div style="
-        width:${size}px;height:${size}px;border-radius:50%;
-        background:${color}CC;border:2px solid ${border};
-        display:flex;align-items:center;justify-content:center;
-        font-family:'IBM Plex Mono',monospace;font-weight:700;
-        font-size:${size > 30 ? 11 : 9}px;color:#fff;
-        box-shadow:0 0 ${Math.round(size * 0.55)}px ${color}55;
-        ${isHigh ? "animation:ping-slow 2s infinite;" : ""}
-      ">${count}</div>
+        position:relative;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        width:${outerSize}px;height:${outerSize}px;
+        border-radius:50%;
+        background:${outerBg};
+      ">
+        <div style="
+          display:flex;flex-direction:column;align-items:center;justify-content:center;
+          width:${innerSize}px;height:${innerSize}px;
+          border-radius:50%;
+          background:${bg};
+          border:1.25px solid ${borderColor};
+          box-shadow:${innerShadow};
+        ">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;color:${textColor};line-height:1;letter-spacing:-0.02em;">${count}</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:5px;text-transform:uppercase;color:${textColor};opacity:0.6;letter-spacing:0.08em;margin-top:1.5px;">${districtName.slice(0, 3)}</span>
+        </div>
+      </div>
     `,
-    iconSize:   [size, size],
-    iconAnchor: [size / 2, size / 2],
+    iconSize: [outerSize, outerSize],
+    iconAnchor: [outerSize / 2, outerSize / 2]
   });
 };
 
 // ── Individual incident marker ─────────────────────────────────────────────
-const SEV_COLOR = {
-  CRITICAL: "#ef4444",
-  HIGH:     "#f59e0b",
-  MEDIUM:   "#3b82f6",
-  LOW:      "#64748b",
-};
-
 const createIncidentIcon = (severity) => {
-  const color = SEV_COLOR[severity] || SEV_COLOR.MEDIUM;
+  const isCritical = severity === "CRITICAL";
+
+  const palette = {
+    CRITICAL: { dot: "#ef4444", glow: "rgba(239,68,68,0.22)", glowDark: "rgba(239,68,68,0.1)", shadow: "rgba(239,68,68,0.5)" },
+    HIGH:     { dot: "#f59e0b", glow: "rgba(245,158,11,0.18)", glowDark: "rgba(245,158,11,0.08)", shadow: "rgba(245,158,11,0.4)" },
+    MEDIUM:   { dot: "#3b82f6", glow: "rgba(59,130,246,0.18)", glowDark: "rgba(59,130,246,0.08)", shadow: "rgba(59,130,246,0.4)" },
+    LOW:      { dot: "#64748b", glow: "rgba(100,116,139,0.12)", glowDark: "rgba(100,116,139,0.06)", shadow: "rgba(100,116,139,0.3)" },
+  };
+
+  const c = palette[severity] || palette.LOW;
+  const glowRing = isCritical
+    ? `<span class="critical-glow-ring" style="position:absolute;inset:-5px;border-radius:50%;background:radial-gradient(circle, ${c.glow} 0%, transparent 70%);"></span>`
+    : `<span style="position:absolute;inset:-3px;border-radius:50%;background:radial-gradient(circle, ${c.glowDark} 0%, transparent 70%);"></span>`;
+
   return L.divIcon({
-    className: "",
+    className: "custom-leaflet-marker",
     html: `
-      <div style="position:relative;width:16px;height:16px;display:flex;align-items:center;justify-content:center;">
-        <span style="position:absolute;width:14px;height:14px;border-radius:50%;background:${color};opacity:0.22;"></span>
-        <span style="position:relative;width:7px;height:7px;border-radius:50%;background:${color};border:1.5px solid rgba(255,255,255,0.8);box-shadow:0 0 6px ${color}99;"></span>
+      <div style="position:relative;display:flex;align-items:center;justify-content:center;width:18px;height:18px;">
+        ${glowRing}
+        <span style="
+          position:relative;
+          display:block;
+          width:7px;height:7px;
+          border-radius:50%;
+          background:${c.dot};
+          border:1.25px solid rgba(255,255,255,0.6);
+          box-shadow:0 0 6px ${c.shadow}, 0 1px 4px rgba(0,0,0,0.5);
+        "></span>
       </div>
     `,
-    iconSize:   [16, 16],
-    iconAnchor: [8, 8],
+    iconSize: [18, 18],
+    iconAnchor: [9, 9]
   });
+};
+
+// Generates an inverted polygon mask covering the entire world except Karnataka
+const createMaskGeoJSON = (karnatakaGeoJSON) => {
+  const worldCoords = [
+    [-180, -90],
+    [-180, 90],
+    [180, 90],
+    [180, -90],
+    [-180, -90]
+  ];
+
+  const feature = karnatakaGeoJSON.features?.[0];
+  if (!feature || !feature.geometry) return null;
+
+  const rings = [worldCoords];
+
+  if (feature.geometry.type === "Polygon") {
+    feature.geometry.coordinates.forEach(ring => {
+      rings.push(ring);
+    });
+  } else if (feature.geometry.type === "MultiPolygon") {
+    feature.geometry.coordinates.forEach(poly => {
+      poly.forEach(ring => {
+        rings.push(ring);
+      });
+    });
+  }
+
+  return {
+    type: "FeatureCollection",
+    features: [{
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "Polygon",
+        coordinates: rings
+      }
+    }]
+  };
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -90,6 +182,7 @@ const KarnatakaOverviewPanel = () => {
   const [tick, setTick]           = useState(0);
   const [activeLayer, setActiveLayer] = useState("dark");
   const [zoomLevel, setZoomLevel] = useState(PANEL_ZOOM);
+  const [boundariesLoaded, setBoundariesLoaded] = useState(false);
 
   // Live sync with recordService
   useEffect(() => {
@@ -117,7 +210,6 @@ const KarnatakaOverviewPanel = () => {
     const map = L.map(mapContainerRef.current, {
       center: KARNATAKA_CENTER,
       zoom:   PANEL_ZOOM,
-      // ── FULLY INTERACTIVE ──
       zoomControl:      true,
       scrollWheelZoom:  true,
       doubleClickZoom:  true,
@@ -136,6 +228,70 @@ const KarnatakaOverviewPanel = () => {
       maxZoom: 19,
     }).addTo(map);
     tileLayerRef.current = tile;
+
+    // Load boundaries asynchronously
+    Promise.all([
+      fetch("/karnataka-state.geojson").then(res => res.json()),
+      fetch("/karnataka-districts.geojson").then(res => res.json())
+    ]).then(([stateData, districtsData]) => {
+      // 1. World mask
+      const maskGeo = createMaskGeoJSON(stateData);
+      if (maskGeo) {
+        L.geoJSON(maskGeo, {
+          style: {
+            fillColor: "#020617",
+            fillOpacity: 0.42,
+            stroke: false
+          },
+          interactive: false
+        }).addTo(map);
+      }
+
+      // 2. Districts subtle lines
+      L.geoJSON(districtsData, {
+        style: {
+          color: "rgba(255, 255, 255, 0.08)",
+          weight: 0.75,
+          opacity: 0.55,
+          fill: false
+        },
+        interactive: false
+      }).addTo(map);
+
+      // 3. State outline (glow)
+      L.geoJSON(stateData, {
+        style: {
+          color: "#2563eb",
+          weight: 3.5,
+          opacity: 0.22,
+          fill: false,
+          lineCap: "round",
+          lineJoin: "round"
+        },
+        interactive: false
+      }).addTo(map);
+
+      // 4. State outline (sharp line)
+      L.geoJSON(stateData, {
+        style: {
+          color: "#06b6d4",
+          weight: 1.25,
+          opacity: 0.8,
+          fill: false,
+          lineCap: "round",
+          lineJoin: "round"
+        },
+        interactive: false
+      }).addTo(map);
+
+      // Stagger markers fade in after boundaries render
+      setTimeout(() => {
+        setBoundariesLoaded(true);
+      }, 350);
+    }).catch(err => {
+      console.error("Error loading dashboard boundaries:", err);
+      setBoundariesLoaded(true); // Fallback
+    });
 
     // Markers layer
     markersLayerRef.current = L.layerGroup().addTo(map);
@@ -171,7 +327,7 @@ const KarnatakaOverviewPanel = () => {
 
   // ── Re-render markers on incidents change or zoom change ─────────────────
   useEffect(() => {
-    if (!mapRef.current || !markersLayerRef.current) return;
+    if (!mapRef.current || !markersLayerRef.current || !boundariesLoaded) return;
     markersLayerRef.current.clearLayers();
 
     const showClusters = zoomLevel < 8.2;
@@ -191,7 +347,7 @@ const KarnatakaOverviewPanel = () => {
       });
 
       Object.entries(clusters).forEach(([district, data]) => {
-        L.marker([data.lat, data.lng], { icon: createClusterIcon(data.count) })
+        L.marker([data.lat, data.lng], { icon: createClusterIcon(district, data.count) })
           .bindTooltip(
             `<span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.05em;text-transform:uppercase;">${district}: ${data.count} FIRs</span>`,
             { direction: "top", offset: [0, -10], opacity: 1 }
@@ -209,12 +365,12 @@ const KarnatakaOverviewPanel = () => {
           .addTo(markersLayerRef.current);
       });
     }
-  }, [incidents, zoomLevel]);
+  }, [incidents, zoomLevel, boundariesLoaded]);
 
   const IBMM = { fontFamily: "'IBM Plex Mono', monospace" };
 
   return (
-    <div className="rounded-[4px] border border-slate-800/20 bg-slate-900/50 overflow-hidden animate-fade-in-up flex flex-col">
+    <div className="rounded-xl border border-slate-800/35 bg-slate-900/35 overflow-hidden animate-fade-in-up flex flex-col" style={{ boxShadow: "0 8px 24px rgba(0,0,0,0.3)" }}>
 
       {/* ── Header ── */}
       <div className="px-4 pt-4 pb-3 flex items-center justify-between border-b border-slate-800/15">
