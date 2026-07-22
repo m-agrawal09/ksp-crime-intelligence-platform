@@ -11,14 +11,13 @@ import PredictiveForecastingCard from "../../components/dashboard/PredictiveFore
 import Loader from "../../components/common/Loader";
 import { assistantService } from "../../services/assistantService";
 import { fetchDashboardData } from "../../services/dashboardService";
-import { RiBrainLine, RiRobot2Line, RiAlertLine } from "react-icons/ri";
+import { RiBrainLine, RiRobot2Line } from "react-icons/ri";
 import { TbChartLine } from "react-icons/tb";
 import { FaBrain, FaGavel, FaSearch, FaExclamationTriangle, FaHistory, FaRobot } from "react-icons/fa";
 
 const TABS = [
-  { id: "copilot",  label: "AI Copilot & Search",        icon: RiRobot2Line,  activeColor: "from-blue-600 to-violet-600" },
-  { id: "forecast", label: "Predictive Trend Forecast",   icon: TbChartLine,   activeColor: "from-violet-600 to-purple-700" },
-  { id: "alerts",   label: "AI Anomaly Alerts",           icon: RiAlertLine,   activeColor: "from-rose-600 to-red-700" },
+  { id: "copilot", label: "AI Copilot & Search", icon: RiRobot2Line, activeColor: "from-blue-600 to-violet-600" },
+  { id: "forecast", label: "Predictive Trend Forecast", icon: TbChartLine, activeColor: "from-violet-600 to-purple-700" },
 ];
 
 const InsightsForecast = () => {
@@ -112,35 +111,34 @@ const InsightsForecast = () => {
 
       {/* ── Tab Bar ── */}
       <div className="flex justify-center">
-      <div className="flex items-center gap-0 p-1" style={{ background: "rgba(15,23,42,0.6)", border: "1px solid rgba(51,65,85,0.3)", borderRadius: 0 }}>
-        {TABS.map((tab) => {
-          const Icon = tab.icon;
-          const isActive = activeTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`relative flex items-center gap-2.5 px-6 py-3.5 text-xs font-bold font-mono uppercase tracking-wider transition-all duration-200 cursor-pointer ${
-                isActive ? "text-white shadow-md" : "text-slate-500 hover:text-slate-300 hover:bg-slate-800/40"
-              }`}
-              style={{
-                borderRadius: 0,
-                ...(isActive ? {
-                  backgroundImage: `linear-gradient(135deg, ${tab.activeColor.includes("blue") ? "#2563eb" : tab.activeColor.includes("violet") ? "#7c3aed" : "#e11d48"}, ${tab.activeColor.includes("rose") ? "#b91c1c" : "#6d28d9"})`,
-                } : { background: "transparent" })
-              }}
-            >
-              <Icon className="text-base" />
-              {tab.label}
-              {tab.id === "alerts" && dashboardData?.ai_alerts?.length > 0 && (
-                <span className="ml-1 bg-rose-500/30 text-rose-300 border border-rose-500/30 text-[9px] font-bold px-1.5 py-0.5 rounded-full">
-                  {dashboardData.ai_alerts.length}
-                </span>
-              )}
-            </button>
-          );
-        })}
-      </div>
+        <div className="flex items-center gap-0 p-1" style={{ background: "rgba(15,23,42,0.6)", border: "1px solid rgba(51,65,85,0.3)", borderRadius: 0 }}>
+          {TABS.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`relative flex items-center gap-2.5 px-6 py-3.5 text-xs font-bold font-mono uppercase tracking-wider transition-all duration-200 cursor-pointer ${isActive ? "text-white shadow-md" : "text-slate-500 hover:text-slate-300 hover:bg-slate-800/40"
+                  }`}
+                style={{
+                  borderRadius: 0,
+                  ...(isActive ? {
+                    backgroundImage: `linear-gradient(135deg, ${tab.activeColor.includes("blue") ? "#2563eb" : tab.activeColor.includes("violet") ? "#7c3aed" : "#e11d48"}, ${tab.activeColor.includes("rose") ? "#b91c1c" : "#6d28d9"})`,
+                  } : { background: "transparent" })
+                }}
+              >
+                <Icon className="text-base" />
+                {tab.label}
+                {tab.id === "alerts" && dashboardData?.ai_alerts?.length > 0 && (
+                  <span className="ml-1 bg-rose-500/30 text-rose-300 border border-rose-500/30 text-[9px] font-bold px-1.5 py-0.5 rounded-full">
+                    {dashboardData.ai_alerts.length}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* ══ TAB 1: AI COPILOT ══ */}
