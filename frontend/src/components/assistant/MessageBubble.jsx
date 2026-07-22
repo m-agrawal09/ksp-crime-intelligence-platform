@@ -264,32 +264,32 @@ const MessageBubble = ({ message }) => {
           <span>{isOfficer ? "INVESTIGATING OFFICER" : "AI PLATFORM CONSOLE"}</span>
           <div className="flex items-center gap-2">
             {!isOfficer && (
-              <div className="flex items-center gap-0.5 bg-slate-900 border border-slate-800/80 rounded p-0.5">
+              <div className="flex items-center gap-1 bg-slate-900/90 border border-slate-800 rounded-lg p-1 shadow-sm">
                 <button
                   onClick={() => { setLang("en"); window.speechSynthesis.cancel(); setIsSpeaking(false); }}
-                  className={`px-1 text-[7px] font-bold rounded transition-all cursor-pointer ${
-                    lang === "en" ? "bg-blue-600 text-white" : "text-slate-500 hover:text-slate-300"
+                  className={`px-2.5 py-1 text-xs font-bold font-mono rounded-md transition-all cursor-pointer ${
+                    lang === "en" ? "bg-blue-600 text-white shadow-md shadow-blue-600/40" : "text-slate-400 hover:text-white"
                   }`}
                 >
                   EN
                 </button>
                 <button
                   onClick={() => { setLang("kn"); window.speechSynthesis.cancel(); setIsSpeaking(false); }}
-                  className={`px-1 text-[7px] font-bold rounded transition-all cursor-pointer ${
-                    lang === "kn" ? "bg-blue-600 text-white" : "text-slate-500 hover:text-slate-300"
+                  className={`px-2.5 py-1 text-xs font-bold font-mono rounded-md transition-all cursor-pointer ${
+                    lang === "kn" ? "bg-blue-600 text-white shadow-md shadow-blue-600/40" : "text-slate-400 hover:text-white"
                   }`}
                 >
-                  ಕನ್ನ
+                  ಕನ್ನಡ
                 </button>
               </div>
             )}
             {!isOfficer && (
               <button 
                 onClick={handleSpeak}
-                className="text-slate-500 hover:text-blue-400 transition-colors p-0.5 cursor-pointer"
+                className="flex items-center justify-center p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-blue-400 hover:border-blue-500/50 transition-all cursor-pointer shadow-sm active:scale-95 ml-1"
                 title={isSpeaking ? "Stop Speaking" : "Read Aloud"}
               >
-                {isSpeaking ? <FaVolumeMute className="text-[10px]" /> : <FaVolumeUp className="text-[10px]" />}
+                {isSpeaking ? <FaVolumeMute className="text-sm text-rose-400" /> : <FaVolumeUp className="text-sm text-blue-400" />}
               </button>
             )}
             <span>{new Date().toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false })}</span>

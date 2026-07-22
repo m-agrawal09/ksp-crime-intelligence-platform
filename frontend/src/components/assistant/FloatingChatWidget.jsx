@@ -168,32 +168,32 @@ const FloatingMessageBubble = ({ msg, parseMarkdown }) => {
           <span>{isOfficer ? "OFFICER CONSOLE" : "AI ENGINE OUT"}</span>
           <div className="flex items-center gap-1.5 ml-2">
             {!isOfficer && (
-              <div className="flex items-center gap-0.5 bg-slate-900 border border-slate-800/80 rounded px-0.5">
+              <div className="flex items-center gap-1 bg-slate-900 border border-slate-800/90 rounded-md p-0.5 shadow-sm">
                 <button
                   onClick={() => { setLang("en"); window.speechSynthesis.cancel(); setIsSpeaking(false); }}
-                  className={`px-0.5 text-[6px] font-bold rounded transition-all cursor-pointer ${
-                    lang === "en" ? "bg-blue-600 text-white" : "text-slate-500 hover:text-slate-300"
+                  className={`px-2 py-0.5 text-[10px] font-bold font-mono rounded transition-all cursor-pointer ${
+                    lang === "en" ? "bg-blue-600 text-white shadow" : "text-slate-400 hover:text-white"
                   }`}
                 >
                   EN
                 </button>
                 <button
                   onClick={() => { setLang("kn"); window.speechSynthesis.cancel(); setIsSpeaking(false); }}
-                  className={`px-0.5 text-[6px] font-bold rounded transition-all cursor-pointer ${
-                    lang === "kn" ? "bg-blue-600 text-white" : "text-slate-500 hover:text-slate-300"
+                  className={`px-2 py-0.5 text-[10px] font-bold font-mono rounded transition-all cursor-pointer ${
+                    lang === "kn" ? "bg-blue-600 text-white shadow" : "text-slate-400 hover:text-white"
                   }`}
                 >
-                  ಕನ್ನ
+                  ಕನ್ನಡ
                 </button>
               </div>
             )}
             {!isOfficer && (
               <button 
                 onClick={handleSpeak}
-                className="text-slate-500 hover:text-blue-400 transition-colors p-0.5 cursor-pointer"
+                className="flex items-center justify-center p-1.5 rounded bg-slate-900 border border-slate-800 text-slate-300 hover:text-blue-400 hover:border-blue-500/50 transition-all cursor-pointer shadow-sm active:scale-95 ml-1"
                 title={isSpeaking ? "Stop Speaking" : "Read Aloud"}
               >
-                {isSpeaking ? <FaVolumeMute className="text-[8px]" /> : <FaVolumeUp className="text-[8px]" />}
+                {isSpeaking ? <FaVolumeMute className="text-xs text-rose-400" /> : <FaVolumeUp className="text-xs text-blue-400" />}
               </button>
             )}
           </div>
