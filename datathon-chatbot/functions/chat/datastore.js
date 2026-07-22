@@ -19,6 +19,32 @@ const https = require("https");
 const SEED_DATA_PATH = path.join(__dirname, "local_crime_records.json");
 const ROWID_MAPPING_PATH = path.join(__dirname, "../../../scripts/rowid_mapping.json");
 
+const DB_FILE_PATH = path.join(os.tmpdir(), "ksp_server_database_records_v2.json");
+
+const loadPersistentDb = () => {
+    try {
+        if (fs.existsSync(DB_FILE_PATH)) {
+            const raw = fs.readFileSync(DB_FILE_PATH, "utf-8");
+            if (raw) {
+                return JSON.parse(raw);
+            }
+        }
+    } catch (e) {
+        console.warn("[datastore] Failed reading persistent DB file:", e.message);
+    }
+    return [];
+};
+
+const savePersistentDb = (records) => {
+    try {
+        fs.writeFileSync(DB_FILE_PATH, JSON.stringify(records, null, 2), "utf-8");
+    } catch (e) {
+        console.warn("[datastore] Failed writing persistent DB file:", e.message);
+    }
+};
+
+let globalServerRecords = loadPersistentDb();
+
 let intIdCounter = 2500;
 const generateUniqueIntId = () => {
     intIdCounter += 1;
@@ -452,7 +478,8 @@ class CrimeRepository {
             console.warn("[CrimeRepository] Online Catalyst Data Store fetch failed:", err.message);
         }
 
-        const combined = cloudRows;
+        globalServerRecords = loadPersistentDb();
+        const combined = [...globalServerRecords, ...cloudRows];
         const seen = new Set();
         const uniqueRows = [];
 
@@ -524,15 +551,20 @@ class CrimeRepository {
             status: String(recordData.status || "Under Investigation")
         };
 
+        const norm = this.normalizeRow(fullRecord);
+        globalServerRecords = loadPersistentDb();
+        globalServerRecords.unshift(norm);
+        savePersistentDb(globalServerRecords);
+
         try {
             console.log("[CrimeRepository] Inserting new FIR directly into Zoho Catalyst Online Data Store...");
             const insertRes = await callCatalystDatastoreApi('/table/CaseMaster/row', 'POST', [catalystCaseMasterRow]);
             if (insertRes.status === 200 && insertRes.data && insertRes.data.data && insertRes.data.data[0]) {
                 const cloudRow = insertRes.data.data[0];
                 console.log("✅ [CrimeRepository] Catalyst Online Data Store INSERT SUCCESS. ROWID:", cloudRow.ROWID);
-                const norm = this.normalizeRow({ ...fullRecord, ...cloudRow });
-                this.masterRecords.unshift(norm);
-                return norm;
+                const cloudNorm = this.normalizeRow({ ...fullRecord, ...cloudRow });
+                this.masterRecords.unshift(cloudNorm);
+                return cloudNorm;
             } else {
                 console.error("❌ [CrimeRepository] Catalyst Online Data Store Insert Failed:", insertRes.status, JSON.stringify(insertRes.data));
             }
@@ -540,8 +572,6 @@ class CrimeRepository {
             console.error("❌ [CrimeRepository] Catalyst Online Data Store Exception:", err.message);
         }
 
-        // In-memory fallback if network/auth temporary issue
-        const norm = this.normalizeRow(fullRecord);
         this.masterRecords.unshift(norm);
         return norm;
     }
