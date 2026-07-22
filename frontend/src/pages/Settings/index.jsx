@@ -683,6 +683,7 @@ const Settings = () => {
                     <th className="py-4 px-6 border border-slate-700">Officer Name</th>
                     <th className="py-4 px-6 border border-slate-700">Rank & KGID</th>
                     <th className="py-4 px-6 border border-slate-700">Login Username</th>
+                    <th className="py-4 px-6 border border-slate-700">Current Password</th>
                     <th className="py-4 px-6 border border-slate-700">Station / Unit</th>
                   </tr>
                 </thead>
@@ -703,6 +704,11 @@ const Settings = () => {
                       <td className="py-4 px-6 border border-slate-700 font-mono text-[#60a5fa] font-semibold">
                         <code className="bg-slate-950/80 px-2.5 py-1 rounded border border-slate-800">
                           {off.username}
+                        </code>
+                      </td>
+                      <td className="py-4 px-6 border border-slate-700 font-mono text-emerald-400 font-bold">
+                        <code className="bg-emerald-950/40 text-emerald-300 px-2.5 py-1 rounded border border-emerald-800/60">
+                          {off.password || "officer123"}
                         </code>
                       </td>
                       <td className="py-4 px-6 border border-slate-700 text-slate-400">{off.unit}</td>
@@ -728,7 +734,7 @@ const Settings = () => {
                   <option value="">-- Choose Officer --</option>
                   {usersList.map((off) => (
                     <option key={off.id} value={off.id}>
-                      {off.name} ({off.username})
+                      {off.name} (Username: {off.username} | Password: {off.password || "officer123"})
                     </option>
                   ))}
                 </select>
