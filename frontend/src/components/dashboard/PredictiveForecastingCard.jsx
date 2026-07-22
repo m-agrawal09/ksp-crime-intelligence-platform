@@ -13,7 +13,7 @@ const DISTRICTS = [
   "Davanagere","Tumakuru",
 ];
 
-const WHAT_IF_SCENARIOS = [
+const WHAT_IF_SCENARIOS_EN = [
   {
     icon: FaArrowUp,
     color: "#f87171",
@@ -48,7 +48,42 @@ const WHAT_IF_SCENARIOS = [
   },
 ];
 
-const PROBABILITY_INSIGHTS = [
+const WHAT_IF_SCENARIOS_KN = [
+  {
+    icon: FaArrowUp,
+    color: "#f87171",
+    bg: "rgba(239,68,68,0.06)",
+    border: "rgba(239,68,68,0.18)",
+    title: "ವಾರಾಂತ್ಯದ ರಾತ್ರಿ ಗಸ್ತುಗಳನ್ನು 30% ರಷ್ಟು ಕಡಿಮೆಗೊಳಿಸಿದರೆ ಏನಾಗುತ್ತದೆ?",
+    body: "ಕೋರಮಂಗಲ ಮತ್ತು ಶಿವಾಜಿನಗರ ವಲಯಗಳ ಅನುಭವದ ಆಧಾರದ ಮೇಲೆ, ಶುಕ್ರವಾರ-ಭಾನುವಾರ ರಾತ್ರಿ ಗಸ್ತು ಕವರೇಜ್ 30% ರಷ್ಟು ಕಡಿಮೆಯಾದರೆ ಆಸ್ತಿ ಕಳ್ಳತನ ಪ್ರಕರಣಗಳು 22-28% ರಷ್ಟು ಹೆಚ್ಚಾಗುವ ಸಾಧ್ಯತೆಯಿದೆ. ಎಲೆಕ್ಟ್ರಾನಿಕ್ಸ್ ವಲಯಗಳು ಮತ್ತು ವಸತಿ ಸಮುಚ್ಚಯಗಳು ಪ್ರಮುಖ ಗುರಿಯಾಗುತ್ತವೆ.",
+  },
+  {
+    icon: FaBrain,
+    color: "#c084fc",
+    bg: "rgba(124,58,237,0.06)",
+    border: "rgba(124,58,237,0.18)",
+    title: "ಬೆಂಗಳೂರು ಪೂರ್ವದಲ್ಲಿ ಹೊಸ ಸೈಬರ್ ಕೆಫೆಗಳ ಗುಂಪು ತೆರೆದರೆ ಏನಾಗುತ್ತದೆ?",
+    body: "ಬೆಂಗಳೂರು ಪೂರ್ವದಲ್ಲಿ ಸೈಬರ್ ವಂಚನೆ ಈಗಾಗಲೇ ಮಾಸಿಕ 14.2% ದರದಲ್ಲಿ ಹೆಚ್ಚುತ್ತಿದೆ. ಹೊಸ ನಿಯಂತ್ರಣವಿಲ್ಲದ ಸೈಬರ್ ಕೆಫೆಗಳು ತೆರೆದರೆ ಐಟಿ ಕಾಯ್ದೆ 66ಡಿ ಅಡಿಯಲ್ಲಿ ತಿಂಗಳಿಗೆ 18-35 ಹೊಸ ಎಫ್‌ಐಆರ್‌ಗಳು ಹೆಚ್ಚಾಗಬಹುದು.",
+  },
+  {
+    icon: FaShieldAlt,
+    color: "#34d399",
+    bg: "rgba(34,197,94,0.06)",
+    border: "rgba(34,197,94,0.18)",
+    title: "ಹೆಚ್ಚುವರಿ 40 ಜಂಕ್ಷನ್‌ಗಳಿಗೆ ಸಿಸಿಟಿವಿ ಕಣ್ಗಾವಲು ವಿಸ್ತರಿಸಿದರೆ ಏನಾಗುತ್ತದೆ?",
+    body: "ಬೆಂಗಳೂರು ನಗರದ ಸಿಸಿಟಿವಿ ಜಂಕ್ಷನ್ ಅಳವಡಿಕೆಯ 60 ದಿನಗಳಲ್ಲಿ ಬೀದಿ ಅಪರಾಧ ಮತ್ತು ಸರಗಳ್ಳತನ 31% ರಷ್ಟು ಕಡಿಮೆಯಾಗಿದೆ. 40 ಹೆಚ್ಚುವರಿ ಜಂಕ್ಷನ್‌ಗಳಿಗೆ ವಿಸ್ತರಿಸುವುದರಿಂದ ತ್ರೈಮಾಸಿಕಕ್ಕೆ ಸುಮಾರು 48 ಅಪರಾಧ ಘಟನೆಗಳನ್ನು ತಡೆಯಬಹುದು.",
+  },
+  {
+    icon: FaQuestionCircle,
+    color: "#fbbf24",
+    bg: "rgba(245,158,11,0.06)",
+    border: "rgba(245,158,11,0.18)",
+    title: "ಮಾನ್ಸೂನ್ ಋತುವು 3 ಹೆಚ್ಚುವರಿ ವಾರಗಳವರೆಗೆ ವಿಸ್ತರಿಸಿದರೆ ಏನಾಗುತ್ತದೆ?",
+    body: "ಮಾನ್ಸೂನ್ ತಿಂಗಳುಗಳಲ್ಲಿ ಬೀದಿ ಅಪರಾಧಗಳಲ್ಲಿ 12% ಇಳಿಕೆಯಾಗುತ್ತದೆ ಆದರೆ ಗೃಹ ಅಪರಾಧಗಳು ಮತ್ತು ಮಾದಕದ್ರವ್ಯ ಪ್ರಕರಣಗಳು 19% ಹೆಚ್ಚಾಗುತ್ತವೆ.",
+  },
+];
+
+const PROBABILITY_INSIGHTS_EN = [
   { label: "Property Theft Spike (Jul–Aug)", probability: 86, color: "#ef4444", zone: "Koramangala, Shivajinagar", basis: "18 FIRs in same window — 2023 & 2024" },
   { label: "Cyber Fraud Escalation", probability: 74, color: "#f59e0b", zone: "Bengaluru East Range", basis: "Section 66D IT Act filings +14.2% MoM" },
   { label: "Narcotics Seizure Opportunity", probability: 61, color: "#8b5cf6", zone: "Mangaluru City Port Zone", basis: "3 active NDPS clusters flagged by QuickML" },
@@ -56,8 +91,16 @@ const PROBABILITY_INSIGHTS = [
   { label: "Charge-sheet Delay Risk", probability: 42, color: "#22c55e", zone: "Judicial Magistrate Courts", basis: "76.8% charge-sheet rate with 23.2% pending" },
 ];
 
+const PROBABILITY_INSIGHTS_KN = [
+  { label: "ಆಸ್ತಿ ಕಳ್ಳತನ ಹೆಚ್ಚಳ (ಜುಲೈ–ಆಗಸ್ಟ್)", probability: 86, color: "#ef4444", zone: "ಕೋರಮಂಗಲ, ಶಿವಾಜಿನಗರ", basis: "2023 ಮತ್ತು 2024 ರ ಅದೇ ಅವಧಿಯಲ್ಲಿ 18 ಎಫ್‌ಐಆರ್‌ಗಳು" },
+  { label: "ಸೈಬರ್ ವಂಚನೆ ಹೆಚ್ಚಳ", probability: 74, color: "#f59e0b", zone: "ಬೆಂಗಳೂರು ಪೂರ್ವ ವಲಯ", basis: "ಐಟಿ ಕಾಯ್ದೆ 66ಡಿ ಸಲ್ಲಿಕೆಗಳಲ್ಲಿ ಮಾಸಿಕ +14.2% ಏರಿಕೆ" },
+  { label: "ಮಾದಕದ್ರವ್ಯ ಜಪ್ತಿ ಅವಕಾಶ", probability: 61, color: "#8b5cf6", zone: "ಮಂಗಳೂರು ಬಂದರು ವಲಯ", basis: "ಕ್ವಿಕ್‌ಎಮ್‌ಎಲ್ ಗುರುತಿಸಿದ 3 ಸಕ್ರಿಯ ಎನ್‌ಡಿಪಿಎಸ್ ಕೇಂದ್ರಗಳು" },
+  { label: "ಮರುಕಳಿಸುವ ಅಪರಾಧಿಗಳ ಚಟುವಟಿಕೆ", probability: 78, color: "#3b82f6", zone: "ರಾಜ್ಯವ್ಯಾಪಿ ಹೆಚ್ಚಿನ ಪ್ರಕರಣಗಳ ವಲಯ", basis: "ಪರೋಲ್ ಅಪರಾಧಿಗಳ ಪಟ್ಟಿಯೊಂದಿಗೆ ಮರುಕಳಿಸುವಿಕೆ ಹೋಲಿಕೆ" },
+  { label: "ಚಾರ್ಜ್ ಶೀಟ್ ವಿಳಂಬ ಅಪಾಯ", probability: 42, color: "#22c55e", zone: "ನ್ಯಾಯಾಂಗ ಮ್ಯಾಜಿಸ್ಟ್ರೇಟ್ ನ್ಯಾಯಾಲಯಗಳು", basis: "76.8% ಚಾರ್ಜ್ ಶೀಟ್ ದರ, 23.2% ಬಾಕಿ" },
+];
+
 /* ─── Probability Bar ─── */
-const ProbBar = ({ label, probability, color, zone, basis }) => (
+const ProbBar = ({ label, probability, color, zone, basis, lang }) => (
   <div className="space-y-3">
     <div className="flex items-start justify-between gap-4">
       <div className="flex-1 min-w-0">
@@ -77,7 +120,7 @@ const ProbBar = ({ label, probability, color, zone, basis }) => (
     </div>
 
     <p className="text-xs text-slate-500 font-inter leading-relaxed">
-      <span className="text-slate-400 font-semibold">Data basis: </span>{basis}
+      <span className="text-slate-400 font-semibold">{lang === "kn" ? "ಡೇಟಾ ಆಧಾರ: " : "Data basis: "}</span>{basis}
     </p>
   </div>
 );
@@ -102,7 +145,7 @@ const WhatIfCard = ({ icon: Icon, color, bg, border, title, body }) => (
 );
 
 /* ─── Threat Zone Card ─── */
-const ThreatZoneCard = ({ fc }) => (
+const ThreatZoneCard = ({ fc, lang }) => (
   <div
     key={fc.id}
     className="overflow-hidden"
@@ -142,7 +185,9 @@ const ThreatZoneCard = ({ fc }) => (
     {/* Body */}
     <div className="p-5 space-y-4">
       <div>
-        <p className="text-[10px] font-mono font-bold text-amber-400/80 uppercase tracking-widest mb-2">Historical Evidence</p>
+        <p className="text-[10px] font-mono font-bold text-amber-400/80 uppercase tracking-widest mb-2">
+          {lang === "kn" ? "ಚಾರಿತ್ರಿಕ ಸಾಕ್ಷ್ಯಗಳು (Historical Evidence)" : "Historical Evidence"}
+        </p>
         <p className="text-[12.5px] text-slate-400 font-inter leading-relaxed">{fc.evidence}</p>
       </div>
 
@@ -153,7 +198,9 @@ const ThreatZoneCard = ({ fc }) => (
         <div className="flex items-start gap-3">
           <FaLightbulb className="text-amber-400 text-sm flex-shrink-0 mt-0.5" />
           <div>
-            <p className="text-[10px] font-mono font-bold text-purple-300/80 uppercase tracking-widest mb-2">Tactical Recommendation</p>
+            <p className="text-[10px] font-mono font-bold text-purple-300/80 uppercase tracking-widest mb-2">
+              {lang === "kn" ? "ಕಾರ್ಯತಂತ್ರದ ಶಿಫಾರಸು (Tactical Recommendation)" : "Tactical Recommendation"}
+            </p>
             <p className="text-[12.5px] text-purple-100/80 font-inter leading-relaxed">{fc.recommendation}</p>
           </div>
         </div>
@@ -163,9 +210,14 @@ const ThreatZoneCard = ({ fc }) => (
 );
 
 /* ─── Main ─── */
-const PredictiveForecastingCard = () => {
+const PredictiveForecastingCard = ({ lang = "en" }) => {
   const [selectedDistrict, setSelectedDistrict] = useState("ALL");
   const [selectedCategory, setSelectedCategory] = useState("ALL");
+
+  const isKn = lang === "kn";
+
+  const whatIfs = isKn ? WHAT_IF_SCENARIOS_KN : WHAT_IF_SCENARIOS_EN;
+  const probabilities = isKn ? PROBABILITY_INSIGHTS_KN : PROBABILITY_INSIGHTS_EN;
 
   const forecastAlerts = useMemo(() => {
     const records = recordService.getRecords();
@@ -187,14 +239,18 @@ const PredictiveForecastingCard = () => {
 
     if (list.length === 0) return [{
       id: "fc-default",
-      location: "Koramangala 100 Feet Road, Bengaluru City",
+      location: isKn ? "ಕೋರಮಂಗಲ 100 ಫೀಟ್ ರಸ್ತೆ, ಬೆಂಗಳೂರು ನಗರ" : "Koramangala 100 Feet Road, Bengaluru City",
       district: "Bengaluru City",
-      crimeType: "Property Theft & Night Housebreaking",
+      crimeType: isKn ? "ಆಸ್ತಿ ಕಳ್ಳತನ ಮತ್ತು ರಾತ್ರಿ ಮನೆಗಳ್ಳತನ" : "Property Theft & Night Housebreaking",
       probability: "86%",
-      riskLevel: "CRITICAL",
-      timeWindow: "July & August · Late Night 22:00 – 05:00",
-      evidence: "Analysis of 200 CCTNS FIR logs shows 18 registered property theft cases at Koramangala PS between 22:30 and 04:30 during June/July.",
-      recommendation: "Deploy 2 extra Night Patrol Hoysala Vans along 100 Feet Road, set up CCTV checkpoint traps near commercial electronics warehouses, and activate security guard verification between 23:00 and 05:00.",
+      riskLevel: isKn ? "ಅತಿ ಗಂಭೀರ (CRITICAL)" : "CRITICAL",
+      timeWindow: isKn ? "ಜುಲೈ ಮತ್ತು ಆಗಸ್ಟ್ · ರಾತ್ರಿ 22:00 – 05:00" : "July & August · Late Night 22:00 – 05:00",
+      evidence: isKn
+        ? "200 ಸಿಸಿಟಿಎನ್‌ಎಸ್ ಪ್ರಕರಣಗಳ ವಿಶ್ಲೇಷಣೆಯು ಜೂನ್/ಜುಲೈ ರಾತ್ರಿ ವೇಳೆ ಕೋರಮಂಗಲ ಠಾಣೆಯಲ್ಲಿ 18 ಆಸ್ತಿ ಕಳ್ಳತನ ಪ್ರಕರಣಗಳನ್ನು ತೋರಿಸುತ್ತದೆ."
+        : "Analysis of 200 CCTNS FIR logs shows 18 registered property theft cases at Koramangala PS between 22:30 and 04:30 during June/July.",
+      recommendation: isKn
+        ? "ಕೋರಮಂಗಲ 100 ಫೀಟ್ ರಸ್ತೆಯಲ್ಲಿ 2 ಹೆಚ್ಚುವರಿ ಹೊಯ್ಸಳ ರಾತ್ರಿ ಗಸ್ತು ವಾಹನಗಳನ್ನು ನಿಯೋಜಿಸಿ, ವಾಣಿಜ್ಯ ಸಂಸ್ಥೆಗಳ ಬಳಿ ಸಿಸಿಟಿವಿ ತಪಾಸಣೆ ತೀವ್ರಗೊಳಿಸಿ."
+        : "Deploy 2 extra Night Patrol Hoysala Vans along 100 Feet Road, set up CCTV checkpoint traps near commercial electronics warehouses, and activate security guard verification between 23:00 and 05:00.",
     }];
 
     return list.slice(0, 3).map((item, idx) => {
@@ -203,16 +259,26 @@ const PredictiveForecastingCard = () => {
       const isTheft = topCategory.includes("Property") || topCategory.includes("Theft");
       const isCyber = topCategory.includes("Cyber");
       const probability = Math.min(96, 72 + item.totalCases * 3) + "%";
-      const timeWindow = isTheft ? "July & August · Late Night 22:00 – 05:00" : isCyber ? "Business Hours 11:00 – 16:30" : "Night Shift 21:00 – 04:00";
-      const evidence = `CCTNS datastore analysis of ${item.totalCases} registered case logs at ${item.street} shows high concentration of ${topCategory} (${maxCatCount} cases). Seasonal recurrence algorithms indicate high probability of repeat occurrence.`;
-      const recommendation = isTheft
-        ? `Recommend extra night patrol vans along ${item.street}, CCTV traps near commercial warehouses, and increased midnight security checks.`
+      const timeWindow = isTheft
+        ? (isKn ? "ಜುಲೈ ಮತ್ತು ಆಗಸ್ಟ್ · ರಾತ್ರಿ 22:00 – 05:00" : "July & August · Late Night 22:00 – 05:00")
         : isCyber
-        ? `Recommend cyber alert broadcasts across local bank branches and monitoring suspicious IP proxy nodes.`
-        : `Recommend intensifying police presence and vehicle check-posts at ${item.street} during peak risk hours.`;
-      return { id: `fc-${idx}`, location: `${item.street}, ${item.district}`, district: item.district, crimeType: topCategory, probability, riskLevel: item.totalCases >= 4 ? "CRITICAL" : "HIGH", timeWindow, evidence, recommendation };
+        ? (isKn ? "ವ್ಯವಹಾರದ ಸಮಯ 11:00 – 16:30" : "Business Hours 11:00 – 16:30")
+        : (isKn ? "ರಾತ್ರಿ ಶಿಫ್ಟ್ 21:00 – 04:00" : "Night Shift 21:00 – 04:00");
+
+      const categoryKnName = isTheft ? "ಆಸ್ತಿ ಅಪರಾಧಗಳು" : isCyber ? "ಸೈಬರ್ ಅಪರಾಧಗಳು" : "ದೈಹಿಕ ಅಪರಾಧಗಳು";
+      const evidence = isKn
+        ? `${item.street} ನಲ್ಲಿ ${item.totalCases} ಪ್ರಕರಣಗಳ ಸಿಸಿಟಿಎನ್‌ಎಸ್ ವಿಶ್ಲೇಷಣೆಯು ${categoryKnName} ಧ್ವನಿಸುತ್ತದೆ.`
+        : `CCTNS datastore analysis of ${item.totalCases} registered case logs at ${item.street} shows high concentration of ${topCategory} (${maxCatCount} cases). Seasonal recurrence algorithms indicate high probability of repeat occurrence.`;
+
+      const recommendation = isTheft
+        ? (isKn ? `${item.street} ನಲ್ಲಿ ಹೆಚ್ಚುವರಿ ರಾತ್ರಿ ಗಸ್ತು ನಿಯೋಜಿಸಲು ಮತ್ತು ಸಿಸಿಟಿವಿ ತಪಾಸಣೆ ತೀವ್ರಗೊಳಿಸಲು ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ.` : `Recommend extra night patrol vans along ${item.street}, CCTV traps near commercial warehouses, and increased midnight security checks.`)
+        : isCyber
+        ? (isKn ? `ಸ್ಥಳೀಯ ಬ್ಯಾಂಕ್ ಶಾಖೆಗಳಲ್ಲಿ ಸೈಬರ್ ಎಚ್ಚರಿಕೆಗಳನ್ನು ಪ್ರಸಾರ ಮಾಡಲು ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ.` : `Recommend cyber alert broadcasts across local bank branches and monitoring suspicious IP proxy nodes.`)
+        : (isKn ? `${item.street} ನಲ್ಲಿ ಪೊಲೀಸ್ ಉಪಸ್ಥಿತಿ ಮತ್ತು ವಾಹನ ತಪಾಸಣೆ ಹೆಚ್ಚಿಸಲು ಶಿಫಾರಸು ಮಾಡಲಾಗಿದೆ.` : `Recommend intensifying police presence and vehicle check-posts at ${item.street} during peak risk hours.`);
+
+      return { id: `fc-${idx}`, location: `${item.street}, ${item.district}`, district: item.district, crimeType: isKn ? categoryKnName : topCategory, probability, riskLevel: item.totalCases >= 4 ? (isKn ? "ಅತಿ ಗಂಭೀರ (CRITICAL)" : "CRITICAL") : (isKn ? "ಹೆಚ್ಚು (HIGH)" : "HIGH"), timeWindow, evidence, recommendation };
     });
-  }, [selectedDistrict, selectedCategory]);
+  }, [selectedDistrict, selectedCategory, isKn]);
 
   const totalRecords = recordService.getRecords().length;
 
@@ -229,16 +295,20 @@ const PredictiveForecastingCard = () => {
             <RiBrainLine className="text-2xl text-purple-400 animate-pulse" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white font-space tracking-tight leading-tight">AI Predictive Crime Forecasting Engine</h2>
-            <p className="text-xs text-slate-500 font-inter mt-1">QuickML v4.2 · Multi-variable spatio-temporal recurrence model · {totalRecords} active CCTNS records</p>
+            <h2 className="text-lg font-bold text-white font-space tracking-tight leading-tight">
+              {isKn ? "ಎಐ ಅಪರಾಧ ಮುನ್ಸೂಚನೆ ಎಂಜಿನ್ (AI Predictive Forecasting Engine)" : "AI Predictive Crime Forecasting Engine"}
+            </h2>
+            <p className="text-xs text-slate-500 font-inter mt-1">
+              {isKn ? `ಕ್ವಿಕ್‌ಎಮ್‌ಎಲ್ v4.2 · ಮರುಕಳಿಸುವಿಕೆಯ ಮಾದರಿ · ${totalRecords} ಸಕ್ರಿಯ ಪ್ರಕರಣಗಳು` : `QuickML v4.2 · Multi-variable spatio-temporal recurrence model · ${totalRecords} active CCTNS records`}
+            </p>
           </div>
         </div>
 
         {/* Filters */}
         <div className="flex flex-wrap gap-2.5">
           {[
-            { value: selectedDistrict, onChange: setSelectedDistrict, color: "#c084fc", options: [["ALL", "All Districts"], ...DISTRICTS.slice(1).map(d => [d, d])] },
-            { value: selectedCategory, onChange: setSelectedCategory, color: "#60a5fa", options: [["ALL", "All Categories"], ["Property Offences", "Property Offences"], ["Offences Against Body", "Body Offences"], ["Cyber Crimes", "Cyber Crimes"], ["Financial Fraud", "Financial Fraud"], ["Narcotics", "Narcotics"]] },
+            { value: selectedDistrict, onChange: setSelectedDistrict, color: "#c084fc", options: [["ALL", isKn ? "ಎಲ್ಲಾ ಜಿಲ್ಲೆಗಳು" : "All Districts"], ...DISTRICTS.slice(1).map(d => [d, d])] },
+            { value: selectedCategory, onChange: setSelectedCategory, color: "#60a5fa", options: [["ALL", isKn ? "ಎಲ್ಲಾ ವಿಭಾಗಗಳು" : "All Categories"], ["Property Offences", isKn ? "ಆಸ್ತಿ ಅಪರಾಧಗಳು" : "Property Offences"], ["Offences Against Body", isKn ? "ದೈಹಿಕ ಅಪರಾಧಗಳು" : "Body Offences"], ["Cyber Crimes", isKn ? "ಸೈಬರ್ ಅಪರಾಧಗಳು" : "Cyber Crimes"], ["Financial Fraud", isKn ? "ಹಣಕಾಸು ವಂಚನೆ" : "Financial Fraud"], ["Narcotics", isKn ? "ಮಾದಕದ್ರವ್ಯ" : "Narcotics"]] },
           ].map((sel, i) => (
             <div key={i} className="flex items-center gap-2 px-3.5 py-2 rounded-xl" style={{ background: "rgba(10,18,30,0.8)", border: "1px solid rgba(51,65,85,0.4)" }}>
               {i === 0 && <FaFilter className="text-[10px] text-purple-400" />}
@@ -262,11 +332,13 @@ const PredictiveForecastingCard = () => {
         <div className="space-y-6">
           <div className="flex items-center gap-2.5 pb-3" style={{ borderBottom: "1px solid rgba(51,65,85,0.25)" }}>
             <FaSkull className="text-rose-400" />
-            <h3 className="text-sm font-bold text-white uppercase tracking-widest font-space">Active Threat Zone Forecasts</h3>
+            <h3 className="text-sm font-bold text-white uppercase tracking-widest font-space">
+              {isKn ? "ಸಕ್ರಿಯ ಬೆದರಿಕೆ ವಲಯಗಳ ಮುನ್ಸೂಚನೆ (Active Threat Zone Forecasts)" : "Active Threat Zone Forecasts"}
+            </h3>
           </div>
 
           <div className="flex flex-col" style={{ gap: "1.5rem" }}>
-            {forecastAlerts.map((fc) => <ThreatZoneCard key={fc.id} fc={fc} />)}
+            {forecastAlerts.map((fc) => <ThreatZoneCard key={fc.id} fc={fc} lang={lang} />)}
           </div>
         </div>
 
@@ -280,10 +352,12 @@ const PredictiveForecastingCard = () => {
           >
             <div className="flex items-center gap-2.5 mb-6 pb-4" style={{ borderBottom: "1px solid rgba(51,65,85,0.25)" }}>
               <FaPercent className="text-blue-400" />
-              <h3 className="text-sm font-bold text-white uppercase tracking-widest font-space">Incident Probability Index</h3>
+              <h3 className="text-sm font-bold text-white uppercase tracking-widest font-space">
+                {isKn ? "ಅಪರಾಧ ಸಂಭವನೀಯತೆಯ ಸೂಚ್ಯಂಕ (Incident Probability Index)" : "Incident Probability Index"}
+              </h3>
             </div>
             <div className="space-y-6">
-              {PROBABILITY_INSIGHTS.map((item) => <ProbBar key={item.label} {...item} />)}
+              {probabilities.map((item) => <ProbBar key={item.label} {...item} lang={lang} />)}
             </div>
           </div>
 
@@ -291,10 +365,12 @@ const PredictiveForecastingCard = () => {
           <div>
             <div className="flex items-center gap-2.5 mb-5 pb-3" style={{ borderBottom: "1px solid rgba(51,65,85,0.25)" }}>
               <FaQuestionCircle className="text-purple-400" />
-              <h3 className="text-sm font-bold text-white uppercase tracking-widest font-space">What-If Scenario Analysis</h3>
+              <h3 className="text-sm font-bold text-white uppercase tracking-widest font-space">
+                {isKn ? "ಸಂಭಾವ್ಯ ಸನ್ನಿವೇಶಗಳ ವಿಶ್ಲೇಷಣೆ (What-If Scenario Analysis)" : "What-If Scenario Analysis"}
+              </h3>
             </div>
             <div className="space-y-4">
-              {WHAT_IF_SCENARIOS.map((s, i) => <WhatIfCard key={i} {...s} />)}
+              {whatIfs.map((s, i) => <WhatIfCard key={i} {...s} />)}
             </div>
           </div>
 
@@ -308,7 +384,7 @@ const PredictiveForecastingCard = () => {
       >
         <span className="flex items-center gap-2 text-xs font-inter text-slate-500">
           <FaCheckCircle className="text-emerald-400" />
-          Correlated with {totalRecords} active CCTNS CaseMaster logs
+          {isKn ? `${totalRecords} ಸಕ್ರಿಯ ಸಿಸಿಟಿಎನ್‌ಎಸ್ ಪ್ರಕರಣಗಳೊಂದಿಗೆ ಸಂಯೋಜಿಸಲಾಗಿದೆ` : `Correlated with ${totalRecords} active CCTNS CaseMaster logs`}
         </span>
         <span className="text-xs font-mono text-slate-500">88.4% Confidence Index · QuickML v4.2</span>
       </div>

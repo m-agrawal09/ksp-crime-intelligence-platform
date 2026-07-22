@@ -11,17 +11,13 @@ import PredictiveForecastingCard from "../../components/dashboard/PredictiveFore
 import Loader from "../../components/common/Loader";
 import { assistantService } from "../../services/assistantService";
 import { fetchDashboardData } from "../../services/dashboardService";
-import { RiBrainLine, RiRobot2Line } from "react-icons/ri";
+import { RiBrainLine, RiRobot2Line, RiGlobalLine } from "react-icons/ri";
 import { TbChartLine } from "react-icons/tb";
 import { FaBrain, FaGavel, FaSearch, FaExclamationTriangle, FaHistory, FaRobot } from "react-icons/fa";
 
-const TABS = [
-  { id: "copilot", label: "AI Copilot & Search", icon: RiRobot2Line, activeColor: "from-blue-600 to-violet-600" },
-  { id: "forecast", label: "Predictive Trend Forecast", icon: TbChartLine, activeColor: "from-violet-600 to-purple-700" },
-];
-
 const InsightsForecast = () => {
   const [activeTab, setActiveTab] = useState("copilot");
+  const [pageLang, setPageLang] = useState("en"); // 'en' or 'kn'
 
   // Chat state
   const [sessions, setSessions] = useState([]);
@@ -33,6 +29,13 @@ const InsightsForecast = () => {
   // Dashboard data
   const [dashboardData, setDashboardData] = useState(null);
   const [loadingData, setLoadingData] = useState(true);
+
+  const isKn = pageLang === "kn";
+
+  const TABS = [
+    { id: "copilot", label: isKn ? "ಎಐ ಕಾಪಿಲಟ್ ಮತ್ತು ಹುಡುಕಾಟ" : "AI Copilot & Search", icon: RiRobot2Line, activeColor: "from-blue-600 to-violet-600" },
+    { id: "forecast", label: isKn ? "ಪೂರ್ವಸೂಚಕ ಪ್ರವೃತ್ತಿ ಮತ್ತು ಮುನ್ಸೂಚನೆ" : "Predictive Trend Forecast", icon: TbChartLine, activeColor: "from-violet-600 to-purple-700" },
+  ];
 
   useEffect(() => {
     const list = assistantService.getSessions();
@@ -54,7 +57,7 @@ const InsightsForecast = () => {
 
   const handleNewSession = () => {
     const newId = `session-temp-${Date.now()}`;
-    setSessions((prev) => [{ id: newId, title: "New Session", timestamp: "Just now", status: "active" }, ...prev]);
+    setSessions((prev) => [{ id: newId, title: isKn ? "ಹೊಸ ಸೇಶನ್" : "New Session", timestamp: isKn ? "ಈಗಷ್ಟೇ" : "Just now", status: "active" }, ...prev]);
     setActiveSessionId(newId);
     setMessages([]);
   };
@@ -66,7 +69,7 @@ const InsightsForecast = () => {
       const replyText = await assistantService.queryAssistant(text);
       setMessages((prev) => [...prev, { sender: "assistant", text: replyText }]);
     } catch {
-      setMessages((prev) => [...prev, { sender: "assistant", text: "Error: Failed to process request." }]);
+      setMessages((prev) => [...prev, { sender: "assistant", text: isKn ? "ದೋಷ: ವಿನಂತಿಯನ್ನು ಪ್ರಕ್ರಿಯೆಗೊಳಿಸಲು ಸಾಧ್ಯವಾಗಿಲ್ಲ." : "Error: Failed to process request." }]);
     } finally {
       setIsTyping(false);
     }
@@ -89,23 +92,52 @@ const InsightsForecast = () => {
             </span>
           </div>
           <h1 className="text-2xl font-bold text-white font-space tracking-tight">
-            AI Insights & Forecast
+            {isKn ? "ಅಪರಾಧ ಮುನ್ಸೂಚನೆ ಮತ್ತು ವಿಶ್ಲೇಷಣೆ (AI Insights & Forecast)" : "AI Insights & Forecast"}
           </h1>
           <p className="text-sm text-slate-500 font-inter mt-1">
-            Natural language intelligence search, predictive crime forecasting, and automated anomaly detection.
+            {isKn
+              ? "ನೈಸರ್ಗಿಕ ಭಾಷೆಯ ಗುಪ್ತಚರ ಹುಡುಕಾಟ, ಅಪರಾಧ ಮುನ್ಸೂಚನೆ ಮತ್ತು ವೈಪರೀತ್ಯ ಪತ್ತೆ ಸಿಸ್ಟಮ್."
+              : "Natural language intelligence search, predictive crime forecasting, and automated anomaly detection."}
           </p>
         </div>
 
-        {/* Live indicator */}
-        <div
-          className="flex items-center gap-2 px-4 py-2 rounded-xl self-start sm:self-auto"
-          style={{
-            background: "rgba(34,197,94,0.07)",
-            border: "1px solid rgba(34,197,94,0.2)",
-          }}
-        >
-          <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-xs font-mono text-emerald-400 font-semibold">CCTNS Live Connected</span>
+        {/* Live indicator & Page Translation Switcher Toggle */}
+        <div className="flex flex-wrap items-center gap-3 self-start sm:self-auto">
+          <div
+            className="flex items-center gap-2 px-3.5 py-2 rounded-xl"
+            style={{
+              background: "rgba(34,197,94,0.07)",
+              border: "1px solid rgba(34,197,94,0.2)",
+            }}
+          >
+            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-xs font-mono text-emerald-400 font-semibold">CCTNS Live Connected</span>
+          </div>
+
+          {/* Global Page Language Switcher Toggle */}
+          <div className="flex items-center gap-1 bg-slate-900/90 border border-purple-500/40 rounded-xl p-1 shadow-lg">
+            <span className="text-xs font-mono text-purple-300 font-bold px-2 flex items-center gap-1">
+              <RiGlobalLine className="text-sm text-purple-400" /> Page Lang:
+            </span>
+            <button
+              type="button"
+              onClick={() => setPageLang("en")}
+              className={`px-3 py-1 text-xs font-bold font-mono rounded-lg transition-all cursor-pointer ${
+                pageLang === "en" ? "bg-purple-600 text-white shadow-md shadow-purple-600/40" : "text-slate-400 hover:text-white"
+              }`}
+            >
+              English
+            </button>
+            <button
+              type="button"
+              onClick={() => setPageLang("kn")}
+              className={`px-3 py-1 text-xs font-bold font-mono rounded-lg transition-all cursor-pointer ${
+                pageLang === "kn" ? "bg-purple-600 text-white shadow-md shadow-purple-600/40" : "text-slate-400 hover:text-white"
+              }`}
+            >
+              ಕನ್ನಡ (Kannada)
+            </button>
+          </div>
         </div>
       </div>
 
@@ -130,11 +162,6 @@ const InsightsForecast = () => {
               >
                 <Icon className="text-base" />
                 {tab.label}
-                {tab.id === "alerts" && dashboardData?.ai_alerts?.length > 0 && (
-                  <span className="ml-1 bg-rose-500/30 text-rose-300 border border-rose-500/30 text-[9px] font-bold px-1.5 py-0.5 rounded-full">
-                    {dashboardData.ai_alerts.length}
-                  </span>
-                )}
               </button>
             );
           })}
@@ -166,7 +193,9 @@ const InsightsForecast = () => {
               <div className="flex items-center justify-between px-4 py-4" style={{ borderBottom: "1px solid rgba(51,65,85,0.25)" }}>
                 <div className="flex items-center gap-2">
                   <FaHistory className="text-xs text-slate-500" />
-                  <span className="text-[11px] font-bold font-mono text-slate-400 uppercase tracking-wider">Sessions</span>
+                  <span className="text-[11px] font-bold font-mono text-slate-400 uppercase tracking-wider">
+                    {isKn ? "ಸೇಶನ್‌ಗಳು" : "Sessions"}
+                  </span>
                 </div>
               </div>
 
@@ -236,58 +265,58 @@ const InsightsForecast = () => {
       {activeTab === "forecast" && (
         <div>
           {loadingData ? (
-            <Loader message="Loading QuickML Time-Series Predictive Models..." />
+            <Loader message={isKn ? "ಕ್ವಿಕ್‌ಎಮ್‌ಎಲ್ ಮುನ್ಸೂಚಕ ಮಾದರಿಗಳನ್ನು ಲೋಡ್ ಮಾಡಲಾಗುತ್ತಿದೆ..." : "Loading QuickML Time-Series Predictive Models..."} />
           ) : (
             <div className="flex flex-col" style={{ gap: "2rem" }}>
               {/* KPI Cards */}
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 <StatCard
-                  title="Forecasted Theft Spike"
+                  title={isKn ? "ಅಂದಾಜು ಕಳ್ಳತನ ಹೆಚ್ಚಳ" : "Forecasted Theft Spike"}
                   value="+18.4%"
-                  change="QuickML Model"
+                  change={isKn ? "ಕ್ವಿಕ್‌ಎಮ್‌ಎಲ್ ಮಾದರಿ" : "QuickML Model"}
                   icon={FaBrain}
                   color="text-purple-400"
                   borderColor="border-purple-500"
                   dataSource="CaseMaster + UnitID 4108"
-                  coverage="Koramangala Police Station"
+                  coverage={isKn ? "ಕೋರಮಂಗಲ ಪೊಲೀಸ್ ಠಾಣೆ" : "Koramangala Police Station"}
                   lastSync="QuickML Realtime"
-                  subText="Property Theft Spike"
+                  subText={isKn ? "ಆಸ್ತಿ ಕಳ್ಳತನದ ಹೆಚ್ಚಳ" : "Property Theft Spike"}
                 />
                 <StatCard
-                  title="Predicted Charge-sheet Rate"
+                  title={isKn ? "ಅಂದಾಜು ಚಾರ್ಜ್ ಶೀಟ್ ದರ" : "Predicted Charge-sheet Rate"}
                   value="76.8%"
-                  change="+2.6% Projection"
+                  change={isKn ? "+2.6% ಪ್ರಕ್ಷೇಪಣ" : "+2.6% Projection"}
                   icon={FaGavel}
                   color="text-emerald-400"
                   borderColor="border-emerald-500"
                   dataSource="ChargesheetDetails ML"
-                  coverage="Judicial Magistrate Courts"
+                  coverage={isKn ? "ನ್ಯಾಯಾಂಗ ಮ್ಯಾಜಿಸ್ಟ್ರೇಟ್ ನ್ಯಾಯಾಲಯಗಳು" : "Judicial Magistrate Courts"}
                   lastSync="Daily Batch Run"
-                  subText="Final Report Type 'A'"
+                  subText={isKn ? "ಅಂತಿಮ ವರದಿ ವಿಧ 'A'" : "Final Report Type 'A'"}
                 />
                 <StatCard
-                  title="Cyber Fraud Velocity"
+                  title={isKn ? "ಸೈಬರ್ ವಂಚನೆ ವೇಗ" : "Cyber Fraud Velocity"}
                   value="210 / Mo"
-                  change="+14.2% MoM Risk"
+                  change={isKn ? "+14.2% ಮಾಸಿಕ ಅಪಾಯ" : "+14.2% MoM Risk"}
                   icon={FaSearch}
                   color="text-amber-400"
                   borderColor="border-amber-500"
                   dataSource="ActSection IT Sec 66D"
-                  coverage="Bengaluru East Range"
+                  coverage={isKn ? "ಬೆಂಗಳೂರು ಪೂರ್ವ ವಲಯ" : "Bengaluru East Range"}
                   lastSync="Hourly Telemetry"
-                  subText="AePS Clone Scams"
+                  subText={isKn ? "AePS ಕ್ಲೋನ್ ವಂಚನೆಗಳು" : "AePS Clone Scams"}
                 />
                 <StatCard
-                  title="Pattern Anomaly Index"
-                  value="HIGH (0.78)"
-                  change="3 Active Alerts"
+                  title={isKn ? "ಮಾದರಿ ವೈಪರೀತ್ಯ ಸೂಚ್ಯಂಕ" : "Pattern Anomaly Index"}
+                  value={isKn ? "ಹೆಚ್ಚು (0.78)" : "HIGH (0.78)"}
+                  change={isKn ? "3 ಸಕ್ರಿಯ ಎಚ್ಚರಿಕೆಗಳು" : "3 Active Alerts"}
                   icon={FaExclamationTriangle}
                   color="text-rose-400"
                   borderColor="border-rose-500"
                   dataSource="QuickML Anomaly Matrix"
-                  coverage="Statewide Alert Grid"
+                  coverage={isKn ? "ರಾಜ್ಯವ್ಯಾಪಿ ಎಚ್ಚರಿಕೆಯ ನಕ್ಷೆ" : "Statewide Alert Grid"}
                   lastSync="Live Stream"
-                  subText="Correlated Case Clusters"
+                  subText={isKn ? "ಸಂಬಂಧಿತ ಪ್ರಕರಣಗಳ ಗುಂಪು" : "Correlated Case Clusters"}
                 />
               </div>
 
@@ -309,30 +338,36 @@ const InsightsForecast = () => {
                   <div className="space-y-3 flex-1">
                     <div>
                       <p className="text-[10px] font-mono font-bold text-purple-400 uppercase tracking-widest mb-1">
-                        Executive Forecast Summary · QuickML Intelligence Report
+                        {isKn ? "ಕಾರ್ಯನಿರ್ವಾಹಕ ಮುನ್ಸೂಚನೆ ಸಾರಾಂಶ · ಕ್ವಿಕ್‌ಎಮ್‌ಎಲ್ ವರದಿ" : "Executive Forecast Summary · QuickML Intelligence Report"}
                       </p>
                       <h3 className="text-base font-bold text-white font-space">
-                        Statewide Crime Outlook — Q3 2025
+                        {isKn ? "ರಾಜ್ಯವ್ಯಾಪಿ ಅಪರಾಧ ಮುನ್ಸೂಚನೆ — ತ್ರೈಮಾಸಿಕ 2025" : "Statewide Crime Outlook — Q3 2025"}
                       </h3>
                     </div>
-                    <p className="text-sm text-slate-400 font-inter leading-relaxed">
-                      The QuickML predictive analytics engine correlates multi-year CCTNS{" "}
-                      <code className="text-purple-300/80 font-mono text-[11px] bg-purple-900/20 px-1 rounded">CaseMaster</code>{" "}
-                      timestamps with geographic unit boundaries (
-                      <code className="text-purple-300/80 font-mono text-[11px] bg-purple-900/20 px-1 rounded">UnitID</code>
-                      ). Based on seasonal variance and repeat Offence Section spikes, property theft incidents in urban
-                      police ranges are projected to rise by <strong className="text-white">18.4%</strong> over upcoming weekends.
-                      Cyber fraud escalation in Bengaluru East follows an accelerating +14.2% monthly trend driven by AePS
-                      cloning operations. Tactical deployment recommendations have been dispatched to precinct shift supervisors.
-                    </p>
-                    <p className="text-sm text-slate-400 font-inter leading-relaxed">
-                      High confidence zones include <strong className="text-white">Koramangala (86% theft probability)</strong>,{" "}
-                      <strong className="text-white">Mangaluru Port Zone (narcotics, 61%)</strong>, and{" "}
-                      <strong className="text-white">Bengaluru East cyber corridor (74%)</strong>. All predictions are
-                      model-generated from{" "}
-                      <code className="text-emerald-400 font-mono text-[11px]">{"{"}recordCount{"}"}</code> active FIR records
-                      with an 88.4% confidence index across a 12-week forward window.
-                    </p>
+                    {isKn ? (
+                      <p className="text-sm text-slate-300 font-inter leading-relaxed">
+                        ಕ್ವಿಕ್‌ಎಮ್‌ಎಲ್ ಮುನ್ಸೂಚಕ ವಿಶ್ಲೇಷಣೆ ಎಂಜಿನ್ ಬಹು-ವರ್ಷಗಳ ಸಿಸಿಟಿಎನ್‌ಎಸ್ ಪ್ರಕರಣಗಳ ಡೇಟಾವನ್ನು ನಕ್ಷೆ ಮಾಡುತ್ತದೆ. ಮುಂಬರುವ ವಾರಾಂತ್ಯಗಳಲ್ಲಿ ನಗರ ಪೊಲೀಸ್ ವ್ಯಾಪ್ತಿಯಲ್ಲಿ ಆಸ್ತಿ ಕಳ್ಳತನದ ಘಟನೆಗಳು <strong className="text-white">18.4%</strong> ಹೆಚ್ಚಾಗುವ ಮುನ್ಸೂಚನೆಯಿದೆ. ಬೆಂಗಳೂರು ಪೂರ್ವದಲ್ಲಿ ಸೈಬರ್ ವಂಚನೆ ಹೆಚ್ಚಳವು ಮಾಸಿಕ <strong className="text-white">+14.2%</strong> ರಷ್ಟಿದೆ. ಕೋರಮಂಗಲ (<strong className="text-white">86% ಕಳ್ಳತನದ ಸಂಭವನೀಯತೆ</strong>), ಮಂಗಳೂರು ಬಂದರು ವಲಯ (<strong className="text-white">ಮಾದಕದ್ರವ್ಯ 61%</strong>), ಮತ್ತು ಬೆಂಗಳೂರು ಪೂರ್ವ ಸೈಬರ್ ಕಾರಿಡಾರ್ (<strong className="text-white">74%</strong>) ಹೆಚ್ಚಿನ ಅಪಾಯಕಾರಿ ವಲಯಗಳಾಗಿವೆ.
+                      </p>
+                    ) : (
+                      <>
+                        <p className="text-sm text-slate-400 font-inter leading-relaxed">
+                          The QuickML predictive analytics engine correlates multi-year CCTNS{" "}
+                          <code className="text-purple-300/80 font-mono text-[11px] bg-purple-900/20 px-1 rounded">CaseMaster</code>{" "}
+                          timestamps with geographic unit boundaries (
+                          <code className="text-purple-300/80 font-mono text-[11px] bg-purple-900/20 px-1 rounded">UnitID</code>
+                          ). Based on seasonal variance and repeat Offence Section spikes, property theft incidents in urban
+                          police ranges are projected to rise by <strong className="text-white">18.4%</strong> over upcoming weekends.
+                          Cyber fraud escalation in Bengaluru East follows an accelerating +14.2% monthly trend driven by AePS
+                          cloning operations. Tactical deployment recommendations have been dispatched to precinct shift supervisors.
+                        </p>
+                        <p className="text-sm text-slate-400 font-inter leading-relaxed">
+                          High confidence zones include <strong className="text-white">Koramangala (86% theft probability)</strong>,{" "}
+                          <strong className="text-white">Mangaluru Port Zone (narcotics, 61%)</strong>, and{" "}
+                          <strong className="text-white">Bengaluru East cyber corridor (74%)</strong>. All predictions are
+                          model-generated from active FIR records with an 88.4% confidence index across a 12-week forward window.
+                        </p>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -342,14 +377,14 @@ const InsightsForecast = () => {
                 className="rounded-2xl p-6 sm:p-8"
                 style={{ background: "rgba(8,18,32,0.6)", border: "1px solid rgba(51,65,85,0.35)" }}
               >
-                <PredictiveForecastingCard />
+                <PredictiveForecastingCard lang={pageLang} />
               </div>
 
               {/* Charts Section */}
               <div>
                 <p className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
                   <TbChartLine className="text-purple-400 text-sm" />
-                  Historical Trend Charts · Supporting Forecast Data
+                  {isKn ? "ಚಾರಿತ್ರಿಕ ಪ್ರವೃತ್ತಿ ಪಟ್ಟಿಕೆಗಳು · ಬೆಂಬಲಿತ ಮುನ್ಸೂಚನೆ ಡೇಟಾ" : "Historical Trend Charts · Supporting Forecast Data"}
                 </p>
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                   <div className="lg:col-span-2">
@@ -365,18 +400,6 @@ const InsightsForecast = () => {
         </div>
       )}
 
-      {/* ══ TAB 3: AI ANOMALY ALERTS ══ */}
-      {activeTab === "alerts" && (
-        <div className="space-y-6">
-          {loadingData ? (
-            <Loader message="Fetching AI Anomaly & Threat Detection Alerts..." />
-          ) : (
-            <div className="max-w-4xl mx-auto">
-              <AIAlertsList alerts={dashboardData?.ai_alerts || []} />
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 };
