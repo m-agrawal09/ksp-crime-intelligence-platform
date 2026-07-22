@@ -50,7 +50,7 @@ const menuItems = [
 
 function Sidebar() {
   return (
-    <aside className="flex h-[calc(100vh-80px)] w-[280px] flex-col border-r border-slate-800 bg-[#070d1a] font-inter">
+    <aside className="hidden lg:flex h-[calc(100vh-80px)] w-[280px] flex-col border-r border-slate-800 bg-[#070d1a] font-inter flex-shrink-0">
 
       {/* Navigation - group elements with tighter vertical spacing */}
       <nav className="flex-grow px-3 py-6 space-y-1 overflow-y-auto">
