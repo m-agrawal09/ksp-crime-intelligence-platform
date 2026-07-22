@@ -1152,12 +1152,13 @@ export const recordService = {
    * Fetch remote Catalyst Datastore records asynchronously
    */
   fetchRemoteRecords: async () => {
+    const currentLocal = loadStorage();
     try {
       const res = await fetch(API_BASE);
       if (res.ok) {
         const json = await res.json();
         if (json.success && Array.isArray(json.data)) {
-          const merged = deduplicateRecords([...json.data, ...INITIAL_FIR_RECORDS]);
+          const merged = deduplicateRecords([...currentLocal, ...json.data, ...INITIAL_FIR_RECORDS]);
           saveStorage(merged);
           return merged;
         }
@@ -1165,7 +1166,7 @@ export const recordService = {
     } catch (err) {
       console.warn("Backend Catalyst Gateway API offline. Using active local datastore cache.");
     }
-    return loadStorage();
+    return currentLocal;
   },
 
   getRecordById: (id) => {
