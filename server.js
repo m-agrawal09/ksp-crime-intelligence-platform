@@ -2,31 +2,9 @@ const http = require("http");
 const url = require("url");
 const path = require("path");
 const fs = require("fs");
+const os = require("os");
 
-// Register mock zcatalyst-sdk-node in the module cache
-// const mockCatalyst = {
-//     initialize: () => ({
-//         datastore: () => ({
-//             table: () => ({
-//                 getAllRows: async () => {
-//                     throw new Error("Local mock datastore enabled");
-//                 }
-//             })
-//         })
-//     })
-// };
-
-// // Intercept require calls to zcatalyst-sdk-node
-// const Module = require('module');
-// const originalRequire = Module.prototype.require;
-// Module.prototype.require = function(id) {
-//     if (id === 'zcatalyst-sdk-node') {
-//         return mockCatalyst;
-//     }
-//     return originalRequire.apply(this, arguments);
-// };
-
-// Set environment variables
+// Chatbot QuickML environment variables
 process.env.QUICKML_ENDPOINT = process.env.QUICKML_ENDPOINT || "https://api.catalyst.zoho.in/quickml/v1/project/56116000000017001/glm/chat";
 process.env.QUICKML_ACCESS_TOKEN = process.env.QUICKML_ACCESS_TOKEN || "1000.0e26964d6e4af7a82438935cde1f3d98.77d250c9050d46c136223b403c654026";
 process.env.CATALYST_ORG_ID = process.env.CATALYST_ORG_ID || "60077759815";
@@ -121,6 +99,29 @@ const server = http.createServer(async (req, res) => {
             res.writeHead(500, { "Content-Type": "application/json" });
             res.end(JSON.stringify({ success: false, error: err.message }));
         }
+    } else if (pathname === "/api/officers" && req.method === "GET") {
+        try {
+            const officers = await repo.getAllOfficerRecords();
+            res.writeHead(200, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ success: true, data: officers }));
+        } catch (err) {
+            res.writeHead(500, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ success: false, error: err.message }));
+        }
+    } else if (pathname === "/api/officers" && req.method === "POST") {
+        let body = "";
+        req.on("data", chunk => { body += chunk; });
+        req.on("end", async () => {
+            try {
+                const officerData = JSON.parse(body || "{}");
+                const newOfficer = await repo.createOfficerRecord(officerData);
+                res.writeHead(201, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ success: true, data: newOfficer }));
+            } catch (err) {
+                res.writeHead(500, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ success: false, error: err.message }));
+            }
+        });
     } else if (pathname === "/api/chat" && req.method === "POST") {
         let body = "";
         req.on("data", chunk => {

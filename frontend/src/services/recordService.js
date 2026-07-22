@@ -9,182 +9,25 @@
  * • Dynamic Analytics Engine calculating Dashboard KPIs, Crime Map pins, and Officer Performance workloads.
  */
 
-const STORAGE_KEY = "ksp_cctns_fir_records_v5";
-const API_BASE = "http://localhost:3000/api/records";
+const STORAGE_KEY = "ksp_cctns_fir_records_v9_online_only";
+const API_BASE = "/api/records";
 
-const INITIAL_FIR_RECORDS = [
-  {
-    id: "fir-1001",
-    crimeNo: "104434108202600244",
-    caseNo: "202600244",
-    regDate: "2026-07-17",
-    incidentFromDate: "2026-07-17T04:30",
-    incidentToDate: "2026-07-17T05:15",
-    district: "Bengaluru City",
-    unit: "Koramangala Police Station",
-    crimeHead: "Property Offences",
-    crimeSubHead: "Dacoity",
-    actSections: "IPC Sec 395 / BNS Sec 310",
-    cognizableType: "Cognizable",
-    severity: "CRITICAL",
-    status: "Under Investigation",
-    complainantName: "Siddharth Malhotra",
-    complainantPhone: "+91 98450 12345",
-    complainantAddress: "No. 42, 8th Main, Koramangala 4th Block, Bengaluru",
-    complainantIdType: "Aadhaar",
-    complainantIdNo: "XXXX-XXXX-8812",
-    locationStreet: "100 Feet Road Commercial Warehouse",
-    landmark: "Opposite Sony World Signal",
-    lat: 12.9352,
-    lng: 77.6245,
-    allottedOfficerName: "Ramesh Gowda",
-    allottedOfficerRank: "PSI",
-    allottedOfficerKgid: "KSP-8821",
-    accusedName: "Kiran Kumar (alias 'Appu')",
-    accusedStatus: "Absconding",
-    briefFacts: "Group of five masked individuals broke into commercial electronics warehouse at 04:30 AM, threatened night security guard with sharp weapons, and looted server hardware valued at 14.5 Lakhs.",
-    propertyDescription: "Server hardware racks, GPU acceleration units",
-    estimatedValue: 1450000,
-    resolutionNotes: "",
-    officialReportImage: "https://images.unsplash.com/photo-1568667256549-094345857637?q=80&w=800&auto=format&fit=crop"
-  },
-  {
-    id: "fir-1002",
-    crimeNo: "104434120202600184",
-    caseNo: "202600184",
-    regDate: "2026-07-17",
-    incidentFromDate: "2026-07-16T14:00",
-    incidentToDate: "2026-07-16T14:30",
-    district: "Bengaluru City",
-    unit: "Whitefield Police Station",
-    crimeHead: "Cyber Crimes",
-    crimeSubHead: "Financial Cyber Fraud",
-    actSections: "IT Act Sec 66D / IPC Sec 420",
-    cognizableType: "Cognizable",
-    severity: "HIGH",
-    status: "Suspect Apprehended",
-    complainantName: "Ananya Deshmukh",
-    complainantPhone: "+91 99001 54321",
-    complainantAddress: "Flat 402, Prestige Shantiniketan, Whitefield, Bengaluru",
-    complainantIdType: "PAN Card",
-    complainantIdNo: "ABCDE1234F",
-    locationStreet: "ITPB Main Road, Whitefield",
-    landmark: "Near Forum Value Mall",
-    lat: 12.9698,
-    lng: 77.7499,
-    allottedOfficerName: "ACP Rajeshwari N.",
-    allottedOfficerRank: "ACP",
-    allottedOfficerKgid: "KSP-2015-ACP88",
-    accusedName: "Vijay Shankar",
-    accusedStatus: "Judicial Custody",
-    briefFacts: "Victim received fraudulent SMS claiming electricity connection termination. On opening malicious link, APK remote control access was installed, siphoning 4.2 Lakhs via unauthorized UPI transfers.",
-    propertyDescription: "Funds siphoned via bank accounts (INR 4.2 Lakhs)",
-    estimatedValue: 420000,
-    resolutionNotes: "Primary suspect apprehended; bank account frozen."
-  },
-  {
-    id: "fir-1003",
-    crimeNo: "104434125202600092",
-    caseNo: "202600092",
-    regDate: "2026-07-16",
-    incidentFromDate: "2026-07-15T22:15",
-    incidentToDate: "2026-07-15T23:00",
-    district: "Bengaluru City",
-    unit: "HAL Police Station",
-    crimeHead: "Offences Against Body",
-    crimeSubHead: "Homicide",
-    actSections: "IPC Sec 302 / BNS Sec 103",
-    cognizableType: "Cognizable",
-    severity: "CRITICAL",
-    status: "Case Closed / Completed",
-    complainantName: "Head Constable N. Swamy",
-    complainantPhone: "+91 94480 99887",
-    complainantAddress: "HAL Station Lines, Bengaluru",
-    complainantIdType: "Department ID",
-    complainantIdNo: "HC-7741",
-    locationStreet: "HAL 3rd Stage Main Road",
-    landmark: "Behind Old Airport Road Junction",
-    lat: 12.9567,
-    lng: 77.6541,
-    allottedOfficerName: "Insp. Ravi Kumar",
-    allottedOfficerRank: "Inspector",
-    allottedOfficerKgid: "KSP-2010-IN74",
-    accusedName: "Ravi Naik",
-    accusedStatus: "Judicial Custody",
-    briefFacts: "Fatal physical altercation outside commercial eatery resulting from old rivalry. Weapon recovered from spot and logged into evidence bin.",
-    propertyDescription: "Machete weapon seized",
-    estimatedValue: 0,
-    resolutionNotes: "Chargesheet IIF-5 filed in Magistrate Court."
-  },
-  {
-    id: "fir-1004",
-    crimeNo: "104435100202600045",
-    caseNo: "202600045",
-    regDate: "2026-07-14",
-    incidentFromDate: "2026-07-14T11:00",
-    incidentToDate: "2026-07-14T12:00",
-    district: "Mangaluru City",
-    unit: "Pandeshwar Police Station",
-    crimeHead: "Narcotics",
-    crimeSubHead: "NDPS Trafficking",
-    actSections: "NDPS Act Sec 20(b)(ii)",
-    cognizableType: "Cognizable",
-    severity: "HIGH",
-    status: "Under Investigation",
-    complainantName: "Inspector K. Vittal",
-    complainantPhone: "+91 94808 02211",
-    complainantAddress: "Pandeshwar PS, Mangaluru",
-    complainantIdType: "Department ID",
-    complainantIdNo: "KSP-IN-9081",
-    locationStreet: "Old Port Cargo Terminal",
-    landmark: "Near Fish Market Gate",
-    lat: 12.8642,
-    lng: 74.8398,
-    allottedOfficerName: "Insp. Ravi Kumar",
-    allottedOfficerRank: "Police Inspector",
-    allottedOfficerKgid: "KSP-2010-IN74",
-    accusedName: "Babu Shetty (alias 'Port Babu')",
-    accusedStatus: "Detained",
-    briefFacts: "Customs joint raid intercepted commercial vehicle carrying 12.5 kg contraband concealed in fish container shipments.",
-    propertyDescription: "12.5 kg contraband substance",
-    estimatedValue: 620000,
-    resolutionNotes: ""
-  },
-  {
-    id: "fir-1005",
-    crimeNo: "104436110202600088",
-    caseNo: "202600088",
-    regDate: "2026-07-12",
-    incidentFromDate: "2026-07-11T18:00",
-    incidentToDate: "2026-07-11T19:00",
-    district: "Belagavi District",
-    unit: "Belagavi Police Station",
-    crimeHead: "Financial Fraud",
-    crimeSubHead: "Corporate Embezzlement",
-    actSections: "IPC Sec 409 / 468",
-    cognizableType: "Cognizable",
-    severity: "CRITICAL",
-    status: "Under Investigation",
-    complainantName: "Auditor V. K. Rao",
-    complainantPhone: "+91 98860 77112",
-    complainantAddress: "Belagavi Main Market",
-    complainantIdType: "Aadhaar",
-    complainantIdNo: "XXXX-XXXX-9900",
-    locationStreet: "Belagavi Commerce Zone",
-    landmark: "Near District Court Gate",
-    lat: 15.8497,
-    lng: 74.4977,
-    allottedOfficerName: "DySP Sharanappa K.",
-    allottedOfficerRank: "Deputy Superintendent",
-    allottedOfficerKgid: "KSP-2008-DSP11",
-    accusedName: "Mahesh Patil",
-    accusedStatus: "Absconding",
-    briefFacts: "Cooperative society investment fraud where funds exceeding 85 Lakhs were siphoned into shell entity bank accounts.",
-    propertyDescription: "Forged ledgers and bank accounts",
-    estimatedValue: 8500000,
-    resolutionNotes: ""
+const INITIAL_FIR_RECORDS = [];
+
+// Helper function to deduplicate records strictly by crimeNo, CaseMasterID, or id
+const deduplicateRecords = (list) => {
+  if (!Array.isArray(list)) return [];
+  const seen = new Set();
+  const unique = [];
+  for (const item of list) {
+    const key = String(item.crimeNo || item.CrimeNo || item.CaseMasterID || item.id || item.ROWID);
+    if (key && !seen.has(key)) {
+      seen.add(key);
+      unique.push(item);
+    }
   }
-];
+  return unique;
+};
 
 // Observer Subscriptions List
 const listeners = new Set();
@@ -203,18 +46,19 @@ const loadStorage = () => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(INITIAL_FIR_RECORDS));
-      return INITIAL_FIR_RECORDS;
+      return [];
     }
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    return deduplicateRecords(parsed);
   } catch (err) {
-    return INITIAL_FIR_RECORDS;
+    return [];
   }
 };
 
 const saveStorage = (records) => {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+    const cleanRecords = deduplicateRecords(records);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(cleanRecords));
   } catch (err) {
     console.error("Failed saving FIR storage:", err);
   }
@@ -290,7 +134,7 @@ export const recordService = {
       const res = await fetch(API_BASE);
       if (res.ok) {
         const json = await res.json();
-        if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+        if (json.success && Array.isArray(json.data)) {
           saveStorage(json.data);
           return json.data;
         }
@@ -306,156 +150,71 @@ export const recordService = {
     return list.find((r) => String(r.id) === String(id)) || null;
   },
 
-  createRecord: (firData) => {
-    const list = loadStorage();
+  createRecord: async (firData) => {
     const caseMasterId = Date.now();
     const serialStr = String(caseMasterId).slice(-5);
     const newCrimeNo = firData.crimeNo || `1044300062026${serialStr}`;
     const newCaseNo = firData.caseNo || `2026${serialStr}`;
     const regDateStr = firData.regDate || new Date().toISOString().split("T")[0];
 
-    const newRecord = {
-      // Official ER Diagram Table Attributes
-      CaseMasterID: caseMasterId,
-      CrimeNo: newCrimeNo,
-      CaseNo: newCaseNo,
-      CrimeRegisteredDate: regDateStr,
-      PolicePersonID: 201,
-      PoliceStationID: 301,
-      CaseCategoryID: 1,
-      GravityOffenceID: firData.severity === "CRITICAL" ? 1 : 2,
-      CrimeMajorHeadID: 1,
-      CrimeMinorHeadID: 101,
-      CaseStatusID: 1,
-      CourtID: 501,
-      IncidentFromDate: firData.incidentFromDate || `${regDateStr}T10:00:00`,
-      IncidentToDate: firData.incidentToDate || `${regDateStr}T11:00:00`,
-      InfoReceivedPSDate: `${regDateStr}T11:30:00`,
-      latitude: Number(firData.lat) || 12.9716,
-      longitude: Number(firData.lng) || 77.5946,
-      BriefFacts: firData.briefFacts || "Incident details logged into CCTNS.",
-
-      // Relational Child Objects
-      ComplainantDetails: {
-        ComplainantID: caseMasterId + 1000,
-        CaseMasterID: caseMasterId,
-        ComplainantName: firData.complainantName || "Complainant",
-        AgeYear: 35,
-        OccupationID: 1,
-        ReligionID: 1,
-        CasteID: 1,
-        GenderID: 1
-      },
-
-      ActSectionAssociation: [
-        {
-          CaseMasterID: caseMasterId,
-          ActID: "IPC",
-          SectionID: firData.actSections || "IPC Sec 379",
-          ActOrderID: 1,
-          SectionOrderID: 1
-        }
-      ],
-
-      Victim: [
-        {
-          VictimMasterID: caseMasterId + 2000,
-          CaseMasterID: caseMasterId,
-          VictimName: "Victim Person",
-          AgeYear: 30,
-          GenderID: 1,
-          VictimPolice: "0"
-        }
-      ],
-
-      Accused: [
-        {
-          AccusedMasterID: caseMasterId + 3000,
-          CaseMasterID: caseMasterId,
-          AccusedName: firData.accusedName || "Unidentified Suspect",
-          AgeYear: 28,
-          GenderID: 1,
-          PersonID: "A1"
-        }
-      ],
-
-      ArrestSurrender: [
-        {
-          ArrestSurrenderID: caseMasterId + 4000,
-          CaseMasterID: caseMasterId,
-          ArrestSurrenderTypeID: 1,
-          ArrestSurrenderDate: regDateStr,
-          IOID: 201,
-          IsAccused: 1
-        }
-      ],
-
-      ChargesheetDetails: {
-        CSID: caseMasterId + 5000,
-        CaseMasterID: caseMasterId,
-        csdate: regDateStr,
-        cstype: "U",
-        PolicePersonID: 201
-      },
-
-      // UI Display Helper Attributes
-      id: `fir-${caseMasterId}`,
-      ROWID: caseMasterId,
+    const payload = {
       crimeNo: newCrimeNo,
       caseNo: newCaseNo,
       regDate: regDateStr,
-      incidentFromDate: firData.incidentFromDate || `${regDateStr}T10:00`,
-      incidentToDate: firData.incidentToDate || "",
       district: firData.district || "Bengaluru City",
-      District: firData.district || "Bengaluru City",
       unit: firData.unit || "Koramangala Police Station",
-      PoliceStation: firData.unit || "Koramangala Police Station",
-      crimeHead: firData.crimeHead || "Property Offences",
-      CrimeCategory: firData.crimeHead || "Property Offences",
-      crimeSubHead: firData.crimeSubHead || "Theft",
-      actSections: firData.actSections || "IPC Sec 379 / BNS Sec 303",
-      ActSections: firData.actSections || "IPC Sec 379 / BNS Sec 303",
-      cognizableType: firData.cognizableType || "Cognizable",
-      severity: firData.severity || "MEDIUM",
-      Severity: firData.severity || "MEDIUM",
-      status: firData.status || "Under Investigation",
-      Status: firData.status || "Under Investigation",
-      complainantName: firData.complainantName || "Complainant",
-      ComplainantName: firData.complainantName || "Complainant",
-      complainantPhone: firData.complainantPhone || "",
-      complainantAddress: firData.complainantAddress || "",
-      complainantIdType: firData.complainantIdType || "Aadhaar",
-      complainantIdNo: firData.complainantIdNo || "",
-      locationStreet: firData.locationStreet || "",
-      landmark: firData.landmark || "",
+      complainantName: firData.complainantName || "Citizen Complainant",
+      accusedName: firData.accusedName || "Unidentified Suspect",
+      briefFacts: firData.briefFacts || "Incident details logged into CCTNS.",
+      incidentFromDate: firData.incidentFromDate || `${regDateStr} 10:00:00`,
+      incidentToDate: firData.incidentToDate || `${regDateStr} 11:30:00`,
       lat: Number(firData.lat) || 12.9716,
       lng: Number(firData.lng) || 77.5946,
-      allottedOfficerName: firData.allottedOfficerName || "Ramesh Gowda",
-      OfficerName: firData.allottedOfficerName || "Ramesh Gowda",
-      allottedOfficerRank: firData.allottedOfficerRank || "PSI",
-      allottedOfficerKgid: firData.allottedOfficerKgid || "KSP-8821",
-      accusedName: firData.accusedName || "Unidentified Suspect",
-      AccusedName: firData.accusedName || "Unidentified Suspect",
-      accusedStatus: firData.accusedStatus || "Unidentified",
-      briefFacts: firData.briefFacts || "Incident details logged.",
-      Description: firData.briefFacts || "Incident details logged.",
-      propertyDescription: firData.propertyDescription || "None",
-      estimatedValue: Number(firData.estimatedValue) || 0,
-      resolutionNotes: firData.resolutionNotes || "",
-      officialReportImage: firData.officialReportImage || "https://images.unsplash.com/photo-1568667256549-094345857637?q=80&w=800&auto=format&fit=crop"
+      severity: firData.severity || "MEDIUM",
+      status: firData.status || "Under Investigation",
+      actSections: firData.actSections || "IPC Sec 395",
+      crimeHead: firData.crimeHead || "Property Offences",
+      crimeSubHead: firData.crimeSubHead || "Theft"
     };
 
-    const updated = [newRecord, ...list];
+    let createdRecord = null;
+
+    try {
+      console.log("[recordService] Sending FIR form submission to backend Catalyst API...");
+      const res = await fetch(API_BASE, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && json.data) {
+          createdRecord = json.data;
+          console.log("[recordService] FIR registered online in Zoho Catalyst Data Store! ROWID:", json.data.ROWID);
+        }
+      }
+    } catch (e) {
+      console.warn("[recordService] Backend API POST exception:", e.message);
+    }
+
+    if (!createdRecord) {
+      createdRecord = {
+        ...payload,
+        id: `fir-${caseMasterId}`,
+        ROWID: caseMasterId,
+        CaseMasterID: caseMasterId,
+        allottedOfficerName: firData.allottedOfficerName || "Ramesh Gowda",
+        allottedOfficerRank: firData.allottedOfficerRank || "PSI",
+        allottedOfficerKgid: firData.allottedOfficerKgid || "KSP-8821",
+        estimatedValue: Number(firData.estimatedValue) || 0,
+        officialReportImage: "https://images.unsplash.com/photo-1568667256549-094345857637?q=80&w=800&auto=format&fit=crop"
+      };
+    }
+
+    const list = loadStorage();
+    const updated = [createdRecord, ...list];
     saveStorage(updated);
-
-    // Sync to Catalyst API backend asynchronously
-    fetch(API_BASE, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newRecord)
-    }).catch(() => {});
-
-    return newRecord;
+    return createdRecord;
   },
 
   updateRecord: (id, updatedData) => {

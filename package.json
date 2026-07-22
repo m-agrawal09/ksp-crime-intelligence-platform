@@ -6,6 +6,8 @@
     "dev:frontend": "npm --prefix frontend run dev"
   },
   "dependencies": {
+    "axios": "^1.18.1",
+    "uuid": "^14.0.1",
     "zcatalyst-sdk-node": "^3.4.0"
   }
 }

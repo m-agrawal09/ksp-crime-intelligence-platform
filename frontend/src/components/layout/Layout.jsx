@@ -1,11 +1,22 @@
+import { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import FloatingChatWidget from "../assistant/FloatingChatWidget";
+import { recordService } from "../../services/recordService";
 
 function Layout() {
   const location = useLocation();
   const isDashboard = location.pathname === "/";
+
+  // Fetch remote records from backend on app startup so all pages have data
+  useEffect(() => {
+    recordService.fetchRemoteRecords().then((records) => {
+      console.log(`[Layout] Fetched ${records?.length || 0} records from backend into localStorage.`);
+    }).catch((err) => {
+      console.warn("[Layout] fetchRemoteRecords failed:", err);
+    });
+  }, []);
 
   return (
     <div className="min-h-screen bg-[var(--color-background)] text-[var(--color-text)]">

@@ -101,11 +101,11 @@ const ManageRecords = () => {
     setIsDetailOpen(true);
   };
 
-  const handleSaveRecord = (formData) => {
+  const handleSaveRecord = async (formData) => {
     if (selectedRecord && selectedRecord.id) {
-      recordService.updateRecord(selectedRecord.id, formData);
+      await recordService.updateRecord(selectedRecord.id, formData);
     } else {
-      recordService.createRecord(formData);
+      await recordService.createRecord(formData);
     }
     setIsFormOpen(false);
     setSelectedRecord(null);

@@ -1,0 +1,7 @@
+{
+  "name": "insights",
+  "type": "AdvancedIO",
+  "stack": "node18",
+  "source": ".",
+  "path": "."
+}

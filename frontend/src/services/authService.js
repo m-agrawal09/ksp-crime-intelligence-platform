@@ -5,9 +5,9 @@
  * Backed by localStorage for session persistence across browser refreshes.
  */
 
-const USERS_STORAGE_KEY = "ksp_auth_users_v2";
-const SESSION_STORAGE_KEY = "ksp_auth_session_v2";
-const PIN_STORAGE_KEY = "ksp_security_pin_v2";
+const USERS_STORAGE_KEY = "ksp_auth_users_v3_online_only";
+const SESSION_STORAGE_KEY = "ksp_auth_session_v3";
+const PIN_STORAGE_KEY = "ksp_security_pin_v3";
 
 const DEFAULT_SECURITY_PIN = "1122";
 
@@ -22,50 +22,6 @@ const INITIAL_USERS = [
     kgid: "KSP-ADMIN-01",
     badge: "KSP-ADMIN-01",
     unit: "KSP Intelligence HQ"
-  },
-  {
-    id: "u-ramesh",
-    username: "ksp.ramesh",
-    password: "Officer@123",
-    name: "Ramesh Gowda",
-    role: "OFFICER",
-    rank: "PSI",
-    kgid: "KSP-8821",
-    badge: "KSP-8821",
-    unit: "Koramangala Police Station"
-  },
-  {
-    id: "u-rajeshwari",
-    username: "ksp.rajeshwari",
-    password: "Officer@123",
-    name: "ACP Rajeshwari N.",
-    role: "OFFICER",
-    rank: "Assistant Commissioner",
-    kgid: "KSP-2015-ACP88",
-    badge: "KSP-2015-ACP88",
-    unit: "Cyber Crime Division"
-  },
-  {
-    id: "u-ravikumar",
-    username: "ksp.ravikumar",
-    password: "Officer@123",
-    name: "Insp. Ravi Kumar",
-    role: "OFFICER",
-    rank: "Police Inspector",
-    kgid: "KSP-2010-IN74",
-    badge: "KSP-2010-IN74",
-    unit: "Narcotics Control Bureau"
-  },
-  {
-    id: "u-sharanappa",
-    username: "ksp.sharanappa",
-    password: "Officer@123",
-    name: "DySP Sharanappa K.",
-    role: "OFFICER",
-    rank: "Deputy Superintendent",
-    kgid: "KSP-2008-DSP11",
-    badge: "KSP-2008-DSP11",
-    unit: "Financial Crime & Fraud Unit"
   }
 ];
 
@@ -140,6 +96,44 @@ const savePin = (pin) => {
 };
 
 export const authService = {
+  syncOnlineOfficers: async () => {
+    try {
+      const res = await fetch('/api/officers');
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && Array.isArray(json.data)) {
+          const currentUsers = loadUsers();
+          const adminUsers = currentUsers.filter(u => u.role === "ADMIN");
+
+          const onlineOfficers = json.data.map(emp => {
+            const cleanName = emp.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+            const badge = emp.badgeNumber || `KSP-${emp.ROWID}`;
+            const existing = currentUsers.find(u => u.id === `u-${emp.ROWID}` || u.badge === badge || u.name.toLowerCase() === emp.name.toLowerCase());
+            return {
+              id: `u-${emp.ROWID}`,
+              username: existing?.username || `ksp.${cleanName}`,
+              password: existing?.password || "Officer@123",
+              name: emp.name,
+              role: "OFFICER",
+              rank: emp.rank || "Police Inspector",
+              kgid: badge,
+              badge: badge,
+              unit: emp.unit || "State Range",
+              avatar: existing?.avatar || "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=250&auto=format&fit=crop"
+            };
+          });
+
+          const synced = [...adminUsers, ...onlineOfficers];
+          saveUsers(synced);
+          return synced;
+        }
+      }
+    } catch (err) {
+      console.warn("[authService] Online officer sync failed:", err.message);
+    }
+    return loadUsers();
+  },
+
   getCurrentUser: () => {
     return loadSession();
   },

@@ -13,76 +13,39 @@ const axios = require("axios");
 class QuickMLService {
 
     constructor() {
-
         this.url = process.env.QUICKML_ENDPOINT;
-
         this.orgId = process.env.CATALYST_ORG_ID;
-
         this.token = process.env.QUICKML_ACCESS_TOKEN;
-
     }
 
     async generate(prompt) {
-
         try {
-
-            const response = await axios.post(
-
-                this.url,
-
-                {
-
-                    messages: [
-
-                        {
-                            role: "system",
-
-                            content:
-                                "You are the Karnataka Police AI Intelligence Assistant."
-                        },
-
-                        {
-                            role: "user",
-
-                            content: prompt
+            if (this.url && this.token) {
+                const response = await axios.post(
+                    this.url,
+                    {
+                        messages: [
+                            { role: "system", content: "You are the Karnataka Police AI Intelligence Assistant." },
+                            { role: "user", content: prompt }
+                        ],
+                        temperature: 0.2,
+                        max_tokens: 600,
+                        stream: false
+                    },
+                    {
+                        headers: {
+                            Authorization: `Zoho-oauthtoken ${this.token}`,
+                            "CATALYST-ORG": this.orgId,
+                            "Content-Type": "application/json"
                         }
-
-                    ],
-
-                    temperature: 0.2,
-
-                    max_tokens: 600,
-
-                    stream: false
-
-                },
-
-                {
-
-                    headers: {
-
-                        Authorization:
-                            `Zoho-oauthtoken ${this.token}`,
-
-                        "CATALYST-ORG":
-                            this.orgId,
-
-                        "Content-Type":
-                            "application/json"
-
                     }
-
-                }
-
-            );
-
-            return response.data;
-
+                );
+                return response.data;
+            }
+            throw new Error("Local offline mode active.");
         }
-
         catch (err) {
-
-            console.warn("QuickML request failed. Using offline fallback response.");
+            console.log("[QuickMLService] Operating in local offline AI intelligence mode.");
             
             let content = "The requested information is not available in the current dataset.";
             let q = prompt.toLowerCase();

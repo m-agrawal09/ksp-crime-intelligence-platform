@@ -48,41 +48,41 @@ const Officers = () => {
     return list;
   };
 
-  // Load officer options on mount & restrict based on role
+  // Load officer options on mount from online database & restrict based on role
   useEffect(() => {
-    const list = reloadOfficerList();
-    if (list.length > 0) {
-      if (!isAdmin && currentUser) {
-        // Officer Mode: Find current officer's own badge number
-        const match = list.find(
-          (o) =>
-            o.badgeNumber === currentUser.badge ||
-            o.badgeNumber === currentUser.kgid ||
-            o.name.toLowerCase().includes(currentUser.name.toLowerCase())
-        );
-
-        if (match) {
-          setSelectedBadge(match.badgeNumber);
-        } else {
-          // If custom officer created without preset profile, auto-initialize
-          const newProf = officerService.addOfficer({
-            name: currentUser.name,
-            rank: currentUser.rank || "Police Inspector",
-            badgeNumber: currentUser.badge || currentUser.kgid,
-            unit: currentUser.unit || "State Range",
-            station: "Karnataka Police Command",
-            yearsOfService: "5",
-            specialArea: "Field Operations & Cyber Intelligence",
-            avatar: currentUser.avatar
-          });
-          reloadOfficerList();
-          setSelectedBadge(newProf.badgeNumber);
+    const init = async () => {
+      await officerService.fetchRemoteOfficers();
+      const list = reloadOfficerList();
+      if (list.length > 0) {
+        if (!isAdmin && currentUser) {
+          const match = list.find(
+            (o) =>
+              o.badgeNumber === currentUser.badge ||
+              o.badgeNumber === currentUser.kgid ||
+              o.name.toLowerCase().includes(currentUser.name.toLowerCase())
+          );
+          if (match) {
+            setSelectedBadge(match.badgeNumber);
+          } else {
+            const newProf = await officerService.addOfficer({
+              name: currentUser.name,
+              rank: currentUser.rank || "Police Inspector",
+              badgeNumber: currentUser.badge || currentUser.kgid,
+              unit: currentUser.unit || "State Range",
+              station: "Karnataka Police Command",
+              yearsOfService: "5",
+              specialArea: "Field Operations & Cyber Intelligence",
+              avatar: currentUser.avatar
+            });
+            reloadOfficerList();
+            setSelectedBadge(newProf.badgeNumber);
+          }
+        } else if (!selectedBadge) {
+          setSelectedBadge(list[0].badgeNumber);
         }
-      } else if (!selectedBadge) {
-        // Admin Mode: Default to first officer if not selected
-        setSelectedBadge(list[0].badgeNumber);
       }
-    }
+    };
+    init();
   }, [isAdmin, currentUser]);
 
   // Sync profile when selected officer changes
@@ -93,9 +93,9 @@ const Officers = () => {
     }
   }, [selectedBadge]);
 
-  const handleAddOfficer = (formData) => {
-    // 1. Create officer profile in database
-    const newProfile = officerService.addOfficer(formData);
+  const handleAddOfficer = async (formData) => {
+    // 1. Create officer profile in database (await online Catalyst API POST)
+    const newProfile = await officerService.addOfficer(formData);
 
     // 2. Register officer user account in auth service
     registerOfficer({

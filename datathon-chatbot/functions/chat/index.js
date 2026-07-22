@@ -9,32 +9,26 @@ const QuickMLService = require("./quickml");
 const { parseResponse } = require("./parser");
 
 module.exports = async (req, res) => {
-
     try {
+        let app = null;
+        try {
+            app = catalyst.initialize(req);
+        } catch (catErr) {
+            app = null;
+        }
 
-
-        const app = catalyst.initialize(req);
-
-        const message = req.body?.message?.trim();
+        const message = (req.body?.message || req.body?.question || "").trim();
 
         const {
-
             getAnalytics,
-
             setAnalytics
-
-            } = require("./cache");
+        } = require("./cache");
 
         if (!message) {
-
             return res.status(400).send({
-
                 success: false,
-
                 error: "Message is required."
-
             });
-
         }
 
         /**

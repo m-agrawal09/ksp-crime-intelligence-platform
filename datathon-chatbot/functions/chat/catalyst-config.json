@@ -1,0 +1,7 @@
+{
+  "name": "chat",
+  "type": "AdvancedIO",
+  "stack": "node18",
+  "source": ".",
+  "path": "."
+}

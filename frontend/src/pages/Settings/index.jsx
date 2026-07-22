@@ -82,10 +82,16 @@ const Settings = () => {
   const [officerPwdSuccess, setOfficerPwdSuccess] = useState("");
   const [officerPwdError, setOfficerPwdError] = useState("");
 
-  const usersList = authService.getUsers().filter((u) => u.role === "OFFICER");
+  const [usersList, setUsersList] = useState([]);
 
-  // Sync state with current user session
+  // Sync state with current user session and fetch online database officers
   useEffect(() => {
+    const sync = async () => {
+      await authService.syncOnlineOfficers();
+      setUsersList(authService.getUsers().filter((u) => u.role === "OFFICER"));
+    };
+    sync();
+
     if (currentUser) {
       setProfileForm({
         name: currentUser.name || "",
