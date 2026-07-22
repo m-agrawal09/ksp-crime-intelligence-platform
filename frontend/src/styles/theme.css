@@ -57,7 +57,7 @@ body {
   background: rgba(15, 23, 42, 0.92) !important;
   border: 1px solid rgba(51, 65, 85, 0.45) !important;
   color: #cbd5e1 !important;
-  font-family: 'IBM Plex Mono', monospace !important;
+  font-family: 'Space Grotesk', sans-serif !important;
   font-size: 9px !important;
   font-weight: 600 !important;
   letter-spacing: 0.06em !important;
@@ -277,7 +277,7 @@ body {
   background: rgba(2, 6, 23, 0.8) !important;
   border: 1px solid rgba(51, 65, 85, 0.25) !important;
   color: #e2e8f0 !important;
-  font-family: 'IBM Plex Mono', monospace !important;
+  font-family: 'Space Grotesk', sans-serif !important;
   font-size: 11px !important;
   border-radius: 6px !important;
   padding: 5px 8px !important;
@@ -301,7 +301,7 @@ body {
   border: 1px solid rgba(51, 65, 85, 0.25);
   border-radius: 8px;
   padding: 8px 10px;
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 9px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -347,7 +347,7 @@ body {
   width: 18px;
   height: 18px;
   border-radius: 4px;
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Space Grotesk', sans-serif;
   font-size: 8px;
   font-weight: 700;
   flex-shrink: 0;

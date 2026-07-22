@@ -37,11 +37,11 @@ const RecentCriticalCases = ({ cases }) => {
       <div className="flex items-center justify-between border-b border-slate-800/20 pb-5 mb-6">
         <div className="flex items-center gap-2.5">
           <FaClipboardList className="text-blue-400/80 text-base" />
-          <h2 className="text-[10px] font-bold text-white uppercase tracking-[0.18em]" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
+          <h2 className="text-[10px] font-bold text-white uppercase tracking-[0.18em] font-space">
             Critical CCTNS Case Feed
           </h2>
         </div>
-        <span className="rounded-[3px] bg-slate-900/60 border border-slate-800/20 px-2.5 py-1 text-[9px] text-slate-600 uppercase tracking-wider" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
+        <span className="rounded-[3px] bg-slate-900/60 border border-slate-800/20 px-2.5 py-1 text-[9px] text-slate-500 uppercase tracking-wider font-space">
           Source: CaseMaster
         </span>
       </div>
@@ -49,7 +49,7 @@ const RecentCriticalCases = ({ cases }) => {
       <div className="overflow-x-auto scrollbar-thin">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="border-b border-slate-800/20 text-[9px] text-slate-600 uppercase tracking-[0.14em]" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
+            <tr className="border-b border-slate-800/20 text-[9px] text-slate-500 uppercase tracking-[0.14em] font-space">
               <th className="py-4 px-6">Crime Number / CaseNo</th>
               <th className="py-4 px-6">Jurisdiction (Unit)</th>
               <th className="py-4 px-6">Sections & Acts</th>
@@ -58,7 +58,7 @@ const RecentCriticalCases = ({ cases }) => {
               <th className="py-4 px-6 text-center">Inspect</th>
             </tr>
           </thead>
-          <tbody className="text-xs" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
+          <tbody className="text-xs">
             {cases && cases.map((c) => {
               const isExpanded = expandedCaseId === c.CaseMasterID;
               
@@ -67,10 +67,10 @@ const RecentCriticalCases = ({ cases }) => {
                   {/* Standard Row */}
                   <tr className="intel-row group">
                     <td className="py-5 px-6">
-                      <div className="font-bold text-slate-300 group-hover:text-blue-400 transition-colors duration-150">
+                      <div className="font-bold text-slate-300 group-hover:text-blue-400 transition-colors duration-150 font-mono text-[11px] tracking-tight">
                         {c.CaseNo}
                       </div>
-                      <div className="text-[9px] text-slate-600 mt-1 select-all">
+                      <div className="text-[9px] text-slate-600 mt-1 select-all font-mono">
                         {c.CrimeNo}
                       </div>
                     </td>
@@ -110,10 +110,10 @@ const RecentCriticalCases = ({ cases }) => {
                   {isExpanded && (
                     <tr>
                       <td colSpan={6} className="bg-slate-950/70 px-8 py-6 border-l-2 border-l-blue-500/50">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 font-mono text-[11px] leading-relaxed text-slate-300">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-[11px] leading-relaxed text-slate-300">
                           {/* Case Briefing */}
                           <div className="md:col-span-2 space-y-2.5">
-                            <span className="text-[9px] font-bold text-blue-400/80 uppercase tracking-widest block">
+                            <span className="text-[9px] font-bold text-blue-400/80 uppercase tracking-widest block font-space">
                               Case Briefing (BriefFacts)
                             </span>
                             <p className="text-slate-400 bg-slate-900/40 p-3.5 rounded-[3px] border border-slate-800/20 leading-relaxed">

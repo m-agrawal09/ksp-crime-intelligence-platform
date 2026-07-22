@@ -41,8 +41,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 const TrendChart = ({ data, className = "" }) => {
   return (
     <ChartCard
-      title="Crime Incidents Trend"
-      subtitle="Monthly CCTNS CaseMaster registrations by major crime heads"
+      title="Monthly Crime Incidents Trend"
       className={`h-full flex flex-col ${className}`}
     >
       <div className="h-[430px] w-full flex-1 min-h-[300px]">

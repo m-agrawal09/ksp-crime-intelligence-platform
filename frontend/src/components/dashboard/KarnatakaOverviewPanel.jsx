@@ -84,8 +84,8 @@ const createClusterIcon = (districtName, count) => {
           border:1.25px solid ${borderColor};
           box-shadow:${innerShadow};
         ">
-          <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;color:${textColor};line-height:1;letter-spacing:-0.02em;">${count}</span>
-          <span style="font-family:'IBM Plex Mono',monospace;font-size:5px;text-transform:uppercase;color:${textColor};opacity:0.6;letter-spacing:0.08em;margin-top:1.5px;">${districtName.slice(0, 3)}</span>
+          <span style="font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700;color:${textColor};line-height:1;letter-spacing:-0.02em;">${count}</span>
+          <span style="font-family:'Space Grotesk',sans-serif;font-size:5px;text-transform:uppercase;color:${textColor};opacity:0.6;letter-spacing:0.08em;margin-top:1.5px;">${districtName.slice(0, 3)}</span>
         </div>
       </div>
     `,
@@ -349,7 +349,7 @@ const KarnatakaOverviewPanel = () => {
       Object.entries(clusters).forEach(([district, data]) => {
         L.marker([data.lat, data.lng], { icon: createClusterIcon(district, data.count) })
           .bindTooltip(
-            `<span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:0.05em;text-transform:uppercase;">${district}: ${data.count} FIRs</span>`,
+            `<span style="font-family:'Space Grotesk',sans-serif;font-size:9px;letter-spacing:0.05em;text-transform:uppercase;">${district}: ${data.count} FIRs</span>`,
             { direction: "top", offset: [0, -10], opacity: 1 }
           )
           .addTo(markersLayerRef.current);
@@ -359,7 +359,7 @@ const KarnatakaOverviewPanel = () => {
       incidents.forEach((inc) => {
         L.marker([inc.lat, inc.lng], { icon: createIncidentIcon(inc.severity) })
           .bindTooltip(
-            `<span style="font-family:'IBM Plex Mono',monospace;font-size:9px;text-transform:uppercase;">${inc.caseNo} · ${inc.severity}</span>`,
+            `<span style="font-family:'Space Grotesk',sans-serif;font-size:9px;text-transform:uppercase;">${inc.caseNo} · ${inc.severity}</span>`,
             { direction: "top", offset: [0, -6], opacity: 1 }
           )
           .addTo(markersLayerRef.current);
@@ -367,10 +367,10 @@ const KarnatakaOverviewPanel = () => {
     }
   }, [incidents, zoomLevel, boundariesLoaded]);
 
-  const IBMM = { fontFamily: "'IBM Plex Mono', monospace" };
+  const IBMM = { fontFamily: "'Space Grotesk', sans-serif" };
 
   return (
-    <div className="rounded-xl border border-slate-800/35 bg-slate-900/35 overflow-hidden animate-fade-in-up flex flex-col" style={{ boxShadow: "0 8px 24px rgba(0,0,0,0.3)" }}>
+    <div className="rounded-xl border border-blue-500/30 bg-slate-900/35 overflow-hidden animate-fade-in-up flex flex-col" style={{ boxShadow: "0 8px 24px rgba(0,0,0,0.3)" }}>
 
       {/* ── Header ── */}
       <div className="px-4 pt-4 pb-3 flex items-center justify-between border-b border-slate-800/15">

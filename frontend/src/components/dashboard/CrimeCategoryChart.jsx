@@ -36,7 +36,6 @@ const CrimeCategoryChart = ({ data, className = "" }) => {
   return (
     <ChartCard
       title="Crime Category Distribution"
-      subtitle="CCTNS CaseVolume by Crime Head"
       className={`h-full flex flex-col ${className}`}
     >
       <div className="flex flex-col gap-7 flex-1 justify-between">

@@ -101,16 +101,16 @@ const Dashboard = () => {
         {/* Title + Controls row */}
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div>
-            <h1 className="text-3xl font-extrabold text-white leading-none" style={{ fontFamily: "'IBM Plex Mono', monospace", letterSpacing: "-0.01em" }}>
+            <h1 className="text-3xl font-extrabold text-white leading-none font-space tracking-tight">
               Executive Intelligence Dashboard
             </h1>
-            <p className="text-[11px] text-slate-500 mt-2 tracking-wide" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
-              Karnataka State Police &bull; CCTNS Analytical Briefing &amp; Modus Operandi Console
+            <p className="text-[11px] text-slate-500 mt-2 tracking-wide font-space">
+              Karnataka State Police &bull; CCTNS Analytical Briefing
             </p>
           </div>
 
           {/* Controls */}
-          <div className="flex flex-wrap items-center gap-2.5 self-start lg:self-auto text-[10px] sm:text-[11px]" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
+          <div className="flex flex-wrap items-center gap-2.5 self-start lg:self-auto text-[10px] sm:text-[11px] font-space font-bold">
             {/* Live Indicator */}
             <div className="flex items-center gap-2 bg-[#060c18] border border-slate-800/25 rounded-[4px] px-3 py-2 shadow-sm">
               <span className="relative flex h-1.5 w-1.5">
@@ -153,7 +153,7 @@ const Dashboard = () => {
         </div>
 
         {/* Status strip */}
-        <div className="flex flex-wrap gap-x-6 gap-y-2 items-center text-[9px] sm:text-[10px] tracking-wider text-slate-600 uppercase" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
+        <div className="flex flex-wrap gap-x-6 gap-y-2 items-center text-[9px] sm:text-[10px] tracking-wider text-slate-500 uppercase font-space font-bold">
           <div className="flex items-center gap-1.5">
             <span className="text-slate-600">Gateway Link:</span>{" "}
             <span className="text-slate-400 font-bold">CCTNS CAS (CONNECTED)</span>
@@ -168,7 +168,7 @@ const Dashboard = () => {
             <span className="text-slate-600">AI Intelligence Core:</span>{" "}
             <span className="text-blue-400 font-bold">QuickML (ONLINE)</span>
           </div>
-          <div className="ml-auto text-[9px] text-slate-700">
+          <div className="ml-auto text-[9px] text-slate-700 font-mono">
             LAST SYNC HANDSHAKE: 2026-07-17 14:26:00 IST
           </div>
         </div>
