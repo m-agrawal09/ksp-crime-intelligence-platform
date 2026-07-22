@@ -4,6 +4,26 @@ const path = require("path");
 const fs = require("fs");
 const os = require("os");
 
+// Load .env variables automatically if file exists
+try {
+    const envPath = path.join(__dirname, ".env");
+    if (fs.existsSync(envPath)) {
+        const envConfig = fs.readFileSync(envPath, "utf-8");
+        envConfig.split("\n").forEach((line) => {
+            const trimmed = line.trim();
+            if (trimmed && !trimmed.startsWith("#") && trimmed.includes("=")) {
+                const [key, ...vals] = trimmed.split("=");
+                const val = vals.join("=").trim().replace(/^["']|["']$/g, '');
+                if (key && !process.env[key.trim()]) {
+                    process.env[key.trim()] = val;
+                }
+            }
+        });
+    }
+} catch (e) {
+    console.warn("Failed loading .env file:", e.message);
+}
+
 // Chatbot QuickML environment variables
 process.env.QUICKML_ENDPOINT = process.env.QUICKML_ENDPOINT || "https://api.catalyst.zoho.in/quickml/v1/project/56116000000017001/glm/chat";
 process.env.QUICKML_ACCESS_TOKEN = process.env.QUICKML_ACCESS_TOKEN || "1000.0e26964d6e4af7a82438935cde1f3d98.77d250c9050d46c136223b403c654026";
@@ -14,7 +34,51 @@ const chatHandler = require("./datathon-chatbot/functions/chat/index.js");
 const insightsHandler = require("./datathon-chatbot/functions/insights/index.js");
 const CrimeRepository = require("./datathon-chatbot/functions/chat/datastore.js");
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+
+const MIME_TYPES = {
+    ".html": "text/html",
+    ".js": "application/javascript",
+    ".css": "text/css",
+    ".json": "application/json",
+    ".png": "image/png",
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".gif": "image/gif",
+    ".svg": "image/svg+xml",
+    ".ico": "image/x-icon",
+    ".woff": "font/woff",
+    ".woff2": "font/woff2"
+};
+
+function serveStaticFile(req, res, pathname) {
+    const distPath = path.join(__dirname, "frontend/dist");
+    if (!fs.existsSync(distPath)) {
+        res.writeHead(404, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ success: false, error: "Frontend build not found. Run 'npm run build' first." }));
+        return;
+    }
+
+    let filePath = path.join(distPath, pathname);
+
+    if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
+        filePath = path.join(distPath, "index.html");
+    }
+
+    if (!fs.existsSync(filePath) && !path.extname(pathname)) {
+        filePath = path.join(distPath, "index.html");
+    }
+
+    if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+        const ext = path.extname(filePath).toLowerCase();
+        const contentType = MIME_TYPES[ext] || "application/octet-stream";
+        res.writeHead(200, { "Content-Type": contentType });
+        fs.createReadStream(filePath).pipe(res);
+    } else {
+        res.writeHead(404, { "Content-Type": "text/plain" });
+        res.end("404 Not Found");
+    }
+}
 
 const server = http.createServer(async (req, res) => {
     // Add CORS headers
@@ -62,30 +126,30 @@ const server = http.createServer(async (req, res) => {
         }
     } else if (pathname === "/api/records" && req.method === "POST") {
         let body = "";
-        req.on("data", chunk => { body += chunk; });
+        req.on("data", chunk => body += chunk.toString());
         req.on("end", async () => {
             try {
-                const recordData = JSON.parse(body || "{}");
+                const recordData = JSON.parse(body);
                 const newRecord = await repo.createCrimeRecord(recordData);
                 res.writeHead(201, { "Content-Type": "application/json" });
                 res.end(JSON.stringify({ success: true, data: newRecord }));
             } catch (err) {
-                res.writeHead(500, { "Content-Type": "application/json" });
+                res.writeHead(400, { "Content-Type": "application/json" });
                 res.end(JSON.stringify({ success: false, error: err.message }));
             }
         });
     } else if (pathname.startsWith("/api/records/") && req.method === "PUT") {
         const id = pathname.replace("/api/records/", "");
         let body = "";
-        req.on("data", chunk => { body += chunk; });
+        req.on("data", chunk => body += chunk.toString());
         req.on("end", async () => {
             try {
-                const recordData = JSON.parse(body || "{}");
-                const updated = await repo.updateCrimeRecord(id, recordData);
+                const updateData = JSON.parse(body);
+                const updated = await repo.updateCrimeRecord(id, updateData);
                 res.writeHead(200, { "Content-Type": "application/json" });
                 res.end(JSON.stringify({ success: true, data: updated }));
             } catch (err) {
-                res.writeHead(500, { "Content-Type": "application/json" });
+                res.writeHead(400, { "Content-Type": "application/json" });
                 res.end(JSON.stringify({ success: false, error: err.message }));
             }
         });
@@ -96,7 +160,7 @@ const server = http.createServer(async (req, res) => {
             res.writeHead(200, { "Content-Type": "application/json" });
             res.end(JSON.stringify({ success: true, data: result }));
         } catch (err) {
-            res.writeHead(500, { "Content-Type": "application/json" });
+            res.writeHead(400, { "Content-Type": "application/json" });
             res.end(JSON.stringify({ success: false, error: err.message }));
         }
     } else if (pathname === "/api/officers" && req.method === "GET") {
@@ -110,23 +174,21 @@ const server = http.createServer(async (req, res) => {
         }
     } else if (pathname === "/api/officers" && req.method === "POST") {
         let body = "";
-        req.on("data", chunk => { body += chunk; });
+        req.on("data", chunk => body += chunk.toString());
         req.on("end", async () => {
             try {
-                const officerData = JSON.parse(body || "{}");
+                const officerData = JSON.parse(body);
                 const newOfficer = await repo.createOfficerRecord(officerData);
                 res.writeHead(201, { "Content-Type": "application/json" });
                 res.end(JSON.stringify({ success: true, data: newOfficer }));
             } catch (err) {
-                res.writeHead(500, { "Content-Type": "application/json" });
+                res.writeHead(400, { "Content-Type": "application/json" });
                 res.end(JSON.stringify({ success: false, error: err.message }));
             }
         });
     } else if (pathname === "/api/chat" && req.method === "POST") {
         let body = "";
-        req.on("data", chunk => {
-            body += chunk;
-        });
+        req.on("data", chunk => body += chunk.toString());
         req.on("end", async () => {
             try {
                 const reqJson = body ? JSON.parse(body) : {};
@@ -158,8 +220,8 @@ const server = http.createServer(async (req, res) => {
             res.end(JSON.stringify({ success: false, error: "Internal server error: " + err.message }));
         }
     } else {
-        res.writeHead(404, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ success: false, error: "Not Found" }));
+        // Serve static frontend build assets and single-page application fallback
+        serveStaticFile(req, res, pathname);
     }
 });
 
