@@ -30,15 +30,16 @@ const CustomTooltip = ({ active, payload }) => {
   return null;
 };
 
-const CrimeCategoryChart = ({ data }) => {
+const CrimeCategoryChart = ({ data, className = "" }) => {
   if (!data) return null;
 
   return (
     <ChartCard
       title="Crime Category Distribution"
       subtitle="CCTNS CaseVolume by Crime Head"
+      className={`h-full flex flex-col ${className}`}
     >
-      <div className="flex flex-col gap-7">
+      <div className="flex flex-col gap-7 flex-1 justify-between">
         {/* Donut Chart Container — larger */}
         <div className="relative h-64 w-full flex items-center justify-center">
           <ResponsiveContainer width="100%" height="100%">

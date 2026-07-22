@@ -93,7 +93,7 @@ const Dashboard = () => {
   const { kpi_metrics, crime_trends, crime_distribution, ai_alerts, recent_critical_cases } = dashboardData;
 
   return (
-    <div className="space-y-10" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+    <div className="flex flex-col gap-6" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
 
       {/* ── 1. Executive Intelligence Header ── */}
       <div className="pb-7 border-b border-slate-900/40 flex flex-col gap-5 animate-fade-in-up">
@@ -178,15 +178,15 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 xl:grid-cols-[1fr_288px] gap-8 items-start">
 
         {/* LEFT: Primary intelligence content */}
-        <div className="space-y-8 min-w-0">
+        <div className="flex flex-col gap-8 min-w-0">
 
           {/* KPI Cards */}
-          <div className="animate-fade-in-up mb-2" style={{ animationDelay: '60ms' }}>
+          <div className="animate-fade-in-up" style={{ animationDelay: '60ms' }}>
             <StatGrid metrics={kpi_metrics} />
           </div>
 
           {/* Chart Row: Trend (2/3) + Category (1/3) */}
-          <div className="grid grid-cols-1 gap-7 lg:grid-cols-3 animate-fade-in-up mt-2" style={{ animationDelay: '120ms' }}>
+          <div className="grid grid-cols-1 gap-7 lg:grid-cols-3 animate-fade-in-up" style={{ animationDelay: '120ms' }}>
             <div className="lg:col-span-2">
               <TrendChart data={crime_trends} />
             </div>
@@ -202,7 +202,7 @@ const Dashboard = () => {
         </div>
 
         {/* RIGHT: Intelligence sidebar */}
-        <div className="space-y-6 xl:sticky xl:top-10 xl:self-start animate-fade-in-up" style={{ animationDelay: '80ms' }}>
+        <div className="flex flex-col gap-6 xl:sticky xl:top-10 xl:self-start animate-fade-in-up" style={{ animationDelay: '80ms' }}>
           <KarnatakaOverviewPanel />
           <AIInsightsBanner />
         </div>

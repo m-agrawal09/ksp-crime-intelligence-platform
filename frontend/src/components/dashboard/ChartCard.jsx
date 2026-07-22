@@ -1,6 +1,6 @@
-const ChartCard = ({ title, subtitle, badge, children }) => {
+const ChartCard = ({ title, subtitle, badge, className = "", children }) => {
   return (
-    <div className="rounded-[4px] border border-slate-800/25 bg-slate-900/50 py-7 px-8">
+    <div className={`rounded-[4px] border border-slate-800/25 bg-slate-900/50 py-7 px-8 ${className}`}>
       <div className="mb-7 flex items-start justify-between">
         <div>
           <h2 className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-300" style={{ fontFamily: "'IBM Plex Mono', monospace" }}>
