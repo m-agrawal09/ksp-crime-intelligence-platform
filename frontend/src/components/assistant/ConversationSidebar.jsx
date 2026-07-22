@@ -1,50 +1,74 @@
 import React from "react";
-import { FaPlus, FaComments, FaCheckCircle, FaInbox, FaArchive } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
+import { RiChatHistoryLine } from "react-icons/ri";
 
 const ConversationSidebar = ({ sessions, activeSessionId, onSelectSession, onNewSession }) => {
   return (
-    <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-5 flex flex-col h-[650px] shadow-lg">
-      {/* Header action */}
-      <button
-        onClick={onNewSession}
-        className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-mono font-bold text-xs py-3 px-4 rounded-lg transition-all shadow-md cursor-pointer mb-5"
-      >
-        <FaPlus className="text-[10px]" />
-        NEW ASSIST SESSION
-      </button>
+    <div className="flex flex-col h-full overflow-hidden">
+      {/* New session button */}
+      <div className="px-4 pt-4 pb-3 flex-shrink-0">
+        <button
+          onClick={onNewSession}
+          className="w-full flex items-center justify-center gap-2 rounded-lg py-2.5 text-xs font-bold font-inter transition-all cursor-pointer"
+          style={{
+            background: "linear-gradient(135deg, rgba(37,99,235,0.2) 0%, rgba(124,58,237,0.2) 100%)",
+            border: "1px solid rgba(37,99,235,0.35)",
+            color: "#93c5fd",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = "linear-gradient(135deg, rgba(37,99,235,0.35) 0%, rgba(124,58,237,0.35) 100%)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = "linear-gradient(135deg, rgba(37,99,235,0.2) 0%, rgba(124,58,237,0.2) 100%)";
+          }}
+        >
+          <FaPlus className="text-[10px]" />
+          New Session
+        </button>
+      </div>
 
-      {/* Title */}
-      <span className="text-[9px] font-mono font-bold tracking-widest text-slate-500 uppercase mb-3 block">
-        Intelligence Logs
-      </span>
+      {/* Section label */}
+      <div className="px-4 pb-2 flex-shrink-0">
+        <div className="flex items-center gap-2">
+          <RiChatHistoryLine className="text-xs text-slate-600" />
+          <span className="text-[10px] font-bold font-mono uppercase tracking-widest text-slate-600">
+            Recent
+          </span>
+        </div>
+      </div>
 
-      {/* List container */}
-      <div className="flex-1 overflow-y-auto space-y-2 pr-1 scrollbar-thin">
+      {/* Session list */}
+      <div className="flex-1 overflow-y-auto px-3 pb-3 space-y-1" style={{ scrollbarWidth: "thin", scrollbarColor: "rgba(51,65,85,0.3) transparent" }}>
         {sessions.map((session) => {
           const isActive = session.id === activeSessionId;
-          
           return (
             <button
               key={session.id}
               onClick={() => onSelectSession(session.id)}
-              className={`w-full flex flex-col p-3 rounded-lg border text-left font-mono transition-all leading-normal group cursor-pointer ${
-                isActive
-                  ? "bg-slate-950/80 border-slate-700 text-white shadow-inner"
-                  : "bg-slate-900/30 border-slate-900 hover:border-slate-800 text-slate-400 hover:text-white"
-              }`}
+              className="w-full text-left rounded-lg px-3 py-2.5 transition-all duration-150 cursor-pointer group"
+              style={{
+                background: isActive ? "rgba(37,99,235,0.15)" : "transparent",
+                border: `1px solid ${isActive ? "rgba(37,99,235,0.3)" : "transparent"}`,
+              }}
+              onMouseEnter={(e) => {
+                if (!isActive) e.currentTarget.style.background = "rgba(51,65,85,0.2)";
+              }}
+              onMouseLeave={(e) => {
+                if (!isActive) e.currentTarget.style.background = "transparent";
+              }}
             >
-              <div className="flex justify-between items-center w-full gap-2">
-                <span className="font-bold text-[11px] truncate group-hover:text-blue-400 transition-colors">
+              <div className="flex items-center justify-between gap-2">
+                <span
+                  className="text-xs font-semibold font-inter truncate leading-snug"
+                  style={{ color: isActive ? "#93c5fd" : "#94a3b8" }}
+                >
                   {session.title}
                 </span>
-                {/* Status Dot */}
-                <span className={`h-1.5 w-1.5 rounded-full flex-shrink-0 ${
-                  session.status === "active" ? "bg-emerald-500 animate-pulse" :
-                  session.status === "standby" ? "bg-blue-500" :
-                  "bg-slate-700"
-                }`} />
+                {session.status === "active" && (
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse flex-shrink-0" />
+                )}
               </div>
-              <span className="text-[9px] text-slate-650 mt-1 block">
+              <span className="text-[10px] text-slate-600 mt-0.5 block font-inter">
                 {session.timestamp}
               </span>
             </button>
@@ -52,10 +76,13 @@ const ConversationSidebar = ({ sessions, activeSessionId, onSelectSession, onNew
         })}
       </div>
 
-      {/* Footer statistics */}
-      <div className="border-t border-slate-850 pt-3 mt-4 text-[9px] font-mono text-slate-500 flex justify-between">
-        <span>ARCHIVED LOGS: {sessions.filter(s => s.status === "archived").length}</span>
-        <span>ACTIVE: 1</span>
+      {/* Footer */}
+      <div
+        className="px-4 py-3 flex-shrink-0 flex items-center justify-between"
+        style={{ borderTop: "1px solid rgba(51,65,85,0.25)" }}
+      >
+        <span className="text-[10px] font-mono text-slate-600">{sessions.length} session{sessions.length !== 1 ? "s" : ""}</span>
+        <span className="text-[10px] font-mono text-emerald-500/70">1 active</span>
       </div>
     </div>
   );

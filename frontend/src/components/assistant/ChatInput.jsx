@@ -1,81 +1,134 @@
 import React, { useState, useRef } from "react";
-import { FaPaperPlane, FaPaperclip, FaMicrophone, FaTrash } from "react-icons/fa";
+import { FaPaperPlane, FaMicrophone, FaTrash } from "react-icons/fa";
+import { RiRobot2Fill } from "react-icons/ri";
 
 const ChatInput = ({ onSend, onClear, disabled }) => {
   const [text, setText] = useState("");
-  const inputRef = useRef(null);
+  const textareaRef = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!text.trim() || disabled) return;
     onSend(text.trim());
     setText("");
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+    }
   };
 
   const handleKeyDown = (e) => {
-    // Submit on Enter (without Shift)
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSubmit(e);
     }
   };
 
+  const handleInput = (e) => {
+    setText(e.target.value);
+    const el = textareaRef.current;
+    if (el) {
+      el.style.height = "auto";
+      el.style.height = Math.min(el.scrollHeight, 140) + "px";
+    }
+  };
+
+  const canSend = text.trim() && !disabled;
+
   return (
-    <div className="bg-slate-900/40 border border-slate-800 p-4 rounded-xl shadow-md">
-      <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
-        
-        {/* Left utility buttons */}
-        <div className="flex gap-2 justify-start items-center">
-          <button
-            type="button"
-            className="p-2.5 rounded-lg bg-slate-950 border border-slate-850 hover:border-slate-700 text-slate-500 hover:text-white transition-all cursor-pointer"
-            title="Attach Document/FIR (Placeholder)"
-          >
-            <FaPaperclip className="text-xs" />
-          </button>
-          
-          <button
-            type="button"
-            className="p-2.5 rounded-lg bg-slate-950 border border-slate-850 hover:border-slate-700 text-slate-500 hover:text-white transition-all cursor-pointer"
-            title="Voice Commands (Placeholder)"
-          >
-            <FaMicrophone className="text-xs" />
-          </button>
-
-          <button
-            type="button"
-            onClick={onClear}
-            className="p-2.5 rounded-lg bg-slate-950 border border-slate-850 hover:border-red-500/40 text-slate-500 hover:text-red-400 transition-all cursor-pointer"
-            title="Purge Active Session Cache"
-          >
-            <FaTrash className="text-xs" />
-          </button>
+    <div
+      className="flex-shrink-0"
+      style={{
+        padding: "14px 20px 16px",
+        borderTop: "1px solid rgba(51,65,85,0.3)",
+        background: "rgba(6,13,26,0.7)",
+      }}
+    >
+      {/* Status row */}
+      <div className="flex items-center gap-2.5 mb-3">
+        <div className="flex items-center gap-1.5">
+          <RiRobot2Fill className="text-xs text-blue-400" />
+          <span className="text-xs font-semibold text-slate-500 font-inter">KSP AI Copilot</span>
         </div>
+        <span className="text-slate-700">·</span>
+        <div className="flex items-center gap-1.5">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="text-xs text-emerald-500/80 font-inter font-medium">CCTNS Live Connected</span>
+        </div>
+      </div>
 
-        {/* Text Input area */}
-        <div className="flex-1 relative flex items-center">
+      {/* Input container */}
+      <form onSubmit={handleSubmit}>
+        <div
+          className="flex items-end gap-3 rounded-2xl transition-all duration-200"
+          style={{
+            padding: "10px 14px",
+            background: "rgba(15,23,42,0.9)",
+            border: `1px solid ${canSend ? "rgba(37,99,235,0.5)" : "rgba(51,65,85,0.5)"}`,
+          }}
+        >
+          {/* Textarea */}
           <textarea
-            ref={inputRef}
+            ref={textareaRef}
             rows={1}
             value={text}
-            onChange={(e) => setText(e.target.value)}
+            onChange={handleInput}
             onKeyDown={handleKeyDown}
             disabled={disabled}
-            placeholder="Type intelligence query script... (e.g. 'Summarize crimes in Bengaluru')"
-            className="w-full bg-slate-950 border border-slate-850 rounded-lg pl-3 pr-10 py-2.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-slate-700 font-mono resize-none transition-colors align-middle leading-normal min-h-[38px] max-h-[120px]"
+            placeholder="Ask about crimes, FIR records, officers, district stats…"
+            className="flex-1 bg-transparent text-[14px] text-white placeholder-slate-500 focus:outline-none resize-none font-inter leading-relaxed"
+            style={{
+              minHeight: 40,
+              maxHeight: 140,
+              padding: "4px 0",
+              scrollbarWidth: "none",
+            }}
           />
+
+          {/* Action buttons */}
+          <div className="flex items-center gap-1.5 flex-shrink-0 pb-0.5">
+            <button
+              type="button"
+              className="p-2 rounded-xl text-slate-600 hover:text-slate-400 hover:bg-slate-800/60 transition-colors cursor-pointer"
+              title="Voice input (coming soon)"
+            >
+              <FaMicrophone className="text-sm" />
+            </button>
+
+            <button
+              type="button"
+              onClick={onClear}
+              className="p-2 rounded-xl text-slate-600 hover:text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer"
+              title="Clear conversation"
+            >
+              <FaTrash className="text-sm" />
+            </button>
+
+            {/* Send */}
+            <button
+              type="submit"
+              disabled={!canSend}
+              className="flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold font-inter transition-all duration-200 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+              style={{
+                background: canSend
+                  ? "linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)"
+                  : "rgba(51,65,85,0.5)",
+                color: "white",
+                border: "none",
+                boxShadow: canSend ? "0 4px 16px rgba(37,99,235,0.3)" : "none",
+              }}
+            >
+              <FaPaperPlane className="text-xs" />
+              Send
+            </button>
+          </div>
         </div>
 
-        {/* Send Button */}
-        <button
-          type="submit"
-          disabled={!text.trim() || disabled}
-          className="flex items-center justify-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white font-mono font-bold text-xs py-2.5 px-5 rounded-lg transition-all shadow-md cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
-        >
-          <FaPaperPlane className="text-[10px]" />
-          SEND
-        </button>
-
+        <p className="text-[11px] font-inter text-slate-600 mt-2 text-center">
+          <kbd className="bg-slate-800/80 px-1.5 py-0.5 rounded text-slate-500 font-mono text-[10px]">Enter</kbd>
+          {" "}to send · {" "}
+          <kbd className="bg-slate-800/80 px-1.5 py-0.5 rounded text-slate-500 font-mono text-[10px]">Shift+Enter</kbd>
+          {" "}for new line
+        </p>
       </form>
     </div>
   );

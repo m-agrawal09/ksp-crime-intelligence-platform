@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from "react";
-import PageHeader from "../../components/dashboard/PageHeader";
 import ConversationSidebar from "../../components/assistant/ConversationSidebar";
-import AssistantHeader from "../../components/assistant/AssistantHeader";
 import SuggestedPrompts from "../../components/assistant/SuggestedPrompts";
 import ChatWindow from "../../components/assistant/ChatWindow";
 import ChatInput from "../../components/assistant/ChatInput";
-import ContextPanel from "../../components/assistant/ContextPanel";
 import TrendChart from "../../components/dashboard/TrendChart";
 import CrimeCategoryChart from "../../components/dashboard/CrimeCategoryChart";
 import AIAlertsList from "../../components/dashboard/AIAlertsList";
@@ -16,40 +13,37 @@ import { assistantService } from "../../services/assistantService";
 import { fetchDashboardData } from "../../services/dashboardService";
 import { RiBrainLine, RiRobot2Line, RiAlertLine } from "react-icons/ri";
 import { TbChartLine } from "react-icons/tb";
-import { FaBrain, FaGavel, FaSearch, FaExclamationTriangle } from "react-icons/fa";
+import { FaBrain, FaGavel, FaSearch, FaExclamationTriangle, FaHistory, FaRobot } from "react-icons/fa";
+
+const TABS = [
+  { id: "copilot",  label: "AI Copilot & Search",        icon: RiRobot2Line,  activeColor: "from-blue-600 to-violet-600" },
+  { id: "forecast", label: "Predictive Trend Forecast",   icon: TbChartLine,   activeColor: "from-violet-600 to-purple-700" },
+  { id: "alerts",   label: "AI Anomaly Alerts",           icon: RiAlertLine,   activeColor: "from-rose-600 to-red-700" },
+];
 
 const InsightsForecast = () => {
-  const [activeTab, setActiveTab] = useState("copilot"); // "copilot" | "forecast" | "alerts"
-  
-  // Chat Copilot State
+  const [activeTab, setActiveTab] = useState("copilot");
+
+  // Chat state
   const [sessions, setSessions] = useState([]);
   const [activeSessionId, setActiveSessionId] = useState("");
   const [messages, setMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
-  const [recentQueries, setRecentQueries] = useState([
-    "Query total cases in Bengaluru",
-    "ACP Rajeshwari Dossier Run",
-    "Identify AePS fraud signatures"
-  ]);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  // Dashboard / Forecast Data State
+  // Dashboard data
   const [dashboardData, setDashboardData] = useState(null);
   const [loadingData, setLoadingData] = useState(true);
 
   useEffect(() => {
-    // Load Copilot Sessions
     const list = assistantService.getSessions();
     setSessions(list);
     if (list.length > 0) {
       setActiveSessionId(list[0].id);
       setMessages(assistantService.getSessionMessages(list[0].id));
     }
-
-    // Load Dashboard & Forecast Data
     fetchDashboardData().then((res) => {
-      if (res && res.data) {
-        setDashboardData(res.data);
-      }
+      if (res?.data) setDashboardData(res.data);
       setLoadingData(false);
     });
   }, []);
@@ -61,137 +55,193 @@ const InsightsForecast = () => {
 
   const handleNewSession = () => {
     const newId = `session-temp-${Date.now()}`;
-    const newSession = {
-      id: newId,
-      title: "New Intelligence Session",
-      timestamp: "Just now",
-      status: "active"
-    };
-
-    setSessions((prev) => [newSession, ...prev]);
+    setSessions((prev) => [{ id: newId, title: "New Session", timestamp: "Just now", status: "active" }, ...prev]);
     setActiveSessionId(newId);
     setMessages([]);
   };
 
   const handleSend = async (text) => {
-    const userMsg = { sender: "officer", text };
-    setMessages((prev) => [...prev, userMsg]);
-    setRecentQueries((prev) => [text, ...prev].slice(0, 10));
+    setMessages((prev) => [...prev, { sender: "officer", text }]);
     setIsTyping(true);
-
     try {
       const replyText = await assistantService.queryAssistant(text);
-      const aiMsg = { sender: "assistant", text: replyText };
-      setMessages((prev) => [...prev, aiMsg]);
-    } catch (err) {
-      const errMsg = { sender: "assistant", text: "Error: Failed to process natural language request." };
-      setMessages((prev) => [...prev, errMsg]);
+      setMessages((prev) => [...prev, { sender: "assistant", text: replyText }]);
+    } catch {
+      setMessages((prev) => [...prev, { sender: "assistant", text: "Error: Failed to process request." }]);
     } finally {
       setIsTyping(false);
     }
   };
 
-  const handleClear = () => {
-    setMessages([]);
-  };
+  const handleClear = () => setMessages([]);
 
   return (
-    <div className="space-y-7 md:space-y-9">
-      {/* Title Header */}
-      <PageHeader
-        title="AI Insights & Forecast"
-        subtitle="Operational natural language search, automated threat anomaly alerts, and QuickML predictive trend forecasting"
-      />
+    <div className="flex flex-col gap-6" style={{ minHeight: "calc(100vh - 160px)" }}>
 
-      {/* Navigation Tabs */}
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800/20 pb-4">
-        <div className="flex items-center gap-1.5 rounded-[4px] bg-slate-900/60 p-1.5 border border-slate-800/20">
-          <button
-            onClick={() => setActiveTab("copilot")}
-            className={`flex items-center gap-2.5 rounded-md px-4 py-2.5 text-[10px] font-mono font-bold tracking-wider uppercase transition-all duration-200 ${
-              activeTab === "copilot"
-                ? "bg-blue-600/90 text-white shadow-md shadow-blue-500/15"
-                : "text-slate-500 hover:text-slate-300 hover:bg-slate-800/40"
-            }`}
-          >
-            <RiRobot2Line className="text-base" />
-            <span>AI Copilot & Search</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab("forecast")}
-            className={`flex items-center gap-2.5 rounded-md px-4 py-2.5 text-[10px] font-mono font-bold tracking-wider uppercase transition-all duration-200 ${
-              activeTab === "forecast"
-                ? "bg-purple-600/90 text-white shadow-md shadow-purple-500/15"
-                : "text-slate-500 hover:text-slate-300 hover:bg-slate-800/40"
-            }`}
-          >
-            <TbChartLine className="text-base" />
-            <span>Predictive Trend Forecast</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab("alerts")}
-            className={`flex items-center gap-2.5 rounded-md px-4 py-2.5 text-[10px] font-mono font-bold tracking-wider uppercase transition-all duration-200 ${
-              activeTab === "alerts"
-                ? "bg-rose-600/90 text-white shadow-md shadow-rose-500/15"
-                : "text-slate-500 hover:text-slate-300 hover:bg-slate-800/40"
-            }`}
-          >
-            <RiAlertLine className="text-base" />
-            <span>AI Anomaly Alerts</span>
-            {dashboardData?.ai_alerts?.length > 0 && (
-              <span className="ml-1 rounded-full bg-rose-500/20 px-2 py-0.5 text-[10px] text-rose-300 border border-rose-500/30 font-bold">
-                {dashboardData.ai_alerts.length}
-              </span>
-            )}
-          </button>
+      {/* ── Page Header ── */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5"
+        style={{ borderBottom: "1px solid rgba(51,65,85,0.3)" }}
+      >
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <RiBrainLine className="text-purple-400 text-lg animate-pulse" />
+            <span className="text-[10px] font-mono font-bold text-purple-400/80 uppercase tracking-widest">
+              QuickML Engine v4.2 · Active
+            </span>
+          </div>
+          <h1 className="text-2xl font-bold text-white font-space tracking-tight">
+            AI Insights & Forecast
+          </h1>
+          <p className="text-sm text-slate-500 font-inter mt-1">
+            Natural language intelligence search, predictive crime forecasting, and automated anomaly detection.
+          </p>
         </div>
 
-        <div className="flex items-center gap-2 text-[10px] font-mono text-slate-600">
-          <RiBrainLine className="text-purple-400/70 text-sm animate-pulse" />
-          <span>QuickML Engine v4.2 Active</span>
+        {/* Live indicator */}
+        <div
+          className="flex items-center gap-2 px-4 py-2 rounded-xl self-start sm:self-auto"
+          style={{
+            background: "rgba(34,197,94,0.07)",
+            border: "1px solid rgba(34,197,94,0.2)",
+          }}
+        >
+          <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="text-xs font-mono text-emerald-400 font-semibold">CCTNS Live Connected</span>
         </div>
       </div>
 
-      {/* Tab 1: AI Copilot & Natural Language Search */}
+      {/* ── Tab Bar ── */}
+      <div className="flex justify-center">
+      <div className="flex items-center gap-0 p-1" style={{ background: "rgba(15,23,42,0.6)", border: "1px solid rgba(51,65,85,0.3)", borderRadius: 0 }}>
+        {TABS.map((tab) => {
+          const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`relative flex items-center gap-2.5 px-6 py-3.5 text-xs font-bold font-mono uppercase tracking-wider transition-all duration-200 cursor-pointer ${
+                isActive ? "text-white shadow-md" : "text-slate-500 hover:text-slate-300 hover:bg-slate-800/40"
+              }`}
+              style={{
+                borderRadius: 0,
+                ...(isActive ? {
+                  backgroundImage: `linear-gradient(135deg, ${tab.activeColor.includes("blue") ? "#2563eb" : tab.activeColor.includes("violet") ? "#7c3aed" : "#e11d48"}, ${tab.activeColor.includes("rose") ? "#b91c1c" : "#6d28d9"})`,
+                } : { background: "transparent" })
+              }}
+            >
+              <Icon className="text-base" />
+              {tab.label}
+              {tab.id === "alerts" && dashboardData?.ai_alerts?.length > 0 && (
+                <span className="ml-1 bg-rose-500/30 text-rose-300 border border-rose-500/30 text-[9px] font-bold px-1.5 py-0.5 rounded-full">
+                  {dashboardData.ai_alerts.length}
+                </span>
+              )}
+            </button>
+          );
+        })}
+      </div>
+      </div>
+
+      {/* ══ TAB 1: AI COPILOT ══ */}
       {activeTab === "copilot" && (
-        <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-6 items-stretch">
-          {/* Left Column: Sessions History */}
-          <div className="md:col-span-1 lg:col-span-1">
-            <ConversationSidebar
-              sessions={sessions}
-              activeSessionId={activeSessionId}
-              onSelectSession={handleSelectSession}
-              onNewSession={handleNewSession}
-            />
-          </div>
+        <div
+          className="flex flex-1 rounded-2xl overflow-hidden"
+          style={{
+            height: "calc(100vh - 310px)",
+            minHeight: 520,
+            border: "1px solid rgba(51,65,85,0.4)",
+            background: "rgba(6,13,26,0.8)",
+          }}
+        >
+          {/* Sidebar: Sessions */}
+          {sidebarOpen && (
+            <div
+              className="flex-shrink-0 flex flex-col"
+              style={{
+                width: 220,
+                borderRight: "1px solid rgba(51,65,85,0.3)",
+                background: "rgba(10,18,30,0.7)",
+              }}
+            >
+              {/* Sidebar header */}
+              <div className="flex items-center justify-between px-4 py-4" style={{ borderBottom: "1px solid rgba(51,65,85,0.25)" }}>
+                <div className="flex items-center gap-2">
+                  <FaHistory className="text-xs text-slate-500" />
+                  <span className="text-[11px] font-bold font-mono text-slate-400 uppercase tracking-wider">Sessions</span>
+                </div>
+              </div>
 
-          {/* Center Panel: Main AI Copilot Workspace */}
-          <div className="md:col-span-2 lg:col-span-3 flex flex-col gap-5">
-            <AssistantHeader />
+              {/* Sidebar content */}
+              <div className="flex-1 overflow-hidden">
+                <ConversationSidebar
+                  sessions={sessions}
+                  activeSessionId={activeSessionId}
+                  onSelectSession={handleSelectSession}
+                  onNewSession={handleNewSession}
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Main Chat Area */}
+          <div className="flex-1 flex flex-col min-w-0">
+            {/* Chat top bar */}
+            <div
+              className="flex items-center justify-between px-5 py-3 flex-shrink-0"
+              style={{ borderBottom: "1px solid rgba(51,65,85,0.25)" }}
+            >
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setSidebarOpen((p) => !p)}
+                  className="p-1.5 rounded-lg text-slate-500 hover:text-slate-300 hover:bg-slate-800/50 transition-colors cursor-pointer"
+                  title="Toggle session sidebar"
+                >
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <rect x="1" y="2" width="12" height="1.5" rx="0.75" fill="currentColor" />
+                    <rect x="1" y="6.25" width="12" height="1.5" rx="0.75" fill="currentColor" />
+                    <rect x="1" y="10.5" width="12" height="1.5" rx="0.75" fill="currentColor" />
+                  </svg>
+                </button>
+                <div className="flex items-center gap-2">
+                  <div
+                    className="flex items-center justify-center rounded-lg"
+                    style={{ width: 28, height: 28, background: "linear-gradient(135deg,rgba(37,99,235,0.25),rgba(124,58,237,0.25))", border: "1px solid rgba(37,99,235,0.3)" }}
+                  >
+                    <FaRobot className="text-xs text-blue-400" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-white font-space">KSP AI Copilot</p>
+                    <p className="text-[10px] font-mono text-emerald-400">● Online · CCTNS Live</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Messages Area */}
             <ChatWindow messages={messages} isTyping={isTyping} />
-            {messages.length === 0 && (
-              <SuggestedPrompts onPromptClick={handleSend} />
-            )}
-            <ChatInput onSend={handleSend} onClear={handleClear} disabled={isTyping} />
-          </div>
 
-          {/* Right Column: Context Panel */}
-          <div className="md:col-span-1 lg:col-span-1">
-            <ContextPanel recentQueries={recentQueries} />
+            {/* Suggested Prompts (shown only when empty) */}
+            {messages.length === 0 && (
+              <div className="px-5 pb-3 flex-shrink-0">
+                <SuggestedPrompts onPromptClick={handleSend} />
+              </div>
+            )}
+
+            {/* Chat Input */}
+            <ChatInput onSend={handleSend} onClear={handleClear} disabled={isTyping} />
           </div>
         </div>
       )}
 
-      {/* Tab 2: Predictive Analytics & Trend Forecast */}
+      {/* ══ TAB 2: PREDICTIVE FORECAST ══ */}
       {activeTab === "forecast" && (
-        <div className="space-y-6">
+        <div>
           {loadingData ? (
             <Loader message="Loading QuickML Time-Series Predictive Models..." />
           ) : (
-            <>
-              {/* QuickML Forecast KPI Summary Cards */}
+            <div className="flex flex-col" style={{ gap: "2rem" }}>
+              {/* KPI Cards */}
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 <StatCard
                   title="Forecasted Theft Spike"
@@ -212,7 +262,7 @@ const InsightsForecast = () => {
                   icon={FaGavel}
                   color="text-emerald-400"
                   borderColor="border-emerald-500"
-                  dataSource="ChargesheetDetails ML Model"
+                  dataSource="ChargesheetDetails ML"
                   coverage="Judicial Magistrate Courts"
                   lastSync="Daily Batch Run"
                   subText="Final Report Type 'A'"
@@ -243,34 +293,81 @@ const InsightsForecast = () => {
                 />
               </div>
 
-              {/* Dynamic Spatio-Temporal Predictive Risk & Patrol Advisory Card */}
-              <PredictiveForecastingCard />
-
-              {/* Forecast Charts Grid */}
-              <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-                <div className="lg:col-span-2">
-                  <TrendChart data={dashboardData?.crime_trends || []} />
-                </div>
-                <div className="lg:col-span-1">
-                  <CrimeCategoryChart data={dashboardData?.crime_distribution || []} />
+              {/* Executive Forecast Narrative */}
+              <div
+                className="rounded-2xl p-6 sm:p-8"
+                style={{
+                  background: "linear-gradient(135deg, rgba(124,58,237,0.06) 0%, rgba(37,99,235,0.06) 100%)",
+                  border: "1px solid rgba(124,58,237,0.2)",
+                }}
+              >
+                <div className="flex items-start gap-4">
+                  <div
+                    className="flex-shrink-0 flex items-center justify-center rounded-xl"
+                    style={{ width: 44, height: 44, background: "rgba(124,58,237,0.15)", border: "1px solid rgba(124,58,237,0.3)" }}
+                  >
+                    <RiBrainLine className="text-xl text-purple-400" />
+                  </div>
+                  <div className="space-y-3 flex-1">
+                    <div>
+                      <p className="text-[10px] font-mono font-bold text-purple-400 uppercase tracking-widest mb-1">
+                        Executive Forecast Summary · QuickML Intelligence Report
+                      </p>
+                      <h3 className="text-base font-bold text-white font-space">
+                        Statewide Crime Outlook — Q3 2025
+                      </h3>
+                    </div>
+                    <p className="text-sm text-slate-400 font-inter leading-relaxed">
+                      The QuickML predictive analytics engine correlates multi-year CCTNS{" "}
+                      <code className="text-purple-300/80 font-mono text-[11px] bg-purple-900/20 px-1 rounded">CaseMaster</code>{" "}
+                      timestamps with geographic unit boundaries (
+                      <code className="text-purple-300/80 font-mono text-[11px] bg-purple-900/20 px-1 rounded">UnitID</code>
+                      ). Based on seasonal variance and repeat Offence Section spikes, property theft incidents in urban
+                      police ranges are projected to rise by <strong className="text-white">18.4%</strong> over upcoming weekends.
+                      Cyber fraud escalation in Bengaluru East follows an accelerating +14.2% monthly trend driven by AePS
+                      cloning operations. Tactical deployment recommendations have been dispatched to precinct shift supervisors.
+                    </p>
+                    <p className="text-sm text-slate-400 font-inter leading-relaxed">
+                      High confidence zones include <strong className="text-white">Koramangala (86% theft probability)</strong>,{" "}
+                      <strong className="text-white">Mangaluru Port Zone (narcotics, 61%)</strong>, and{" "}
+                      <strong className="text-white">Bengaluru East cyber corridor (74%)</strong>. All predictions are
+                      model-generated from{" "}
+                      <code className="text-emerald-400 font-mono text-[11px]">{"{"}recordCount{"}"}</code> active FIR records
+                      with an 88.4% confidence index across a 12-week forward window.
+                    </p>
+                  </div>
                 </div>
               </div>
 
-              {/* Predictive Summary Banner */}
-              <div className="rounded-[4px] border border-purple-900/20 bg-slate-900/50 p-7">
-                <h3 className="font-mono text-[10px] font-bold uppercase tracking-widest text-purple-400/80 flex items-center gap-2">
-                  <RiBrainLine className="text-sm" /> QuickML Time-Series Forecasting Intelligence
-                </h3>
-                <p className="mt-3 text-[12px] leading-relaxed text-slate-400 font-sans">
-                  The QuickML predictive analytics engine correlates multi-year CCTNS <code className="text-purple-300/80 font-mono">CaseMaster</code> timestamps with geographic unit boundaries (<code className="text-purple-300/80 font-mono">UnitID</code>). Based on seasonal variance and repeat Offence Section spikes, property theft incidents in urban police ranges are projected to rise over upcoming weekends. Tactical deployment recommendations have been dispatched to precinct shift supervisors.
+              {/* Forecast Intelligence Card (Probabilities + What-Ifs + Threat Zones) */}
+              <div
+                className="rounded-2xl p-6 sm:p-8"
+                style={{ background: "rgba(8,18,32,0.6)", border: "1px solid rgba(51,65,85,0.35)" }}
+              >
+                <PredictiveForecastingCard />
+              </div>
+
+              {/* Charts Section */}
+              <div>
+                <p className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+                  <TbChartLine className="text-purple-400 text-sm" />
+                  Historical Trend Charts · Supporting Forecast Data
                 </p>
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+                  <div className="lg:col-span-2">
+                    <TrendChart data={dashboardData?.crime_trends || []} />
+                  </div>
+                  <div className="lg:col-span-1">
+                    <CrimeCategoryChart data={dashboardData?.crime_distribution || []} />
+                  </div>
+                </div>
               </div>
-            </>
+            </div>
           )}
         </div>
       )}
 
-      {/* Tab 3: AI Threat Anomaly Alerts */}
+      {/* ══ TAB 3: AI ANOMALY ALERTS ══ */}
       {activeTab === "alerts" && (
         <div className="space-y-6">
           {loadingData ? (

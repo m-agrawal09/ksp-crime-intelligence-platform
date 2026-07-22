@@ -145,7 +145,7 @@ export const authService = {
   loginAdmin: async (username, password) => {
     const users = loadUsers();
     const cleanUsername = username.trim().toLowerCase();
-    
+
     const user = users.find(
       (u) => u.username.toLowerCase() === cleanUsername && u.role === "ADMIN"
     );
@@ -188,7 +188,7 @@ export const authService = {
 
   registerOfficerAccount: (officerData) => {
     const users = loadUsers();
-    
+
     const { username, password, name, rank, badge, kgid, unit } = officerData;
 
     // Check username uniqueness
@@ -220,7 +220,7 @@ export const authService = {
   updatePassword: (userId, newPassword) => {
     const users = loadUsers();
     const userIndex = users.findIndex((u) => u.id === userId);
-    
+
     if (userIndex === -1) {
       throw new Error("User account not found.");
     }

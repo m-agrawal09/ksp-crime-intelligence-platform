@@ -202,33 +202,33 @@ const MessageBubble = ({ message }) => {
 
       if (line.startsWith("###")) {
         elements.push(
-          <h3 key={i} className="text-[10px] font-bold text-blue-400 tracking-wider font-mono uppercase mt-4 mb-2 border-b border-slate-800 pb-1">
+          <h3 key={i} className="text-[11px] font-bold text-blue-400 tracking-wider font-mono uppercase mt-4 mb-2 border-b border-slate-800 pb-1">
             {parseBold(line.replace("###", "").trim())}
           </h3>
         );
       } else if (line.startsWith("####")) {
         elements.push(
-          <h4 key={i} className="text-[9px] font-bold text-slate-200 font-mono uppercase mt-3 mb-1.5">
+          <h4 key={i} className="text-[10px] font-bold text-slate-200 font-mono uppercase mt-3 mb-1.5">
             {parseBold(line.replace("####", "").trim())}
           </h4>
         );
       } else if (line.startsWith("*") || line.startsWith("-")) {
         elements.push(
-          <div key={i} className="flex items-start gap-2 pl-2 text-[10px] leading-relaxed text-slate-350 my-1 font-sans">
+          <div key={i} className="flex items-start gap-2 pl-2 text-[11px] leading-relaxed text-slate-350 my-1 font-sans">
             <span className="h-1.5 w-1.5 rounded-full bg-blue-500 mt-1.5 flex-shrink-0" />
             <span>{parseBold(line.substring(1).trim())}</span>
           </div>
         );
       } else if (line.startsWith("1.") || line.startsWith("2.") || line.startsWith("3.") || line.startsWith("4.")) {
         elements.push(
-          <div key={i} className="flex items-start gap-2 pl-2 text-[10px] leading-relaxed text-slate-355 my-1 font-sans">
+          <div key={i} className="flex items-start gap-2 pl-2 text-[11px] leading-relaxed text-slate-355 my-1 font-sans">
             <span className="font-mono text-blue-400 font-bold flex-shrink-0">{line.slice(0, 2)}</span>
             <span>{parseBold(line.substring(2).trim())}</span>
           </div>
         );
       } else if (line) {
         elements.push(
-          <p key={i} className="text-[10px] leading-relaxed text-slate-400 my-2 font-sans">
+          <p key={i} className="text-[11px] leading-relaxed text-slate-400 my-2 font-sans">
             {parseBold(line)}
           </p>
         );
@@ -255,11 +255,11 @@ const MessageBubble = ({ message }) => {
       </div>
 
       {/* Bubble text */}
-      <div className={`flex-1 rounded-xl border p-4 shadow-md ${
+      <div className={`flex-1 border p-4 shadow-md ${
         isOfficer 
           ? "bg-slate-900/60 border-slate-800/80 text-slate-200"
           : "bg-slate-950/40 border-slate-850 text-slate-300"
-      }`}>
+      }`} style={{ borderRadius: 0 }}>
         <div className="flex items-center justify-between border-b border-slate-900/40 pb-1 mb-1.5 text-[9px] font-mono text-slate-500 tracking-wider">
           <span>{isOfficer ? "INVESTIGATING OFFICER" : "AI PLATFORM CONSOLE"}</span>
           <div className="flex items-center gap-2">
@@ -297,7 +297,7 @@ const MessageBubble = ({ message }) => {
         </div>
         <div className="space-y-1">
           {isOfficer ? (
-            <p className="text-[11px] leading-relaxed font-sans">{message.text}</p>
+            <p className="text-sm leading-relaxed font-inter font-medium">{message.text}</p>
           ) : (
             parseMarkdown(activeText)
           )}

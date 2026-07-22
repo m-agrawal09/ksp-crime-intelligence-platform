@@ -259,7 +259,7 @@ const Settings = () => {
 
         {/* SECTION 1: Officer Hero Card (Structured Flow, Increased Padding and Image Size) */}
         <div className="bg-[#081220] rounded-[4px] border border-[rgba(255,255,255,0.05)] p-10 sm:p-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 items-start shadow-sm relative overflow-hidden">
-          
+
           {/* Subtle logo watermark */}
           <div className="absolute right-0 bottom-0 opacity-[0.015] text-[180px] pointer-events-none translate-y-12 translate-x-12 select-none">
             🛡️
@@ -274,7 +274,7 @@ const Settings = () => {
                 className="h-full w-full object-cover"
               />
             </div>
-            
+
             <label htmlFor="avatar-upload-hero" className="cursor-pointer bg-[#0b1220] border border-slate-800 rounded-[4px] px-4 py-2 text-[11px] font-semibold text-white flex items-center gap-1.5 hover:bg-slate-800 transition-colors shadow-sm font-inter">
               <FaUpload className="text-[10px]" /> Change Photo
             </label>
@@ -364,18 +364,17 @@ const Settings = () => {
 
       {/* SECTION 2: Main Settings Area (5-4-3 Grid on Desktop, smooth visual gap-3 between cards) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 z-10 relative">
-        
+
         {/* Profile & Credentials form spans 9 columns if admin, 12 columns if not */}
-        <form 
-          onSubmit={handleProfileUpdate} 
+        <form
+          onSubmit={handleProfileUpdate}
           className={`grid grid-cols-1 gap-3 ${isAdmin ? "lg:col-span-9 lg:grid-cols-9" : "lg:col-span-12 lg:grid-cols-12"}`}
         >
           {/* Left Card: Account Profile Details (5 Columns if Admin, 7 if Not) */}
-          <div 
+          <div
             id="profile-details-section"
-            className={`flex flex-col justify-between bg-[#081220] rounded-[4px] border border-[rgba(255,255,255,0.05)] p-8 sm:p-10 shadow-sm ${
-              isAdmin ? "lg:col-span-5" : "lg:col-span-7"
-            }`}
+            className={`flex flex-col justify-between bg-[#081220] rounded-[4px] border border-[rgba(255,255,255,0.05)] p-8 sm:p-10 shadow-sm ${isAdmin ? "lg:col-span-5" : "lg:col-span-7"
+              }`}
           >
             <div>
               {/* Header */}
@@ -505,11 +504,10 @@ const Settings = () => {
           </div>
 
           {/* Center Card: Manage Login Credentials (4 Columns if Admin, 5 if Not) */}
-          <div 
+          <div
             id="login-credentials-section"
-            className={`flex flex-col justify-between bg-[#081220] rounded-[4px] border border-[rgba(255,255,255,0.05)] p-8 sm:p-10 shadow-sm ${
-              isAdmin ? "lg:col-span-4" : "lg:col-span-5"
-            }`}
+            className={`flex flex-col justify-between bg-[#081220] rounded-[4px] border border-[rgba(255,255,255,0.05)] p-8 sm:p-10 shadow-sm ${isAdmin ? "lg:col-span-4" : "lg:col-span-5"
+              }`}
           >
             <div>
               {/* Header */}
@@ -581,7 +579,7 @@ const Settings = () => {
 
         {/* Right Card: Records Security PIN Configuration (3 Columns, Admin Only) */}
         {isAdmin && (
-          <div 
+          <div
             id="pin-config-section"
             className="lg:col-span-3 flex flex-col justify-between bg-[#081220] rounded-[4px] border border-[rgba(255,255,255,0.05)] p-8 sm:p-10 shadow-sm"
           >
@@ -648,7 +646,7 @@ const Settings = () => {
       {/* SECTION 3: Officer Directory & Password Override (Admin Only, distinct table borders like Wikipedia) */}
       {isAdmin && (
         <div className="bg-[#081220] rounded-[4px] border border-[rgba(255,255,255,0.05)] p-8 sm:p-10 space-y-6 shadow-sm z-10 relative">
-          
+
           {/* Header info */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-800/50 pb-4">
             <div>
@@ -693,10 +691,10 @@ const Settings = () => {
                     <tr key={off.id} className="odd:bg-[#081220] even:bg-[#0c1626] hover:bg-[#2563eb]/5 transition-colors duration-150">
                       <td className="py-4 px-6 border border-slate-700 font-semibold text-white">
                         <div className="flex items-center gap-4">
-                          <img 
-                            src={off.avatar || PRESET_AVATARS[0].url} 
-                            alt={off.name} 
-                            className="h-8 w-8 rounded-[2px] object-cover border border-slate-700/60 shadow-sm" 
+                          <img
+                            src={off.avatar || PRESET_AVATARS[0].url}
+                            alt={off.name}
+                            className="h-8 w-8 rounded-[2px] object-cover border border-slate-700/60 shadow-sm"
                           />
                           <span>{off.name}</span>
                         </div>
