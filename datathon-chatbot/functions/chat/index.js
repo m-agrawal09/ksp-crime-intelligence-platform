@@ -1,4 +1,9 @@
-const catalyst = require("zcatalyst-sdk-node");
+let catalyst = null;
+try {
+    catalyst = require("zcatalyst-sdk-node");
+} catch (err) {
+    catalyst = null;
+}
 
 const CrimeRepository = require("./datastore");
 const { generateAnalytics } = require("./analytics");
@@ -12,7 +17,7 @@ module.exports = async (req, res) => {
     try {
         let app = null;
         try {
-            app = catalyst.initialize(req);
+            app = catalyst ? catalyst.initialize(req) : null;
         } catch (catErr) {
             app = null;
         }
