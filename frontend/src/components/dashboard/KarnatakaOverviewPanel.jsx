@@ -442,15 +442,15 @@ const KarnatakaOverviewPanel = () => {
       {/* ── Stats Bar ── */}
       <div className="px-4 py-3 border-t border-slate-800/15 bg-slate-900/30 grid grid-cols-3 divide-x divide-slate-800/20">
         <div className="pr-3">
-          <span className="text-[8px] text-slate-600 uppercase tracking-widest block" style={IBMM}>Active</span>
+          <span className="text-[8px] text-slate-300 uppercase tracking-widest block" style={IBMM}>Active</span>
           <span className="text-amber-400 font-bold text-sm leading-tight tabular-nums" style={IBMM}>{activeCount}</span>
         </div>
         <div className="px-3">
-          <span className="text-[8px] text-slate-600 uppercase tracking-widest block" style={IBMM}>High Risk</span>
+          <span className="text-[8px] text-slate-300 uppercase tracking-widest block" style={IBMM}>High Risk</span>
           <span className="text-red-400 font-bold text-sm leading-tight tabular-nums" style={IBMM}>{highCount}</span>
         </div>
         <div className="pl-3">
-          <span className="text-[8px] text-slate-600 uppercase tracking-widest block" style={IBMM}>Districts</span>
+          <span className="text-[8px] text-slate-300 uppercase tracking-widest block" style={IBMM}>Districts</span>
           <span className="text-blue-400 font-bold text-sm leading-tight tabular-nums" style={IBMM}>{hotspots.length}</span>
         </div>
       </div>

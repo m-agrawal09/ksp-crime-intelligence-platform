@@ -79,24 +79,24 @@ const StatCard = ({
 
   return (
     <div
-      className="relative overflow-hidden rounded-[4px] border border-blue-500/30 bg-slate-900/60 transition-all duration-200 hover:border-blue-500/60 hover:bg-slate-900/80 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/40 shadow-sm animate-fade-in-up"
+      className="relative overflow-hidden rounded-[4px] border border-blue-500/30 bg-slate-900/60 transition-all duration-200 hover:border-blue-500/60 hover:bg-slate-900/80 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/40 shadow-sm animate-fade-in-up h-full flex flex-col"
       onMouseEnter={() => setShowMetadata(true)}
       onMouseLeave={() => setShowMetadata(false)}
     >
 
 
       {/* Card body */}
-      <div className="px-6 pt-9 pb-6 flex flex-col items-center justify-center">
+      <div className="px-8 pb-4 flex flex-col items-center justify-start flex-1 h-full" style={{ paddingTop: "12px" }}>
 
         {/* ── Row 1: Label + Icon ── */}
-        <div className="flex items-center justify-center gap-3 mb-4 w-full text-center">
+        <div className="flex items-center justify-center gap-2 mb-2 w-full text-center px-1">
           <span
-            className="text-[10px] font-extrabold tracking-[0.14em] text-slate-300 uppercase leading-tight text-center font-space"
+            className="text-[9px] font-extrabold tracking-[0.12em] text-slate-300 uppercase leading-tight text-center font-space break-words max-w-[80%]"
           >
             {title}
           </span>
-          <div className={`flex-shrink-0 rounded-[3px] border border-slate-800/30 bg-slate-800/20 p-2 ${color}`}>
-            {Icon ? <Icon className="text-[13px]" /> : <FaInfoCircle className="text-[13px]" />}
+          <div className={`flex-shrink-0 rounded-[3px] border border-slate-800/30 bg-slate-800/20 p-1.5 ${color}`}>
+            {Icon ? <Icon className="text-[11px]" /> : <FaInfoCircle className="text-[11px]" />}
           </div>
         </div>
 
@@ -109,7 +109,7 @@ const StatCard = ({
           </span>
         </div>
 
-        {/* Change + subText (Centered) */}
+        {/* Change (Centered) */}
         <div className="flex flex-col items-center gap-1.5 mb-3.5 text-center w-full">
           <div className={`flex items-center gap-1 text-[10px] font-bold ${isPositive ? "text-emerald-400" : "text-red-400"}`}>
             {isPositive
@@ -117,29 +117,22 @@ const StatCard = ({
               : <FaArrowDown className="text-[8px]" />}
             <span>{change}</span>
           </div>
-          {subText && (
-            <span
-              className="text-[9px] text-slate-500 tracking-wide uppercase font-medium"
-            >
-              {subText}
-            </span>
-          )}
         </div>
 
         {/* Sparkline */}
         {sparkData && (
-          <div className="w-full mt-1.5 -mx-1">
+          <div className="w-full mt-auto pt-4 -mx-1">
             <Sparkline data={sparkData} color={sparkColor || accentHex} id={sparkId} />
           </div>
         )}
       </div>
 
-      {/* ── Hover metadata overlay ── */}
       <div
-        className={`absolute inset-0 flex flex-col justify-between bg-slate-950/97 px-6 pt-9 pb-6 text-center transition-all duration-200 ${showMetadata
-            ? "opacity-100 translate-y-0"
-            : "opacity-0 translate-y-3 pointer-events-none"
+        className={`absolute inset-0 flex flex-col justify-between bg-slate-950/97 px-8 pb-4 text-center transition-all duration-200 ${showMetadata
+          ? "opacity-100 translate-y-0"
+          : "opacity-0 translate-y-3 pointer-events-none"
           }`}
+        style={{ paddingTop: "12px" }}
       >
 
 
