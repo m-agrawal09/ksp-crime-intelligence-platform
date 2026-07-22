@@ -1,14 +1,86 @@
-import React, { useState, useRef } from "react";
-import { FaPaperPlane, FaMicrophone, FaTrash } from "react-icons/fa";
+import React, { useState, useRef, useEffect } from "react";
+import { FaPaperPlane, FaMicrophone, FaStop, FaTrash } from "react-icons/fa";
 import { RiRobot2Fill } from "react-icons/ri";
 
 const ChatInput = ({ onSend, onClear, disabled }) => {
   const [text, setText] = useState("");
+  const [isListening, setIsListening] = useState(false);
+  const [voiceLang, setVoiceLang] = useState("en-IN"); // 'en-IN' (English) or 'kn-IN' (Kannada)
+  const recognitionRef = useRef(null);
   const textareaRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+    };
+  }, []);
+
+  const toggleListening = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      alert("Voice input is not supported in this browser. Please use Chrome, Edge, or Safari.");
+      return;
+    }
+
+    if (isListening) {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+      setIsListening(false);
+      return;
+    }
+
+    try {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = true;
+      recognition.lang = voiceLang;
+
+      recognition.onstart = () => {
+        setIsListening(true);
+      };
+
+      recognition.onresult = (event) => {
+        let transcript = "";
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+        if (transcript.trim()) {
+          setText(transcript);
+          if (textareaRef.current) {
+            textareaRef.current.style.height = "auto";
+            textareaRef.current.style.height = Math.min(textareaRef.current.scrollHeight, 140) + "px";
+          }
+        }
+      };
+
+      recognition.onerror = (err) => {
+        console.error("Speech recognition error:", err);
+        setIsListening(false);
+      };
+
+      recognition.onend = () => {
+        setIsListening(false);
+      };
+
+      recognitionRef.current = recognition;
+      recognition.start();
+    } catch (e) {
+      console.error("Failed to start speech recognition:", e);
+      setIsListening(false);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!text.trim() || disabled) return;
+    if (isListening && recognitionRef.current) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    }
     onSend(text.trim());
     setText("");
     if (textareaRef.current) {
@@ -44,17 +116,50 @@ const ChatInput = ({ onSend, onClear, disabled }) => {
       }}
     >
       {/* Status row */}
-      <div className="flex items-center gap-2.5 mb-3">
-        <div className="flex items-center gap-1.5">
-          <RiRobot2Fill className="text-xs text-blue-400" />
-          <span className="text-xs font-semibold text-slate-500 font-inter">KSP AI Copilot</span>
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-1.5">
+            <RiRobot2Fill className="text-xs text-blue-400" />
+            <span className="text-xs font-semibold text-slate-500 font-inter">KSP AI Copilot</span>
+          </div>
+          <span className="text-slate-700">·</span>
+          <div className="flex items-center gap-1.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-xs text-emerald-500/80 font-inter font-medium">CCTNS Live Connected</span>
+          </div>
         </div>
-        <span className="text-slate-700">·</span>
-        <div className="flex items-center gap-1.5">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-xs text-emerald-500/80 font-inter font-medium">CCTNS Live Connected</span>
+
+        {/* Voice Language Toggle */}
+        <div className="flex items-center gap-1.5 bg-slate-900/80 border border-slate-800 rounded-lg p-0.5">
+          <span className="text-[10px] font-mono text-slate-400 px-1.5">Mic Lang:</span>
+          <button
+            type="button"
+            onClick={() => setVoiceLang("en-IN")}
+            className={`px-1.5 py-0.5 text-[10px] font-bold rounded transition-colors cursor-pointer ${
+              voiceLang === "en-IN" ? "bg-blue-600 text-white" : "text-slate-400 hover:text-white"
+            }`}
+          >
+            English
+          </button>
+          <button
+            type="button"
+            onClick={() => setVoiceLang("kn-IN")}
+            className={`px-1.5 py-0.5 text-[10px] font-bold rounded transition-colors cursor-pointer ${
+              voiceLang === "kn-IN" ? "bg-blue-600 text-white" : "text-slate-400 hover:text-white"
+            }`}
+          >
+            ಕನ್ನಡ
+          </button>
         </div>
       </div>
+
+      {/* Listening Status Banner */}
+      {isListening && (
+        <div className="mb-2 flex items-center gap-2 px-3 py-1.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-inter animate-pulse">
+          <span className="h-2 w-2 rounded-full bg-rose-500 animate-ping" />
+          <span>Listening ({voiceLang === "kn-IN" ? "ಕನ್ನಡ Voice Input" : "English Voice Input"})... Speak now</span>
+        </div>
+      )}
 
       {/* Input container */}
       <form onSubmit={handleSubmit}>
@@ -74,7 +179,11 @@ const ChatInput = ({ onSend, onClear, disabled }) => {
             onChange={handleInput}
             onKeyDown={handleKeyDown}
             disabled={disabled}
-            placeholder="Ask about crimes, FIR records, officers, district stats…"
+            placeholder={
+              voiceLang === "kn-IN"
+                ? "ಕನ್ನಡದಲ್ಲಿ ಅಥವಾ ಇಂಗ್ಲಿಷ್‌ನಲ್ಲಿ ಪ್ರಶ್ನೆ ಕೇಳಿ..."
+                : "Ask about crimes, FIR records, officers, district stats…"
+            }
             className="flex-1 bg-transparent text-[14px] text-white placeholder-slate-500 focus:outline-none resize-none font-inter leading-relaxed"
             style={{
               minHeight: 40,
@@ -86,12 +195,18 @@ const ChatInput = ({ onSend, onClear, disabled }) => {
 
           {/* Action buttons */}
           <div className="flex items-center gap-1.5 flex-shrink-0 pb-0.5">
+            {/* Voice Input Mic Button */}
             <button
               type="button"
-              className="p-2 rounded-xl text-slate-600 hover:text-slate-400 hover:bg-slate-800/60 transition-colors cursor-pointer"
-              title="Voice input (coming soon)"
+              onClick={toggleListening}
+              className={`p-2 rounded-xl transition-all cursor-pointer ${
+                isListening
+                  ? "bg-rose-600 text-white shadow-lg shadow-rose-600/50 animate-pulse"
+                  : "text-slate-400 hover:text-white hover:bg-slate-800/60"
+              }`}
+              title={isListening ? "Stop Voice Input" : `Speak in ${voiceLang === "kn-IN" ? "ಕನ್ನಡ" : "English"}`}
             >
-              <FaMicrophone className="text-sm" />
+              {isListening ? <FaStop className="text-sm" /> : <FaMicrophone className="text-sm" />}
             </button>
 
             <button
