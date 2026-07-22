@@ -4,7 +4,7 @@ import { FaFilePdf, FaFileExcel, FaShareAlt, FaCalendarAlt, FaShieldAlt } from "
 const ReportPreview = ({ reportData, onExport, onShare, onSchedule }) => {
   if (!reportData) {
     return (
-      <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-20 shadow-lg text-center flex flex-col items-center justify-center gap-3 text-slate-500 font-mono text-xs">
+      <div className="bg-slate-900/40 border border-blue-500/30 rounded-xl p-20 shadow-lg text-center flex flex-col items-center justify-center gap-3 text-slate-500 font-space text-xs">
         <FaShieldAlt className="text-3xl text-slate-700 animate-pulse" />
         <span>Awaiting parameter compilation. Click 'Preview Report' to generate.</span>
       </div>
@@ -13,16 +13,16 @@ const ReportPreview = ({ reportData, onExport, onShare, onSchedule }) => {
 
   const { title, subtitle, classification, date, meta, summary, kpis, findings, recommendations } = reportData;
 
-  const doubleBorder = "border-t-4 border-double border-slate-700 my-6";
+  const doubleBorder = "border-t border-slate-800/30 my-6";
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full">
       
       {/* 1. Confidential Document Sheet */}
-      <div className="bg-slate-950 border border-slate-800 rounded-xl p-8 sm:p-12 max-w-3xl mx-auto shadow-2xl relative overflow-hidden font-mono text-xs text-slate-300 leading-relaxed selection:bg-blue-500/20">
+      <div className="bg-slate-900/35 border border-blue-500/30 rounded-xl p-8 sm:p-12 w-full shadow-2xl relative overflow-hidden font-space text-xs text-slate-300 leading-relaxed selection:bg-blue-500/20">
         
         {/* Security Watermark Stamp */}
-        <div className="absolute top-8 right-8 border-2 border-red-500/40 text-red-500/50 font-bold uppercase tracking-widest text-[9px] px-2.5 py-1 rotate-12 select-none pointer-events-none rounded">
+        <div className="absolute top-8 right-8 border border-red-500/40 text-red-500/60 font-bold uppercase tracking-widest text-[9px] px-2.5 py-1 rotate-12 select-none pointer-events-none rounded bg-red-950/10">
           {classification}
         </div>
 
@@ -42,17 +42,17 @@ const ReportPreview = ({ reportData, onExport, onShare, onSchedule }) => {
         <div className={doubleBorder} />
 
         {/* Cover Meta Parameters */}
-        <div className="grid grid-cols-2 gap-y-3 gap-x-6 text-[10px] border-b border-slate-900 pb-4 mb-6">
+        <div className="grid grid-cols-2 gap-y-3 gap-x-6 text-[10px] border-b border-slate-800/20 pb-4 mb-6">
           <div>
-            <span className="text-slate-500 block uppercase text-[8px]">DOCUMENT DATE:</span>
-            <span className="text-slate-200 font-bold">{date}</span>
+            <span className="text-slate-550 block uppercase text-[8px]">DOCUMENT DATE:</span>
+            <span className="text-slate-200 font-bold font-mono">{date}</span>
           </div>
           <div>
             <span className="text-slate-550 block uppercase text-[8px]">CLASSIFICATION RANK:</span>
             <span className="text-red-400 font-bold uppercase">{classification}</span>
           </div>
           <div>
-            <span className="text-slate-500 block uppercase text-[8px]">JURISDICTION SCOPE:</span>
+            <span className="text-slate-550 block uppercase text-[8px]">JURISDICTION SCOPE:</span>
             <span className="text-slate-200 font-bold uppercase">{meta.district}</span>
           </div>
           <div>
@@ -60,12 +60,12 @@ const ReportPreview = ({ reportData, onExport, onShare, onSchedule }) => {
             <span className="text-slate-200 font-bold uppercase">{meta.category}</span>
           </div>
           <div>
-            <span className="text-slate-500 block uppercase text-[8px]">ACTIVE OFFICER CONTEXT:</span>
+            <span className="text-slate-550 block uppercase text-[8px]">ACTIVE OFFICER CONTEXT:</span>
             <span className="text-slate-200 font-bold uppercase">{meta.officer}</span>
           </div>
           <div>
             <span className="text-slate-550 block uppercase text-[8px]">TEMPORAL BOUNDS:</span>
-            <span className="text-slate-200 font-bold uppercase">{meta.dateRange}</span>
+            <span className="text-slate-200 font-bold uppercase font-mono">{meta.dateRange}</span>
           </div>
         </div>
 
@@ -86,11 +86,11 @@ const ReportPreview = ({ reportData, onExport, onShare, onSchedule }) => {
           <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest block">
             II. KEY METRIC AGGREGATIONS
           </span>
-          <div className="grid grid-cols-3 gap-4 text-center bg-slate-900/20 border border-slate-900 p-4 rounded-xl">
+          <div className="grid grid-cols-3 gap-4 text-center bg-slate-950/40 border border-slate-800/30 p-4 rounded-xl">
             {kpis.map((kpi, idx) => (
               <div key={idx}>
                 <span className="text-[8px] text-slate-500 block uppercase">{kpi.label}</span>
-                <span className="text-base font-bold text-white block mt-1">{kpi.value}</span>
+                <span className="text-base font-bold text-white block mt-1 font-mono">{kpi.value}</span>
               </div>
             ))}
           </div>
@@ -106,7 +106,7 @@ const ReportPreview = ({ reportData, onExport, onShare, onSchedule }) => {
           <div className="space-y-2.5 pl-2">
             {findings.map((finding, idx) => (
               <div key={idx} className="flex items-start gap-2.5 text-[11px] leading-relaxed text-slate-300">
-                <span className="text-blue-500 font-bold">{idx + 1}.</span>
+                <span className="text-blue-500 font-bold font-mono">{idx + 1}.</span>
                 <span className="font-sans">{finding}</span>
               </div>
             ))}
@@ -139,14 +139,14 @@ const ReportPreview = ({ reportData, onExport, onShare, onSchedule }) => {
               <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest block">
                 V. AUDITED FIR INCIDENT REGISTERS ({reportData.recordsTable.length} FILTERED ROWS)
               </span>
-              <span className="text-[9px] font-mono text-slate-500 uppercase">
+              <span className="text-[9px] font-space text-slate-500 uppercase">
                 Showing all matching output
               </span>
             </div>
 
-            <div className="overflow-x-auto rounded-lg border border-slate-800 bg-slate-950">
-              <table className="w-full text-left font-mono text-[10px]">
-                <thead className="bg-slate-900 text-slate-400 uppercase border-b border-slate-800">
+            <div className="overflow-x-auto rounded-lg border border-slate-800/40 bg-slate-950/40">
+              <table className="w-full text-left text-[10px] font-space">
+                <thead className="bg-slate-900/60 text-slate-400 uppercase border-b border-slate-800/40">
                   <tr>
                     <th className="p-2.5">Crime No / Date</th>
                     <th className="p-2.5">Jurisdiction (District / PS)</th>
@@ -155,12 +155,12 @@ const ReportPreview = ({ reportData, onExport, onShare, onSchedule }) => {
                     <th className="p-2.5">Status & Severity</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-850 text-slate-300">
+                <tbody className="divide-y divide-slate-850/40 text-slate-300">
                   {reportData.recordsTable.map((r) => (
                     <tr key={r.id || r.crimeNo} className="hover:bg-slate-900/50">
-                      <td className="p-2.5 font-bold text-blue-400">
+                      <td className="p-2.5 font-bold text-blue-400 font-mono">
                         {r.crimeNo}
-                        <span className="block text-[9px] font-normal text-slate-500">{r.regDate}</span>
+                        <span className="block text-[9px] font-normal text-slate-500 font-mono mt-0.5">{r.regDate}</span>
                       </td>
                       <td className="p-2.5">
                         {r.unit}
@@ -168,7 +168,7 @@ const ReportPreview = ({ reportData, onExport, onShare, onSchedule }) => {
                       </td>
                       <td className="p-2.5">
                         {r.crimeHead}
-                        <span className="block text-[9px] text-slate-500">{r.actSections}</span>
+                        <span className="block text-[9px] text-slate-500 font-mono mt-0.5">{r.actSections}</span>
                       </td>
                       <td className="p-2.5">
                         {r.allottedOfficerName}
@@ -190,13 +190,13 @@ const ReportPreview = ({ reportData, onExport, onShare, onSchedule }) => {
           </div>
         )}
 
-        <div className="border-t-2 border-dashed border-slate-800 my-8" />
+        <div className="border-t border-dashed border-slate-800/40 my-8" />
 
         {/* Signatures */}
-        <div className="flex justify-between items-end pt-2 text-[8px] text-slate-500 font-mono">
+        <div className="flex justify-between items-end pt-2 text-[8px] text-slate-550 font-space">
           <div>
             <span>SYSTEM ENCRYPTED: MD5_AIP_LOG</span>
-            <span className="block mt-0.5">KSP DATASTORE HANDSHAKE COMPLETED</span>
+            <span className="block mt-0.5 font-mono">KSP DATASTORE HANDSHAKE COMPLETED</span>
           </div>
           <div className="text-right uppercase border-t border-slate-800 pt-1.5 w-36">
             <span>COMMAND OFFICER</span>
@@ -205,32 +205,32 @@ const ReportPreview = ({ reportData, onExport, onShare, onSchedule }) => {
 
       </div>
 
-      {/* 2. Actions Strip (Print / PDF, Excel CSV, Share, Schedule) */}
-      <div className="bg-slate-900/60 border border-slate-800 p-4 rounded-xl flex flex-wrap gap-3 justify-center items-center max-w-3xl mx-auto shadow-md">
+      {/* 2. Actions Strip */}
+      <div className="bg-slate-900/40 border border-blue-500/30 p-4 rounded-xl flex flex-wrap gap-3 justify-center items-center w-full shadow-md">
         <button
           onClick={() => onExport("PDF")}
-          className="flex items-center justify-center gap-1.5 bg-red-600 hover:bg-red-700 text-white font-mono font-bold text-xs py-2.5 px-5 rounded-lg transition-all shadow-lg shadow-red-600/20 cursor-pointer active:scale-95"
+          className="flex items-center justify-center gap-1.5 bg-red-600 hover:bg-red-700 text-white font-space font-bold text-xs py-2.5 px-5 rounded-none transition-all shadow-lg shadow-red-600/20 cursor-pointer active:scale-95"
         >
           <FaFilePdf className="text-sm" />
           PRINT / SAVE AS PDF
         </button>
         <button
           onClick={() => onExport("EXCEL")}
-          className="flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-mono font-bold text-xs py-2.5 px-5 rounded-lg transition-all shadow-lg shadow-emerald-600/20 cursor-pointer active:scale-95"
+          className="flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-space font-bold text-xs py-2.5 px-5 rounded-none transition-all shadow-lg shadow-emerald-600/20 cursor-pointer active:scale-95"
         >
           <FaFileExcel className="text-sm" />
           EXPORT EXCEL (CSV)
         </button>
         <button
           onClick={onShare}
-          className="flex items-center justify-center gap-1.5 bg-slate-850 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-750 font-mono font-bold text-xs py-2 px-4 rounded-lg transition-colors cursor-pointer"
+          className="flex items-center justify-center gap-1.5 bg-slate-850 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-750 font-space font-bold text-xs py-2 px-4 rounded-none transition-colors cursor-pointer"
         >
           <FaShareAlt className="text-xs" />
           SHARE REPORT
         </button>
         <button
           onClick={onSchedule}
-          className="flex items-center justify-center gap-1.5 bg-slate-850 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-750 font-mono font-bold text-xs py-2 px-4 rounded-lg transition-colors cursor-pointer"
+          className="flex items-center justify-center gap-1.5 bg-slate-850 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-750 font-space font-bold text-xs py-2 px-4 rounded-none transition-colors cursor-pointer"
         >
           <FaCalendarAlt className="text-xs" />
           SCHEDULE COMPILATION

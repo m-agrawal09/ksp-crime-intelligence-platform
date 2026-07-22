@@ -17,7 +17,13 @@ const districtsList = [
   "Shivamogga",
   "Udupi District",
   "Davanagere",
-  "Tumakuru"
+  "Tumakuru",
+  "Chikkamagaluru",
+  "Bidar",
+  "Mandya",
+  "Dakshina Kannada",
+  "Hassan",
+  "Uttara Kannada"
 ];
 
 const categoriesList = [
@@ -48,7 +54,13 @@ const districtCoords = {
   "Shivamogga": { lat: 13.9299, lng: 75.5681 },
   "Udupi District": { lat: 13.3409, lng: 74.7421 },
   "Davanagere": { lat: 14.4644, lng: 75.9218 },
-  "Tumakuru": { lat: 13.3392, lng: 77.1140 }
+  "Tumakuru": { lat: 13.3392, lng: 77.1140 },
+  "Chikkamagaluru": { lat: 13.3161, lng: 75.7720 },
+  "Bidar": { lat: 17.9104, lng: 77.5186 },
+  "Mandya": { lat: 12.5218, lng: 76.8973 },
+  "Dakshina Kannada": { lat: 12.8700, lng: 75.2400 },
+  "Hassan": { lat: 13.0070, lng: 76.1030 },
+  "Uttara Kannada": { lat: 14.7900, lng: 74.6800 }
 };
 
 const getLiveIncidents = () => {

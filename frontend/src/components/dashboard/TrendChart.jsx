@@ -78,14 +78,14 @@ const TrendChart = ({ data, className = "" }) => {
 
             <XAxis
               dataKey="month"
-              tick={{ fill: "#334155", fontSize: 10, fontFamily: "monospace" }}
+              tick={{ fill: "#ffffff", fontSize: 10, fontFamily: "monospace" }}
               axisLine={false}
               tickLine={false}
               tickMargin={8}
             />
 
             <YAxis
-              tick={{ fill: "#334155", fontSize: 10, fontFamily: "monospace" }}
+              tick={{ fill: "#ffffff", fontSize: 10, fontFamily: "monospace" }}
               axisLine={false}
               tickLine={false}
             />
@@ -115,6 +115,8 @@ const TrendChart = ({ data, className = "" }) => {
               strokeWidth={2}
               fillOpacity={1}
               fill="url(#colorProperty)"
+              dot={{ stroke: "#3b82f6", strokeWidth: 1.5, fill: "#3b82f6", r: 3.5 }}
+              activeDot={{ r: 5, stroke: "#3b82f6", strokeWidth: 1 }}
               isAnimationActive={true}
               animationDuration={900}
               animationEasing="ease-out"
@@ -128,6 +130,8 @@ const TrendChart = ({ data, className = "" }) => {
               strokeWidth={2}
               fillOpacity={1}
               fill="url(#colorBody)"
+              dot={{ stroke: "#f43f5e", strokeWidth: 1.5, fill: "#f43f5e", r: 3.5 }}
+              activeDot={{ r: 5, stroke: "#f43f5e", strokeWidth: 1 }}
               isAnimationActive={true}
               animationDuration={1050}
               animationEasing="ease-out"
@@ -141,6 +145,8 @@ const TrendChart = ({ data, className = "" }) => {
               strokeWidth={2}
               fillOpacity={1}
               fill="url(#colorCyber)"
+              dot={{ stroke: "#a855f7", strokeWidth: 1.5, fill: "#a855f7", r: 3.5 }}
+              activeDot={{ r: 5, stroke: "#a855f7", strokeWidth: 1 }}
               isAnimationActive={true}
               animationDuration={1200}
               animationEasing="ease-out"
@@ -154,6 +160,8 @@ const TrendChart = ({ data, className = "" }) => {
               strokeWidth={2}
               fillOpacity={1}
               fill="url(#colorFraud)"
+              dot={{ stroke: "#f59e0b", strokeWidth: 1.5, fill: "#f59e0b", r: 3.5 }}
+              activeDot={{ r: 5, stroke: "#f59e0b", strokeWidth: 1 }}
               isAnimationActive={true}
               animationDuration={1350}
               animationEasing="ease-out"

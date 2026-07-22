@@ -17,24 +17,24 @@ const menuItems = [
     icon: RiDashboardLine,
   },
   {
-    name: "AI Insights & Forecast",
-    path: "/insights-forecast",
-    icon: RiBrainLine,
-  },
-  {
-    name: "Manage Records",
-    path: "/records",
-    icon: HiOutlineDocumentText,
-  },
-  {
     name: "Crime Map",
     path: "/map",
     icon: TbMapSearch,
   },
   {
+    name: "AI Insights & Forecast",
+    path: "/insights-forecast",
+    icon: RiBrainLine,
+  },
+  {
     name: "Officer Performance",
     path: "/officers",
     icon: MdOutlineAdminPanelSettings,
+  },
+  {
+    name: "Manage Records",
+    path: "/records",
+    icon: HiOutlineDocumentText,
   },
   {
     name: "Reports",

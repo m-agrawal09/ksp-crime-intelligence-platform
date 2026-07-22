@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import PageHeader from "../../components/dashboard/PageHeader";
-import ReportTemplates from "../../components/reports/ReportTemplates";
 import ReportConfiguration from "../../components/reports/ReportConfiguration";
 import ReportPreview from "../../components/reports/ReportPreview";
 import RecentReports from "../../components/reports/RecentReports";
@@ -145,24 +144,21 @@ const Reports = () => {
         subtitle="Configure, compile, and export operational police logs, trial briefs, and executive summaries"
       />
 
-      {/* Templates Row Selection */}
-      <ReportTemplates
-        templates={templates}
-        activeTemplateId={activeTemplateId}
-        onSelectTemplate={handleSelectTemplate}
-      />
+
 
       {/* Main Core Columns Workspace */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
         
         {/* Left Side: Parameters Form and Live Document Preview Sheet (3 col spans) */}
-        <div className="lg:col-span-3 space-y-6">
+        <div className="lg:col-span-3">
           <ReportConfiguration
             config={config}
             onConfigChange={handleConfigChange}
             onGeneratePreview={handleGeneratePreview}
             isGenerating={isGenerating}
           />
+
+          <div style={{ height: "32px" }}></div>
 
           <ReportPreview
             reportData={previewData}

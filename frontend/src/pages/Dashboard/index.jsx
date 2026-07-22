@@ -22,7 +22,13 @@ const DISTRICTS = [
   "Shivamogga",
   "Udupi District",
   "Davanagere",
-  "Tumakuru"
+  "Tumakuru",
+  "Chikkamagaluru",
+  "Bidar",
+  "Mandya",
+  "Dakshina Kannada",
+  "Hassan",
+  "Uttara Kannada"
 ];
 
 const Dashboard = () => {

@@ -70,7 +70,7 @@ const CrimeCategoryChart = ({ data, className = "" }) => {
           <div className="absolute flex flex-col items-center justify-center pointer-events-none">
             <span className="text-[8px] font-mono tracking-widest text-slate-600 uppercase">TOTAL</span>
             <span className="font-mono text-xl font-bold text-white mt-0.5">
-              {data.reduce((sum, item) => sum + item.fir_count, 0).toLocaleString("en-IN")}
+              {data.reduce((sum, item) => sum + item.fir_count, 0).toLocaleString("en-IN")} CASES
             </span>
           </div>
         </div>
@@ -85,11 +85,11 @@ const CrimeCategoryChart = ({ data, className = "" }) => {
                     className="h-1.5 w-1.5 rounded-full flex-shrink-0"
                     style={{ backgroundColor: COLORS[index % COLORS.length] }}
                   />
-                  <span className="font-bold text-slate-500 uppercase tracking-wide">{item.category}</span>
+                  <span className="font-bold text-white uppercase tracking-wide">{item.category}</span>
                 </div>
-                <div className="text-slate-500 font-mono text-[9px]">
-                  <span className="text-slate-300 font-bold">{item.fir_count.toLocaleString("en-IN")}</span>
-                  <span className="text-slate-800 px-1">/</span>
+                <div className="text-slate-400 font-mono text-[9px]">
+                  <span className="text-white font-bold">{item.fir_count.toLocaleString("en-IN")}</span>
+                  <span className="text-slate-600 px-1">/</span>
                   <span className="text-white font-bold">{item.percentage}%</span>
                 </div>
               </div>

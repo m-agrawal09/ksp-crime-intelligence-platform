@@ -1,6 +1,91 @@
 // Live Officer Dossier Service connected to Zoho Catalyst Online Data Store (Employee table)
 
-const officersDatabase = {};
+const officersDatabase = {
+  "KSP-8821": {
+    badgeNumber: "KSP-8821",
+    name: "Ramesh Gowda",
+    rank: "PSI",
+    unit: "Koramangala Police Station",
+    station: "Bengaluru City",
+    yearsOfService: 6,
+    status: "On Duty",
+    avatar: "https://i.pinimg.com/736x/cf/d7/89/cfd789465d360c8424f4e368fc5d2806.jpg",
+    ROWID: "KSP-8821",
+    kpis: { totalCases: 5, activeCases: 2, closedCases: 3, chargesheetRate: 80, avgInvestigationTime: 28, detectionRate: 85 },
+    workload: { highPriority: [], pending: [], hearings: [], recent: [] },
+    summary: { strongArea: "Property Crimes & Burglary Detection", workloadStatus: "Optimal", rating: "4.8 / 5.0", aiRecommendation: "Highly effective at field operations.", lastUpdated: "Just now" }
+  },
+  "KSP-7455": {
+    badgeNumber: "KSP-7455",
+    name: "PSI Manjunath",
+    rank: "PSI",
+    unit: "Vidyaranyapuram Police Station",
+    station: "Mysuru City",
+    yearsOfService: 4,
+    status: "On Duty",
+    avatar: "https://i.pinimg.com/1200x/4a/00/0f/4a000f954bc84e713ce910bc90de34f9.jpg",
+    ROWID: "KSP-7455",
+    kpis: { totalCases: 4, activeCases: 1, closedCases: 3, chargesheetRate: 85, avgInvestigationTime: 30, detectionRate: 90 },
+    workload: { highPriority: [], pending: [], hearings: [], recent: [] },
+    summary: { strongArea: "Cyber Fraud & Online Cheating Tracking", workloadStatus: "Optimal", rating: "4.9 / 5.0", aiRecommendation: "Strong computer forensic expertise.", lastUpdated: "Just now" }
+  },
+  "KSP-6120": {
+    badgeNumber: "KSP-6120",
+    name: "Inspector Patil",
+    rank: "PI",
+    unit: "Kadri Police Station",
+    station: "Mangaluru City",
+    yearsOfService: 12,
+    status: "On Duty",
+    avatar: "https://i.pinimg.com/736x/31/80/fa/3180fa0f3fd16359d9d9790c2eed874d.jpg",
+    ROWID: "KSP-6120",
+    kpis: { totalCases: 3, activeCases: 0, closedCases: 3, chargesheetRate: 100, avgInvestigationTime: 20, detectionRate: 95 },
+    workload: { highPriority: [], pending: [], hearings: [], recent: [] },
+    summary: { strongArea: "Narcotics Raids & Inter-State Smuggling Cases", workloadStatus: "Optimal", rating: "5.0 / 5.0", aiRecommendation: "Senior leadership profile.", lastUpdated: "Just now" }
+  },
+  "KSP-4933": {
+    badgeNumber: "KSP-4933",
+    name: "PSI Anjali",
+    rank: "PSI",
+    unit: "Camp Police Station",
+    station: "Belagavi District",
+    yearsOfService: 5,
+    status: "On Duty",
+    avatar: "https://i.pinimg.com/1200x/22/1a/b3/221ab37e4210e1c445b1a65e97dbdf53.jpg",
+    ROWID: "KSP-4933",
+    kpis: { totalCases: 2, activeCases: 1, closedCases: 1, chargesheetRate: 75, avgInvestigationTime: 35, detectionRate: 80 },
+    workload: { highPriority: [], pending: [], hearings: [], recent: [] },
+    summary: { strongArea: "SLL & Community Dispute Settlements", workloadStatus: "Optimal", rating: "4.7 / 5.0", aiRecommendation: "Excellent communal counseling records.", lastUpdated: "Just now" }
+  },
+  "KSP-3211": {
+    badgeNumber: "KSP-3211",
+    name: "PSI Sandeep",
+    rank: "PSI",
+    unit: "Town Police Station",
+    station: "Shivamogga",
+    yearsOfService: 3,
+    status: "On Duty",
+    avatar: "https://i.pinimg.com/736x/b6/94/11/b6941188e0fb2cc12b1d0864bc7c8352.jpg",
+    ROWID: "KSP-3211",
+    kpis: { totalCases: 1, activeCases: 1, closedCases: 0, chargesheetRate: 60, avgInvestigationTime: 40, detectionRate: 70 },
+    workload: { highPriority: [], pending: [], hearings: [], recent: [] },
+    summary: { strongArea: "Law and Order Maintenance & Mob Control", workloadStatus: "Underloaded", rating: "4.5 / 5.0", aiRecommendation: "Available for case intake.", lastUpdated: "Just now" }
+  },
+  "KSP-5022": {
+    badgeNumber: "KSP-5022",
+    name: "ASI Siddaramaiah",
+    rank: "ASI",
+    unit: "City Police Station",
+    station: "Tumakuru",
+    yearsOfService: 15,
+    status: "On Duty",
+    avatar: "https://i.pinimg.com/736x/37/7b/2f/377b2f76dac0bed695186521a84e6f5e.jpg",
+    ROWID: "KSP-5022",
+    kpis: { totalCases: 0, activeCases: 0, closedCases: 0, chargesheetRate: 85, avgInvestigationTime: 30, detectionRate: 90 },
+    workload: { highPriority: [], pending: [], hearings: [], recent: [] },
+    summary: { strongArea: "CCTNS Digital Record Maintenance & Verification", workloadStatus: "Optimal", rating: "4.9 / 5.0", aiRecommendation: "Senior administrator.", lastUpdated: "Just now" }
+  }
+};
 
 const OFFICERS_STORAGE_KEY = "ksp_custom_officers_v3_online_only";
 
@@ -122,6 +207,19 @@ export const officerService = {
     const liveStats = recordService.getOfficerAnalytics(updatedName);
 
     return {
+      categoryDistribution: [
+        { name: "Property Offences", value: 12, color: "#3b82f6" },
+        { name: "Cyber Crimes", value: 8, color: "#a855f7" },
+        { name: "Financial Fraud", value: 4, color: "#f59e0b" }
+      ],
+      monthlyTrend: [
+        { month: "Jan", assigned: 4, resolved: 3 },
+        { month: "Feb", assigned: 5, resolved: 4 },
+        { month: "Mar", assigned: 3, resolved: 4 },
+        { month: "Apr", assigned: 6, resolved: 5 },
+        { month: "May", assigned: 4, resolved: 4 },
+        { month: "Jun", assigned: 5, resolved: 4 }
+      ],
       ...base,
       name: updatedName,
       unit: updatedUnit,

@@ -120,22 +120,20 @@ const ReportConfiguration = ({ config, onConfigChange, onGeneratePreview, isGene
             <button
               type="button"
               onClick={() => onConfigChange("format", "PDF")}
-              className={`py-2 px-3 rounded-lg text-xs font-mono font-bold border transition-colors cursor-pointer text-center ${
-                config.format === "PDF"
+              className={`py-2 px-3 rounded-lg text-xs font-mono font-bold border transition-colors cursor-pointer text-center ${config.format === "PDF"
                   ? "bg-blue-600 border-blue-500 text-white"
                   : "bg-slate-950 border-slate-800 hover:border-slate-750 text-slate-400 hover:text-white"
-              }`}
+                }`}
             >
               PDF
             </button>
             <button
               type="button"
               onClick={() => onConfigChange("format", "EXCEL")}
-              className={`py-2 px-3 rounded-lg text-xs font-mono font-bold border transition-colors cursor-pointer text-center ${
-                config.format === "EXCEL"
+              className={`py-2 px-3 rounded-lg text-xs font-mono font-bold border transition-colors cursor-pointer text-center ${config.format === "EXCEL"
                   ? "bg-blue-600 border-blue-500 text-white"
                   : "bg-slate-950 border-slate-800 hover:border-slate-750 text-slate-400 hover:text-white"
-              }`}
+                }`}
             >
               EXCEL
             </button>
@@ -151,22 +149,20 @@ const ReportConfiguration = ({ config, onConfigChange, onGeneratePreview, isGene
             <button
               type="button"
               onClick={() => onConfigChange("scope", "Detailed")}
-              className={`py-2 px-3 rounded-lg text-xs font-mono font-bold border transition-colors cursor-pointer text-center ${
-                config.scope === "Detailed"
+              className={`py-2 px-3 rounded-lg text-xs font-mono font-bold border transition-colors cursor-pointer text-center ${config.scope === "Detailed"
                   ? "bg-slate-900 border-slate-750 text-white"
                   : "bg-slate-950 border-slate-800 hover:border-slate-750 text-slate-400 hover:text-white"
-              }`}
+                }`}
             >
               DETAILED
             </button>
             <button
               type="button"
               onClick={() => onConfigChange("scope", "Summary")}
-              className={`py-2 px-3 rounded-lg text-xs font-mono font-bold border transition-colors cursor-pointer text-center ${
-                config.scope === "Summary"
+              className={`py-2 px-3 rounded-lg text-xs font-mono font-bold border transition-colors cursor-pointer text-center ${config.scope === "Summary"
                   ? "bg-slate-900 border-slate-750 text-white"
                   : "bg-slate-950 border-slate-800 hover:border-slate-750 text-slate-400 hover:text-white"
-              }`}
+                }`}
             >
               SUMMARY
             </button>
@@ -182,22 +178,20 @@ const ReportConfiguration = ({ config, onConfigChange, onGeneratePreview, isGene
             <button
               type="button"
               onClick={() => onConfigChange("priority", "Critical")}
-              className={`py-2 px-3 rounded-lg text-xs font-mono font-bold border transition-colors cursor-pointer text-center ${
-                config.priority === "Critical"
+              className={`py-2 px-3 rounded-lg text-xs font-mono font-bold border transition-colors cursor-pointer text-center ${config.priority === "Critical"
                   ? "bg-red-950/20 border-red-500/30 text-red-400"
                   : "bg-slate-950 border-slate-800 hover:border-slate-750 text-slate-400 hover:text-white"
-              }`}
+                }`}
             >
               CRITICAL
             </button>
             <button
               type="button"
               onClick={() => onConfigChange("priority", "Routine")}
-              className={`py-2 px-3 rounded-lg text-xs font-mono font-bold border transition-colors cursor-pointer text-center ${
-                config.priority === "Routine"
+              className={`py-2 px-3 rounded-lg text-xs font-mono font-bold border transition-colors cursor-pointer text-center ${config.priority === "Routine"
                   ? "bg-slate-900 border-slate-750 text-white"
                   : "bg-slate-950 border-slate-800 hover:border-slate-750 text-slate-400 hover:text-white"
-              }`}
+                }`}
             >
               ROUTINE
             </button>
