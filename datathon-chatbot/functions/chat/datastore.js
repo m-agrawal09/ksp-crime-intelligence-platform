@@ -134,6 +134,32 @@ function tryGetLocalCliCredentials() {
     }
 }
 
+function getCatalystCredentials() {
+    const envToken = process.env.CATALYST_REFRESH_TOKEN;
+    const envClientId = process.env.CATALYST_CLIENT_ID || "1000.D5IIHDXSPN2MII26AD0V61I6RMVSNM";
+    const envClientSecret = process.env.CATALYST_CLIENT_SECRET || "02ee875ecfc50573e5cc8d62916ad3077be20d0f42";
+    const envDc = process.env.CATALYST_DC || "in";
+
+    if (envToken) {
+        return {
+            dc: envDc,
+            clientId: envClientId,
+            clientSecret: envClientSecret,
+            refreshToken: envToken
+        };
+    }
+
+    const localCreds = tryGetLocalCliCredentials();
+    if (localCreds) return localCreds;
+
+    return {
+        dc: "in",
+        clientId: "1000.D5IIHDXSPN2MII26AD0V61I6RMVSNM",
+        clientSecret: "02ee875ecfc50573e5cc8d62916ad3077be20d0f42",
+        refreshToken: "1000.a7b68e03acb6065eafafd5a97f89498c.540ce405ff72c1e0eba1b7772d9054df"
+    };
+}
+
 let cachedToken = null;
 let tokenExpiryTime = 0;
 
@@ -141,7 +167,7 @@ async function getFreshAccessToken() {
     if (cachedToken && Date.now() < tokenExpiryTime) {
         return cachedToken;
     }
-    const creds = tryGetLocalCliCredentials();
+    const creds = getCatalystCredentials();
     if (!creds) throw new Error("No CLI credentials available for Catalyst API");
 
     const bodyData = `client_id=${creds.clientId}&client_secret=${creds.clientSecret}&refresh_token=${creds.refreshToken}&grant_type=refresh_token`;
@@ -284,23 +310,23 @@ class CrimeRepository {
         this.lookupCache = global.__catalyst_lookup_cache;
 
         const defaults = {
-            District: "56116000000042001",
-            Unit: "56116000000037351",
-            Employee: "56116000000034007",
-            CaseCategory: "56116000000038005",
-            GravityOffence: "56116000000034005",
-            CaseStatusMaster: "56116000000039003",
-            Court: "56116000000034004",
-            CrimeHead: "56116000000034009",
-            CrimeSubHead: "56116000000034009",
-            Rank: "56116000000039004",
-            Designation: "56116000000052001"
+            District: "38079000000025002",
+            Unit: "38079000000023002",
+            Employee: "38079000000023003",
+            CaseCategory: "38079000000030001",
+            GravityOffence: "38079000000031001",
+            CaseStatusMaster: "38079000000032001",
+            Court: "38079000000025003",
+            CrimeHead: "38079000000025004",
+            CrimeSubHead: "38079000000033001",
+            Rank: "38079000000035001",
+            Designation: "38079000000036001"
         };
         try {
             if (fs.existsSync(ROWID_MAPPING_PATH)) {
                 const loaded = JSON.parse(fs.readFileSync(ROWID_MAPPING_PATH, 'utf-8'));
                 this.rowIds = { ...defaults, ...loaded };
-                if (!this.rowIds.CrimeSubHead) this.rowIds.CrimeSubHead = "56116000000034009";
+                if (!this.rowIds.CrimeSubHead || this.rowIds.CrimeSubHead.startsWith("5611")) this.rowIds.CrimeSubHead = "38079000000033001";
             } else {
                 this.rowIds = defaults;
             }
@@ -329,23 +355,23 @@ class CrimeRepository {
                 officerKgid = emp.kgid || emp.KGID;
             }
         }
-        officerName = officerName || "PSI Investigating Officer";
+        officerName = officerName || "Ramesh Gowda";
         officerRank = officerRank || "PSI";
-        officerKgid = officerKgid || "KSP-2026-1001";
+        officerKgid = officerKgid || "KSP-8821";
 
         let stationName = row.PoliceStation || row.unit;
         if (!stationName && row.PoliceStationID) {
             stationName = liveLookups.units?.[row.PoliceStationID] || cache.units?.[row.PoliceStationID];
         }
-        stationName = stationName || "Central Police Station";
+        stationName = stationName || "Koramangala Police Station";
 
         let districtName = row.District || row.district;
         if (!districtName && row.DistrictID) {
             districtName = liveLookups.districts?.[row.DistrictID] || cache.districts?.[row.DistrictID];
         }
-        if (!districtName && row.PoliceStationID) {
-            const distId = cache.units?.[`dist_${row.PoliceStationID}`];
-            if (distId) districtName = liveLookups.districts?.[distId] || cache.districts?.[distId];
+        if (!districtName && row.PoliceStationID && cache.units?.[`dist_${row.PoliceStationID}`]) {
+            const distId = cache.units[`dist_${row.PoliceStationID}`];
+            districtName = liveLookups.districts?.[distId] || cache.districts?.[distId];
         }
         districtName = districtName || "Bengaluru City";
 
@@ -419,12 +445,12 @@ class CrimeRepository {
             allottedOfficerKgid: officerKgid,
             accusedName: accName,
             AccusedName: accName,
-            briefFacts: row.BriefFacts || row.Description || `FIR #${crimeNo} registered at ${stationName}, ${districtName}.`,
-            Description: row.BriefFacts || row.Description || `FIR #${crimeNo} registered at ${stationName}, ${districtName}.`,
+            briefFacts: row.BriefFacts || row.briefFacts || "Incident logged.",
+            BriefFacts: row.BriefFacts || row.briefFacts || "Incident logged.",
             propertyDescription: row.propertyDescription || "Evidence catalogued under mahazar",
-            estimatedValue: Number(row.estimatedValue || 250000),
-            officialReportImage: row.officialReportImage || "https://images.unsplash.com/photo-1568667256549-094345857637?q=80&w=800&auto=format&fit=crop",
-            lat: Number(row.latiutude || row.latitude || row.lat || 12.9716),
+            estimatedValue: Number(row.EstimatedValue || row.estimatedValue || 0),
+            officialReportImage: "https://images.unsplash.com/photo-1568667256549-094345857637?q=80&w=800&auto=format&fit=crop",
+            lat: Number(row.latiutude || row.lat || 12.9716),
             lng: Number(row.longitude || row.lng || 77.5946),
             locationStreet: row.locationStreet || `${districtName} Station Limit Road`
         };
@@ -516,16 +542,18 @@ class CrimeRepository {
         const regDateStr = formatCatalystDate(recordData.regDate || recordData.CrimeRegisteredDate);
 
         const catalystCaseMasterRow = {
+            CaseMasterID: String(caseMasterId),
             CrimeNo: crimeNo,
             CaseNo: caseNo,
             CrimeRegisteredDate: regDateStr,
-            PolicePersonID: String(this.rowIds.Employee),
-            PoliceStationID: String(this.rowIds.Unit),
-            CaseCategoryID: String(this.rowIds.CaseCategory),
-            GravityOffenceID: String(this.rowIds.GravityOffence),
-            CrimeMajorHeadID: String(this.rowIds.CrimeHead),
-            CaseStatusID: String(this.rowIds.CaseStatusMaster),
-            CourtID: String(this.rowIds.Court),
+            PolicePersonID: String(this.rowIds.Employee || "38079000000023003"),
+            PoliceStationID: String(this.rowIds.Unit || "38079000000023002"),
+            CaseCategoryID: String(this.rowIds.CaseCategory || "38079000000030001"),
+            GravityOffenceID: String(this.rowIds.GravityOffence || "38079000000031001"),
+            CrimeMajorHeadID: String(this.rowIds.CrimeHead || "38079000000025004"),
+            CrimeMinorHeadID: String(this.rowIds.CrimeSubHead || "38079000000033001"),
+            CaseStatusID: String(this.rowIds.CaseStatusMaster || "38079000000032001"),
+            CourtID: String(this.rowIds.Court || "38079000000025003"),
             IncidentFromDate: formatCatalystDatetime(recordData.incidentFromDate || recordData.IncidentFromDate, "10:00:00"),
             IncidentToDate: formatCatalystDatetime(recordData.incidentToDate || recordData.IncidentToDate, "11:30:00"),
             InfoReceivedPSDate: formatCatalystDatetime(recordData.infoReceivedPSDate || recordData.InfoReceivedPSDate, "12:00:00"),
