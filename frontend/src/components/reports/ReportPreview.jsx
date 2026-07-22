@@ -1,5 +1,5 @@
 import React from "react";
-import { FaFilePdf, FaFileExcel, FaShareAlt, FaCalendarAlt, FaShieldAlt } from "react-icons/fa";
+import { FaFilePdf, FaFileExcel, FaShieldAlt } from "react-icons/fa";
 
 const ReportPreview = ({ reportData, onExport, onShare, onSchedule }) => {
   if (!reportData) {
@@ -220,20 +220,6 @@ const ReportPreview = ({ reportData, onExport, onShare, onSchedule }) => {
         >
           <FaFileExcel className="text-sm" />
           EXPORT EXCEL (CSV)
-        </button>
-        <button
-          onClick={onShare}
-          className="flex items-center justify-center gap-1.5 bg-slate-850 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-750 font-space font-bold text-xs py-2 px-4 rounded-none transition-colors cursor-pointer"
-        >
-          <FaShareAlt className="text-xs" />
-          SHARE REPORT
-        </button>
-        <button
-          onClick={onSchedule}
-          className="flex items-center justify-center gap-1.5 bg-slate-850 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-750 font-space font-bold text-xs py-2 px-4 rounded-none transition-colors cursor-pointer"
-        >
-          <FaCalendarAlt className="text-xs" />
-          SCHEDULE COMPILATION
         </button>
       </div>
 
