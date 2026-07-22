@@ -213,7 +213,7 @@ class CrimeRepository {
 
     constructor(req) {
         if (!global.__catalyst_master_records) {
-            global.__catalyst_master_records = loadBaselineData();
+            global.__catalyst_master_records = [];
         }
         this.masterRecords = global.__catalyst_master_records;
 

@@ -36,19 +36,8 @@ module.exports = async (req, res) => {
          */
         const repository = new CrimeRepository(req);
 
-        let analytics = getAnalytics();
-
-if (!analytics) {
-
-    const records =
-        await repository.getCrimeAnalyticsData();
-
-    analytics =
-        generateAnalytics(records);
-
-    setAnalytics(analytics);
-
-}
+        const records = await repository.getCrimeAnalyticsData();
+        const analytics = generateAnalytics(records);
 
         /**
          * Detect user intent.
