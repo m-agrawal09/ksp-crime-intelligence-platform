@@ -9,13 +9,13 @@ import { recordService } from "./recordService";
 
 const districtsList = [
   "Bengaluru City",
-  "Mysuru District",
+  "Mysuru City",
   "Mangaluru City",
-  "Hubli-Dharwad",
-  "Belagavi District",
-  "Kalaburagi District",
+  "Hubballi-Dharwad",
+  "Belagavi",
+  "Kalaburagi",
   "Shivamogga",
-  "Udupi District",
+  "Udupi",
   "Davanagere",
   "Tumakuru",
   "Chikkamagaluru",
@@ -44,46 +44,59 @@ const statusesList = [
   "Case Closed / Completed"
 ];
 
-const districtCoords = {
-  "Bengaluru City": { lat: 12.9716, lng: 77.5946 },
-  "Mysuru District": { lat: 12.2958, lng: 76.6394 },
-  "Mangaluru City": { lat: 12.9141, lng: 74.8560 },
-  "Hubli-Dharwad": { lat: 15.3647, lng: 75.1240 },
-  "Belagavi District": { lat: 15.8497, lng: 74.4977 },
-  "Kalaburagi District": { lat: 17.3291, lng: 76.8343 },
-  "Shivamogga": { lat: 13.9299, lng: 75.5681 },
-  "Udupi District": { lat: 13.3409, lng: 74.7421 },
-  "Davanagere": { lat: 14.4644, lng: 75.9218 },
-  "Tumakuru": { lat: 13.3392, lng: 77.1140 },
-  "Chikkamagaluru": { lat: 13.3161, lng: 75.7720 },
-  "Bidar": { lat: 17.9104, lng: 77.5186 },
-  "Mandya": { lat: 12.5218, lng: 76.8973 },
-  "Dakshina Kannada": { lat: 12.8700, lng: 75.2400 },
-  "Hassan": { lat: 13.0070, lng: 76.1030 },
-  "Uttara Kannada": { lat: 14.7900, lng: 74.6800 }
+const districtCoordsMap = [
+  { keywords: ["bengaluru", "bangalore"], lat: 12.9716, lng: 77.5946, name: "Bengaluru City" },
+  { keywords: ["mysuru", "mysore"], lat: 12.2958, lng: 76.6394, name: "Mysuru City" },
+  { keywords: ["mangaluru", "mangalore", "dakshina kannada"], lat: 12.9141, lng: 74.8560, name: "Mangaluru City" },
+  { keywords: ["hubballi", "hubli", "dharwad"], lat: 15.3647, lng: 75.1240, name: "Hubballi-Dharwad" },
+  { keywords: ["belagavi", "belgaum"], lat: 15.8497, lng: 74.4977, name: "Belagavi" },
+  { keywords: ["kalaburagi", "gulbarga"], lat: 17.3291, lng: 76.8343, name: "Kalaburagi" },
+  { keywords: ["shivamogga", "shimoga"], lat: 13.9299, lng: 75.5681, name: "Shivamogga" },
+  { keywords: ["udupi"], lat: 13.3409, lng: 74.7421, name: "Udupi" },
+  { keywords: ["davanagere", "davangere"], lat: 14.4644, lng: 75.9218, name: "Davanagere" },
+  { keywords: ["tumakuru", "tumkur"], lat: 13.3392, lng: 77.1140, name: "Tumakuru" },
+  { keywords: ["chikkamagaluru", "chikmagalur"], lat: 13.3161, lng: 75.7720, name: "Chikkamagaluru" },
+  { keywords: ["bidar"], lat: 17.9104, lng: 77.5186, name: "Bidar" },
+  { keywords: ["mandya"], lat: 12.5218, lng: 76.8973, name: "Mandya" },
+  { keywords: ["hassan"], lat: 13.0070, lng: 76.1030, name: "Hassan" },
+  { keywords: ["uttara kannada", "karwar"], lat: 14.7900, lng: 74.6800, name: "Uttara Kannada" }
+];
+
+export const getDistrictCoordinates = (districtName, itemLat, itemLng) => {
+  if (itemLat && itemLng && Number(itemLat) !== 12.9716 && Number(itemLng) !== 77.5946) {
+    return { lat: Number(itemLat), lng: Number(itemLng) };
+  }
+  if (!districtName) return { lat: 12.9716, lng: 77.5946 };
+  const dLower = String(districtName).toLowerCase();
+  for (const entry of districtCoordsMap) {
+    if (entry.keywords.some(k => dLower.includes(k))) {
+      return { lat: entry.lat, lng: entry.lng };
+    }
+  }
+  return { lat: Number(itemLat) || 12.9716, lng: Number(itemLng) || 77.5946 };
 };
 
 const getLiveIncidents = () => {
   const firs = recordService.getRecords();
 
-  return firs.map((r, idx) => {
-    const center = districtCoords[r.district] || districtCoords["Bengaluru City"];
+  return firs.map((r) => {
+    const center = getDistrictCoordinates(r.district, r.lat, r.lng);
     
     return {
-      id: r.id,
+      id: r.id || r.ROWID || `fir-${r.crimeNo}`,
       caseNo: r.caseNo || r.crimeNo,
       crimeNo: r.crimeNo,
-      category: r.crimeHead || "Property Offences",
-      severity: r.severity || "MEDIUM",
-      status: r.status || "Under Investigation",
-      district: r.district || "Bengaluru City",
-      unit: r.unit || "City Station",
-      date: r.regDate || "2026-07-01",
-      lat: Number(r.lat) || center.lat,
-      lng: Number(r.lng) || center.lng,
-      briefFacts: r.briefFacts || "Incident recorded in CCTNS Datastore.",
+      category: r.crimeHead || r.CrimeCategory || "Property Offences",
+      severity: r.severity || r.Severity || "MEDIUM",
+      status: r.status || r.Status || "Under Investigation",
+      district: r.district || r.District || "Bengaluru City",
+      unit: r.unit || r.PoliceStation || "City Station",
+      date: r.regDate || r.CrimeRegisteredDate || new Date().toISOString().split("T")[0],
+      lat: Number(r.lat || r.latiutude) || center.lat,
+      lng: Number(r.lng || r.longitude) || center.lng,
+      briefFacts: r.briefFacts || r.BriefFacts || "Incident recorded in CCTNS Datastore.",
       assignedOfficer: {
-        name: r.allottedOfficerName || "Unassigned",
+        name: r.allottedOfficerName || r.OfficerName || "Unassigned",
         kgid: r.allottedOfficerKgid || "KSP-0000"
       },
       districtCenter: center

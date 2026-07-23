@@ -21,7 +21,15 @@
           "idx": 1,
           "id": "60077759371",
           "name": "Development",
-          "type": 3
+          "type": 3,
+          "env_status": "Active",
+          "project_details": {
+            "project_name": "DataThon",
+            "id": "56116000000017001",
+            "project_type": "Live"
+          },
+          "is_default": false,
+          "action_required": false
         }
       ]
     }

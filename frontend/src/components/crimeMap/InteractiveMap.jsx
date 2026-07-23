@@ -5,8 +5,8 @@ import "leaflet/dist/leaflet.css";
 import { FaCalendarAlt, FaUser, FaBuilding } from "react-icons/fa";
 
 // Tile Layer details
-const MAP_TILE_URL = "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png";
-const MAP_ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
+const MAP_TILE_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+const MAP_ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
 // Map center of Karnataka
 const KARNATAKA_CENTER = [14.5, 76.2];
@@ -156,6 +156,11 @@ const MapController = ({ selectedItem, setZoomLevel }) => {
 
 // Available High-Precision Map Tile Services
 const MAP_LAYERS = {
+  streets: {
+    name: "Streets",
+    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  },
   dark: {
     name: "Dark",
     url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
@@ -165,11 +170,6 @@ const MAP_LAYERS = {
     name: "Satellite",
     url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
     attribution: "&copy; Esri, Maxar, Earthstar Geographics, CNES/Airbus DS, USDA, USGS, AeroGRID, IGN, and the GIS User Community"
-  },
-  streets: {
-    name: "Streets",
-    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }
 };
 
@@ -225,7 +225,7 @@ const createMaskGeoJSON = (karnatakaGeoJSON) => {
 
 const InteractiveMap = ({ incidents, selectedItem, onSelectDistrict, onSelectMarker }) => {
   const [zoomLevel, setZoomLevel] = useState(DEFAULT_ZOOM);
-  const [activeLayer, setActiveLayer] = useState("dark");
+  const [activeLayer, setActiveLayer] = useState("streets");
 
   // Boundaries state
   const [stateGeoJSON, setStateGeoJSON] = useState(null);
@@ -267,12 +267,14 @@ const InteractiveMap = ({ incidents, selectedItem, onSelectDistrict, onSelectMar
   const getDistrictClusters = () => {
     const clusters = {};
     incidents.forEach((inc) => {
-      const name = inc.district;
+      const name = inc.district || "Bengaluru City";
+      const lat = Number(inc.lat) || inc.districtCenter?.lat || 12.9716;
+      const lng = Number(inc.lng) || inc.districtCenter?.lng || 77.5946;
       if (!clusters[name]) {
         clusters[name] = {
           name,
           count: 0,
-          latLng: inc.districtCenter,
+          latLng: inc.districtCenter || { lat, lng },
           incidents: []
         };
       }

@@ -8,6 +8,12 @@ import { recordService } from "../../services/recordService";
 
 // ── Exact same tile layers as InteractiveMap.jsx ──────────────────────────
 const MAP_LAYERS = {
+  streets: {
+    label: "Streets",
+    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  },
   dark: {
     label: "Dark",
     url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
@@ -19,12 +25,6 @@ const MAP_LAYERS = {
     url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
     attribution:
       "&copy; Esri, Maxar, Earthstar Geographics, CNES/Airbus DS, USDA, USGS, AeroGRID, IGN",
-  },
-  streets: {
-    label: "Streets",
-    url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    attribution:
-      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   },
 };
 
@@ -180,7 +180,7 @@ const KarnatakaOverviewPanel = () => {
   const zoomRef         = useRef(PANEL_ZOOM);
 
   const [tick, setTick]           = useState(0);
-  const [activeLayer, setActiveLayer] = useState("dark");
+  const [activeLayer, setActiveLayer] = useState("streets");
   const [zoomLevel, setZoomLevel] = useState(PANEL_ZOOM);
   const [boundariesLoaded, setBoundariesLoaded] = useState(false);
 
@@ -223,8 +223,8 @@ const KarnatakaOverviewPanel = () => {
     map.zoomControl.setPosition("bottomright");
 
     // Initial tile layer
-    const tile = L.tileLayer(MAP_LAYERS.dark.url, {
-      attribution: MAP_LAYERS.dark.attribution,
+    const tile = L.tileLayer(MAP_LAYERS.streets.url, {
+      attribution: MAP_LAYERS.streets.attribution,
       maxZoom: 19,
     }).addTo(map);
     tileLayerRef.current = tile;
@@ -336,14 +336,17 @@ const KarnatakaOverviewPanel = () => {
       // District clusters
       const clusters = {};
       incidents.forEach((inc) => {
-        if (!clusters[inc.district]) {
-          clusters[inc.district] = {
+        const dName = inc.district || "Bengaluru City";
+        const lat = Number(inc.lat) || inc.districtCenter?.lat || 12.9716;
+        const lng = Number(inc.lng) || inc.districtCenter?.lng || 77.5946;
+        if (!clusters[dName]) {
+          clusters[dName] = {
             count: 0,
-            lat:   inc.districtCenter.lat,
-            lng:   inc.districtCenter.lng,
+            lat: inc.districtCenter?.lat || lat,
+            lng: inc.districtCenter?.lng || lng,
           };
         }
-        clusters[inc.district].count++;
+        clusters[dName].count++;
       });
 
       Object.entries(clusters).forEach(([district, data]) => {

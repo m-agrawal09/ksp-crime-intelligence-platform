@@ -48,8 +48,8 @@ let globalServerRecords = loadPersistentDb();
 let intIdCounter = 2500;
 const generateUniqueIntId = () => {
     intIdCounter += 1;
-    const timestampOffset = Math.floor((Date.now() % 1000000));
-    return Number(25000000 + timestampOffset + intIdCounter);
+    const timestampOffset = Math.floor((Date.now() % 100000));
+    return Number(`25${String(timestampOffset).padStart(5, '0')}${String(intIdCounter).slice(-3)}`);
 };
 
 function formatCatalystDate(dStr) {
@@ -310,23 +310,19 @@ class CrimeRepository {
         this.lookupCache = global.__catalyst_lookup_cache;
 
         const defaults = {
-            District: "38079000000025002",
-            Unit: "38079000000023002",
-            Employee: "38079000000023003",
-            CaseCategory: "38079000000030001",
-            GravityOffence: "38079000000031001",
-            CaseStatusMaster: "38079000000032001",
-            Court: "38079000000025003",
-            CrimeHead: "38079000000025004",
-            CrimeSubHead: "38079000000033001",
-            Rank: "38079000000035001",
-            Designation: "38079000000036001"
+            District: "56116000000043001",
+            Unit: "56116000000049001",
+            Employee: "56116000000042004",
+            CaseCategory: "56116000000039001",
+            GravityOffence: "56116000000040003",
+            CaseStatusMaster: "56116000000041002",
+            Court: "56116000000047001",
+            CrimeHead: "56116000000034009"
         };
         try {
             if (fs.existsSync(ROWID_MAPPING_PATH)) {
                 const loaded = JSON.parse(fs.readFileSync(ROWID_MAPPING_PATH, 'utf-8'));
                 this.rowIds = { ...defaults, ...loaded };
-                if (!this.rowIds.CrimeSubHead || this.rowIds.CrimeSubHead.startsWith("5611")) this.rowIds.CrimeSubHead = "38079000000033001";
             } else {
                 this.rowIds = defaults;
             }
@@ -338,7 +334,7 @@ class CrimeRepository {
     }
 
     normalizeRow(row, liveLookups = {}) {
-        const caseMasterId = Number(row.CaseMasterID || row.ROWID || row.id || 2001);
+        const caseMasterId = String(row.CaseMasterID || row.ROWID || row.id || "2001");
         const crimeNo = String(row.CrimeNo || row.crimeNo || `1044300062026${String(caseMasterId).padStart(5, "0")}`);
         const caseNo = String(row.CaseNo || row.caseNo || `2026${String(caseMasterId).padStart(5, "0")}`);
         const regDateStr = String(row.CrimeRegisteredDate || row.regDate || new Date().toISOString().split("T")[0]);
@@ -489,15 +485,15 @@ class CrimeRepository {
             if (caseRes.status === 200 && caseRes.data && Array.isArray(caseRes.data.data)) {
                 cloudRows = caseRes.data.data;
             }
-            if (unitRes?.data?.data) unitRes.data.data.forEach(u => liveLookups.units[u.ROWID] = u.UnitName);
-            if (distRes?.data?.data) distRes.data.data.forEach(d => liveLookups.districts[d.ROWID] = d.DistrictName);
-            if (empRes?.data?.data) empRes.data.data.forEach(e => liveLookups.employees[e.ROWID] = e);
-            if (catRes?.data?.data) catRes.data.data.forEach(c => liveLookups.categories[c.ROWID] = c.LookupValue);
-            if (gravRes?.data?.data) gravRes.data.data.forEach(g => liveLookups.gravity[g.ROWID] = g.LookupValue);
-            if (statusRes?.data?.data) statusRes.data.data.forEach(s => liveLookups.caseStatuses[s.ROWID] = s.CaseStatusName);
-            if (headRes?.data?.data) headRes.data.data.forEach(h => liveLookups.crimeHeads[h.ROWID] = h.CrimeGroupName);
-            if (compRes?.data?.data) compRes.data.data.forEach(c => { if (c.CaseMasterID) liveLookups.complainants[c.CaseMasterID] = c.ComplainantName; });
-            if (accRes?.data?.data) accRes.data.data.forEach(a => { if (a.CaseMasterID) liveLookups.accused[a.CaseMasterID] = a.AccusedName; });
+            if (Array.isArray(unitRes?.data?.data)) unitRes.data.data.forEach(u => liveLookups.units[u.ROWID] = u.UnitName);
+            if (Array.isArray(distRes?.data?.data)) distRes.data.data.forEach(d => liveLookups.districts[d.ROWID] = d.DistrictName);
+            if (Array.isArray(empRes?.data?.data)) empRes.data.data.forEach(e => liveLookups.employees[e.ROWID] = e);
+            if (Array.isArray(catRes?.data?.data)) catRes.data.data.forEach(c => liveLookups.categories[c.ROWID] = c.LookupValue);
+            if (Array.isArray(gravRes?.data?.data)) gravRes.data.data.forEach(g => liveLookups.gravity[g.ROWID] = g.LookupValue);
+            if (Array.isArray(statusRes?.data?.data)) statusRes.data.data.forEach(s => liveLookups.caseStatuses[s.ROWID] = s.CaseStatusName);
+            if (Array.isArray(headRes?.data?.data)) headRes.data.data.forEach(h => liveLookups.crimeHeads[h.ROWID] = h.CrimeGroupName);
+            if (Array.isArray(compRes?.data?.data)) compRes.data.data.forEach(c => { if (c.CaseMasterID) liveLookups.complainants[c.CaseMasterID] = c.ComplainantName; });
+            if (Array.isArray(accRes?.data?.data)) accRes.data.data.forEach(a => { if (a.CaseMasterID) liveLookups.accused[a.CaseMasterID] = a.AccusedName; });
 
             console.log(`[CrimeRepository] Fetched ${cloudRows.length} CaseMaster rows and online lookups from Zoho Catalyst Data Store.`);
         } catch (err) {
@@ -537,23 +533,21 @@ class CrimeRepository {
     async createCrimeRecord(recordData) {
         const caseMasterId = generateUniqueIntId();
         const serialNo = String(caseMasterId).slice(-5);
-        const crimeNo = String(recordData.crimeNo || `1044300062026${serialNo}`);
+        const crimeNo = String(recordData.crimeNo || `1044361102026${serialNo}`);
         const caseNo = String(recordData.caseNo || `2026${serialNo}`);
         const regDateStr = formatCatalystDate(recordData.regDate || recordData.CrimeRegisteredDate);
 
         const catalystCaseMasterRow = {
-            CaseMasterID: String(caseMasterId),
             CrimeNo: crimeNo,
             CaseNo: caseNo,
             CrimeRegisteredDate: regDateStr,
-            PolicePersonID: String(this.rowIds.Employee || "38079000000023003"),
-            PoliceStationID: String(this.rowIds.Unit || "38079000000023002"),
-            CaseCategoryID: String(this.rowIds.CaseCategory || "38079000000030001"),
-            GravityOffenceID: String(this.rowIds.GravityOffence || "38079000000031001"),
-            CrimeMajorHeadID: String(this.rowIds.CrimeHead || "38079000000025004"),
-            CrimeMinorHeadID: String(this.rowIds.CrimeSubHead || "38079000000033001"),
-            CaseStatusID: String(this.rowIds.CaseStatusMaster || "38079000000032001"),
-            CourtID: String(this.rowIds.Court || "38079000000025003"),
+            PolicePersonID: String(this.rowIds.Employee || "56116000000042004"),
+            PoliceStationID: String(this.rowIds.Unit || "56116000000049001"),
+            CaseCategoryID: String(this.rowIds.CaseCategory || "56116000000039001"),
+            GravityOffenceID: String(this.rowIds.GravityOffence || "56116000000040003"),
+            CrimeMajorHeadID: String(this.rowIds.CrimeHead || "56116000000034009"),
+            CaseStatusID: String(this.rowIds.CaseStatusMaster || "56116000000041002"),
+            CourtID: String(this.rowIds.Court || "56116000000047001"),
             IncidentFromDate: formatCatalystDatetime(recordData.incidentFromDate || recordData.IncidentFromDate, "10:00:00"),
             IncidentToDate: formatCatalystDatetime(recordData.incidentToDate || recordData.IncidentToDate, "11:30:00"),
             InfoReceivedPSDate: formatCatalystDatetime(recordData.infoReceivedPSDate || recordData.InfoReceivedPSDate, "12:00:00"),
@@ -561,9 +555,6 @@ class CrimeRepository {
             longitude: Number(recordData.lng || recordData.longitude) || 77.5946,
             BriefFacts: String(recordData.briefFacts || recordData.Description || `FIR #${crimeNo} registered at ${recordData.unit || 'Police Station'}.`).slice(0, 250)
         };
-        if (this.rowIds.CrimeSubHead && String(this.rowIds.CrimeSubHead).startsWith("5611") && this.rowIds.CrimeSubHead !== this.rowIds.CrimeHead) {
-            catalystCaseMasterRow.CrimeMinorHeadID = String(this.rowIds.CrimeSubHead);
-        }
 
         const fullRecord = {
             ...catalystCaseMasterRow,
@@ -615,7 +606,7 @@ class CrimeRepository {
             if (rowId && String(rowId).length > 10) {
                 await callCatalystDatastoreApi(`/table/CaseMaster/row`, 'PUT', [{
                     ROWID: String(rowId),
-                    CaseStatusID: String(this.rowIds.CaseStatusMaster),
+                    CaseStatusID: String(this.rowIds.CaseStatusMaster || "56116000000041002"),
                     BriefFacts: String(updatedData.briefFacts || updatedData.Description || "Updated FIR record")
                 }]);
                 console.log("✅ [CrimeRepository] Online Catalyst Data Store row updated.");
@@ -668,7 +659,7 @@ class CrimeRepository {
     }
 
     async createOfficerRecord(officerData) {
-        const empId = Number(Date.now().toString().slice(-6));
+        const empId = String(Date.now().toString().slice(-6));
         const badge = String(officerData.badgeNumber || `KSP-2026-${empId}`);
         const name = String(officerData.name || "Officer");
 
@@ -676,15 +667,8 @@ class CrimeRepository {
             EmployeeID: empId,
             KGID: badge,
             FirstName: name,
-            DistrictID: String(this.rowIds.District),
-            UnitID: String(this.rowIds.Unit),
-            RankID: String(this.rowIds.Rank || "38079000000035001"),
-            DesignationID: String(this.rowIds.Designation || "38079000000036001"),
-            EmployeeDOB: "1992-01-01",
-            GenderlD: 1,
-            BloodGroupID: 1,
-            PhysicallyChallenged: false,
-            AppointmentDate: new Date().toISOString().split("T")[0]
+            DistrictID: String(this.rowIds.District || "56116000000043001"),
+            UnitID: String(this.rowIds.Unit || "56116000000049001")
         };
 
         try {

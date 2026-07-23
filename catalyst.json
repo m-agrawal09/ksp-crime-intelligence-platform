@@ -1,16 +1,12 @@
 {
-  "functions": [
-    {
-      "name": "chat",
-      "type": "AdvancedIO",
-      "source": "datathon-chatbot/functions/chat"
-    },
-    {
-      "name": "insights",
-      "type": "AdvancedIO",
-      "source": "datathon-chatbot/functions/insights"
-    }
-  ],
+  "functions": {
+    "targets": [
+      "chat",
+      "insights"
+    ],
+    "source": "datathon-chatbot/functions",
+    "ignore": []
+  },
   "client": {
     "source": "frontend/dist"
   }

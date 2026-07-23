@@ -1,7 +1,11 @@
 {
-  "name": "chat",
-  "type": "AdvancedIO",
-  "stack": "node18",
-  "source": ".",
-  "path": "."
+  "deployment": {
+    "name": "chat",
+    "stack": "node18",
+    "type": "basicio",
+    "env_variables": {}
+  },
+  "execution": {
+    "main": "index.js"
+  }
 }

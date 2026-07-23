@@ -20,11 +20,14 @@ import {
 } from "react-icons/fa";
 
 const PRESET_AVATARS = [
-  { label: "Male Officer 1", url: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=250&auto=format&fit=crop" },
-  { label: "Female Officer 1", url: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=250&auto=format&fit=crop" },
-  { label: "Male Officer 2", url: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=250&auto=format&fit=crop" },
-  { label: "Senior DySP", url: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=250&auto=format&fit=crop" },
-  { label: "Tactical Officer", url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=250&auto=format&fit=crop" }
+  { label: "Commander Profile", url: "https://i.pinimg.com/1200x/27/0c/e1/270ce1193cbdc1cb9f4211e8e0eaf87d.jpg" },
+  { label: "Tactical Officer", url: "https://i.pinimg.com/1200x/3a/01/97/3a0197357a4ad3428b34eb8884cf4cea.jpg" },
+  { label: "Inspector Profile", url: "https://i.pinimg.com/736x/2c/11/3f/2c113fd9405b68fa8e59fbf22a17ed45.jpg" },
+  { label: "Special Ops Officer", url: "https://i.pinimg.com/1200x/4a/00/0f/4a000f954bc84e713ce910bc90de34f9.jpg" },
+  { label: "Field Officer", url: "https://i.pinimg.com/736x/09/74/48/0974482cba0effe8a902070d27fcc952.jpg" },
+  { label: "Senior DySP", url: "https://i.pinimg.com/1200x/18/1e/26/181e26c023cfd2c8eee90ebb99fbddfb.jpg" },
+  { label: "Intelligence Officer", url: "https://i.pinimg.com/736x/a5/9f/3e/a59f3e2c45390d5ff9ba4291a77f1212.jpg" },
+  { label: "Operations Officer", url: "https://i.pinimg.com/736x/80/7b/ec/807bec8232c15e4db104f32fa1887835.jpg" }
 ];
 
 const Settings = () => {

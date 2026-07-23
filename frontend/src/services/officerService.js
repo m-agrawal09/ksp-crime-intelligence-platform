@@ -1,5 +1,16 @@
 // Live Officer Dossier Service connected to Zoho Catalyst Online Data Store (Employee table)
 
+const OFFICER_PHOTOS = [
+  "https://i.pinimg.com/1200x/27/0c/e1/270ce1193cbdc1cb9f4211e8e0eaf87d.jpg",
+  "https://i.pinimg.com/1200x/3a/01/97/3a0197357a4ad3428b34eb8884cf4cea.jpg",
+  "https://i.pinimg.com/736x/2c/11/3f/2c113fd9405b68fa8e59fbf22a17ed45.jpg",
+  "https://i.pinimg.com/1200x/4a/00/0f/4a000f954bc84e713ce910bc90de34f9.jpg",
+  "https://i.pinimg.com/736x/09/74/48/0974482cba0effe8a902070d27fcc952.jpg",
+  "https://i.pinimg.com/1200x/18/1e/26/181e26c023cfd2c8eee90ebb99fbddfb.jpg",
+  "https://i.pinimg.com/736x/a5/9f/3e/a59f3e2c45390d5ff9ba4291a77f1212.jpg",
+  "https://i.pinimg.com/736x/80/7b/ec/807bec8232c15e4db104f32fa1887835.jpg"
+];
+
 const officersDatabase = {
   "KSP-8821": {
     badgeNumber: "KSP-8821",
@@ -9,7 +20,7 @@ const officersDatabase = {
     station: "Bengaluru City",
     yearsOfService: 6,
     status: "On Duty",
-    avatar: "https://i.pinimg.com/736x/cf/d7/89/cfd789465d360c8424f4e368fc5d2806.jpg",
+    avatar: OFFICER_PHOTOS[0],
     ROWID: "KSP-8821",
     kpis: { totalCases: 5, activeCases: 2, closedCases: 3, chargesheetRate: 80, avgInvestigationTime: 28, detectionRate: 85 },
     workload: { highPriority: [], pending: [], hearings: [], recent: [] },
@@ -23,7 +34,7 @@ const officersDatabase = {
     station: "Mysuru City",
     yearsOfService: 4,
     status: "On Duty",
-    avatar: "https://i.pinimg.com/1200x/4a/00/0f/4a000f954bc84e713ce910bc90de34f9.jpg",
+    avatar: OFFICER_PHOTOS[1],
     ROWID: "KSP-7455",
     kpis: { totalCases: 4, activeCases: 1, closedCases: 3, chargesheetRate: 85, avgInvestigationTime: 30, detectionRate: 90 },
     workload: { highPriority: [], pending: [], hearings: [], recent: [] },
@@ -37,7 +48,7 @@ const officersDatabase = {
     station: "Mangaluru City",
     yearsOfService: 12,
     status: "On Duty",
-    avatar: "https://i.pinimg.com/736x/31/80/fa/3180fa0f3fd16359d9d9790c2eed874d.jpg",
+    avatar: OFFICER_PHOTOS[2],
     ROWID: "KSP-6120",
     kpis: { totalCases: 3, activeCases: 0, closedCases: 3, chargesheetRate: 100, avgInvestigationTime: 20, detectionRate: 95 },
     workload: { highPriority: [], pending: [], hearings: [], recent: [] },
@@ -51,7 +62,7 @@ const officersDatabase = {
     station: "Belagavi District",
     yearsOfService: 5,
     status: "On Duty",
-    avatar: "https://i.pinimg.com/1200x/22/1a/b3/221ab37e4210e1c445b1a65e97dbdf53.jpg",
+    avatar: OFFICER_PHOTOS[3],
     ROWID: "KSP-4933",
     kpis: { totalCases: 2, activeCases: 1, closedCases: 1, chargesheetRate: 75, avgInvestigationTime: 35, detectionRate: 80 },
     workload: { highPriority: [], pending: [], hearings: [], recent: [] },
@@ -65,7 +76,7 @@ const officersDatabase = {
     station: "Shivamogga",
     yearsOfService: 3,
     status: "On Duty",
-    avatar: "https://i.pinimg.com/736x/b6/94/11/b6941188e0fb2cc12b1d0864bc7c8352.jpg",
+    avatar: OFFICER_PHOTOS[4],
     ROWID: "KSP-3211",
     kpis: { totalCases: 1, activeCases: 1, closedCases: 0, chargesheetRate: 60, avgInvestigationTime: 40, detectionRate: 70 },
     workload: { highPriority: [], pending: [], hearings: [], recent: [] },
@@ -79,7 +90,7 @@ const officersDatabase = {
     station: "Tumakuru",
     yearsOfService: 15,
     status: "On Duty",
-    avatar: "https://i.pinimg.com/736x/37/7b/2f/377b2f76dac0bed695186521a84e6f5e.jpg",
+    avatar: OFFICER_PHOTOS[5],
     ROWID: "KSP-5022",
     kpis: { totalCases: 0, activeCases: 0, closedCases: 0, chargesheetRate: 85, avgInvestigationTime: 30, detectionRate: 90 },
     workload: { highPriority: [], pending: [], hearings: [], recent: [] },
@@ -87,7 +98,7 @@ const officersDatabase = {
   }
 };
 
-const OFFICERS_STORAGE_KEY = "ksp_custom_officers_v3_online_only";
+const OFFICERS_STORAGE_KEY = "ksp_custom_officers_v5_pinterest_photos";
 
 const loadCustomOfficers = () => {
   try {
@@ -132,7 +143,7 @@ export const officerService = {
         const json = await res.json();
         if (json.success && Array.isArray(json.data)) {
           const customMap = loadCustomOfficers();
-          json.data.forEach((emp) => {
+          json.data.forEach((emp, idx) => {
             const badge = emp.badgeNumber || `KSP-${emp.ROWID}`;
             if (!customMap[badge]) {
               customMap[badge] = {
@@ -143,7 +154,7 @@ export const officerService = {
                 station: emp.station || "Bengaluru Range",
                 yearsOfService: emp.yearsOfService || 5,
                 status: emp.status || "On Duty",
-                avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=250&auto=format&fit=crop",
+                avatar: OFFICER_PHOTOS[idx % OFFICER_PHOTOS.length],
                 ROWID: emp.ROWID,
                 kpis: {
                   totalCases: 0,

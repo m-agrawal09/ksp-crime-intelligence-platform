@@ -5,11 +5,22 @@
  * Backed by localStorage for session persistence across browser refreshes.
  */
 
-const USERS_STORAGE_KEY = "ksp_auth_users_v3_online_only";
-const SESSION_STORAGE_KEY = "ksp_auth_session_v3";
-const PIN_STORAGE_KEY = "ksp_security_pin_v3";
+const USERS_STORAGE_KEY = "ksp_auth_users_v6_pinterest_avatars";
+const SESSION_STORAGE_KEY = "ksp_auth_session_v6";
+const PIN_STORAGE_KEY = "ksp_security_pin_v6";
 
 const DEFAULT_SECURITY_PIN = "1122";
+
+const OFFICER_PHOTOS = [
+  "https://i.pinimg.com/1200x/27/0c/e1/270ce1193cbdc1cb9f4211e8e0eaf87d.jpg",
+  "https://i.pinimg.com/1200x/3a/01/97/3a0197357a4ad3428b34eb8884cf4cea.jpg",
+  "https://i.pinimg.com/736x/2c/11/3f/2c113fd9405b68fa8e59fbf22a17ed45.jpg",
+  "https://i.pinimg.com/1200x/4a/00/0f/4a000f954bc84e713ce910bc90de34f9.jpg",
+  "https://i.pinimg.com/736x/09/74/48/0974482cba0effe8a902070d27fcc952.jpg",
+  "https://i.pinimg.com/1200x/18/1e/26/181e26c023cfd2c8eee90ebb99fbddfb.jpg",
+  "https://i.pinimg.com/736x/a5/9f/3e/a59f3e2c45390d5ff9ba4291a77f1212.jpg",
+  "https://i.pinimg.com/736x/80/7b/ec/807bec8232c15e4db104f32fa1887835.jpg"
+];
 
 const INITIAL_USERS = [
   {
@@ -21,7 +32,8 @@ const INITIAL_USERS = [
     rank: "Command Director",
     kgid: "KSP-ADMIN-01",
     badge: "KSP-ADMIN-01",
-    unit: "KSP Intelligence HQ"
+    unit: "KSP Intelligence HQ",
+    avatar: OFFICER_PHOTOS[0]
   }
 ];
 
@@ -105,9 +117,10 @@ export const authService = {
           const currentUsers = loadUsers();
           const adminUsers = currentUsers.filter(u => u.role === "ADMIN");
 
-          const onlineOfficers = json.data.map(emp => {
+          const onlineOfficers = json.data.map((emp, idx) => {
             const cleanName = emp.name.toLowerCase().replace(/[^a-z0-9]/g, '');
             const badge = emp.badgeNumber || `KSP-${emp.ROWID}`;
+            const photoUrl = OFFICER_PHOTOS[idx % OFFICER_PHOTOS.length];
             const existing = currentUsers.find(u => u.id === `u-${emp.ROWID}` || u.badge === badge || u.name.toLowerCase() === emp.name.toLowerCase());
             return {
               id: `u-${emp.ROWID}`,
@@ -119,7 +132,7 @@ export const authService = {
               kgid: badge,
               badge: badge,
               unit: emp.unit || "State Range",
-              avatar: existing?.avatar || "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=250&auto=format&fit=crop"
+              avatar: photoUrl
             };
           });
 
