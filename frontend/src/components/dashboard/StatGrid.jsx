@@ -6,7 +6,6 @@ import {
   FaUserLock
 } from "react-icons/fa";
 import StatCard from "./StatCard";
-import { useLanguage } from "../../context/LanguageContext";
 
 // Static sparkline trend data for each KPI card (10-point arrays)
 const SPARK_DATA = {
@@ -17,14 +16,13 @@ const SPARK_DATA = {
 };
 
 const StatGrid = ({ metrics }) => {
-  const { t } = useLanguage();
   if (!metrics) return null;
 
   const cardsData = [
     {
-      title:      t("kpiTotalFirs", "Total Registered FIRs"),
+      title:      "Total Registered FIRs",
       value:      metrics.total_firs.value.toLocaleString("en-IN"),
-      change:     `${metrics.total_firs.change_percent >= 0 ? "+" : ""}${metrics.total_firs.change_percent}% ${t("fromLastMonth", "from last month")}`,
+      change:     `${metrics.total_firs.change_percent >= 0 ? "+" : ""}${metrics.total_firs.change_percent}% from last month`,
       icon:       FaFolderOpen,
       color:      "text-blue-400",
       borderColor:"border-blue-500",
@@ -36,9 +34,9 @@ const StatGrid = ({ metrics }) => {
       sparkColor: SPARK_DATA.firs.color,
     },
     {
-      title:      t("kpiActiveInvestigations", "Active Investigations"),
+      title:      "Active Investigations",
       value:      metrics.active_investigations.value.toLocaleString("en-IN"),
-      change:     `${metrics.active_investigations.change_percent >= 0 ? "+" : ""}${metrics.active_investigations.change_percent}% ${t("fromLastMonth", "from last month")}`,
+      change:     `${metrics.active_investigations.change_percent >= 0 ? "+" : ""}${metrics.active_investigations.change_percent}% from last month`,
       icon:       FaSearch,
       color:      "text-amber-400",
       borderColor:"border-amber-500",
@@ -50,9 +48,9 @@ const StatGrid = ({ metrics }) => {
       sparkColor: SPARK_DATA.active.color,
     },
     {
-      title:      t("kpiChargesheetRate", "Charge-Sheet Rate (IIF-5)"),
+      title:      "Charge-Sheet Rate (IIF-5)",
       value:      `${metrics.charge_sheet_rate.value}%`,
-      change:     `+${metrics.charge_sheet_rate.change_percent}% ${t("fromLastQuarter", "vs last quarter")}`,
+      change:     `+${metrics.charge_sheet_rate.change_percent}% vs last quarter`,
       icon:       FaGavel,
       color:      "text-emerald-400",
       borderColor:"border-emerald-500",
@@ -64,9 +62,9 @@ const StatGrid = ({ metrics }) => {
       sparkColor: SPARK_DATA.chargeSheet.color,
     },
     {
-      title:      t("kpiArrestRate", "Suspect Arrest Rate (IIF-3)"),
+      title:      "Suspect Arrest Rate (IIF-3)",
       value:      `${metrics.apprehension_rate.value}%`,
-      change:     `+${metrics.apprehension_rate.change_percent}% ${t("yoyTracking", "YoY tracking")}`,
+      change:     `+${metrics.apprehension_rate.change_percent}% YoY tracking`,
       icon:       FaUserLock,
       color:      "text-rose-400",
       borderColor:"border-rose-500",

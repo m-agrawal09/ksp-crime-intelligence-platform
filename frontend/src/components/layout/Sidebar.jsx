@@ -2,54 +2,53 @@ import { NavLink } from "react-router-dom";
 import {
   RiDashboardLine,
   RiBrainLine,
+  RiRobot2Line,
   RiSettings4Line,
 } from "react-icons/ri";
-import { TbMapSearch } from "react-icons/tb";
+import { TbMapSearch, TbChartLine } from "react-icons/tb";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import { HiOutlineDocumentChartBar, HiOutlineDocumentText } from "react-icons/hi2";
-import { useLanguage } from "../../context/LanguageContext";
+import { PiShieldStarFill } from "react-icons/pi";
+
+const menuItems = [
+  {
+    name: "Dashboard",
+    path: "/",
+    icon: RiDashboardLine,
+  },
+  {
+    name: "Crime Map",
+    path: "/map",
+    icon: TbMapSearch,
+  },
+  {
+    name: "AI Insights & Forecast",
+    path: "/insights-forecast",
+    icon: RiBrainLine,
+  },
+  {
+    name: "Officer Performance",
+    path: "/officers",
+    icon: MdOutlineAdminPanelSettings,
+  },
+  {
+    name: "Manage Records",
+    path: "/records",
+    icon: HiOutlineDocumentText,
+  },
+  {
+    name: "Reports",
+    path: "/reports",
+    icon: HiOutlineDocumentChartBar,
+  },
+  {
+    name: "Settings",
+    path: "/settings",
+    icon: RiSettings4Line,
+  },
+];
 
 function Sidebar() {
-  const { t } = useLanguage();
-
-  const menuItems = [
-    {
-      name: t("navDashboard", "Executive Dashboard"),
-      path: "/",
-      icon: RiDashboardLine,
-    },
-    {
-      name: t("navCrimeMap", "GIS Crime Map"),
-      path: "/map",
-      icon: TbMapSearch,
-    },
-    {
-      name: t("navInsights", "AI Insights & Forecast"),
-      path: "/insights-forecast",
-      icon: RiBrainLine,
-    },
-    {
-      name: t("navOfficers", "Officer Performance"),
-      path: "/officers",
-      icon: MdOutlineAdminPanelSettings,
-    },
-    {
-      name: t("navRecords", "Manage Records"),
-      path: "/records",
-      icon: HiOutlineDocumentText,
-    },
-    {
-      name: t("navReports", "Reports"),
-      path: "/reports",
-      icon: HiOutlineDocumentChartBar,
-    },
-    {
-      name: t("navSettings", "Settings"),
-      path: "/settings",
-      icon: RiSettings4Line,
-    },
-  ];
-
   return (
     <aside className="hidden lg:flex h-[calc(100vh-80px)] w-[280px] flex-col border-r border-slate-800 bg-[#070d1a] font-inter flex-shrink-0">
 
