@@ -4,6 +4,7 @@ import FIRFormModal from "../../components/records/FIRFormModal";
 import FIRDetailModal from "../../components/records/FIRDetailModal";
 import PINVerificationModal from "../../components/records/PINVerificationModal";
 import { recordService } from "../../services/recordService";
+import { useLanguage } from "../../context/LanguageContext";
 import {
   FaFolderPlus,
   FaSearch,
@@ -19,6 +20,7 @@ import {
 } from "react-icons/fa";
 
 const ManageRecords = () => {
+  const { t } = useLanguage();
   const [records, setRecords] = useState([]);
   const [filters, setFilters] = useState({
     search: "",
@@ -66,6 +68,15 @@ const ManageRecords = () => {
     return () => unsubscribe();
   }, [filters]);
 
+  // Derived Statistics
+  const stats = useMemo(() => {
+    const total = records.length;
+    const active = records.filter((r) => r.status !== "Case Closed / Completed").length;
+    const closed = records.filter((r) => r.status === "Case Closed / Completed").length;
+    const critical = records.filter((r) => r.severity === "CRITICAL").length;
+    return { total, active, closed, critical };
+  }, [records]);
+
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
@@ -81,23 +92,22 @@ const ManageRecords = () => {
     });
   };
 
-  // Handlers for CRUD with PIN protection
   const handleOpenCreateModal = () => {
-    requestPinAuth("Register New FIR Record", () => {
+    requestPinAuth(t("authFileFir", "Authorization Required: File New FIR"), () => {
       setSelectedRecord(null);
       setIsFormOpen(true);
     });
   };
 
-  const handleOpenEditModal = (record) => {
-    requestPinAuth(`Edit FIR ${record.crimeNo}`, () => {
-      setSelectedRecord(record);
+  const handleOpenEditModal = (rec) => {
+    requestPinAuth(t("authEditFir", `Authorization Required: Edit FIR #${rec.crimeNo || rec.id}`), () => {
+      setSelectedRecord(rec);
       setIsFormOpen(true);
     });
   };
 
-  const handleOpenDetailModal = (record) => {
-    setSelectedRecord(record);
+  const handleViewDetail = (rec) => {
+    setSelectedRecord(rec);
     setIsDetailOpen(true);
   };
 
@@ -112,22 +122,21 @@ const ManageRecords = () => {
     reloadRecords();
   };
 
-  const handleToggleCaseClosed = (id) => {
-    const rec = recordService.getRecordById(id);
-    const actionText = rec?.status === "Case Closed / Completed" ? "Re-open Case Investigation" : "Mark Case Closed / Completed";
-
-    requestPinAuth(`${actionText} for ${rec?.crimeNo || 'FIR'}`, () => {
-      recordService.toggleCaseClosed(id);
+  const handleToggleStatus = (rec) => {
+    const isCurrentlyClosed = rec.status === "Case Closed / Completed";
+    const actionLabel = isCurrentlyClosed ? t("reopenCase", "Reopen Case") : t("markClosed", "Mark Case Closed");
+    requestPinAuth(t("authToggleStatus", `Authorization Required: ${actionLabel}`), () => {
+      recordService.toggleCaseClosed(rec.id);
       reloadRecords();
-      if (selectedRecord && selectedRecord.id === id) {
-        setSelectedRecord(recordService.getRecordById(id));
+      if (selectedRecord && selectedRecord.id === rec.id) {
+        setSelectedRecord(recordService.getRecordById(rec.id));
       }
     });
   };
 
   const handleDeletePrompt = (id) => {
     const rec = recordService.getRecordById(id);
-    requestPinAuth(`Delete FIR ${rec?.crimeNo || ''}`, () => {
+    requestPinAuth(t("authDeleteFir", `Authorization Required: Delete FIR #${rec?.crimeNo || ''}`), () => {
       setDeleteConfirmId(id);
     });
   };
@@ -138,22 +147,13 @@ const ManageRecords = () => {
     reloadRecords();
   };
 
-  // Statistics Summary
-  const stats = useMemo(() => {
-    const all = recordService.getRecords();
-    const active = all.filter((r) => r.status !== "Case Closed / Completed").length;
-    const closed = all.filter((r) => r.status === "Case Closed / Completed").length;
-    const critical = all.filter((r) => r.severity === "CRITICAL").length;
-    return { total: all.length, active, closed, critical };
-  }, [records]);
-
   return (
     <div className="flex flex-col font-inter">
       {/* Title Header */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between border-b border-slate-800/80 pb-6 mb-6 px-6">
         <PageHeader
-          title="CCTNS Manage Records & FIR Console"
-          subtitle="Register new First Information Reports, update case timelines, allocate investigating officers, and mark completed case closures"
+          title={t("recordsTitle", "CCTNS FIR Records Directory")}
+          subtitle={t("recordsSubtitle", "Full Cloud Persistence & Relational Datastore Management")}
         />
 
         <button
@@ -161,16 +161,15 @@ const ManageRecords = () => {
           className="h-11 rounded-[4px] bg-[#2563eb] hover:bg-blue-600 px-6 text-xs font-bold uppercase tracking-wider text-white flex items-center gap-2 transition-all cursor-pointer shadow-sm border-none outline-none font-space self-start md:self-auto active:scale-95"
         >
           <FaFolderPlus className="text-sm" />
-          <span>Register New FIR</span>
+          <span>{t("btnRegisterFir", "+ Register New FIR")}</span>
         </button>
       </div>
 
       {/* KPI Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        {/* Total Registered FIRs */}
         <div className="h-[96px] rounded-[4px] border-t-2 border-t-[#2563eb] border-r border-b border-l border-slate-800 bg-[#081220] pt-[18px] pb-[18px] px-6 flex items-center justify-between shadow-sm">
           <div>
-            <span className="text-[9px] font-medium uppercase tracking-widest text-slate-400">Total Registered FIRs</span>
+            <span className="text-[9px] font-medium uppercase tracking-widest text-slate-400">{t("kpiTotalFirs", "TOTAL REGISTERED FIRS")}</span>
             <h3 className="font-mono text-3xl sm:text-[34px] font-bold text-white mt-1 leading-none">{stats.total}</h3>
           </div>
           <div className="h-8 w-8 rounded-[2px] bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-400 flex-shrink-0 self-center">
@@ -178,10 +177,9 @@ const ManageRecords = () => {
           </div>
         </div>
 
-        {/* Active Investigations */}
         <div className="h-[96px] rounded-[4px] border-t-2 border-t-[#d97706] border-r border-b border-l border-slate-800 bg-[#081220] pt-[18px] pb-[18px] px-6 flex items-center justify-between shadow-sm">
           <div>
-            <span className="text-[9px] font-medium uppercase tracking-widest text-amber-400">Active Investigations</span>
+            <span className="text-[9px] font-medium uppercase tracking-widest text-amber-400">{t("kpiActiveInvestigations", "ACTIVE INVESTIGATIONS")}</span>
             <h3 className="font-mono text-3xl sm:text-[34px] font-bold text-white mt-1 leading-none">{stats.active}</h3>
           </div>
           <div className="h-8 w-8 rounded-[2px] bg-amber-600/10 border border-amber-500/20 flex items-center justify-center text-amber-400 flex-shrink-0 self-center">
@@ -189,10 +187,9 @@ const ManageRecords = () => {
           </div>
         </div>
 
-        {/* Closed / Completed Cases */}
         <div className="h-[96px] rounded-[4px] border-t-2 border-t-[#059669] border-r border-b border-l border-slate-800 bg-[#081220] pt-[18px] pb-[18px] px-6 flex items-center justify-between shadow-sm">
           <div>
-            <span className="text-[9px] font-medium uppercase tracking-widest text-emerald-400">Closed / Completed Cases</span>
+            <span className="text-[9px] font-medium uppercase tracking-widest text-emerald-400">{t("statusClosed", "Case Closed / Completed")}</span>
             <h3 className="font-mono text-3xl sm:text-[34px] font-bold text-white mt-1 leading-none">{stats.closed}</h3>
           </div>
           <div className="h-8 w-8 rounded-[2px] bg-emerald-600/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 flex-shrink-0 self-center">
@@ -200,10 +197,9 @@ const ManageRecords = () => {
           </div>
         </div>
 
-        {/* Critical Severity Incidents */}
         <div className="h-[96px] rounded-[4px] border-t-2 border-t-[#e11d48] border-r border-b border-l border-slate-800 bg-[#081220] pt-[18px] pb-[18px] px-6 flex items-center justify-between shadow-sm">
           <div>
-            <span className="text-[9px] font-medium uppercase tracking-widest text-rose-400">Critical Severity Incidents</span>
+            <span className="text-[9px] font-medium uppercase tracking-widest text-rose-400">{t("severityCritical", "CRITICAL")}</span>
             <h3 className="font-mono text-3xl sm:text-[34px] font-bold text-white mt-1 leading-none">{stats.critical}</h3>
           </div>
           <div className="h-8 w-8 rounded-[2px] bg-rose-600/10 border border-rose-500/20 flex items-center justify-center text-rose-400 flex-shrink-0 self-center">
@@ -212,23 +208,22 @@ const ManageRecords = () => {
         </div>
       </div>
 
-      {/* Query Filters & Search Toolbar (Dedicated Section) */}
+      {/* Query Filters & Search Toolbar */}
       <div className="bg-[#081220] rounded-[4px] border border-[rgba(255,255,255,0.05)] pt-[18px] pb-[18px] px-6 space-y-6 shadow-sm mb-6">
         <div className="flex items-center justify-between border-b border-slate-800/80 pb-4">
           <div className="flex items-center gap-2 text-xs font-bold text-slate-200 uppercase tracking-widest font-space">
             <FaFilter className="text-[#2563eb] text-sm" />
-            <span>Search & Filter FIR Records</span>
+            <span>{t("searchPlaceholder", "Search FIR Records")}</span>
           </div>
           <button
             onClick={handleResetFilters}
             className="text-[11px] font-semibold text-[#2563eb] hover:text-blue-400 transition-colors uppercase tracking-wider font-space cursor-pointer"
           >
-            Reset Filters
+            {t("btnReset", "Reset Filters")}
           </button>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6 text-xs font-mono">
-          {/* Search Box */}
           <div className="relative sm:col-span-2 lg:col-span-2">
             <FaSearch className="absolute left-3.5 top-3.5 text-slate-500" />
             <input
@@ -236,12 +231,11 @@ const ManageRecords = () => {
               name="search"
               value={filters.search}
               onChange={handleFilterChange}
-              placeholder="Search by FIR No, Officer, Complainant..."
+              placeholder={t("searchPlaceholder", "Search by FIR No, Officer, Complainant...")}
               className="w-full h-11 rounded-[4px] bg-[#0c182a] border border-slate-800 pl-10 pr-4 text-xs text-white outline-none focus:border-[#2563eb] placeholder-slate-500 transition-all font-inter"
             />
           </div>
 
-          {/* District Filter */}
           <div>
             <select
               name="district"
@@ -249,16 +243,16 @@ const ManageRecords = () => {
               onChange={handleFilterChange}
               className="w-full h-11 rounded-[4px] bg-[#0c182a] border border-slate-800 px-4 text-xs text-slate-300 outline-none focus:border-[#2563eb] transition-all font-mono"
             >
-              <option value="">All District Ranges</option>
+              <option value="">{t("mapAllDistricts", "All Districts")}</option>
               <option value="Bengaluru City">Bengaluru City</option>
+              <option value="Mysuru District">Mysuru District</option>
               <option value="Mangaluru City">Mangaluru City</option>
-              <option value="Mysuru City">Mysuru City</option>
               <option value="Hubballi-Dharwad">Hubballi-Dharwad</option>
               <option value="Belagavi District">Belagavi District</option>
+              <option value="Shivamogga">Shivamogga</option>
             </select>
           </div>
 
-          {/* Crime Category Filter */}
           <div>
             <select
               name="category"
@@ -266,16 +260,15 @@ const ManageRecords = () => {
               onChange={handleFilterChange}
               className="w-full h-11 rounded-[4px] bg-[#0c182a] border border-slate-800 px-4 text-xs text-slate-300 outline-none focus:border-[#2563eb] transition-all font-mono"
             >
-              <option value="">All Crime Categories</option>
-              <option value="Property Offences">Property Offences</option>
-              <option value="Offences Against Body">Offences Against Body</option>
-              <option value="Cyber Crimes">Cyber Crimes</option>
-              <option value="Financial Fraud">Financial Fraud</option>
-              <option value="Special & Local Laws (SLL)">Special & Local Laws (SLL)</option>
+              <option value="">{t("mapAllCategories", "All Categories")}</option>
+              <option value="Property Offences">{t("catProperty", "Property Offences")}</option>
+              <option value="Body Offences">{t("catBody", "Body Offences")}</option>
+              <option value="Cyber Crimes">{t("catCyber", "Cyber Crimes")}</option>
+              <option value="Financial Fraud">{t("catFinancial", "Financial Fraud")}</option>
+              <option value="Special & Local Laws (SLL)">{t("catSLL", "Special & Local Laws (SLL)")}</option>
             </select>
           </div>
 
-          {/* Severity Filter */}
           <div>
             <select
               name="severity"
@@ -283,15 +276,14 @@ const ManageRecords = () => {
               onChange={handleFilterChange}
               className="w-full h-11 rounded-[4px] bg-[#0c182a] border border-slate-800 px-4 text-xs text-slate-300 outline-none focus:border-[#2563eb] transition-all font-mono"
             >
-              <option value="">All Severity Levels</option>
-              <option value="CRITICAL">CRITICAL</option>
-              <option value="HIGH">HIGH</option>
-              <option value="MEDIUM">MEDIUM</option>
-              <option value="LOW">LOW</option>
+              <option value="">{t("mapAllSeverities", "All Severities")}</option>
+              <option value="CRITICAL">{t("severityCritical", "CRITICAL")}</option>
+              <option value="HIGH">{t("severityHigh", "HIGH")}</option>
+              <option value="MEDIUM">{t("severityMedium", "MEDIUM")}</option>
+              <option value="LOW">{t("severityLow", "LOW")}</option>
             </select>
           </div>
 
-          {/* Status Filter */}
           <div>
             <select
               name="status"
@@ -300,11 +292,8 @@ const ManageRecords = () => {
               className="w-full h-11 rounded-[4px] bg-[#0c182a] border border-slate-800 px-4 text-xs text-slate-300 outline-none focus:border-[#2563eb] transition-all font-mono"
             >
               <option value="">All Case Statuses</option>
-              <option value="ACTIVE">Active Cases</option>
-              <option value="CLOSED">Case Closed / Completed</option>
-              <option value="Under Investigation">Under Investigation</option>
-              <option value="Suspect Apprehended">Suspect Apprehended</option>
-              <option value="Charge-sheet Submitted">Charge-sheet Submitted</option>
+              <option value="ACTIVE">{t("statusActive", "Under Investigation")}</option>
+              <option value="CLOSED">{t("statusClosed", "Case Closed / Completed")}</option>
             </select>
           </div>
         </div>
@@ -316,14 +305,14 @@ const ManageRecords = () => {
           <table className="w-full text-left border-collapse font-sans text-xs">
             <thead>
               <tr className="bg-[#0c1626] font-space text-[10px] font-bold text-slate-300 uppercase tracking-wider border-b border-slate-700">
-                <th className="py-3.5 pl-6 pr-4 border-b border-slate-700">Crime No & Date</th>
-                <th className="py-3.5 px-4 border-b border-slate-700">Jurisdiction</th>
-                <th className="py-3.5 px-4 border-b border-slate-700">Crime Category & Section</th>
-                <th className="py-3.5 px-4 border-b border-slate-700">Complainant</th>
-                <th className="py-3.5 px-4 border-b border-slate-700">Allotted Officer</th>
-                <th className="py-3.5 px-4 border-b border-slate-700">Accused / Suspect</th>
-                <th className="py-3.5 px-4 border-b border-slate-700">Status & Severity</th>
-                <th className="py-3.5 pl-4 pr-6 border-b border-slate-700 text-right">Actions</th>
+                <th className="py-3.5 pl-6 pr-4 border-b border-slate-700">{t("thCrimeNo", "FIR / Crime No")}</th>
+                <th className="py-3.5 px-4 border-b border-slate-700">{t("thDistrictUnit", "District & Police Station")}</th>
+                <th className="py-3.5 px-4 border-b border-slate-700">{t("thCategorySeverity", "Category & Severity")}</th>
+                <th className="py-3.5 px-4 border-b border-slate-700">{t("thComplainant", "Complainant")}</th>
+                <th className="py-3.5 px-4 border-b border-slate-700">{t("thOfficerName", "Officer Name")}</th>
+                <th className="py-3.5 px-4 border-b border-slate-700">{t("thAccused", "Accused Suspect")}</th>
+                <th className="py-3.5 px-4 border-b border-slate-700">{t("thStatus", "Case Status")}</th>
+                <th className="py-3.5 pl-4 pr-6 border-b border-slate-700 text-right">{t("thActions", "Actions")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/60 text-slate-300">
