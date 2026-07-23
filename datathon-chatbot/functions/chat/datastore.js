@@ -501,7 +501,7 @@ class CrimeRepository {
         }
 
         globalServerRecords = loadPersistentDb();
-        const combined = [...globalServerRecords, ...cloudRows];
+        const combined = [...cloudRows, ...globalServerRecords];
         const seen = new Set();
         const uniqueRows = [];
 

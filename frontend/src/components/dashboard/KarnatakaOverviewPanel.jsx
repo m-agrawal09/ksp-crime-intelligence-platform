@@ -234,13 +234,14 @@ const KarnatakaOverviewPanel = () => {
       fetch("/karnataka-state.geojson").then(res => res.json()),
       fetch("/karnataka-districts.geojson").then(res => res.json())
     ]).then(([stateData, districtsData]) => {
-      // 1. World mask
+      if (!mapRef.current) return;
+      // 1. World mask (strongly fades all other states outside Karnataka)
       const maskGeo = createMaskGeoJSON(stateData);
       if (maskGeo) {
         L.geoJSON(maskGeo, {
           style: {
             fillColor: "#020617",
-            fillOpacity: 0.42,
+            fillOpacity: 0.84,
             stroke: false
           },
           interactive: false
@@ -250,20 +251,30 @@ const KarnatakaOverviewPanel = () => {
       // 2. Districts subtle lines
       L.geoJSON(districtsData, {
         style: {
-          color: "rgba(255, 255, 255, 0.08)",
-          weight: 0.75,
-          opacity: 0.55,
+          color: "rgba(255, 255, 255, 0.12)",
+          weight: 0.8,
+          opacity: 0.6,
           fill: false
         },
         interactive: false
       }).addTo(map);
 
-      // 3. State outline (glow)
+      // 3. Karnataka State Fill Highlight (spotlight effect)
+      L.geoJSON(stateData, {
+        style: {
+          fillColor: "#ffffff",
+          fillOpacity: 0.22,
+          stroke: false
+        },
+        interactive: false
+      }).addTo(map);
+
+      // 4. State boundary glow outer
       L.geoJSON(stateData, {
         style: {
           color: "#2563eb",
-          weight: 3.5,
-          opacity: 0.22,
+          weight: 12,
+          opacity: 0.5,
           fill: false,
           lineCap: "round",
           lineJoin: "round"
@@ -271,12 +282,25 @@ const KarnatakaOverviewPanel = () => {
         interactive: false
       }).addTo(map);
 
-      // 4. State outline (sharp line)
+      // State boundary glow mid
       L.geoJSON(stateData, {
         style: {
-          color: "#06b6d4",
-          weight: 1.25,
+          color: "#3b82f6",
+          weight: 6,
           opacity: 0.8,
+          fill: false,
+          lineCap: "round",
+          lineJoin: "round"
+        },
+        interactive: false
+      }).addTo(map);
+
+      // 5. Thin bright neon blue boundary stroke across Karnataka state
+      L.geoJSON(stateData, {
+        style: {
+          color: "#93c5fd",
+          weight: 2.5,
+          opacity: 1,
           fill: false,
           lineCap: "round",
           lineJoin: "round"

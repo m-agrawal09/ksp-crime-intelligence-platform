@@ -62,41 +62,32 @@ const createCustomMarker = (incident) => {
   });
 };
 
-// Premium cluster icon — concentric ring + deep shadow design
+// Premium cluster icon — crimson red circular badge with radial aura
 const createClusterIcon = (districtName, count) => {
-  const isCritical = count > 15;
-  const isHigh = count > 6;
+  const outerSize = 52;
+  const innerSize = 36;
 
-  let outerSize, innerSize, bg, borderColor, textColor, outerBg, innerShadow, pulseClass;
+  const abbrMap = {
+    "Bengaluru City": "BEN",
+    "Mysuru City": "MYS",
+    "Mangaluru City": "MAN",
+    "Hubballi-Dharwad": "HUB",
+    "Belagavi": "BEL",
+    "Kalaburagi": "KAL",
+    "Shivamogga": "SHI",
+    "Udupi": "UDU",
+    "Davanagere": "DAV",
+    "Tumakuru": "TUM",
+    "Chikkamagaluru": "CHI",
+    "Bidar": "BID",
+    "Mandya": "MAN",
+    "Ballari": "BAL"
+  };
 
-  if (isCritical) {
-    outerSize = 56; innerSize = 38;
-    bg = "rgba(120,25,25,0.92)";
-    borderColor = "rgba(239,68,68,0.55)";
-    textColor = "#fca5a5";
-    outerBg = "rgba(239,68,68,0.14)";
-    innerShadow = "0 4px 20px rgba(239,68,68,0.3), 0 2px 8px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.06)";
-    pulseClass = "situation-pulse";
-  } else if (isHigh) {
-    outerSize = 50; innerSize = 34;
-    bg = "rgba(113,47,10,0.92)";
-    borderColor = "rgba(245,158,11,0.5)";
-    textColor = "#fcd34d";
-    outerBg = "rgba(245,158,11,0.12)";
-    innerShadow = "0 4px 18px rgba(245,158,11,0.25), 0 2px 8px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.05)";
-    pulseClass = "";
-  } else {
-    outerSize = 44; innerSize = 30;
-    bg = "rgba(23,52,130,0.92)";
-    borderColor = "rgba(59,130,246,0.45)";
-    textColor = "#93c5fd";
-    outerBg = "rgba(59,130,246,0.1)";
-    innerShadow = "0 4px 16px rgba(59,130,246,0.2), 0 2px 8px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.05)";
-    pulseClass = "";
-  }
+  const abbr = abbrMap[districtName] || districtName.slice(0, 3).toUpperCase();
 
   return L.divIcon({
-    className: `custom-cluster-icon ${pulseClass}`,
+    className: "custom-cluster-icon situation-pulse",
     html: `
       <div style="
         position:relative;
@@ -105,18 +96,18 @@ const createClusterIcon = (districtName, count) => {
         justify-content:center;
         width:${outerSize}px;height:${outerSize}px;
         border-radius:50%;
-        background:${outerBg};
+        background:rgba(239,68,68,0.28);
       ">
         <div style="
           display:flex;flex-direction:column;align-items:center;justify-content:center;
           width:${innerSize}px;height:${innerSize}px;
           border-radius:50%;
-          background:${bg};
-          border:1.5px solid ${borderColor};
-          box-shadow:${innerShadow};
+          background:rgba(185,28,28,0.92);
+          border:1.5px solid rgba(254,202,202,0.7);
+          box-shadow:0 4px 20px rgba(239,68,68,0.4), 0 2px 8px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.2);
         ">
-          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;color:${textColor};line-height:1;letter-spacing:-0.02em;">${count}</span>
-          <span style="font-family:'IBM Plex Mono',monospace;font-size:6px;text-transform:uppercase;color:${textColor};opacity:0.6;letter-spacing:0.08em;margin-top:1.5px;">${districtName.slice(0, 3)}</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:800;color:#ffffff;line-height:1;letter-spacing:-0.02em;">${count}</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:6.5px;font-weight:700;text-transform:uppercase;color:#fca5a5;letter-spacing:0.08em;margin-top:1.5px;">${abbr}</span>
         </div>
       </div>
     `,
@@ -294,35 +285,54 @@ const InteractiveMap = ({ incidents, selectedItem, onSelectDistrict, onSelectMar
   const officersSet = new Set(incidents.map(i => i.assignedOfficer?.name).filter(Boolean));
   const officersCount = officersSet.size;
 
-  // Custom Layer styles
+  // Custom Layer styles - Heavily fade surrounding states outside Karnataka
   const maskStyle = {
     fillColor: "#020617",
-    fillOpacity: 0.42,
+    fillOpacity: 0.84,
     stroke: false
   };
 
-  const glowStyle = {
-    color: "#2563eb", // Royal blue
-    weight: 3.5,
-    opacity: 0.22,
+  // State fill highlight to make Karnataka stand out with bright spotlight
+  const stateHighlightStyle = {
+    fillColor: "#ffffff",
+    fillOpacity: 0.22,
+    stroke: false
+  };
+
+  // Outer glowing aura for state boundary
+  const glowOuterStyle = {
+    color: "#2563eb",
+    weight: 12,
+    opacity: 0.5,
     fill: false,
     lineCap: "round",
     lineJoin: "round"
   };
 
-  const mainStyle = {
-    color: "#06b6d4", // Cyan
-    weight: 1.25,
+  const glowMidStyle = {
+    color: "#3b82f6",
+    weight: 6,
     opacity: 0.8,
     fill: false,
     lineCap: "round",
     lineJoin: "round"
   };
 
+  // Thin bright neon blue boundary line outlining Karnataka state
+  const thinBlueBoundaryStyle = {
+    color: "#93c5fd",
+    weight: 2.5,
+    opacity: 1,
+    fill: false,
+    lineCap: "round",
+    lineJoin: "round"
+  };
+
+  // District interior line style
   const districtStyle = {
-    color: "rgba(255, 255, 255, 0.08)", // extremely subtle
-    weight: 0.75,
-    opacity: 0.55,
+    color: "rgba(255, 255, 255, 0.12)",
+    weight: 0.8,
+    opacity: 0.6,
     fill: false,
     lineCap: "round",
     lineJoin: "round"
@@ -433,11 +443,13 @@ const InteractiveMap = ({ incidents, selectedItem, onSelectDistrict, onSelectMar
           <GeoJSON data={districtsGeoJSON} style={districtStyle} interactive={false} />
         )}
 
-        {/* 3. Karnataka State Outline (Glow & Sharp Stroke) */}
+        {/* 3. Karnataka State Highlight & Neon Glowing Boundary */}
         {stateGeoJSON && (
           <>
-            <GeoJSON data={stateGeoJSON} style={glowStyle} interactive={false} />
-            <GeoJSON data={stateGeoJSON} style={mainStyle} interactive={false} />
+            <GeoJSON data={stateGeoJSON} style={stateHighlightStyle} interactive={false} />
+            <GeoJSON data={stateGeoJSON} style={glowOuterStyle} interactive={false} />
+            <GeoJSON data={stateGeoJSON} style={glowMidStyle} interactive={false} />
+            <GeoJSON data={stateGeoJSON} style={thinBlueBoundaryStyle} interactive={false} />
           </>
         )}
 
