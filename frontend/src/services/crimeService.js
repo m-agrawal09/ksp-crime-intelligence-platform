@@ -27,13 +27,11 @@ const districtsList = [
 ];
 
 const categoriesList = [
-  "Property Offences",
-  "Body Offences",
-  "Cyber Crimes",
-  "Financial Fraud",
-  "Narcotics",
-  "Crimes Against Women",
-  "Special & Local Laws (SLL)"
+  "Theft",
+  "Assault",
+  "Murder",
+  "Property Related",
+  "Cyber Crime"
 ];
 
 const severitiesList = ["CRITICAL", "HIGH", "MEDIUM", "LOW"];

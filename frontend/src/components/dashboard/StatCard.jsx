@@ -110,7 +110,7 @@ const StatCard = ({
         </div>
 
         {/* Change (Centered) */}
-        <div className="flex flex-col items-center gap-1.5 mb-3.5 text-center w-full">
+        <div className="flex flex-col items-center gap-1.5 mb-2 text-center w-full">
           <div className={`flex items-center gap-1 text-[10px] font-bold ${isPositive ? "text-emerald-400" : "text-red-400"}`}>
             {isPositive
               ? <FaArrowUp className="text-[8px]" />
@@ -118,13 +118,6 @@ const StatCard = ({
             <span>{change}</span>
           </div>
         </div>
-
-        {/* Sparkline */}
-        {sparkData && (
-          <div className="w-full mt-auto pt-4 -mx-1">
-            <Sparkline data={sparkData} color={sparkColor || accentHex} id={sparkId} />
-          </div>
-        )}
       </div>
 
       <div

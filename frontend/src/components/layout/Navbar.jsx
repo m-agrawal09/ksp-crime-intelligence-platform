@@ -19,15 +19,15 @@ function Navbar({ onToggleMobileMenu }) {
     <header className="sticky top-0 z-50 flex h-20 items-center justify-between border-b border-slate-800 bg-slate-950/98 px-4 sm:px-8 font-inter shadow-sm shadow-black/20">
 
       {/* Left Header Section */}
-      <div className="flex items-center gap-2 sm:gap-4">
+      <div className="flex items-center gap-3 sm:gap-4">
 
         {/* Hamburger Menu Toggle for Mobile & Responsive */}
         <button
           onClick={onToggleMobileMenu}
-          className="rounded-lg p-2 transition hover:bg-slate-800 cursor-pointer active:scale-95 text-white flex items-center justify-center"
+          className="flex items-center justify-center h-10 w-10 sm:h-11 sm:w-11 rounded-xl border border-slate-700/70 bg-slate-900/90 hover:bg-slate-800/90 hover:border-blue-500/60 text-slate-200 hover:text-blue-400 transition-all duration-200 shadow-sm active:scale-95 cursor-pointer"
           title="Toggle Navigation Menu"
         >
-          <HiBars3 className="text-2xl sm:text-3xl text-white" />
+          <HiBars3 className="text-xl sm:text-2xl" />
         </button>
 
         <div className="flex items-center gap-2.5 sm:gap-4">
@@ -49,11 +49,11 @@ function Navbar({ onToggleMobileMenu }) {
       </div>
 
       {/* Right User & Actions */}
-      <div className="flex items-center gap-2 sm:gap-4">
+      <div className="flex items-center gap-2.5 sm:gap-3.5">
 
         {/* User Badge Info (Desktop / Tablet) */}
         {currentUser && (
-          <div className="hidden md:flex items-center gap-3 bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-1.5 font-mono text-xs">
+          <div className="hidden md:flex items-center gap-3 bg-slate-900/90 border border-slate-700/70 rounded-xl px-3.5 h-10 sm:h-11 font-mono text-xs shadow-sm">
             <div className="h-7 w-7 rounded-lg flex items-center justify-center text-sm font-bold bg-blue-600 text-white flex-shrink-0">
               {isAdmin ? <FaUserShield /> : <FaUserCheck />}
             </div>
@@ -69,17 +69,22 @@ function Navbar({ onToggleMobileMenu }) {
         {/* Interactive Notification Bell Dropdown */}
         <NotificationDropdown />
 
-        <Link to="/settings" className="rounded-lg p-2 transition hover:bg-slate-800 text-slate-300 hover:text-white" title="Settings">
-          <FiSettings className="text-lg sm:text-xl" />
+        {/* Settings Icon Button */}
+        <Link
+          to="/settings"
+          className="flex items-center justify-center h-10 w-10 sm:h-11 sm:w-11 rounded-xl border border-slate-700/70 bg-slate-900/90 hover:border-blue-500/60 text-slate-200 hover:text-blue-400 hover:bg-slate-800/90 transition-all duration-200 shadow-sm active:scale-95 group"
+          title="Settings"
+        >
+          <FiSettings className="text-xl sm:text-2xl group-hover:rotate-90 transition-transform duration-300" />
         </Link>
 
         {/* Logout Button */}
         <button
           onClick={handleLogout}
-          className="flex items-center gap-1.5 rounded-xl border border-rose-900/50 bg-rose-950/30 px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs font-mono font-bold text-rose-300 hover:bg-rose-900/40 hover:text-white transition-all cursor-pointer"
+          className="flex items-center justify-center gap-2 rounded-xl border border-rose-500/30 bg-rose-950/40 px-3 sm:px-4 h-10 sm:h-11 text-xs font-mono font-bold text-rose-300 hover:bg-rose-900/50 hover:border-rose-500/60 hover:text-white transition-all duration-200 cursor-pointer shadow-sm active:scale-95"
           title="Sign Out"
         >
-          <FaSignOutAlt className="text-xs" />
+          <FaSignOutAlt className="text-xs sm:text-sm" />
           <span className="hidden sm:inline">Logout</span>
         </button>
 

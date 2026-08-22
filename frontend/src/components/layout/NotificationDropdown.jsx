@@ -128,14 +128,18 @@ const NotificationDropdown = () => {
       {/* Bell Icon Trigger */}
       <button
         onClick={() => setIsOpen((p) => !p)}
-        className="relative rounded-lg p-2 transition hover:bg-slate-800 text-slate-300 hover:text-white cursor-pointer active:scale-95"
+        className={`relative flex items-center justify-center h-10 w-10 sm:h-11 sm:w-11 rounded-xl border transition-all duration-200 cursor-pointer active:scale-95 shadow-sm ${
+          isOpen
+            ? "bg-blue-600/20 border-blue-500 text-blue-400 shadow-blue-500/20 shadow-md ring-2 ring-blue-500/20"
+            : "bg-slate-900/90 border-slate-700/70 hover:border-blue-500/60 text-slate-200 hover:text-blue-400 hover:bg-slate-800/90 hover:shadow-blue-500/10"
+        }`}
         title="FIR Alerts & Notifications"
       >
-        <IoNotificationsOutline className="text-xl" />
+        <IoNotificationsOutline className="text-xl sm:text-2xl transition-transform duration-200 hover:scale-110" />
         {hasUnread && (
-          <span className="absolute top-1 right-1 flex h-4 w-4">
+          <span className="absolute -top-1 -right-1 flex h-4.5 w-4.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-4 w-4 bg-rose-600 text-white font-mono text-[9px] font-extrabold items-center justify-center border border-slate-950">
+            <span className="relative inline-flex rounded-full h-4.5 w-4.5 bg-rose-600 text-white font-mono text-[9.5px] font-extrabold items-center justify-center border-2 border-slate-950 shadow-sm">
               {unreadCount > 9 ? "9+" : unreadCount}
             </span>
           </span>

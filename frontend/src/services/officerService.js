@@ -52,7 +52,7 @@ const officersDatabase = {
     ROWID: "KSP-6120",
     kpis: { totalCases: 3, activeCases: 0, closedCases: 3, chargesheetRate: 100, avgInvestigationTime: 20, detectionRate: 95 },
     workload: { highPriority: [], pending: [], hearings: [], recent: [] },
-    summary: { strongArea: "Narcotics Raids & Inter-State Smuggling Cases", workloadStatus: "Optimal", rating: "5.0 / 5.0", aiRecommendation: "Senior leadership profile.", lastUpdated: "Just now" }
+    summary: { strongArea: "Cyber Crime & Assault Tracking", workloadStatus: "Optimal", rating: "5.0 / 5.0", aiRecommendation: "Senior leadership profile.", lastUpdated: "Just now" }
   },
   "KSP-4933": {
     badgeNumber: "KSP-4933",

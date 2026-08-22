@@ -269,11 +269,11 @@ const FIRFormModal = ({ isOpen, onClose, onSave, initialData = null }) => {
                   onChange={handleChange}
                   className="w-full rounded-lg bg-slate-900 border border-slate-800 px-3.5 py-2.5 text-slate-200 outline-none focus:border-blue-500"
                 >
-                  <option value="Property Offences">Property Offences</option>
-                  <option value="Offences Against Body">Offences Against Body</option>
-                  <option value="Cyber Crimes">Cyber Crimes</option>
-                  <option value="Financial Fraud">Financial Fraud</option>
-                  <option value="Special & Local Laws (SLL)">Special & Local Laws (SLL)</option>
+                  <option value="Theft">Theft</option>
+                  <option value="Assault">Assault</option>
+                  <option value="Murder">Murder</option>
+                  <option value="Property Related">Property Related</option>
+                  <option value="Cyber Crime">Cyber Crime</option>
                 </select>
               </div>
 

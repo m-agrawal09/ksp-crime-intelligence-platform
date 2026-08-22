@@ -44,7 +44,7 @@ const WHAT_IF_SCENARIOS_EN = [
     bg: "rgba(245,158,11,0.06)",
     border: "rgba(245,158,11,0.18)",
     title: "What if monsoon season extends by 3 additional weeks?",
-    body: "Monsoon months historically show a 12% dip in street crime but a 19% spike in indoor domestic offences and narcotics-related cases. An extended monsoon would shift crime distribution — reducing Property Offences from 38% to 29% while elevating Offences Against Body to approximately 26% of monthly FIR intake.",
+    body: "Monsoon months historically show a 12% dip in street crime but a 19% spike in indoor domestic offences and narcotics-related cases. An extended monsoon would shift crime distribution — reducing Property Related offences from 38% to 29% while elevating Assault to approximately 26% of monthly FIR intake.",
   },
 ];
 

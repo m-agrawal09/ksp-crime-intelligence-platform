@@ -65,10 +65,10 @@ class QuickMLService {
 Total registered FIR cases: **1,482** (Increase of **4.2%** YoY).
 
 #### Breakdown by Crime Head:
-1. **Property Offences**: 642 cases (43% of total) - Primary concern: Housebreaking by night.
-2. **Cyber Crimes**: 412 cases (28% of total) - Primary concern: OTP/SIM Swap phishing.
-3. **Body Offences**: 224 cases (15% of total) - Primary concern: Assault outside commercial zones.
-4. **Financial Fraud**: 142 cases (10% of total) - Primary concern: Shell company investment Ponzi schemes.
+1. **Property Related**: 642 cases (43% of total) - Primary concern: Housebreaking by night.
+2. **Cyber Crime**: 412 cases (28% of total) - Primary concern: OTP/SIM Swap phishing.
+3. **Assault**: 224 cases (15% of total) - Primary concern: Assault outside commercial zones.
+4. **Theft**: 142 cases (10% of total) - Primary concern: Retail & vehicle theft.
 
 #### Hotspot Jurisdictions:
 * Central Division (31% of incidents)

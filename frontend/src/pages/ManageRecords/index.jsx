@@ -267,11 +267,11 @@ const ManageRecords = () => {
               className="w-full h-11 rounded-[4px] bg-[#0c182a] border border-slate-800 px-4 text-xs text-slate-300 outline-none focus:border-[#2563eb] transition-all font-mono"
             >
               <option value="">All Crime Categories</option>
-              <option value="Property Offences">Property Offences</option>
-              <option value="Offences Against Body">Offences Against Body</option>
-              <option value="Cyber Crimes">Cyber Crimes</option>
-              <option value="Financial Fraud">Financial Fraud</option>
-              <option value="Special & Local Laws (SLL)">Special & Local Laws (SLL)</option>
+              <option value="Theft">Theft</option>
+              <option value="Assault">Assault</option>
+              <option value="Murder">Murder</option>
+              <option value="Property Related">Property Related</option>
+              <option value="Cyber Crime">Cyber Crime</option>
             </select>
           </div>
 

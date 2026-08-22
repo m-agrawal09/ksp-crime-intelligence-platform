@@ -9,7 +9,7 @@ import KarnatakaOverviewPanel from "../../components/dashboard/KarnatakaOverview
 import AIInsightsBanner from "../../components/dashboard/AIInsightsBanner";
 import { fetchDashboardData } from "../../services/dashboardService";
 import { recordService } from "../../services/recordService";
-import { FaSyncAlt } from "react-icons/fa";
+import { FaSyncAlt, FaCalendarAlt, FaMapMarkerAlt, FaShieldAlt } from "react-icons/fa";
 
 const DISTRICTS = [
   "All Districts (Statewide)",
@@ -32,23 +32,23 @@ const DISTRICTS = [
 ];
 
 const Dashboard = () => {
+  const [selectedDistrict, setSelectedDistrict] = useState("ALL");
+  const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [dashboardData, setDashboardData] = useState(null);
-  const [selectedDistrict, setSelectedDistrict] = useState("ALL");
 
-  const loadData = async (dist = selectedDistrict) => {
-    setError(null);
+  const loadData = async (district = selectedDistrict) => {
     try {
-      const response = await fetchDashboardData(dist);
-      if (response.status === "success") {
-        setDashboardData(response.data);
+      setLoading(true);
+      setError(null);
+      const res = await fetchDashboardData(district);
+      if (res.status === "success") {
+        setDashboardData(res.data);
       } else {
-        throw new Error("Failed to receive valid status from Catalyst Gateway.");
+        setError(res.error || "Failed to load dashboard data");
       }
     } catch (err) {
-      console.error(err);
-      setError(err.message || "Failed to load CCTNS case records.");
+      setError(err.message || "An unexpected error occurred");
     } finally {
       setLoading(false);
     }
@@ -87,7 +87,7 @@ const Dashboard = () => {
         <span className="font-bold text-sm uppercase mb-2">Catalyst SDK connection error</span>
         <p className="text-slate-400 text-center mb-4">{error}</p>
         <button
-          onClick={loadData}
+          onClick={() => loadData(selectedDistrict)}
           className="px-4 py-2 bg-rose-900/20 border border-rose-800 hover:bg-rose-900/40 text-rose-300 rounded font-bold transition-all"
         >
           Retry Connection Handshake
@@ -115,30 +115,35 @@ const Dashboard = () => {
             </p>
           </div>
 
-          {/* Controls */}
-          <div className="flex flex-wrap items-center gap-2.5 self-start lg:self-auto text-[10px] sm:text-[11px] font-space font-bold">
-            {/* Live Indicator */}
-            <div className="flex items-center gap-2 bg-[#060c18] border border-slate-800/25 rounded-[4px] px-3 py-2 shadow-sm">
-              <span className="relative flex h-1.5 w-1.5">
+          {/* Unified Controls Container (Straight Corners + Extra Breathing Room) */}
+          <div className="flex flex-wrap items-center gap-4 sm:gap-5 self-start lg:self-auto bg-slate-900/60 border border-slate-700/40 rounded-none px-5 py-3 sm:px-6 sm:py-3.5 shadow-sm backdrop-blur-md text-xs font-mono font-medium text-slate-300">
+            
+            {/* Live Telemetry Indicator */}
+            <div className="flex items-center gap-2 pr-4 sm:pr-5 border-r border-slate-800/80">
+              <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.8)]"></span>
               </span>
-              <span className="text-slate-500 font-bold">TELEMETRY:</span>
-              <span className="text-emerald-400 font-bold uppercase">SECURE</span>
+              <span className="text-[10px] text-slate-400 font-mono tracking-wider font-bold">TELEMETRY:</span>
+              <span className="text-[10px] text-emerald-400 font-bold font-mono tracking-wider">SECURE</span>
             </div>
 
-            {/* Date */}
-            <div className="bg-[#060c18] border border-slate-800/25 rounded-[4px] px-3.5 py-2 text-slate-400 font-bold shadow-sm">
-              {new Date().toLocaleDateString("en-IN", { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}
+            {/* Date Badge */}
+            <div className="flex items-center gap-2 pr-4 sm:pr-5 border-r border-slate-800/80">
+              <FaCalendarAlt className="text-blue-400 text-xs flex-shrink-0" />
+              <span className="text-xs font-mono font-medium text-slate-200">
+                {new Date().toLocaleDateString("en-IN", { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}
+              </span>
             </div>
 
-            {/* District Filter */}
-            <div className="flex items-center gap-2 bg-[#060c18] border border-slate-800/25 rounded-[4px] px-3 py-2 text-slate-300 shadow-sm">
-              <span className="text-slate-600 font-bold uppercase text-[9px]">JURISDICTION:</span>
+            {/* District Jurisdiction Selector */}
+            <div className="flex items-center gap-2 pr-4 sm:pr-5 border-r border-slate-800/80">
+              <FaMapMarkerAlt className="text-blue-400 text-xs flex-shrink-0" />
+              <span className="text-[10px] text-slate-400 font-mono font-bold tracking-wider uppercase">JURISDICTION:</span>
               <select
                 value={selectedDistrict}
                 onChange={(e) => setSelectedDistrict(e.target.value)}
-                className="bg-transparent text-blue-400 font-bold outline-none cursor-pointer text-[11px] pr-1"
+                className="bg-transparent text-blue-400 hover:text-blue-300 font-bold font-mono outline-none cursor-pointer text-xs pr-1"
               >
                 <option value="ALL" className="bg-slate-950 text-slate-200">Statewide (All Districts)</option>
                 {DISTRICTS.slice(1).map((d) => (
@@ -147,13 +152,14 @@ const Dashboard = () => {
               </select>
             </div>
 
-            {/* Sync */}
+            {/* Sync Core Button */}
             <button
               onClick={() => loadData(selectedDistrict)}
-              className="flex items-center gap-2 rounded-[4px] border border-slate-800/25 bg-slate-900/30 px-3.5 py-2 text-slate-500 hover:border-slate-700/50 hover:text-white transition-all cursor-pointer shadow-sm"
+              className="flex items-center gap-2 text-blue-400 hover:text-white transition-colors cursor-pointer group font-mono text-xs active:scale-95"
+              title="Refresh Dashboard Data"
             >
-              <FaSyncAlt className="text-[10px]" />
-              <span>SYNC CORE</span>
+              <FaSyncAlt className="text-xs text-blue-400 group-hover:rotate-180 transition-transform duration-500" />
+              <span className="font-bold tracking-wider">SYNC CORE</span>
             </button>
           </div>
         </div>
