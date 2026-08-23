@@ -115,84 +115,88 @@ const Dashboard = () => {
             </p>
           </div>
 
-          {/* Unified Controls Container */}
-          <div className="flex flex-wrap items-center gap-4 sm:gap-5 self-start lg:self-auto bg-slate-900/60 border border-slate-700/40 rounded-none px-5 py-3 sm:px-6 sm:py-3.5 shadow-sm backdrop-blur-md text-xs font-mono text-slate-300">
-
-            {/* Live Telemetry Indicator */}
-            <div className="flex items-center gap-2 pr-4 border-r border-slate-800/80">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.8)]"></span>
-              </span>
-              <span className="text-[10px] text-slate-400 font-mono tracking-wider font-semibold">TELEMETRY:</span>
-              <span className="text-[10px] text-emerald-400 font-semibold font-mono tracking-wider">SECURE</span>
-            </div>
-
-            {/* Date Badge */}
-            <div className="flex items-center gap-2 pr-4 border-r border-slate-800/80">
-              <FaCalendarAlt className="text-blue-400 text-xs flex-shrink-0" />
-              <span className="text-xs font-mono text-slate-300">
-                {new Date().toLocaleDateString("en-IN", { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}
+          {/* Top-Right Operational Status System */}
+          <div className="flex flex-wrap items-center gap-4 sm:gap-5 self-start lg:self-auto bg-slate-950/90 border border-slate-800/80 rounded-none px-4 py-2.5 shadow-md backdrop-blur-md font-mono text-[10px]">
+            {/* TELEMETRY */}
+            <div className="flex flex-col gap-0.5 pr-3.5 border-r border-slate-800/80">
+              <span className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">TELEMETRY</span>
+              <span className="flex items-center gap-1.5 text-emerald-400 font-bold tracking-wider">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                SECURE
               </span>
             </div>
 
-            {/* District Jurisdiction Selector */}
-            <div className="flex items-center gap-2 pr-4 border-r border-slate-800/80">
-              <FaMapMarkerAlt className="text-blue-400 text-xs flex-shrink-0" />
-              <span className="text-[10px] text-slate-400 font-mono font-semibold tracking-wider uppercase">JURISDICTION:</span>
+            {/* CCTNS */}
+            <div className="flex flex-col gap-0.5 pr-3.5 border-r border-slate-800/80">
+              <span className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">CCTNS</span>
+              <span className="text-slate-300 font-bold tracking-wider">CONNECTED</span>
+            </div>
+
+            {/* AI CORE */}
+            <div className="flex flex-col gap-0.5 pr-3.5 border-r border-slate-800/80">
+              <span className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">AI CORE</span>
+              <span className="text-blue-400 font-bold tracking-wider">QUICKML ONLINE</span>
+            </div>
+
+            {/* JURISDICTION */}
+            <div className="flex flex-col gap-0.5 pr-3.5 border-r border-slate-800/80">
+              <span className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">JURISDICTION</span>
               <select
                 value={selectedDistrict}
                 onChange={(e) => setSelectedDistrict(e.target.value)}
-                className="bg-transparent text-blue-400 hover:text-blue-300 font-semibold font-mono outline-none cursor-pointer text-xs pr-1"
+                className="bg-transparent text-cyan-400 hover:text-cyan-300 font-bold font-mono outline-none cursor-pointer text-[10px] tracking-wider uppercase"
               >
-                <option value="ALL" className="bg-slate-950 text-slate-200">Statewide (All Districts)</option>
+                <option value="ALL" className="bg-slate-950 text-slate-200">STATEWIDE</option>
                 {DISTRICTS.slice(1).map((d) => (
-                  <option key={d} value={d} className="bg-slate-950 text-slate-200">{d}</option>
+                  <option key={d} value={d} className="bg-slate-950 text-slate-200">{d.toUpperCase()}</option>
                 ))}
               </select>
             </div>
 
-            {/* Sync Core Button */}
+            {/* LAST SYNC */}
+            <div className="flex flex-col gap-0.5 pr-3.5 border-r border-slate-800/80">
+              <span className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">LAST SYNC</span>
+              <span className="text-slate-300 font-bold tracking-wider">14:26 IST</span>
+            </div>
+
+            {/* SYNC CORE Button */}
             <button
               onClick={() => loadData(selectedDistrict)}
-              className="flex items-center gap-2 text-blue-400 hover:text-white transition-colors cursor-pointer group font-mono text-xs active:scale-95"
+              className="flex items-center gap-1.5 text-cyan-400 hover:text-white transition-colors cursor-pointer group font-mono text-[10px] active:scale-95 py-0.5"
               title="Refresh Dashboard Data"
             >
-              <FaSyncAlt className="text-xs text-blue-400 group-hover:rotate-180 transition-transform duration-500" />
-              <span className="font-semibold tracking-wider">SYNC CORE</span>
+              <FaSyncAlt className="text-[10px] text-cyan-400 group-hover:rotate-180 transition-transform duration-500" />
+              <span className="font-bold tracking-widest uppercase">SYNC</span>
             </button>
           </div>
         </div>
 
         {/* Status strip */}
         <div className="flex flex-wrap gap-x-6 gap-y-2 items-center text-[10px] tracking-wider text-slate-400 font-mono font-semibold">
+          <div className="flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 rounded-none text-amber-300">
+            <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-ping"></span>
+            <span>STATEWIDE THREAT INDEX: LEVEL 2 (ELEVATED)</span>
+          </div>
+          <div className="text-slate-700">&bull;</div>
           <div className="flex items-center gap-1.5">
             <span className="text-slate-500">Gateway Link:</span>{" "}
-            <span className="text-slate-300">CCTNS CAS (CONNECTED)</span>
+            <span className="text-slate-300">CCTNS CAS</span>
           </div>
           <div className="text-slate-700">&bull;</div>
           <div>
             <span className="text-slate-500">Active Units:</span>{" "}
             <span className="text-slate-300">1,024 Districts &amp; Commands</span>
           </div>
-          <div className="text-slate-700">&bull;</div>
-          <div>
-            <span className="text-slate-500">AI Intelligence Core:</span>{" "}
-            <span className="text-blue-400 font-bold">QuickML (ONLINE)</span>
-          </div>
-          <div className="ml-auto text-[9px] text-slate-700 font-mono">
-            LAST SYNC HANDSHAKE: 2026-07-17 14:26:00 IST
-          </div>
         </div>
       </div>
 
-      {/* ── 2. Main Grid: Left content + Right sidebar ── */}
-      <div className="grid grid-cols-1 xl:grid-cols-[1fr_288px] gap-8 items-start">
+      {/* ── 2. Main Grid: Left content + Right visual sidebar ── */}
+      <div className="grid grid-cols-1 xl:grid-cols-[1fr_340px] gap-8 items-start">
 
         {/* LEFT: Primary intelligence content */}
         <div className="flex flex-col gap-8 min-w-0">
 
-          {/* KPI Cards */}
+          {/* KPI Cards (Visual 4-Grid with Sparklines) */}
           <div className="animate-fade-in-up" style={{ animationDelay: '60ms' }}>
             <StatGrid metrics={kpi_metrics} />
           </div>
@@ -213,7 +217,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* RIGHT: Intelligence sidebar */}
+        {/* RIGHT: Intelligence & GIS spatial sidebar */}
         <div className="flex flex-col gap-6 xl:sticky xl:top-10 xl:self-start animate-fade-in-up" style={{ animationDelay: '80ms' }}>
           <KarnatakaOverviewPanel />
           <AIInsightsBanner />

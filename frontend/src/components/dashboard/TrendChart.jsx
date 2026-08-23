@@ -87,60 +87,88 @@ const TrendChart = ({ data, className = "" }) => {
       className={`h-full flex flex-col ${className}`}
     >
       <div className="flex flex-col flex-1 justify-between gap-4 pt-2">
+        {/* Metric Overview Strip (Immediate direction, peak, current, avg) */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 font-mono text-[10px]">
+          <div className="bg-slate-950/80 border border-slate-800/60 p-2 rounded-none flex flex-col justify-between">
+            <span className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">DIRECTION</span>
+            <span className="font-bold text-emerald-400 flex items-center gap-1 mt-0.5 text-[11px]">
+              <FaArrowUp className="text-[9px]" /> UPWARD (+4.2%)
+            </span>
+          </div>
+
+          <div className="bg-slate-950/80 border border-slate-800/60 p-2 rounded-none flex flex-col justify-between">
+            <span className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">PEAK MONTH</span>
+            <span className="font-bold text-amber-300 mt-0.5 text-[11px]">
+              {peakMonthObj ? `${peakMonthObj.month} (${peakMonthObj.total_crimes} FIRs)` : "N/A"}
+            </span>
+          </div>
+
+          <div className="bg-slate-950/80 border border-slate-800/60 p-2 rounded-none flex flex-col justify-between">
+            <span className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">CURRENT PERIOD</span>
+            <span className="font-bold text-cyan-300 mt-0.5 text-[11px]">
+              {data && data.length > 0 ? `${data[data.length - 1].month} (${data[data.length - 1].total_crimes} FIRs)` : "N/A"}
+            </span>
+          </div>
+
+          <div className="bg-slate-950/80 border border-slate-800/60 p-2 rounded-none flex flex-col justify-between">
+            <span className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">MONTHLY AVG</span>
+            <span className="font-bold text-white mt-0.5 text-[11px]">{avgMonthlyCases} FIRs/mo</span>
+          </div>
+        </div>
+
         {/* Main Area Chart Container */}
-        <div className="h-[370px] w-full flex-1 min-h-[280px]">
+        <div className="h-[320px] w-full flex-1 min-h-[260px]">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart
               data={data}
               margin={{ top: 16, right: 16, left: -18, bottom: 0 }}
             >
               <defs>
-                {/* Luminous Multi-stop Linear Gradients */}
-                <linearGradient id="colorTotalGlow" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#38bdf8" stopOpacity={0.35} />
-                  <stop offset="50%" stopColor="#0284c7" stopOpacity={0.12} />
-                  <stop offset="100%" stopColor="#38bdf8" stopOpacity={0.0} />
+                {/* Restrained Cyan Multi-stop Linear Gradient */}
+                <linearGradient id="colorCyanGlow" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#06b6d4" stopOpacity={0.25} />
+                  <stop offset="60%" stopColor="#0891b2" stopOpacity={0.08} />
+                  <stop offset="100%" stopColor="#06b6d4" stopOpacity={0.0} />
                 </linearGradient>
 
                 <linearGradient id="colorTheftGlow" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#facc15" stopOpacity={0.28} />
+                  <stop offset="0%" stopColor="#facc15" stopOpacity={0.25} />
                   <stop offset="100%" stopColor="#eab308" stopOpacity={0.0} />
                 </linearGradient>
                 <linearGradient id="colorAssaultGlow" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#ff8c38" stopOpacity={0.28} />
+                  <stop offset="0%" stopColor="#ff8c38" stopOpacity={0.25} />
                   <stop offset="100%" stopColor="#f97316" stopOpacity={0.0} />
                 </linearGradient>
                 <linearGradient id="colorMurderGlow" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#f87171" stopOpacity={0.28} />
+                  <stop offset="0%" stopColor="#f87171" stopOpacity={0.25} />
                   <stop offset="100%" stopColor="#ef4444" stopOpacity={0.0} />
                 </linearGradient>
                 <linearGradient id="colorPropertyGlow" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#60a5fa" stopOpacity={0.28} />
+                  <stop offset="0%" stopColor="#60a5fa" stopOpacity={0.25} />
                   <stop offset="100%" stopColor="#3b82f6" stopOpacity={0.0} />
                 </linearGradient>
                 <linearGradient id="colorCyberGlow" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#c084fc" stopOpacity={0.28} />
+                  <stop offset="0%" stopColor="#c084fc" stopOpacity={0.25} />
                   <stop offset="100%" stopColor="#a855f7" stopOpacity={0.0} />
                 </linearGradient>
               </defs>
 
               <CartesianGrid
-                stroke="#1e293b"
-                strokeDasharray="3 4"
+                stroke="rgba(255, 255, 255, 0.05)"
+                strokeDasharray="3 3"
                 vertical={false}
-                strokeOpacity={0.6}
               />
 
               <XAxis
                 dataKey="month"
-                tick={{ fill: "#94a3b8", fontSize: 11, fontFamily: "monospace" }}
+                tick={{ fill: "#64748b", fontSize: 10, fontFamily: "monospace" }}
                 axisLine={false}
                 tickLine={false}
-                tickMargin={12}
+                tickMargin={10}
               />
 
               <YAxis
-                tick={{ fill: "#94a3b8", fontSize: 11, fontFamily: "monospace" }}
+                tick={{ fill: "#64748b", fontSize: 10, fontFamily: "monospace" }}
                 axisLine={false}
                 tickLine={false}
               />
@@ -164,20 +192,20 @@ const TrendChart = ({ data, className = "" }) => {
                 />
               )}
 
-              {/* Render Single Overall Crime Trend */}
+              {/* Render Single Overall Crime Trend in Restrained Cyan */}
               {viewMode === "total" ? (
                 <Area
                   type="monotone"
                   name="Overall Incidents (Statewide)"
                   dataKey="total_crimes"
-                  stroke="#38bdf8"
-                  strokeWidth={3}
+                  stroke="#06b6d4"
+                  strokeWidth={2.5}
                   fillOpacity={1}
-                  fill="url(#colorTotalGlow)"
-                  dot={{ stroke: "#38bdf8", strokeWidth: 2, fill: "#0369a1", r: 4.5 }}
-                  activeDot={{ r: 7, stroke: "#ffffff", strokeWidth: 2.5, fill: "#38bdf8" }}
+                  fill="url(#colorCyanGlow)"
+                  dot={{ stroke: "#06b6d4", strokeWidth: 2, fill: "#0891b2", r: 4 }}
+                  activeDot={{ r: 6, stroke: "#ffffff", strokeWidth: 2, fill: "#06b6d4" }}
                   isAnimationActive={true}
-                  animationDuration={900}
+                  animationDuration={800}
                   animationEasing="ease-out"
                 />
               ) : (
@@ -188,11 +216,11 @@ const TrendChart = ({ data, className = "" }) => {
                     name="Theft"
                     dataKey="theft"
                     stroke="#eab308"
-                    strokeWidth={2.5}
+                    strokeWidth={2}
                     fillOpacity={1}
                     fill="url(#colorTheftGlow)"
-                    dot={{ stroke: "#eab308", strokeWidth: 1.5, fill: "#713f12", r: 3.5 }}
-                    activeDot={{ r: 6, stroke: "#ffffff", strokeWidth: 2, fill: "#eab308" }}
+                    dot={{ stroke: "#eab308", strokeWidth: 1.5, fill: "#713f12", r: 3 }}
+                    activeDot={{ r: 5, stroke: "#ffffff", strokeWidth: 2, fill: "#eab308" }}
                     isAnimationActive={true}
                     animationDuration={800}
                     animationEasing="ease-out"
@@ -203,11 +231,11 @@ const TrendChart = ({ data, className = "" }) => {
                     name="Assault"
                     dataKey="assault"
                     stroke="#f97316"
-                    strokeWidth={2.5}
+                    strokeWidth={2}
                     fillOpacity={1}
                     fill="url(#colorAssaultGlow)"
-                    dot={{ stroke: "#f97316", strokeWidth: 1.5, fill: "#7c2d12", r: 3.5 }}
-                    activeDot={{ r: 6, stroke: "#ffffff", strokeWidth: 2, fill: "#f97316" }}
+                    dot={{ stroke: "#f97316", strokeWidth: 1.5, fill: "#7c2d12", r: 3 }}
+                    activeDot={{ r: 5, stroke: "#ffffff", strokeWidth: 2, fill: "#f97316" }}
                     isAnimationActive={true}
                     animationDuration={950}
                     animationEasing="ease-out"
@@ -218,11 +246,11 @@ const TrendChart = ({ data, className = "" }) => {
                     name="Murder"
                     dataKey="murder"
                     stroke="#ef4444"
-                    strokeWidth={2.5}
+                    strokeWidth={2}
                     fillOpacity={1}
                     fill="url(#colorMurderGlow)"
-                    dot={{ stroke: "#ef4444", strokeWidth: 1.5, fill: "#7f1d1d", r: 3.5 }}
-                    activeDot={{ r: 6, stroke: "#ffffff", strokeWidth: 2, fill: "#ef4444" }}
+                    dot={{ stroke: "#ef4444", strokeWidth: 1.5, fill: "#7f1d1d", r: 3 }}
+                    activeDot={{ r: 5, stroke: "#ffffff", strokeWidth: 2, fill: "#ef4444" }}
                     isAnimationActive={true}
                     animationDuration={1100}
                     animationEasing="ease-out"
@@ -233,11 +261,11 @@ const TrendChart = ({ data, className = "" }) => {
                     name="Property Related"
                     dataKey="property_related"
                     stroke="#3b82f6"
-                    strokeWidth={2.5}
+                    strokeWidth={2}
                     fillOpacity={1}
                     fill="url(#colorPropertyGlow)"
-                    dot={{ stroke: "#3b82f6", strokeWidth: 1.5, fill: "#1e3a8a", r: 3.5 }}
-                    activeDot={{ r: 6, stroke: "#ffffff", strokeWidth: 2, fill: "#3b82f6" }}
+                    dot={{ stroke: "#3b82f6", strokeWidth: 1.5, fill: "#1e3a8a", r: 3 }}
+                    activeDot={{ r: 5, stroke: "#ffffff", strokeWidth: 2, fill: "#3b82f6" }}
                     isAnimationActive={true}
                     animationDuration={1250}
                     animationEasing="ease-out"
@@ -248,11 +276,11 @@ const TrendChart = ({ data, className = "" }) => {
                     name="Cyber Crime"
                     dataKey="cyber_crime"
                     stroke="#a855f7"
-                    strokeWidth={2.5}
+                    strokeWidth={2}
                     fillOpacity={1}
                     fill="url(#colorCyberGlow)"
-                    dot={{ stroke: "#a855f7", strokeWidth: 1.5, fill: "#581c87", r: 3.5 }}
-                    activeDot={{ r: 6, stroke: "#ffffff", strokeWidth: 2, fill: "#a855f7" }}
+                    dot={{ stroke: "#a855f7", strokeWidth: 1.5, fill: "#581c87", r: 3 }}
+                    activeDot={{ r: 5, stroke: "#ffffff", strokeWidth: 2, fill: "#a855f7" }}
                     isAnimationActive={true}
                     animationDuration={1400}
                     animationEasing="ease-out"
@@ -261,33 +289,6 @@ const TrendChart = ({ data, className = "" }) => {
               )}
             </AreaChart>
           </ResponsiveContainer>
-        </div>
-
-        {/* Glassmorphic Summary Bar at Chart Bottom */}
-        <div className="grid grid-cols-3 gap-3 pt-2 font-mono text-[10px]">
-          <div className="bg-slate-900/40 border border-slate-800/50 p-2.5 flex items-center justify-between shadow-sm">
-            <div className="flex items-center gap-2">
-              <FaChartLine className="text-blue-400 text-xs" />
-              <span className="text-slate-400 uppercase tracking-wider">7-Mo Average</span>
-            </div>
-            <span className="font-bold text-white text-xs">{avgMonthlyCases} FIRs/mo</span>
-          </div>
-
-          <div className="bg-slate-900/40 border border-slate-800/50 p-2.5 flex items-center justify-between shadow-sm">
-            <div className="flex items-center gap-2">
-              <FaCalendarAlt className="text-amber-400 text-xs" />
-              <span className="text-slate-400 uppercase tracking-wider">Peak Month</span>
-            </div>
-            <span className="font-bold text-amber-300 text-xs">{peakMonthObj ? `${peakMonthObj.month} (${peakMonthObj.total_crimes})` : "N/A"}</span>
-          </div>
-
-          <div className="bg-slate-900/40 border border-slate-800/50 p-2.5 flex items-center justify-between shadow-sm">
-            <div className="flex items-center gap-2">
-              <FaArrowUp className="text-emerald-400 text-xs" />
-              <span className="text-slate-400 uppercase tracking-wider">Trend Rate</span>
-            </div>
-            <span className="font-bold text-emerald-400 text-xs">+4.2% MoM</span>
-          </div>
         </div>
       </div>
     </ChartCard>

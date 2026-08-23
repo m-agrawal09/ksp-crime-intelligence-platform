@@ -101,33 +101,20 @@ function Sidebar() {
         })}
       </nav>
 
-      {/* Footer & Live 24-Hour Clock */}
-      <div className="border-t border-slate-800 p-4 space-y-2.5">
-        {/* Real-time 24-hour clock card */}
-        <div className="rounded-xl bg-slate-900/60 border border-slate-700/50 px-4 py-3 flex items-center justify-between font-mono shadow-sm">
-          <div className="flex flex-col gap-1">
-            <span className="text-[21px] font-bold text-slate-200 tracking-widest tabular-nums leading-none">
-              {time24}
-            </span>
-            <span className="text-[11px] text-slate-400 font-medium tracking-wider uppercase">
-              {dateFormatted}
-            </span>
+      {/* Compact Secondary Operational Clock Footer */}
+      <div className="border-t border-slate-800/80 px-3.5 py-3 font-mono text-[10px] space-y-1.5 bg-[#050914]">
+        <div className="flex items-center justify-between font-semibold tracking-wider">
+          <div className="flex items-center gap-1.5 text-emerald-400">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>LIVE</span>
+            <span className="text-slate-600">|</span>
+            <span className="text-slate-200 tabular-nums">{hours}:{minutes} IST</span>
           </div>
-          <div className="flex items-center gap-1.5 bg-slate-800/60 border border-slate-700/40 px-2 py-1 rounded-md">
-            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse flex-shrink-0" />
-            <span className="text-[9px] font-bold text-slate-300 tracking-wider">LIVE</span>
-          </div>
+          <span className="text-slate-400 text-[9px]">{dateFormatted}</span>
         </div>
-
-        {/* Catalyst Status Badge */}
-        <div className="rounded-md bg-slate-900/40 px-3.5 py-2.5 border border-slate-800/30 flex items-center justify-between">
-          <p className="text-[10px] font-bold font-mono text-slate-400 uppercase tracking-wider">
-            Catalyst SDK
-          </p>
-          <span className="flex items-center gap-1.5 text-[10px] font-mono text-emerald-400 font-bold">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse inline-block" />
-            ONLINE
-          </span>
+        <div className="flex items-center justify-between text-[9px] text-slate-500 tracking-wider uppercase border-t border-slate-800/40 pt-1.5 font-bold">
+          <span>CCTNS SDK ONLINE</span>
+          <span className="text-blue-400">ZOHO CATALYST</span>
         </div>
       </div>
     </aside>

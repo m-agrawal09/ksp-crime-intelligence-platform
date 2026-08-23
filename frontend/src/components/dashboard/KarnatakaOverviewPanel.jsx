@@ -378,11 +378,38 @@ const KarnatakaOverviewPanel = () => {
       });
 
       Object.entries(clusters).forEach(([district, data]) => {
+        const districtIncs = incidents.filter(i => (i.district || "Bengaluru City") === district);
+        const categories = {};
+        districtIncs.forEach(inc => {
+          const cat = inc.type || "General";
+          categories[cat] = (categories[cat] || 0) + 1;
+        });
+        const topCategory = Object.entries(categories).sort((a,b) => b[1] - a[1])[0]?.[0] || "Property Offences";
+        const isCritical = data.count > 15;
+        const isHigh = data.count > 6;
+        const riskLabel = isCritical ? "CRITICAL" : isHigh ? "HIGH" : "MEDIUM";
+        const riskColor = isCritical ? "#ef4444" : isHigh ? "#f59e0b" : "#3b82f6";
+
+        const tooltipHTML = `
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:6px 8px;background:rgba(2,6,23,0.96);border:1px solid rgba(51,65,85,0.8);border-radius:4px;color:#f8fafc;min-width:150px;box-shadow:0 10px 25px rgba(0,0,0,0.5);">
+            <div style="font-weight:bold;color:#38bdf8;text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid rgba(51,65,85,0.6);padding-bottom:3px;margin-bottom:4px;">${district}</div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:2px;">
+              <span style="color:#94a3b8;">Total Cases:</span>
+              <span style="font-weight:bold;color:#ffffff;">${data.count} FIRs</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:2px;">
+              <span style="color:#94a3b8;">Top Crime:</span>
+              <span style="font-weight:bold;color:#fcd34d;">${topCategory}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;">
+              <span style="color:#94a3b8;">Risk Index:</span>
+              <span style="font-weight:bold;color:${riskColor};">${riskLabel}</span>
+            </div>
+          </div>
+        `;
+
         L.marker([data.lat, data.lng], { icon: createClusterIcon(district, data.count) })
-          .bindTooltip(
-            `<span style="font-family:'IBM Plex Sans',sans-serif;font-size:9px;letter-spacing:0.05em;text-transform:uppercase;">${district}: ${data.count} FIRs</span>`,
-            { direction: "top", offset: [0, -10], opacity: 1 }
-          )
+          .bindTooltip(tooltipHTML, { direction: "top", offset: [0, -10], opacity: 1 })
           .addTo(markersLayerRef.current);
       });
     } else {
@@ -390,7 +417,7 @@ const KarnatakaOverviewPanel = () => {
       incidents.forEach((inc) => {
         L.marker([inc.lat, inc.lng], { icon: createIncidentIcon(inc.severity) })
           .bindTooltip(
-            `<span style="font-family:'IBM Plex Sans',sans-serif;font-size:9px;text-transform:uppercase;">${inc.caseNo} · ${inc.severity}</span>`,
+            `<span style="font-family:'IBM Plex Mono',monospace;font-size:9px;text-transform:uppercase;">${inc.caseNo} · ${inc.severity} · ${inc.type || 'Incident'}</span>`,
             { direction: "top", offset: [0, -6], opacity: 1 }
           )
           .addTo(markersLayerRef.current);
@@ -408,7 +435,7 @@ const KarnatakaOverviewPanel = () => {
             Karnataka Live Crime Map
           </h2>
           <p className="text-[11px] text-slate-400 mt-0.5 font-sans">
-            {zoomLevel < 8.2 ? "District Clusters" : "Street-Level Incidents"} · Live Feed
+            {zoomLevel < 8.2 ? "District Overview" : "Street-Level Incidents"} · Live Feed
           </p>
         </div>
 
@@ -428,7 +455,7 @@ const KarnatakaOverviewPanel = () => {
       </div>
 
       {/* ── Map ── */}
-      <div className="relative bg-[#020617]" style={{ height: "320px" }}>
+      <div className="relative bg-[#020617]" style={{ height: "270px" }}>
         <div ref={mapContainerRef} style={{ height: "100%", width: "100%" }} />
 
         {/* ── Layer Switcher (same as Crime Map) ── */}
@@ -459,7 +486,7 @@ const KarnatakaOverviewPanel = () => {
         </div>
 
         {/* ── Zoom level badge (bottom-left) ── */}
-        <div className="absolute bottom-10 left-2.5 z-[1000] bg-slate-950/70 backdrop-blur-sm border border-slate-800/40 rounded-sm px-2 py-0.5 pointer-events-none font-mono">
+        <div className="absolute bottom-4 left-2.5 z-[1000] bg-slate-950/70 backdrop-blur-sm border border-slate-800/40 rounded-sm px-2 py-0.5 pointer-events-none font-mono">
           <span className="text-[8px] text-slate-400 uppercase tracking-wider">
             {zoomLevel < 8.2 ? "District Overview" : "Street Level"}
           </span>
@@ -467,28 +494,29 @@ const KarnatakaOverviewPanel = () => {
       </div>
 
       {/* ── Stats Bar ── */}
-      <div className="px-4 py-2.5 border-t border-slate-800/60 bg-slate-900/40 grid grid-cols-3 divide-x divide-slate-800/40 font-mono">
+      <div className="px-4 py-2 border-t border-slate-800/60 bg-slate-900/40 grid grid-cols-3 divide-x divide-slate-800/40 font-mono text-xs">
         <div className="pr-3">
-          <span className="text-[9px] text-slate-400 uppercase tracking-wider block font-mono">STATUS: ACTIVE</span>
+          <span className="text-[9px] text-slate-400 uppercase tracking-wider block font-mono">ACTIVE</span>
           <span className="text-amber-400 font-bold text-sm leading-tight tabular-nums font-mono">{activeCount}</span>
         </div>
         <div className="px-3">
-          <span className="text-[9px] text-slate-400 uppercase tracking-wider block font-mono">RISK: HIGH</span>
+          <span className="text-[9px] text-slate-400 uppercase tracking-wider block font-mono">HIGH RISK</span>
           <span className="text-red-400 font-bold text-sm leading-tight tabular-nums font-mono">{highCount}</span>
         </div>
         <div className="pl-3">
-          <span className="text-[9px] text-slate-400 uppercase tracking-wider block font-mono">JURISDICTION</span>
+          <span className="text-[9px] text-slate-400 uppercase tracking-wider block font-mono">HOTSPOTS</span>
           <span className="text-blue-400 font-bold text-sm leading-tight tabular-nums font-mono">{hotspots.length} Districts</span>
         </div>
       </div>
 
-      {/* ── Footer ── */}
-      <div className="px-4 py-2 border-t border-slate-800/40 flex items-center justify-end font-sans">
+      {/* ── Footer CTA ── */}
+      <div className="px-4 py-2.5 border-t border-slate-800/40 flex items-center justify-between font-mono bg-slate-950/60">
+        <span className="text-[9px] text-slate-500 uppercase tracking-wider font-semibold">COMMAND GIS OVERVIEW</span>
         <Link
           to="/map"
-          className="flex items-center gap-1.5 text-[11px] text-slate-400 hover:text-cyan-400 transition-colors duration-150 font-medium"
+          className="flex items-center gap-1.5 text-xs font-bold text-cyan-400 hover:text-cyan-300 transition-colors uppercase tracking-wider group"
         >
-          Open Command Map <FaExternalLinkAlt className="text-[9px]" />
+          Go to Crime Map <span className="group-hover:translate-x-0.5 transition-transform">&rarr;</span>
         </Link>
       </div>
     </div>

@@ -59,7 +59,7 @@ const CustomTooltip = ({ active, payload }) => {
     const data = payload[0].payload;
     const style = CATEGORY_STYLE_MAP[data.category] || DEFAULT_STYLE;
     return (
-      <div className="rounded-xl border border-slate-800/80 bg-slate-950/95 p-3.5 shadow-2xl backdrop-blur-md font-mono text-xs">
+      <div className="relative z-[9999] rounded-xl border border-slate-700/80 bg-slate-950/98 p-3.5 shadow-2xl backdrop-blur-md font-mono text-xs">
         <div className="flex items-center gap-2 mb-1.5 pb-1 border-b border-slate-800/60">
           <span className="h-2 w-2 rounded-full" style={{ backgroundColor: style.color }} />
           <p className="font-bold text-white uppercase tracking-wider">{data.category}</p>
@@ -86,9 +86,9 @@ const CrimeCategoryChart = ({ data, className = "" }) => {
         {/* Glassmorphic Outer Container for Donut Chart */}
         <div className="relative h-64 w-full flex items-center justify-center my-auto">
           {/* Subtle Outer Glowing Glass Ring */}
-          <div className="absolute w-56 h-56 rounded-full border border-slate-800/40 bg-slate-900/30 backdrop-blur-md shadow-inner pointer-events-none" />
+          <div className="absolute w-56 h-56 rounded-full border border-slate-800/40 bg-slate-900/30 backdrop-blur-md shadow-inner pointer-events-none z-0" />
 
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height="100%" className="relative z-10">
             <PieChart>
               <defs>
                 {Object.entries(CATEGORY_STYLE_MAP).map(([key, style]) => (
@@ -132,12 +132,16 @@ const CrimeCategoryChart = ({ data, className = "" }) => {
                   );
                 })}
               </Pie>
-              <Tooltip content={<CustomTooltip />} />
+              <Tooltip
+                content={<CustomTooltip />}
+                wrapperStyle={{ zIndex: 9999, pointerEvents: "none" }}
+                allowEscapeViewBox={{ x: true, y: true }}
+              />
             </PieChart>
           </ResponsiveContainer>
 
           {/* Inner Glassmorphic Floating Center Badge */}
-          <div className="absolute pointer-events-none flex flex-col items-center justify-center w-28 h-28 rounded-full bg-slate-950/80 border border-slate-800/80 backdrop-blur-md shadow-xl shadow-black/50">
+          <div className="absolute pointer-events-none flex flex-col items-center justify-center w-28 h-28 rounded-full bg-slate-950/80 border border-slate-800/80 backdrop-blur-md shadow-xl shadow-black/50 z-0">
             <span className="text-[9px] font-mono tracking-widest text-slate-500 uppercase font-bold">TOTAL</span>
             <span className="font-mono text-2xl font-extrabold text-white leading-none mt-1">
               {totalCases.toLocaleString("en-IN")}

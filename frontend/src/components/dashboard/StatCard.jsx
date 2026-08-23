@@ -101,16 +101,16 @@ const StatCard = ({
         </div>
 
         {/* Metric value (Centered) */}
-        <div className="mb-2.5 text-center w-full">
+        <div className="mb-2 text-center w-full">
           <span
-            className="text-[2.5rem] font-bold tracking-tight text-white leading-none tabular-nums font-sans"
+            className="text-[2.25rem] font-bold tracking-tight text-white leading-none tabular-nums font-sans"
           >
             {value}
           </span>
         </div>
 
         {/* Change (Centered) */}
-        <div className="flex flex-col items-center gap-1.5 mb-2 text-center w-full">
+        <div className="flex flex-col items-center gap-1 mb-1 text-center w-full">
           <div className={`flex items-center gap-1 text-[11px] font-semibold ${isPositive ? "text-emerald-400" : "text-red-400"}`}>
             {isPositive
               ? <FaArrowUp className="text-[9px]" />
