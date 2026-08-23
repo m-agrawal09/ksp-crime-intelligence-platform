@@ -61,7 +61,7 @@ const RecentCriticalCases = ({ cases }) => {
           <tbody className="text-xs">
             {cases && cases.map((c) => {
               const isExpanded = expandedCaseId === c.CaseMasterID;
-              
+
               return (
                 <React.Fragment key={c.CaseMasterID}>
                   {/* Standard Row */}
@@ -142,11 +142,10 @@ const RecentCriticalCases = ({ cases }) => {
                                 {c.suspects.map((s) => (
                                   <div key={s.AccusedMasterID} className="flex items-center justify-between">
                                     <span className="text-slate-400 font-semibold">{s.PersonID}: {s.AccusedName}</span>
-                                    <span className={`text-[9px] px-1.5 py-0.5 rounded-[2px] ${
-                                      s.ApprehensionStatus === "Detained" || s.ApprehensionStatus === "Judicial Custody"
+                                    <span className={`text-[9px] px-1.5 py-0.5 rounded-[2px] ${s.ApprehensionStatus === "Detained" || s.ApprehensionStatus === "Judicial Custody"
                                         ? "text-emerald-400 bg-emerald-500/5"
                                         : "text-rose-400 bg-rose-500/5"
-                                    }`}>
+                                      }`}>
                                       {s.ApprehensionStatus}
                                     </span>
                                   </div>

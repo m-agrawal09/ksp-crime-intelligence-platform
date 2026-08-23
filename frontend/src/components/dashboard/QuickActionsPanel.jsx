@@ -54,7 +54,7 @@ const QuickActionsPanel = () => {
         )}`;
         const downloadAnchor = document.createElement("a");
         downloadAnchor.setAttribute("href", jsonString);
-        downloadAnchor.setAttribute("download", `CCTNS_Statewide_Report_${new Date().toISOString().slice(0,10)}.json`);
+        downloadAnchor.setAttribute("download", `CCTNS_Statewide_Report_${new Date().toISOString().slice(0, 10)}.json`);
         document.body.appendChild(downloadAnchor);
         downloadAnchor.click();
         downloadAnchor.remove();
@@ -146,8 +146,8 @@ const QuickActionsPanel = () => {
 
   const levelColor = (level) => {
     if (level === "SUCCESS") return "text-emerald-400 font-bold";
-    if (level === "ERROR")   return "text-rose-400 font-bold";
-    if (level === "INIT")    return "text-blue-400 font-bold";
+    if (level === "ERROR") return "text-rose-400 font-bold";
+    if (level === "INIT") return "text-blue-400 font-bold";
     return "text-slate-400";
   };
 
