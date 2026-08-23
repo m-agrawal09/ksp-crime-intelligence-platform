@@ -8092,7 +8092,7 @@ const saveStorage = (records) => {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(cleanRecords));
   } catch (err) {
-    console.error("Failed saving FIR storage:", err);
+    console.warn("FIR storage quota full, keeping data in active memory:", err.message);
   }
   notifySubscribers();
 };

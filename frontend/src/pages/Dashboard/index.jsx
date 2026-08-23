@@ -99,51 +99,51 @@ const Dashboard = () => {
   const { kpi_metrics, crime_trends, crime_distribution, ai_alerts, recent_critical_cases } = dashboardData;
 
   return (
-    <div className="flex flex-col gap-6" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+    <div className="flex flex-col gap-6 font-sans">
 
       {/* ── 1. Executive Intelligence Header ── */}
-      <div className="pb-7 border-b border-slate-900/40 flex flex-col gap-5 animate-fade-in-up">
+      <div className="pb-6 border-b border-slate-800/60 flex flex-col gap-4 animate-fade-in-up">
 
         {/* Title + Controls row */}
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div>
-            <h1 className="text-3xl font-extrabold text-white leading-none font-space tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold text-white leading-snug font-sans tracking-tight">
               Executive Intelligence Dashboard
             </h1>
-            <p className="text-[11px] text-slate-500 mt-2 tracking-wide font-space">
+            <p className="text-xs text-slate-400 mt-1 font-sans">
               Karnataka State Police &bull; CCTNS Analytical Briefing
             </p>
           </div>
 
-          {/* Unified Controls Container (Straight Corners + Extra Breathing Room) */}
-          <div className="flex flex-wrap items-center gap-4 sm:gap-5 self-start lg:self-auto bg-slate-900/60 border border-slate-700/40 rounded-none px-5 py-3 sm:px-6 sm:py-3.5 shadow-sm backdrop-blur-md text-xs font-mono font-medium text-slate-300">
-            
+          {/* Unified Controls Container */}
+          <div className="flex flex-wrap items-center gap-4 sm:gap-5 self-start lg:self-auto bg-slate-900/60 border border-slate-700/40 rounded-none px-5 py-3 sm:px-6 sm:py-3.5 shadow-sm backdrop-blur-md text-xs font-mono text-slate-300">
+
             {/* Live Telemetry Indicator */}
-            <div className="flex items-center gap-2 pr-4 sm:pr-5 border-r border-slate-800/80">
+            <div className="flex items-center gap-2 pr-4 border-r border-slate-800/80">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.8)]"></span>
               </span>
-              <span className="text-[10px] text-slate-400 font-mono tracking-wider font-bold">TELEMETRY:</span>
-              <span className="text-[10px] text-emerald-400 font-bold font-mono tracking-wider">SECURE</span>
+              <span className="text-[10px] text-slate-400 font-mono tracking-wider font-semibold">TELEMETRY:</span>
+              <span className="text-[10px] text-emerald-400 font-semibold font-mono tracking-wider">SECURE</span>
             </div>
 
             {/* Date Badge */}
-            <div className="flex items-center gap-2 pr-4 sm:pr-5 border-r border-slate-800/80">
+            <div className="flex items-center gap-2 pr-4 border-r border-slate-800/80">
               <FaCalendarAlt className="text-blue-400 text-xs flex-shrink-0" />
-              <span className="text-xs font-mono font-medium text-slate-200">
+              <span className="text-xs font-mono text-slate-300">
                 {new Date().toLocaleDateString("en-IN", { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}
               </span>
             </div>
 
             {/* District Jurisdiction Selector */}
-            <div className="flex items-center gap-2 pr-4 sm:pr-5 border-r border-slate-800/80">
+            <div className="flex items-center gap-2 pr-4 border-r border-slate-800/80">
               <FaMapMarkerAlt className="text-blue-400 text-xs flex-shrink-0" />
-              <span className="text-[10px] text-slate-400 font-mono font-bold tracking-wider uppercase">JURISDICTION:</span>
+              <span className="text-[10px] text-slate-400 font-mono font-semibold tracking-wider uppercase">JURISDICTION:</span>
               <select
                 value={selectedDistrict}
                 onChange={(e) => setSelectedDistrict(e.target.value)}
-                className="bg-transparent text-blue-400 hover:text-blue-300 font-bold font-mono outline-none cursor-pointer text-xs pr-1"
+                className="bg-transparent text-blue-400 hover:text-blue-300 font-semibold font-mono outline-none cursor-pointer text-xs pr-1"
               >
                 <option value="ALL" className="bg-slate-950 text-slate-200">Statewide (All Districts)</option>
                 {DISTRICTS.slice(1).map((d) => (
@@ -159,25 +159,25 @@ const Dashboard = () => {
               title="Refresh Dashboard Data"
             >
               <FaSyncAlt className="text-xs text-blue-400 group-hover:rotate-180 transition-transform duration-500" />
-              <span className="font-bold tracking-wider">SYNC CORE</span>
+              <span className="font-semibold tracking-wider">SYNC CORE</span>
             </button>
           </div>
         </div>
 
         {/* Status strip */}
-        <div className="flex flex-wrap gap-x-6 gap-y-2 items-center text-[9px] sm:text-[10px] tracking-wider text-slate-500 uppercase font-space font-bold">
+        <div className="flex flex-wrap gap-x-6 gap-y-2 items-center text-[10px] tracking-wider text-slate-400 font-mono font-semibold">
           <div className="flex items-center gap-1.5">
-            <span className="text-slate-600">Gateway Link:</span>{" "}
-            <span className="text-slate-400 font-bold">CCTNS CAS (CONNECTED)</span>
+            <span className="text-slate-500">Gateway Link:</span>{" "}
+            <span className="text-slate-300">CCTNS CAS (CONNECTED)</span>
           </div>
-          <div className="text-slate-800/60">&bull;</div>
+          <div className="text-slate-700">&bull;</div>
           <div>
-            <span className="text-slate-600">Active Units:</span>{" "}
-            <span className="text-slate-400 font-bold">1,024 Districts &amp; Commands</span>
+            <span className="text-slate-500">Active Units:</span>{" "}
+            <span className="text-slate-300">1,024 Districts &amp; Commands</span>
           </div>
-          <div className="text-slate-800/60">&bull;</div>
+          <div className="text-slate-700">&bull;</div>
           <div>
-            <span className="text-slate-600">AI Intelligence Core:</span>{" "}
+            <span className="text-slate-500">AI Intelligence Core:</span>{" "}
             <span className="text-blue-400 font-bold">QuickML (ONLINE)</span>
           </div>
           <div className="ml-auto text-[9px] text-slate-700 font-mono">

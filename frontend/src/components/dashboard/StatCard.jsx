@@ -79,31 +79,31 @@ const StatCard = ({
 
   return (
     <div
-      className="relative overflow-hidden rounded-[4px] border border-blue-500/30 bg-slate-900/60 transition-all duration-200 hover:border-blue-500/60 hover:bg-slate-900/80 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/40 shadow-sm animate-fade-in-up h-full flex flex-col"
+      className="relative overflow-hidden rounded-[4px] border border-blue-500/30 bg-slate-900/60 transition-all duration-200 hover:border-blue-500/60 hover:bg-slate-900/80 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/40 shadow-sm animate-fade-in-up h-full flex flex-col font-sans"
       onMouseEnter={() => setShowMetadata(true)}
       onMouseLeave={() => setShowMetadata(false)}
     >
 
 
       {/* Card body */}
-      <div className="px-8 pb-4 flex flex-col items-center justify-start flex-1 h-full" style={{ paddingTop: "12px" }}>
+      <div className="px-6 pb-4 flex flex-col items-center justify-start flex-1 h-full" style={{ paddingTop: "14px" }}>
 
         {/* ── Row 1: Label + Icon ── */}
         <div className="flex items-center justify-center gap-2 mb-2 w-full text-center px-1">
           <span
-            className="text-[9px] font-extrabold tracking-[0.12em] text-slate-300 uppercase leading-tight text-center font-space break-words max-w-[80%]"
+            className="text-[11px] font-semibold text-slate-300 leading-tight text-center font-sans break-words max-w-[85%]"
           >
             {title}
           </span>
-          <div className={`flex-shrink-0 rounded-[3px] border border-slate-800/30 bg-slate-800/20 p-1.5 ${color}`}>
-            {Icon ? <Icon className="text-[11px]" /> : <FaInfoCircle className="text-[11px]" />}
+          <div className={`flex-shrink-0 rounded border border-slate-800/40 bg-slate-800/30 p-1.5 ${color}`}>
+            {Icon ? <Icon className="text-[12px]" /> : <FaInfoCircle className="text-[12px]" />}
           </div>
         </div>
 
         {/* Metric value (Centered) */}
         <div className="mb-2.5 text-center w-full">
           <span
-            className="text-[2.6rem] font-extrabold tracking-tight text-white leading-none tabular-nums font-space"
+            className="text-[2.5rem] font-bold tracking-tight text-white leading-none tabular-nums font-sans"
           >
             {value}
           </span>
@@ -111,55 +111,55 @@ const StatCard = ({
 
         {/* Change (Centered) */}
         <div className="flex flex-col items-center gap-1.5 mb-2 text-center w-full">
-          <div className={`flex items-center gap-1 text-[10px] font-bold ${isPositive ? "text-emerald-400" : "text-red-400"}`}>
+          <div className={`flex items-center gap-1 text-[11px] font-semibold ${isPositive ? "text-emerald-400" : "text-red-400"}`}>
             {isPositive
-              ? <FaArrowUp className="text-[8px]" />
-              : <FaArrowDown className="text-[8px]" />}
+              ? <FaArrowUp className="text-[9px]" />
+              : <FaArrowDown className="text-[9px]" />}
             <span>{change}</span>
           </div>
         </div>
       </div>
 
       <div
-        className={`absolute inset-0 flex flex-col justify-between bg-slate-950/97 px-8 pb-4 text-center transition-all duration-200 ${showMetadata
+        className={`absolute inset-0 flex flex-col justify-between bg-slate-950/97 px-6 pb-4 text-center transition-all duration-200 ${showMetadata
           ? "opacity-100 translate-y-0"
           : "opacity-0 translate-y-3 pointer-events-none"
           }`}
-        style={{ paddingTop: "12px" }}
+        style={{ paddingTop: "14px" }}
       >
 
 
         <div>
-          <div className="flex items-center justify-center gap-1.5 border-b border-slate-800/30 pb-2.5 mb-3.5">
-            <FaInfoCircle className="text-[9px] text-blue-400/70" />
+          <div className="flex items-center justify-center gap-1.5 border-b border-slate-800/50 pb-2 mb-3">
+            <FaInfoCircle className="text-[10px] text-blue-400/80" />
             <span
-              className="text-[9px] font-bold uppercase tracking-[0.14em] text-slate-400 font-space"
+              className="text-[10px] font-semibold uppercase tracking-wider text-slate-400 font-mono"
             >
               Operational Metadata
             </span>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             <div>
               <span
-                className="text-[8px] text-slate-500 block uppercase tracking-[0.14em] mb-0.5 font-semibold"
+                className="text-[9px] text-slate-500 block uppercase tracking-wider mb-0.5 font-semibold font-mono"
               >
-                Data Source
+                SOURCE
               </span>
               <span
-                className="text-[11px] text-slate-300 font-medium font-bold font-mono"
+                className="text-[11px] text-slate-300 font-mono font-medium"
               >
                 {dataSource}
               </span>
             </div>
             <div>
               <span
-                className="text-[8px] text-slate-500 block uppercase tracking-[0.14em] mb-0.5 font-semibold"
+                className="text-[9px] text-slate-500 block uppercase tracking-wider mb-0.5 font-semibold font-mono"
               >
-                Coverage
+                JURISDICTION
               </span>
               <span
-                className="text-[11px] text-slate-300 font-medium font-bold"
+                className="text-[11px] text-slate-300 font-sans font-medium"
               >
                 {coverage}
               </span>
@@ -168,15 +168,15 @@ const StatCard = ({
         </div>
 
         <div
-          className="flex flex-col items-center justify-center gap-1 border-t border-slate-800/25 pt-2.5"
+          className="flex flex-col items-center justify-center gap-0.5 border-t border-slate-800/50 pt-2"
         >
           <span
-            className="text-[8px] text-slate-500 uppercase tracking-[0.14em] font-semibold"
+            className="text-[9px] text-slate-500 uppercase tracking-wider font-semibold font-mono"
           >
-            Last Sync
+            LAST SYNC
           </span>
           <span
-            className="text-[10px] text-slate-400 font-medium font-bold font-mono"
+            className="text-[10px] text-slate-400 font-mono font-medium"
           >
             {lastSync}
           </span>

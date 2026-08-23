@@ -100,9 +100,9 @@ const createIncidentIcon = (severity) => {
 
   const palette = {
     CRITICAL: { dot: "#ef4444", glow: "rgba(239,68,68,0.22)", glowDark: "rgba(239,68,68,0.1)", shadow: "rgba(239,68,68,0.5)" },
-    HIGH:     { dot: "#f59e0b", glow: "rgba(245,158,11,0.18)", glowDark: "rgba(245,158,11,0.08)", shadow: "rgba(245,158,11,0.4)" },
-    MEDIUM:   { dot: "#3b82f6", glow: "rgba(59,130,246,0.18)", glowDark: "rgba(59,130,246,0.08)", shadow: "rgba(59,130,246,0.4)" },
-    LOW:      { dot: "#64748b", glow: "rgba(100,116,139,0.12)", glowDark: "rgba(100,116,139,0.06)", shadow: "rgba(100,116,139,0.3)" },
+    HIGH: { dot: "#f59e0b", glow: "rgba(245,158,11,0.18)", glowDark: "rgba(245,158,11,0.08)", shadow: "rgba(245,158,11,0.4)" },
+    MEDIUM: { dot: "#3b82f6", glow: "rgba(59,130,246,0.18)", glowDark: "rgba(59,130,246,0.08)", shadow: "rgba(59,130,246,0.4)" },
+    LOW: { dot: "#64748b", glow: "rgba(100,116,139,0.12)", glowDark: "rgba(100,116,139,0.06)", shadow: "rgba(100,116,139,0.3)" },
   };
 
   const c = palette[severity] || palette.LOW;
@@ -174,12 +174,12 @@ const createMaskGeoJSON = (karnatakaGeoJSON) => {
 // ─────────────────────────────────────────────────────────────────────────────
 const KarnatakaOverviewPanel = () => {
   const mapContainerRef = useRef(null);
-  const mapRef          = useRef(null);
-  const tileLayerRef    = useRef(null);
+  const mapRef = useRef(null);
+  const tileLayerRef = useRef(null);
   const markersLayerRef = useRef(null);
-  const zoomRef         = useRef(PANEL_ZOOM);
+  const zoomRef = useRef(PANEL_ZOOM);
 
-  const [tick, setTick]           = useState(0);
+  const [tick, setTick] = useState(0);
   const [activeLayer, setActiveLayer] = useState("streets");
   const [zoomLevel, setZoomLevel] = useState(PANEL_ZOOM);
   const [boundariesLoaded, setBoundariesLoaded] = useState(false);
@@ -194,7 +194,7 @@ const KarnatakaOverviewPanel = () => {
   const incidents = useMemo(() => crimeService.getIncidents(), [tick]);
 
   // Stats
-  const hotspots   = useMemo(() => crimeService.getHotspotDistricts(incidents), [incidents]);
+  const hotspots = useMemo(() => crimeService.getHotspotDistricts(incidents), [incidents]);
   const activeCount = useMemo(
     () => incidents.filter((i) => i.status !== "Case Closed / Completed").length,
     [incidents]
@@ -209,13 +209,13 @@ const KarnatakaOverviewPanel = () => {
 
     const map = L.map(mapContainerRef.current, {
       center: KARNATAKA_CENTER,
-      zoom:   PANEL_ZOOM,
-      zoomControl:      true,
-      scrollWheelZoom:  true,
-      doubleClickZoom:  true,
-      dragging:         true,
-      touchZoom:        true,
-      keyboard:         true,
+      zoom: PANEL_ZOOM,
+      zoomControl: true,
+      scrollWheelZoom: true,
+      doubleClickZoom: true,
+      dragging: true,
+      touchZoom: true,
+      keyboard: true,
       attributionControl: false,
     });
 
@@ -229,12 +229,14 @@ const KarnatakaOverviewPanel = () => {
     }).addTo(map);
     tileLayerRef.current = tile;
 
+    let isMounted = true;
+
     // Load boundaries asynchronously
     Promise.all([
       fetch("/karnataka-state.geojson").then(res => res.json()),
       fetch("/karnataka-districts.geojson").then(res => res.json())
     ]).then(([stateData, districtsData]) => {
-      if (!mapRef.current) return;
+      if (!isMounted || !mapRef.current) return;
       // 1. World mask (strongly fades all other states outside Karnataka)
       const maskGeo = createMaskGeoJSON(stateData);
       if (maskGeo) {
@@ -310,11 +312,11 @@ const KarnatakaOverviewPanel = () => {
 
       // Stagger markers fade in after boundaries render
       setTimeout(() => {
-        setBoundariesLoaded(true);
+        if (isMounted) setBoundariesLoaded(true);
       }, 350);
     }).catch(err => {
       console.error("Error loading dashboard boundaries:", err);
-      setBoundariesLoaded(true); // Fallback
+      if (isMounted) setBoundariesLoaded(true); // Fallback
     });
 
     // Markers layer
@@ -322,6 +324,7 @@ const KarnatakaOverviewPanel = () => {
 
     // Track zoom for cluster/marker switching
     map.on("zoomend", () => {
+      if (!isMounted) return;
       zoomRef.current = map.getZoom();
       setZoomLevel(map.getZoom());
     });
@@ -329,8 +332,9 @@ const KarnatakaOverviewPanel = () => {
     mapRef.current = map;
 
     return () => {
+      isMounted = false;
       map.remove();
-      mapRef.current      = null;
+      mapRef.current = null;
       tileLayerRef.current = null;
       markersLayerRef.current = null;
     };
@@ -376,7 +380,7 @@ const KarnatakaOverviewPanel = () => {
       Object.entries(clusters).forEach(([district, data]) => {
         L.marker([data.lat, data.lng], { icon: createClusterIcon(district, data.count) })
           .bindTooltip(
-            `<span style="font-family:'Space Grotesk',sans-serif;font-size:9px;letter-spacing:0.05em;text-transform:uppercase;">${district}: ${data.count} FIRs</span>`,
+            `<span style="font-family:'IBM Plex Sans',sans-serif;font-size:9px;letter-spacing:0.05em;text-transform:uppercase;">${district}: ${data.count} FIRs</span>`,
             { direction: "top", offset: [0, -10], opacity: 1 }
           )
           .addTo(markersLayerRef.current);
@@ -386,7 +390,7 @@ const KarnatakaOverviewPanel = () => {
       incidents.forEach((inc) => {
         L.marker([inc.lat, inc.lng], { icon: createIncidentIcon(inc.severity) })
           .bindTooltip(
-            `<span style="font-family:'Space Grotesk',sans-serif;font-size:9px;text-transform:uppercase;">${inc.caseNo} · ${inc.severity}</span>`,
+            `<span style="font-family:'IBM Plex Sans',sans-serif;font-size:9px;text-transform:uppercase;">${inc.caseNo} · ${inc.severity}</span>`,
             { direction: "top", offset: [0, -6], opacity: 1 }
           )
           .addTo(markersLayerRef.current);
@@ -394,19 +398,17 @@ const KarnatakaOverviewPanel = () => {
     }
   }, [incidents, zoomLevel, boundariesLoaded]);
 
-  const IBMM = { fontFamily: "'Space Grotesk', sans-serif" };
-
   return (
-    <div className="rounded-xl border border-blue-500/30 bg-slate-900/35 overflow-hidden animate-fade-in-up flex flex-col" style={{ boxShadow: "0 8px 24px rgba(0,0,0,0.3)" }}>
+    <div className="rounded-xl border border-blue-500/30 bg-slate-900/35 overflow-hidden animate-fade-in-up flex flex-col font-sans shadow-sm" style={{ boxShadow: "0 8px 24px rgba(0,0,0,0.3)" }}>
 
       {/* ── Header ── */}
-      <div className="px-4 pt-4 pb-3 flex items-center justify-between border-b border-slate-800/15">
+      <div className="px-4 pt-3.5 pb-3 flex items-center justify-between border-b border-slate-800/60">
         <div>
-          <h2 className="text-[10px] font-bold text-white uppercase tracking-[0.18em]" style={IBMM}>
-            Karnataka Live Map
+          <h2 className="text-sm font-semibold text-white tracking-tight font-sans">
+            Karnataka Live Crime Map
           </h2>
-          <p className="text-[9px] text-slate-600 mt-0.5 uppercase tracking-wider" style={IBMM}>
-            {zoomLevel < 8.2 ? "District Clusters" : "Street-Level Incidents"} · Live
+          <p className="text-[11px] text-slate-400 mt-0.5 font-sans">
+            {zoomLevel < 8.2 ? "District Clusters" : "Street-Level Incidents"} · Live Feed
           </p>
         </div>
 
@@ -414,12 +416,12 @@ const KarnatakaOverviewPanel = () => {
         <div className="flex flex-col gap-1">
           {[
             { label: "Critical/High", color: "#ef4444" },
-            { label: "Medium",        color: "#3b82f6" },
-            { label: "Low",           color: "#64748b" },
+            { label: "Medium", color: "#3b82f6" },
+            { label: "Low", color: "#64748b" },
           ].map(({ label, color }) => (
             <div key={label} className="flex items-center gap-1.5">
               <span className="h-1.5 w-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: color }} />
-              <span className="text-[8px] text-slate-500 uppercase tracking-wider" style={IBMM}>{label}</span>
+              <span className="text-[9px] text-slate-400 font-mono uppercase tracking-wider">{label}</span>
             </div>
           ))}
         </div>
@@ -430,17 +432,15 @@ const KarnatakaOverviewPanel = () => {
         <div ref={mapContainerRef} style={{ height: "100%", width: "100%" }} />
 
         {/* ── Layer Switcher (same as Crime Map) ── */}
-        <div className="absolute top-2.5 right-2.5 z-[1000] flex bg-slate-900/90 backdrop-blur-sm border border-slate-800/60 rounded-[4px] p-0.5 shadow-xl">
+        <div className="absolute top-2.5 right-2.5 z-[1000] flex bg-slate-900/90 backdrop-blur-sm border border-slate-800/60 rounded p-0.5 shadow-xl font-mono">
           {Object.entries(MAP_LAYERS).map(([key, layer]) => (
             <button
               key={key}
               onClick={() => setActiveLayer(key)}
-              className={`px-2 py-1 rounded-[3px] text-[8px] font-bold transition-all uppercase tracking-wider ${
-                activeLayer === key
-                  ? "bg-blue-600 text-white shadow"
+              className={`px-2 py-1 rounded text-[8px] font-semibold transition-all uppercase tracking-wider ${activeLayer === key
+                  ? "bg-slate-800 text-white shadow"
                   : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
-              }`}
-              style={IBMM}
+                }`}
             >
               {layer.label}
             </button>
@@ -448,49 +448,47 @@ const KarnatakaOverviewPanel = () => {
         </div>
 
         {/* ── Live badge ── */}
-        <div className="absolute top-2.5 left-2.5 z-[1000] flex items-center gap-1.5 bg-slate-950/80 backdrop-blur-sm border border-slate-800/50 rounded-sm px-2 py-1 pointer-events-none">
+        <div className="absolute top-2.5 left-2.5 z-[1000] flex items-center gap-1.5 bg-slate-950/80 backdrop-blur-sm border border-slate-800/50 rounded-sm px-2 py-1 pointer-events-none font-mono">
           <span className="relative flex h-1.5 w-1.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
           </span>
-          <span className="text-[8px] text-emerald-400 font-bold uppercase tracking-wider" style={IBMM}>
-            Live · {incidents.length} FIRs
+          <span className="text-[9px] text-emerald-400 font-semibold uppercase tracking-wider">
+            LIVE · {incidents.length} FIRs
           </span>
         </div>
 
         {/* ── Zoom level badge (bottom-left) ── */}
-        <div className="absolute bottom-10 left-2.5 z-[1000] bg-slate-950/70 backdrop-blur-sm border border-slate-800/40 rounded-sm px-2 py-0.5 pointer-events-none">
-          <span className="text-[8px] text-slate-500 uppercase tracking-wider" style={IBMM}>
+        <div className="absolute bottom-10 left-2.5 z-[1000] bg-slate-950/70 backdrop-blur-sm border border-slate-800/40 rounded-sm px-2 py-0.5 pointer-events-none font-mono">
+          <span className="text-[8px] text-slate-400 uppercase tracking-wider">
             {zoomLevel < 8.2 ? "District Overview" : "Street Level"}
           </span>
         </div>
       </div>
 
       {/* ── Stats Bar ── */}
-      <div className="px-4 py-3 border-t border-slate-800/15 bg-slate-900/30 grid grid-cols-3 divide-x divide-slate-800/20">
+      <div className="px-4 py-2.5 border-t border-slate-800/60 bg-slate-900/40 grid grid-cols-3 divide-x divide-slate-800/40 font-mono">
         <div className="pr-3">
-          <span className="text-[8px] text-slate-300 uppercase tracking-widest block" style={IBMM}>Active</span>
-          <span className="text-amber-400 font-bold text-sm leading-tight tabular-nums" style={IBMM}>{activeCount}</span>
+          <span className="text-[9px] text-slate-400 uppercase tracking-wider block font-mono">STATUS: ACTIVE</span>
+          <span className="text-amber-400 font-bold text-sm leading-tight tabular-nums font-mono">{activeCount}</span>
         </div>
         <div className="px-3">
-          <span className="text-[8px] text-slate-300 uppercase tracking-widest block" style={IBMM}>High Risk</span>
-          <span className="text-red-400 font-bold text-sm leading-tight tabular-nums" style={IBMM}>{highCount}</span>
+          <span className="text-[9px] text-slate-400 uppercase tracking-wider block font-mono">RISK: HIGH</span>
+          <span className="text-red-400 font-bold text-sm leading-tight tabular-nums font-mono">{highCount}</span>
         </div>
         <div className="pl-3">
-          <span className="text-[8px] text-slate-300 uppercase tracking-widest block" style={IBMM}>Districts</span>
-          <span className="text-blue-400 font-bold text-sm leading-tight tabular-nums" style={IBMM}>{hotspots.length}</span>
+          <span className="text-[9px] text-slate-400 uppercase tracking-wider block font-mono">JURISDICTION</span>
+          <span className="text-blue-400 font-bold text-sm leading-tight tabular-nums font-mono">{hotspots.length} Districts</span>
         </div>
       </div>
 
       {/* ── Footer ── */}
-      <div className="px-4 py-2.5 border-t border-slate-800/10 flex items-center justify-end">
+      <div className="px-4 py-2 border-t border-slate-800/40 flex items-center justify-end font-sans">
         <Link
           to="/map"
-          className="flex items-center gap-1.5 text-[9px] text-slate-500 hover:text-blue-400 transition-colors duration-150 uppercase tracking-widest font-bold"
-          style={IBMM}
+          className="flex items-center gap-1.5 text-[11px] text-slate-400 hover:text-cyan-400 transition-colors duration-150 font-medium"
         >
-          <FaExternalLinkAlt className="text-[8px]" />
-          Full Crime Map
+          Open Command Map <FaExternalLinkAlt className="text-[9px]" />
         </Link>
       </div>
     </div>
