@@ -99,26 +99,26 @@ const Dashboard = () => {
   const { kpi_metrics, crime_trends, crime_distribution, ai_alerts, recent_critical_cases } = dashboardData;
 
   return (
-    <div className="flex flex-col gap-6 font-sans">
+    <div className="flex flex-col gap-8 font-sans">
 
       {/* ── 1. Executive Intelligence Header ── */}
-      <div className="pb-6 border-b border-slate-800/60 flex flex-col gap-4 animate-fade-in-up">
+      <div className="pb-8 border-b border-slate-800/60 flex flex-col gap-6 animate-fade-in-up">
 
         {/* Title + Controls row */}
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-white leading-snug font-sans tracking-tight">
               Executive Intelligence Dashboard
             </h1>
-            <p className="text-xs text-slate-400 mt-1 font-sans">
+            <p className="text-xs text-slate-400 mt-2 font-sans">
               Karnataka State Police &bull; CCTNS Analytical Briefing
             </p>
           </div>
 
           {/* Top-Right Operational Status System */}
-          <div className="flex flex-wrap items-center gap-4 sm:gap-5 self-start lg:self-auto bg-slate-950/90 border border-slate-800/80 rounded-none px-4 py-2.5 shadow-md backdrop-blur-md font-mono text-[10px]">
+          <div className="flex flex-wrap items-center gap-4 sm:gap-6 self-start lg:self-auto bg-slate-950/90 border border-slate-800/80 rounded-none px-6 py-3.5 shadow-md backdrop-blur-md font-mono text-[10px]">
             {/* TELEMETRY */}
-            <div className="flex flex-col gap-0.5 pr-3.5 border-r border-slate-800/80">
+            <div className="flex flex-col gap-1 pr-4 border-r border-slate-800/80">
               <span className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">TELEMETRY</span>
               <span className="flex items-center gap-1.5 text-emerald-400 font-bold tracking-wider">
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -127,19 +127,19 @@ const Dashboard = () => {
             </div>
 
             {/* CCTNS */}
-            <div className="flex flex-col gap-0.5 pr-3.5 border-r border-slate-800/80">
+            <div className="flex flex-col gap-1 pr-4 border-r border-slate-800/80">
               <span className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">CCTNS</span>
               <span className="text-slate-300 font-bold tracking-wider">CONNECTED</span>
             </div>
 
             {/* AI CORE */}
-            <div className="flex flex-col gap-0.5 pr-3.5 border-r border-slate-800/80">
+            <div className="flex flex-col gap-1 pr-4 border-r border-slate-800/80">
               <span className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">AI CORE</span>
               <span className="text-blue-400 font-bold tracking-wider">QUICKML ONLINE</span>
             </div>
 
             {/* JURISDICTION */}
-            <div className="flex flex-col gap-0.5 pr-3.5 border-r border-slate-800/80">
+            <div className="flex flex-col gap-1 pr-4 border-r border-slate-800/80">
               <span className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">JURISDICTION</span>
               <select
                 value={selectedDistrict}
@@ -154,7 +154,7 @@ const Dashboard = () => {
             </div>
 
             {/* LAST SYNC */}
-            <div className="flex flex-col gap-0.5 pr-3.5 border-r border-slate-800/80">
+            <div className="flex flex-col gap-1 pr-4 border-r border-slate-800/80">
               <span className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">LAST SYNC</span>
               <span className="text-slate-300 font-bold tracking-wider">14:26 IST</span>
             </div>
@@ -162,7 +162,7 @@ const Dashboard = () => {
             {/* SYNC CORE Button */}
             <button
               onClick={() => loadData(selectedDistrict)}
-              className="flex items-center gap-1.5 text-cyan-400 hover:text-white transition-colors cursor-pointer group font-mono text-[10px] active:scale-95 py-0.5"
+              className="flex items-center gap-2 text-cyan-400 hover:text-white transition-colors cursor-pointer group font-mono text-[10px] active:scale-95 py-1"
               title="Refresh Dashboard Data"
             >
               <FaSyncAlt className="text-[10px] text-cyan-400 group-hover:rotate-180 transition-transform duration-500" />
@@ -171,23 +171,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Status strip */}
-        <div className="flex flex-wrap gap-x-6 gap-y-2 items-center text-[10px] tracking-wider text-slate-400 font-mono font-semibold">
-          <div className="flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 px-2.5 py-1 rounded-none text-amber-300">
-            <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-ping"></span>
-            <span>STATEWIDE THREAT INDEX: LEVEL 2 (ELEVATED)</span>
-          </div>
-          <div className="text-slate-700">&bull;</div>
-          <div className="flex items-center gap-1.5">
-            <span className="text-slate-500">Gateway Link:</span>{" "}
-            <span className="text-slate-300">CCTNS CAS</span>
-          </div>
-          <div className="text-slate-700">&bull;</div>
-          <div>
-            <span className="text-slate-500">Active Units:</span>{" "}
-            <span className="text-slate-300">1,024 Districts &amp; Commands</span>
-          </div>
-        </div>
+
       </div>
 
       {/* ── 2. Main Grid: Left content + Right visual sidebar ── */}
@@ -202,7 +186,7 @@ const Dashboard = () => {
           </div>
 
           {/* Chart Row: Trend (2/3) + Category (1/3) */}
-          <div className="grid grid-cols-1 gap-7 lg:grid-cols-3 animate-fade-in-up" style={{ animationDelay: '120ms' }}>
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-3 animate-fade-in-up" style={{ animationDelay: '120ms' }}>
             <div className="lg:col-span-2">
               <TrendChart data={crime_trends} />
             </div>
@@ -218,7 +202,7 @@ const Dashboard = () => {
         </div>
 
         {/* RIGHT: Intelligence & GIS spatial sidebar */}
-        <div className="flex flex-col gap-6 xl:sticky xl:top-10 xl:self-start animate-fade-in-up" style={{ animationDelay: '80ms' }}>
+        <div className="flex flex-col gap-8 xl:sticky xl:top-10 xl:self-start animate-fade-in-up" style={{ animationDelay: '80ms' }}>
           <KarnatakaOverviewPanel />
           <AIInsightsBanner />
         </div>

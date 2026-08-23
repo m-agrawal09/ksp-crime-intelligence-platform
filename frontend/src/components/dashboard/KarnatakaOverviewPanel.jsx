@@ -426,27 +426,27 @@ const KarnatakaOverviewPanel = () => {
   }, [incidents, zoomLevel, boundariesLoaded]);
 
   return (
-    <div className="rounded-xl border border-blue-500/30 bg-slate-900/35 overflow-hidden animate-fade-in-up flex flex-col font-sans shadow-sm" style={{ boxShadow: "0 8px 24px rgba(0,0,0,0.3)" }}>
+    <div className="rounded-md border border-blue-500/30 bg-slate-900/35 overflow-hidden animate-fade-in-up flex flex-col font-sans shadow-sm" style={{ boxShadow: "0 8px 24px rgba(0,0,0,0.3)" }}>
 
       {/* ── Header ── */}
-      <div className="px-4 pt-3.5 pb-3 flex items-center justify-between border-b border-slate-800/60">
+      <div className="px-6 py-4 flex items-center justify-between border-b border-slate-800/60">
         <div>
           <h2 className="text-sm font-semibold text-white tracking-tight font-sans">
             Karnataka Live Crime Map
           </h2>
-          <p className="text-[11px] text-slate-400 mt-0.5 font-sans">
+          <p className="text-[11px] text-slate-400 mt-1 font-sans">
             {zoomLevel < 8.2 ? "District Overview" : "Street-Level Incidents"} · Live Feed
           </p>
         </div>
 
         {/* Legend dots */}
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1.5">
           {[
             { label: "Critical/High", color: "#ef4444" },
             { label: "Medium", color: "#3b82f6" },
             { label: "Low", color: "#64748b" },
           ].map(({ label, color }) => (
-            <div key={label} className="flex items-center gap-1.5">
+            <div key={label} className="flex items-center gap-2">
               <span className="h-1.5 w-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: color }} />
               <span className="text-[9px] text-slate-400 font-mono uppercase tracking-wider">{label}</span>
             </div>
@@ -455,11 +455,11 @@ const KarnatakaOverviewPanel = () => {
       </div>
 
       {/* ── Map ── */}
-      <div className="relative bg-[#020617]" style={{ height: "270px" }}>
+      <div className="relative bg-[#020617]" style={{ height: "360px" }}>
         <div ref={mapContainerRef} style={{ height: "100%", width: "100%" }} />
 
         {/* ── Layer Switcher (same as Crime Map) ── */}
-        <div className="absolute top-2.5 right-2.5 z-[1000] flex bg-slate-900/90 backdrop-blur-sm border border-slate-800/60 rounded p-0.5 shadow-xl font-mono">
+        <div className="absolute top-3 right-3 z-[1000] flex bg-slate-900/90 backdrop-blur-sm border border-slate-800/60 rounded p-1 shadow-xl font-mono">
           {Object.entries(MAP_LAYERS).map(([key, layer]) => (
             <button
               key={key}
@@ -475,7 +475,7 @@ const KarnatakaOverviewPanel = () => {
         </div>
 
         {/* ── Live badge ── */}
-        <div className="absolute top-2.5 left-2.5 z-[1000] flex items-center gap-1.5 bg-slate-950/80 backdrop-blur-sm border border-slate-800/50 rounded-sm px-2 py-1 pointer-events-none font-mono">
+        <div className="absolute top-3 left-3 z-[1000] flex items-center gap-2 bg-slate-950/80 backdrop-blur-sm border border-slate-800/50 rounded-sm px-2.5 py-1 pointer-events-none font-mono">
           <span className="relative flex h-1.5 w-1.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
@@ -486,7 +486,7 @@ const KarnatakaOverviewPanel = () => {
         </div>
 
         {/* ── Zoom level badge (bottom-left) ── */}
-        <div className="absolute bottom-4 left-2.5 z-[1000] bg-slate-950/70 backdrop-blur-sm border border-slate-800/40 rounded-sm px-2 py-0.5 pointer-events-none font-mono">
+        <div className="absolute bottom-4 left-3 z-[1000] bg-slate-950/70 backdrop-blur-sm border border-slate-800/40 rounded-sm px-2.5 py-1 pointer-events-none font-mono">
           <span className="text-[8px] text-slate-400 uppercase tracking-wider">
             {zoomLevel < 8.2 ? "District Overview" : "Street Level"}
           </span>
@@ -494,27 +494,27 @@ const KarnatakaOverviewPanel = () => {
       </div>
 
       {/* ── Stats Bar ── */}
-      <div className="px-4 py-2 border-t border-slate-800/60 bg-slate-900/40 grid grid-cols-3 divide-x divide-slate-800/40 font-mono text-xs">
-        <div className="pr-3">
+      <div className="px-6 py-3 border-t border-slate-800/60 bg-slate-900/40 grid grid-cols-3 divide-x divide-slate-800/40 font-mono text-xs">
+        <div className="pr-4">
           <span className="text-[9px] text-slate-400 uppercase tracking-wider block font-mono">ACTIVE</span>
           <span className="text-amber-400 font-bold text-sm leading-tight tabular-nums font-mono">{activeCount}</span>
         </div>
-        <div className="px-3">
+        <div className="px-4">
           <span className="text-[9px] text-slate-400 uppercase tracking-wider block font-mono">HIGH RISK</span>
           <span className="text-red-400 font-bold text-sm leading-tight tabular-nums font-mono">{highCount}</span>
         </div>
-        <div className="pl-3">
+        <div className="pl-4">
           <span className="text-[9px] text-slate-400 uppercase tracking-wider block font-mono">HOTSPOTS</span>
           <span className="text-blue-400 font-bold text-sm leading-tight tabular-nums font-mono">{hotspots.length} Districts</span>
         </div>
       </div>
 
       {/* ── Footer CTA ── */}
-      <div className="px-4 py-2.5 border-t border-slate-800/40 flex items-center justify-between font-mono bg-slate-950/60">
+      <div className="px-6 py-3 border-t border-slate-800/40 flex items-center justify-between font-mono bg-slate-950/60">
         <span className="text-[9px] text-slate-500 uppercase tracking-wider font-semibold">COMMAND GIS OVERVIEW</span>
         <Link
           to="/map"
-          className="flex items-center gap-1.5 text-xs font-bold text-cyan-400 hover:text-cyan-300 transition-colors uppercase tracking-wider group"
+          className="flex items-center gap-2 text-xs font-bold text-cyan-400 hover:text-cyan-300 transition-colors uppercase tracking-wider group"
         >
           Go to Crime Map <span className="group-hover:translate-x-0.5 transition-transform">&rarr;</span>
         </Link>

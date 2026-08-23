@@ -86,31 +86,31 @@ const StatCard = ({
 
 
       {/* Card body */}
-      <div className="px-6 pb-4 flex flex-col items-center justify-start flex-1 h-full" style={{ paddingTop: "14px" }}>
+      <div className="p-6 flex flex-col items-center justify-start flex-1 h-full font-sans">
 
         {/* ── Row 1: Label + Icon ── */}
-        <div className="flex items-center justify-center gap-2 mb-2 w-full text-center px-1">
+        <div className="flex items-center justify-between gap-2 mb-4 w-full text-left">
           <span
-            className="text-[11px] font-semibold text-slate-300 leading-tight text-center font-sans break-words max-w-[85%]"
+            className="text-xs font-semibold text-slate-300 leading-tight font-sans break-words max-w-[80%]"
           >
             {title}
           </span>
-          <div className={`flex-shrink-0 rounded border border-slate-800/40 bg-slate-800/30 p-1.5 ${color}`}>
-            {Icon ? <Icon className="text-[12px]" /> : <FaInfoCircle className="text-[12px]" />}
+          <div className={`flex-shrink-0 rounded border border-slate-800/40 bg-slate-800/30 p-2 ${color}`}>
+            {Icon ? <Icon className="text-xs" /> : <FaInfoCircle className="text-xs" />}
           </div>
         </div>
 
-        {/* Metric value (Centered) */}
-        <div className="mb-2 text-center w-full">
+        {/* Metric value */}
+        <div className="mb-3 text-left w-full">
           <span
-            className="text-[2.25rem] font-bold tracking-tight text-white leading-none tabular-nums font-sans"
+            className="text-3xl font-bold tracking-tight text-white leading-none tabular-nums font-sans"
           >
             {value}
           </span>
         </div>
 
-        {/* Change (Centered) */}
-        <div className="flex flex-col items-center gap-1 mb-1 text-center w-full">
+        {/* Change */}
+        <div className="flex items-center gap-2 mt-auto w-full text-left">
           <div className={`flex items-center gap-1 text-[11px] font-semibold ${isPositive ? "text-emerald-400" : "text-red-400"}`}>
             {isPositive
               ? <FaArrowUp className="text-[9px]" />

@@ -33,8 +33,8 @@ const RecentCriticalCases = ({ cases }) => {
   };
 
   return (
-    <div className="rounded-[4px] border border-slate-800/20 bg-slate-900/50 p-8 sm:p-10 shadow-sm w-full">
-      <div className="flex items-center justify-between border-b border-slate-800/20 pb-5 mb-6">
+    <div className="rounded-md border border-slate-800/20 bg-slate-900/50 p-6 md:p-8 shadow-sm w-full">
+      <div className="flex items-center justify-between border-b border-slate-800/20 pb-6 mb-6">
         <div className="flex items-center gap-2.5">
           <FaClipboardList className="text-blue-400/80 text-base" />
           <h2 className="text-[10px] font-bold text-white uppercase tracking-[0.18em] font-space">
