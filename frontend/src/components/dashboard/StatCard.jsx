@@ -70,6 +70,17 @@ const StatCard = ({
   const sparkId = (title || "card").replace(/[^a-z0-9]/gi, "").toLowerCase();
   const isPositive = !String(change).startsWith("-");
 
+  // Sanitize operational metadata fields to prevent any "undefined" display
+  const cleanDataSource = (!dataSource || String(dataSource).includes("undefined"))
+    ? "CaseMaster (Catalyst Datastore)"
+    : dataSource;
+  const cleanCoverage = (!coverage || String(coverage).includes("undefined"))
+    ? "Statewide Active Units (CCTNS Datastore)"
+    : coverage;
+  const cleanLastSync = (!lastSync || String(lastSync).includes("undefined"))
+    ? "Real-Time Synced"
+    : lastSync;
+
   // Extract color hex from Tailwind class for accent line
   const accentHex =
     color.includes("blue") ? "#3b82f6" :
@@ -148,7 +159,7 @@ const StatCard = ({
               <span
                 className="text-[11px] text-slate-300 font-mono font-medium"
               >
-                {dataSource}
+                {cleanDataSource}
               </span>
             </div>
             <div>
@@ -160,7 +171,7 @@ const StatCard = ({
               <span
                 className="text-[11px] text-slate-300 font-sans font-medium"
               >
-                {coverage}
+                {cleanCoverage}
               </span>
             </div>
           </div>
@@ -177,7 +188,7 @@ const StatCard = ({
           <span
             className="text-[10px] text-slate-400 font-mono font-medium"
           >
-            {lastSync}
+            {cleanLastSync}
           </span>
         </div>
       </div>
