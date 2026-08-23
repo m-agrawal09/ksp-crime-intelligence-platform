@@ -173,7 +173,7 @@ const QuickActionsPanel = () => {
             const isCurrent = runningAction === act.id;
 
             const tileInner = (
-              <div className="flex items-center justify-between p-4 rounded-md border border-slate-800/60 bg-slate-950/60 hover:bg-slate-800/50 hover:border-slate-700/80 transition-all duration-150 group cursor-pointer shadow-sm">
+              <div className="flex items-center justify-between p-4 rounded-md border border-slate-800/60 bg-slate-950/60 hover:bg-slate-800/50 hover:border-slate-700/80 transition-all duration-200 ease-in-out group cursor-pointer shadow-sm">
                 <div className="flex items-center gap-3 min-w-0">
                   <div className={`p-2.5 rounded border flex items-center justify-center flex-shrink-0 ${act.iconColor}`}>
                     {isCurrent ? (
@@ -182,11 +182,11 @@ const QuickActionsPanel = () => {
                       <Icon className="text-xs" />
                     )}
                   </div>
-                  <span className="text-xs font-bold text-slate-200 group-hover:text-white transition-colors font-mono tracking-tight truncate">
+                  <span className="text-xs font-bold text-slate-200 group-hover:text-white transition-colors duration-200 ease-in-out font-mono tracking-tight truncate">
                     {act.label}
                   </span>
                 </div>
-                <span className="text-[10px] font-mono font-bold text-slate-400 group-hover:text-cyan-400 transition-colors uppercase ml-2 whitespace-nowrap">
+                <span className="text-[10px] font-mono font-bold text-slate-400 group-hover:text-cyan-400 group-hover:translate-x-0.5 transition-all duration-200 ease-in-out uppercase ml-2 whitespace-nowrap">
                   {act.btnText} &rarr;
                 </span>
               </div>

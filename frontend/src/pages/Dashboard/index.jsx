@@ -99,14 +99,14 @@ const Dashboard = () => {
   const { kpi_metrics, crime_trends, crime_distribution, ai_alerts, recent_critical_cases } = dashboardData;
 
   return (
-    <div className="flex flex-col gap-8 font-sans">
+    <div className="flex flex-col gap-8 font-sans px-1 sm:px-2">
 
       {/* ── 1. Executive Intelligence Header ── */}
       <div className="pb-8 border-b border-slate-800/60 flex flex-col gap-6 animate-fade-in-up">
 
         {/* Title + Controls row */}
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-          <div>
+          <div className="pl-2 sm:pl-4 lg:pl-6">
             <h1 className="text-2xl sm:text-3xl font-bold text-white leading-snug font-sans tracking-tight">
               Executive Intelligence Dashboard
             </h1>
@@ -144,7 +144,7 @@ const Dashboard = () => {
               <select
                 value={selectedDistrict}
                 onChange={(e) => setSelectedDistrict(e.target.value)}
-                className="bg-transparent text-cyan-400 hover:text-cyan-300 font-bold font-mono outline-none cursor-pointer text-[10px] tracking-wider uppercase"
+                className="bg-transparent text-cyan-400 hover:text-cyan-300 transition-colors duration-150 ease-in-out font-bold font-mono outline-none cursor-pointer text-[10px] tracking-wider uppercase"
               >
                 <option value="ALL" className="bg-slate-950 text-slate-200">STATEWIDE</option>
                 {DISTRICTS.slice(1).map((d) => (
@@ -162,10 +162,10 @@ const Dashboard = () => {
             {/* SYNC CORE Button */}
             <button
               onClick={() => loadData(selectedDistrict)}
-              className="flex items-center gap-2 text-cyan-400 hover:text-white transition-colors cursor-pointer group font-mono text-[10px] active:scale-95 py-1"
+              className="flex items-center gap-2 text-cyan-400 hover:text-white transition-all duration-200 ease-in-out cursor-pointer group font-mono text-[10px] active:scale-95 py-1"
               title="Refresh Dashboard Data"
             >
-              <FaSyncAlt className="text-[10px] text-cyan-400 group-hover:rotate-180 transition-transform duration-500" />
+              <FaSyncAlt className="text-[10px] text-cyan-400 group-hover:rotate-180 transition-transform duration-300 ease-in-out" />
               <span className="font-bold tracking-widest uppercase">SYNC</span>
             </button>
           </div>

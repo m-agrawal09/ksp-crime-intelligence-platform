@@ -438,20 +438,6 @@ const KarnatakaOverviewPanel = () => {
             {zoomLevel < 8.2 ? "District Overview" : "Street-Level Incidents"} · Live Feed
           </p>
         </div>
-
-        {/* Legend dots */}
-        <div className="flex flex-col gap-1.5">
-          {[
-            { label: "Critical/High", color: "#ef4444" },
-            { label: "Medium", color: "#3b82f6" },
-            { label: "Low", color: "#64748b" },
-          ].map(({ label, color }) => (
-            <div key={label} className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: color }} />
-              <span className="text-[9px] text-slate-400 font-mono uppercase tracking-wider">{label}</span>
-            </div>
-          ))}
-        </div>
       </div>
 
       {/* ── Map ── */}
@@ -464,7 +450,7 @@ const KarnatakaOverviewPanel = () => {
             <button
               key={key}
               onClick={() => setActiveLayer(key)}
-              className={`px-2 py-1 rounded text-[8px] font-semibold transition-all uppercase tracking-wider ${activeLayer === key
+              className={`px-2 py-1 rounded text-[8px] font-semibold transition-all duration-200 ease-in-out uppercase tracking-wider ${activeLayer === key
                   ? "bg-slate-800 text-white shadow"
                   : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
                 }`}
@@ -477,7 +463,6 @@ const KarnatakaOverviewPanel = () => {
         {/* ── Live badge ── */}
         <div className="absolute top-3 left-3 z-[1000] flex items-center gap-2 bg-slate-950/80 backdrop-blur-sm border border-slate-800/50 rounded-sm px-2.5 py-1 pointer-events-none font-mono">
           <span className="relative flex h-1.5 w-1.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
           </span>
           <span className="text-[9px] text-emerald-400 font-semibold uppercase tracking-wider">
@@ -514,9 +499,9 @@ const KarnatakaOverviewPanel = () => {
         <span className="text-[9px] text-slate-500 uppercase tracking-wider font-semibold">COMMAND GIS OVERVIEW</span>
         <Link
           to="/map"
-          className="flex items-center gap-2 text-xs font-bold text-cyan-400 hover:text-cyan-300 transition-colors uppercase tracking-wider group"
+          className="flex items-center gap-2 text-xs font-bold text-cyan-400 hover:text-cyan-300 transition-all duration-200 ease-in-out uppercase tracking-wider group"
         >
-          Go to Crime Map <span className="group-hover:translate-x-0.5 transition-transform">&rarr;</span>
+          Go to Crime Map <span className="group-hover:translate-x-1 transition-transform duration-200 ease-in-out">&rarr;</span>
         </Link>
       </div>
     </div>

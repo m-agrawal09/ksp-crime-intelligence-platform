@@ -78,7 +78,7 @@ const StatGrid = ({ metrics }) => {
   ];
 
   return (
-    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 stagger-children">
+    <div className="grid gap-6 lg:gap-8 sm:grid-cols-2 lg:grid-cols-4 stagger-children">
       {cardsData.map((card) => (
         <StatCard
           key={card.title}

@@ -65,7 +65,7 @@ const RecentCriticalCases = ({ cases }) => {
               return (
                 <React.Fragment key={c.CaseMasterID}>
                   {/* Standard Row */}
-                  <tr className="intel-row group">
+                  <tr className="intel-row group hover:bg-slate-800/40 transition-colors duration-200 ease-in-out cursor-pointer">
                     <td className="py-5 px-6">
                       <div className="font-bold text-slate-300 group-hover:text-blue-400 transition-colors duration-150 font-mono text-[11px] tracking-tight">
                         {c.CaseNo}

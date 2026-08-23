@@ -79,38 +79,37 @@ const StatCard = ({
 
   return (
     <div
-      className="relative overflow-hidden rounded-[4px] border border-blue-500/30 bg-slate-900/60 transition-all duration-200 hover:border-blue-500/60 hover:bg-slate-900/80 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/40 shadow-sm animate-fade-in-up h-full flex flex-col font-sans"
+      className="relative overflow-hidden rounded-md border border-blue-500/30 bg-slate-900/60 transition-all duration-200 ease-in-out hover:border-blue-500/60 hover:bg-slate-900/80 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/40 shadow-sm animate-fade-in-up flex flex-col font-sans"
       onMouseEnter={() => setShowMetadata(true)}
       onMouseLeave={() => setShowMetadata(false)}
     >
 
-
       {/* Card body */}
-      <div className="p-6 flex flex-col items-center justify-start flex-1 h-full font-sans">
+      <div className="px-6 py-6 flex flex-col items-center justify-center gap-2.5 text-center font-sans">
 
         {/* ── Row 1: Label + Icon ── */}
-        <div className="flex items-center justify-between gap-2 mb-4 w-full text-left">
+        <div className="flex items-center justify-center gap-2 w-full text-center">
           <span
-            className="text-xs font-semibold text-slate-300 leading-tight font-sans break-words max-w-[80%]"
+            className="text-xs font-semibold text-slate-300 leading-snug font-sans text-center"
           >
             {title}
           </span>
           <div className={`flex-shrink-0 rounded border border-slate-800/40 bg-slate-800/30 p-2 ${color}`}>
-            {Icon ? <Icon className="text-xs" /> : <FaInfoCircle className="text-xs" />}
+            {Icon ? <Icon className="text-xs sm:text-sm" /> : <FaInfoCircle className="text-xs sm:text-sm" />}
           </div>
         </div>
 
         {/* Metric value */}
-        <div className="mb-3 text-left w-full">
+        <div className="my-0.5 text-center w-full">
           <span
-            className="text-3xl font-bold tracking-tight text-white leading-none tabular-nums font-sans"
+            className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white leading-none tabular-nums font-sans"
           >
             {value}
           </span>
         </div>
 
         {/* Change */}
-        <div className="flex items-center gap-2 mt-auto w-full text-left">
+        <div className="flex items-center justify-center gap-2 w-full text-center">
           <div className={`flex items-center gap-1 text-[11px] font-semibold ${isPositive ? "text-emerald-400" : "text-red-400"}`}>
             {isPositive
               ? <FaArrowUp className="text-[9px]" />
@@ -121,11 +120,10 @@ const StatCard = ({
       </div>
 
       <div
-        className={`absolute inset-0 flex flex-col justify-between bg-slate-950/97 px-6 pb-4 text-center transition-all duration-200 ${showMetadata
+        className={`absolute inset-0 flex flex-col justify-between bg-slate-950/97 px-6 py-6 text-center transition-all duration-200 ease-in-out ${showMetadata
           ? "opacity-100 translate-y-0"
           : "opacity-0 translate-y-3 pointer-events-none"
           }`}
-        style={{ paddingTop: "14px" }}
       >
 
 
