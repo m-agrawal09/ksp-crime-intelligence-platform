@@ -1,4 +1,10 @@
 {
+  "appsail": [
+    {
+      "name": "ksp-crime-intelligence",
+      "source": "."
+    }
+  ],
   "functions": {
     "targets": [
       "chat",

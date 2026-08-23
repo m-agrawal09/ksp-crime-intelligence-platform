@@ -8177,10 +8177,10 @@ export const recordService = {
       if (res.ok) {
         const json = await res.json();
         if (json.success && Array.isArray(json.data) && json.data.length > 0) {
-          const currentLocal = loadStorage();
-          const merged = deduplicateRecords([...json.data, ...currentLocal]);
-          saveStorage(merged);
-          return merged;
+          // Backend Database is the single source of truth across all browsers
+          const cleanRemote = deduplicateRecords(json.data);
+          saveStorage(cleanRemote);
+          return cleanRemote;
         }
       }
     } catch (err) {

@@ -10,7 +10,9 @@ import {
   RiDashboardLine,
   RiBrainLine,
   RiSettings4Line,
-  RiCloseLine
+  RiCloseLine,
+  RiNodeTree,
+  RiTimeLine
 } from "react-icons/ri";
 import { TbMapSearch } from "react-icons/tb";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
@@ -20,6 +22,8 @@ import kspLogo from "../../assets/images/ksp-emblem.png";
 const menuItems = [
   { name: "Dashboard", path: "/", icon: RiDashboardLine },
   { name: "Crime Map", path: "/map", icon: TbMapSearch },
+  { name: "Link & Network Analysis", path: "/network-analysis", icon: RiNodeTree },
+  { name: "Diurnal Heat & Red-Zones", path: "/spatiotemporal", icon: RiTimeLine },
   { name: "AI Insights & Forecast", path: "/insights-forecast", icon: RiBrainLine },
   { name: "Officer Performance", path: "/officers", icon: MdOutlineAdminPanelSettings },
   { name: "Manage Records", path: "/records", icon: HiOutlineDocumentText },

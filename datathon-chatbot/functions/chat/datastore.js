@@ -19,14 +19,15 @@ const https = require("https");
 const SEED_DATA_PATH = path.join(__dirname, "local_crime_records.json");
 const ROWID_MAPPING_PATH = path.join(__dirname, "../../../scripts/rowid_mapping.json");
 
-const DB_FILE_PATH = path.join(os.tmpdir(), "ksp_server_database_records_v2.json");
+const DB_FILE_PATH = SEED_DATA_PATH;
 
 const loadPersistentDb = () => {
     try {
         if (fs.existsSync(DB_FILE_PATH)) {
             const raw = fs.readFileSync(DB_FILE_PATH, "utf-8");
             if (raw) {
-                return JSON.parse(raw);
+                const parsed = JSON.parse(raw);
+                return Array.isArray(parsed) ? parsed : (parsed.CaseMaster || []);
             }
         }
     } catch (e) {
@@ -162,17 +163,27 @@ function getCatalystCredentials() {
 
 let cachedToken = null;
 let tokenExpiryTime = 0;
+let inFlightTokenPromise = null;
+let lastRateLimitTime = 0;
 
 async function getFreshAccessToken() {
     if (cachedToken && Date.now() < tokenExpiryTime) {
         return cachedToken;
     }
+    // If rate-limited recently (in last 15s), don't hammer the auth server
+    if (Date.now() - lastRateLimitTime < 15000) {
+        throw new Error("Rate limit backoff active.");
+    }
+    if (inFlightTokenPromise) {
+        return inFlightTokenPromise;
+    }
+
     const creds = getCatalystCredentials();
     if (!creds) throw new Error("No CLI credentials available for Catalyst API");
 
     const bodyData = `client_id=${creds.clientId}&client_secret=${creds.clientSecret}&refresh_token=${creds.refreshToken}&grant_type=refresh_token`;
     
-    return new Promise((resolve, reject) => {
+    inFlightTokenPromise = new Promise((resolve, reject) => {
         const options = {
             hostname: `accounts.zoho.${creds.dc}`,
             port: 443,
@@ -187,20 +198,31 @@ async function getFreshAccessToken() {
             let body = '';
             res.on('data', chunk => body += chunk);
             res.on('end', () => {
+                inFlightTokenPromise = null;
                 try {
                     const parsed = JSON.parse(body);
                     if (parsed.access_token) {
                         cachedToken = parsed.access_token;
                         tokenExpiryTime = Date.now() + 50 * 60 * 1000;
                         resolve(cachedToken);
-                    } else reject(new Error(body));
+                    } else {
+                        if (body.includes("too many requests") || body.includes("Access Denied")) {
+                            lastRateLimitTime = Date.now();
+                        }
+                        reject(new Error(body));
+                    }
                 } catch(e) { reject(e); }
             });
         });
-        req.on('error', reject);
+        req.on('error', (err) => {
+            inFlightTokenPromise = null;
+            reject(err);
+        });
         req.write(bodyData);
         req.end();
     });
+
+    return inFlightTokenPromise;
 }
 
 function makeApiRequest(options, postData) {
@@ -498,7 +520,8 @@ class CrimeRepository {
         }
 
         globalServerRecords = loadPersistentDb();
-        const combined = [...cloudRows, ...globalServerRecords];
+        const baseSeed = (cloudRows.length === 0 && globalServerRecords.length === 0) ? loadBaselineData() : [];
+        const combined = [...cloudRows, ...globalServerRecords, ...baseSeed];
         const seen = new Set();
         const uniqueRows = [];
 
@@ -651,6 +674,31 @@ class CrimeRepository {
             }
         } catch (e) {
             console.warn("[CrimeRepository] Online Catalyst Employee fetch failed:", e.message);
+        }
+
+        if (cloudOfficers.length === 0) {
+            try {
+                const raw = fs.readFileSync(SEED_DATA_PATH, "utf-8");
+                const allData = JSON.parse(raw);
+                const empList = allData.Employee || [];
+                const units = (allData.Unit || []).reduce((acc, u) => { acc[u.UnitID] = u.UnitName; return acc; }, {});
+                const dists = (allData.District || []).reduce((acc, d) => { acc[d.DistrictID] = d.DistrictName; return acc; }, {});
+
+                cloudOfficers = empList.map((emp, idx) => ({
+                    badgeNumber: emp.KGID || `KSP-2026-${String(emp.EmployeeID).padStart(4, '0')}`,
+                    name: emp.FirstName || `Officer ${idx + 1}`,
+                    rank: "Police Inspector",
+                    unit: units[emp.UnitID] || "General Unit",
+                    station: dists[emp.DistrictID] || "Bengaluru City",
+                    yearsOfService: 4 + (idx % 10),
+                    status: "On Duty",
+                    ROWID: emp.EmployeeID,
+                    EmployeeID: emp.EmployeeID
+                }));
+                console.log(`[CrimeRepository] Loaded ${cloudOfficers.length} officer records from seed datastore.`);
+            } catch (fallbackErr) {
+                console.warn("[CrimeRepository] Seed fallback for officers failed:", fallbackErr.message);
+            }
         }
         return cloudOfficers;
     }

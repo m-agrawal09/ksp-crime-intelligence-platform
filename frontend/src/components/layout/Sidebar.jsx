@@ -5,6 +5,8 @@ import {
   RiBrainLine,
   RiRobot2Line,
   RiSettings4Line,
+  RiNodeTree,
+  RiTimeLine,
 } from "react-icons/ri";
 import { TbMapSearch, TbChartLine } from "react-icons/tb";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
@@ -21,6 +23,16 @@ const menuItems = [
     name: "Crime Map",
     path: "/map",
     icon: TbMapSearch,
+  },
+  {
+    name: "Link & Network Analysis",
+    path: "/network-analysis",
+    icon: RiNodeTree,
+  },
+  {
+    name: "Diurnal Heat & Red-Zones",
+    path: "/spatiotemporal",
+    icon: RiTimeLine,
   },
   {
     name: "AI Insights & Forecast",

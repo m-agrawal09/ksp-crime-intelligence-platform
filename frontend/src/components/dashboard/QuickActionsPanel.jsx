@@ -7,7 +7,9 @@ import {
   FaFileExport,
   FaFingerprint,
   FaCog,
-  FaTerminal
+  FaTerminal,
+  FaProjectDiagram,
+  FaClock
 } from "react-icons/fa";
 import FIRFormModal from "../records/FIRFormModal";
 import PINVerificationModal from "../records/PINVerificationModal";
@@ -95,6 +97,22 @@ const QuickActionsPanel = () => {
 
   const actions = [
     {
+      id: "diurnal_matrix",
+      label: "Diurnal Heat & Red-Zones",
+      icon: FaClock,
+      iconColor: "text-amber-400 bg-amber-500/10 border-amber-500/20",
+      path: "/spatiotemporal",
+      btnText: "Open Radar",
+    },
+    {
+      id: "network_analysis",
+      label: "Link & Network Analysis",
+      icon: FaProjectDiagram,
+      iconColor: "text-blue-400 bg-blue-500/10 border-blue-500/20",
+      path: "/network-analysis",
+      btnText: "Open Matrix",
+    },
+    {
       id: "generate_ai_brief",
       label: "AI Insights & Forecast",
       icon: FaBrain,
@@ -133,14 +151,6 @@ const QuickActionsPanel = () => {
       iconColor: "text-rose-400 bg-rose-500/10 border-rose-500/20",
       isAction: true,
       btnText: "+ Register FIR",
-    },
-    {
-      id: "settings",
-      label: "Settings",
-      icon: FaCog,
-      iconColor: "text-slate-400 bg-slate-500/10 border-slate-500/20",
-      isAction: true,
-      btnText: "Authorize PIN",
     },
   ];
 

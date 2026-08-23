@@ -4,6 +4,8 @@ import Layout from "../components/layout/Layout";
 
 import Dashboard from "../pages/Dashboard";
 import CrimeMap from "../pages/CrimeMap";
+import NetworkAnalysis from "../pages/NetworkAnalysis";
+import DiurnalMatrix from "../pages/DiurnalMatrix";
 import Officers from "../pages/Officers";
 import InsightsForecast from "../pages/InsightsForecast";
 import Reports from "../pages/Reports";
@@ -28,6 +30,13 @@ function AppRoutes() {
         }
       >
         <Route path="/" element={<Dashboard />} />
+        <Route path="/network-analysis" element={<NetworkAnalysis />} />
+        <Route path="/network" element={<NetworkAnalysis />} />
+        <Route path="/link-analysis" element={<NetworkAnalysis />} />
+        <Route path="/spatiotemporal" element={<DiurnalMatrix />} />
+        <Route path="/diurnal" element={<DiurnalMatrix />} />
+        <Route path="/diurnal-matrix" element={<DiurnalMatrix />} />
+        <Route path="/red-zones" element={<DiurnalMatrix />} />
         <Route path="/insights-forecast" element={<InsightsForecast />} />
         <Route path="/insights" element={<InsightsForecast />} />
         <Route path="/forecast" element={<InsightsForecast />} />

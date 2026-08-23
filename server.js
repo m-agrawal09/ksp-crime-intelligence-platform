@@ -59,13 +59,18 @@ function serveStaticFile(req, res, pathname) {
         return;
     }
 
-    let filePath = path.join(distPath, pathname);
+    let cleanPath = pathname;
+    if (cleanPath.includes("/assets/")) {
+        cleanPath = cleanPath.substring(cleanPath.indexOf("/assets/"));
+    }
+
+    let filePath = path.join(distPath, cleanPath);
 
     if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
         filePath = path.join(distPath, "index.html");
     }
 
-    if (!fs.existsSync(filePath) && !path.extname(pathname)) {
+    if (!fs.existsSync(filePath) && !path.extname(cleanPath)) {
         filePath = path.join(distPath, "index.html");
     }
 
@@ -80,8 +85,14 @@ function serveStaticFile(req, res, pathname) {
         });
         fs.createReadStream(filePath).pipe(res);
     } else {
-        res.writeHead(404, { "Content-Type": "text/plain" });
-        res.end("404 Not Found");
+        const indexHtml = path.join(distPath, "index.html");
+        if (fs.existsSync(indexHtml)) {
+            res.writeHead(200, { "Content-Type": "text/html" });
+            fs.createReadStream(indexHtml).pipe(res);
+        } else {
+            res.writeHead(404, { "Content-Type": "text/plain" });
+            res.end("404 Not Found");
+        }
     }
 }
 

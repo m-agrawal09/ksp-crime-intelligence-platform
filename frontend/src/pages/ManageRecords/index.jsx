@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { Link } from "react-router-dom";
 import PageHeader from "../../components/dashboard/PageHeader";
 import FIRFormModal from "../../components/records/FIRFormModal";
 import FIRDetailModal from "../../components/records/FIRDetailModal";
@@ -15,7 +16,8 @@ import {
   FaFilter,
   FaShieldAlt,
   FaUserCheck,
-  FaExclamationTriangle
+  FaExclamationTriangle,
+  FaProjectDiagram
 } from "react-icons/fa";
 
 const ManageRecords = () => {
@@ -416,6 +418,15 @@ const ManageRecords = () => {
                           >
                             <FaEdit />
                           </button>
+
+                          {/* View in Network Matrix */}
+                          <Link
+                            to={`/network-analysis`}
+                            className="p-2 rounded-[4px] border border-slate-800 bg-[#0c182a] text-slate-400 hover:text-amber-400 hover:bg-[#201d14] hover:border-slate-700 transition-colors"
+                            title="Explore Suspect in Link & Network Graph"
+                          >
+                            <FaProjectDiagram />
+                          </Link>
 
                           {/* Toggle Closed Status */}
                           <button
