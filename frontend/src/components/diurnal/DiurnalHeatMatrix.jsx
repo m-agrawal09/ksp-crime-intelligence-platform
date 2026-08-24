@@ -29,11 +29,11 @@ export default function DiurnalHeatMatrix({
   const hours = Array.from({ length: 24 }, (_, i) => i);
 
   const getCellColor = (count, intensity) => {
-    if (count === 0) return "bg-[#091122] border-slate-800/40 text-slate-700 hover:border-slate-600";
-    if (intensity < 0.25) return "bg-blue-950/60 border-blue-800/40 text-blue-300 hover:border-blue-400";
-    if (intensity < 0.55) return "bg-cyan-950/70 border-cyan-700/50 text-cyan-200 hover:border-cyan-400";
-    if (intensity < 0.8) return "bg-amber-950/80 border-amber-500/60 text-amber-200 hover:border-amber-300 font-semibold";
-    return "bg-rose-950/90 border-rose-500 text-rose-100 font-bold hover:border-rose-400 shadow-[0_0_12px_rgba(244,63,94,0.3)]";
+    if (count === 0) return "bg-slate-950/70 border-slate-800 text-slate-600 hover:border-slate-500";
+    if (intensity < 0.25) return "bg-emerald-950/90 border-emerald-500/80 text-emerald-300 hover:border-emerald-300 font-bold shadow-[0_0_8px_rgba(16,185,129,0.25)]";
+    if (intensity < 0.55) return "bg-cyan-900/90 border-cyan-400 text-cyan-200 hover:border-cyan-200 font-bold shadow-[0_0_10px_rgba(6,182,212,0.35)]";
+    if (intensity < 0.8) return "bg-amber-600/90 border-amber-300 text-amber-950 hover:border-amber-100 font-extrabold shadow-[0_0_14px_rgba(245,158,11,0.5)]";
+    return "bg-rose-600 border-rose-300 text-white font-extrabold hover:bg-rose-500 shadow-[0_0_16px_rgba(244,63,94,0.7)]";
   };
 
   const activeCell = selectedCell || hoveredCell;
@@ -55,22 +55,26 @@ export default function DiurnalHeatMatrix({
         </div>
 
         {/* Heat Legend */}
-        <div className="flex items-center gap-2.5 text-[11px] font-mono text-slate-300 bg-slate-950/80 px-3.5 py-1.5 rounded-sm border border-slate-700/70">
+        <div className="flex items-center gap-3 text-[11px] font-mono text-slate-300 bg-slate-950/90 px-3.5 py-1.5 rounded-sm border border-slate-700/80">
           <span className="text-slate-400 text-[10px] font-semibold">Intensity:</span>
           <div className="flex items-center gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-sm bg-[#091122] border border-slate-700" />
+            <div className="w-3 h-3 rounded-sm bg-slate-950 border border-slate-800" />
             <span className="text-[10px] text-slate-400">0</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-sm bg-blue-950 border border-blue-700" />
-            <span className="text-[10px] text-blue-300 font-semibold">Low</span>
+            <div className="w-3 h-3 rounded-sm bg-emerald-950 border border-emerald-500" />
+            <span className="text-[10px] text-emerald-300 font-bold">Low</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-sm bg-amber-950 border border-amber-500" />
-            <span className="text-[10px] text-amber-300 font-semibold">Med</span>
+            <div className="w-3 h-3 rounded-sm bg-cyan-900 border border-cyan-400" />
+            <span className="text-[10px] text-cyan-300 font-bold">Med</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-sm bg-rose-950 border border-rose-500" />
+            <div className="w-3 h-3 rounded-sm bg-amber-600 border border-amber-300" />
+            <span className="text-[10px] text-amber-300 font-bold">High</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <div className="w-3 h-3 rounded-sm bg-rose-600 border border-rose-300" />
             <span className="text-[10px] text-rose-300 font-bold">Peak</span>
           </div>
         </div>
