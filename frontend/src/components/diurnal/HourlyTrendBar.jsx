@@ -32,19 +32,22 @@ export default function HourlyTrendBar({ hourlyData }) {
   const maxVal = Math.max(...hourlyTotals.map((h) => h.count), 1);
 
   return (
-    <div className="bg-[#0b1329]/80 border border-slate-800/80 rounded-2xl p-4.5 backdrop-blur-xl shadow-xl space-y-3">
-      <div className="flex items-center justify-between border-b border-slate-800/60 pb-2.5">
-        <div className="flex items-center gap-2">
+    <div 
+      className="bg-slate-900/85 border border-slate-700/60 rounded-md backdrop-blur-md shadow-xl space-y-4"
+      style={{ padding: "22px 24px" }}
+    >
+      <div className="flex items-center justify-between border-b border-slate-700/50 pb-3">
+        <div className="flex items-center gap-2.5">
           <RiBarChartGroupedLine className="text-cyan-400 text-lg" />
           <h3 className="text-xs font-bold text-white uppercase tracking-wider font-mono">
             24-Hour Diurnal Aggregate Curve
           </h3>
         </div>
-        <span className="text-[10px] font-mono text-slate-400">Total Statewide Incidents by Hour</span>
+        <span className="text-[10.5px] font-mono text-slate-400">Total Statewide Incidents by Hour</span>
       </div>
 
       {/* 24 Bar Visualizer */}
-      <div className="flex items-end gap-1.5 h-28 pt-4 px-1">
+      <div className="flex items-end gap-2 h-32 pt-4 px-3">
         {hourlyTotals.map((h) => {
           const heightPercent = Math.round((h.count / maxVal) * 100);
           const isNightSurge = (h.hour >= 1 && h.hour <= 5) || h.hour >= 22;
@@ -53,17 +56,17 @@ export default function HourlyTrendBar({ hourlyData }) {
           return (
             <div
               key={h.hour}
-              className="flex-1 flex flex-col items-center gap-1 group relative h-full justify-end"
+              className="flex-1 flex flex-col items-center gap-1.5 group relative h-full justify-end"
             >
               {/* Tooltip on hover */}
-              <div className="absolute -top-10 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900 border border-slate-700 text-white text-[10px] font-mono px-2 py-1 rounded-md shadow-xl whitespace-nowrap pointer-events-none z-20">
+              <div className="absolute -top-10 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-950 border border-slate-700 text-white text-[10px] font-mono px-2 py-1 rounded-sm shadow-xl whitespace-nowrap pointer-events-none z-20">
                 <strong>{String(h.hour).padStart(2, '0')}:00</strong> • {h.count} Cases
               </div>
 
               {/* Bar */}
               <div
                 style={{ height: `${Math.max(8, heightPercent)}%` }}
-                className={`w-full rounded-t-md transition-all duration-300 ${
+                className={`w-full rounded-t-sm transition-all duration-300 ${
                   isNightSurge
                     ? "bg-gradient-to-t from-rose-600/50 to-rose-400 group-hover:to-rose-300 shadow-[0_0_8px_rgba(244,63,94,0.3)]"
                     : isMiddayPeak
@@ -73,7 +76,7 @@ export default function HourlyTrendBar({ hourlyData }) {
               />
 
               {/* Label */}
-              <span className={`text-[9px] font-mono ${h.hour % 3 === 0 ? "text-slate-400 font-bold" : "text-slate-600"}`}>
+              <span className={`text-[9.5px] font-mono ${h.hour % 3 === 0 ? "text-slate-300 font-bold" : "text-slate-600"}`}>
                 {h.hour % 3 === 0 ? String(h.hour).padStart(2, '0') : "·"}
               </span>
             </div>
@@ -82,17 +85,17 @@ export default function HourlyTrendBar({ hourlyData }) {
       </div>
 
       {/* Bracket Subtitles */}
-      <div className="grid grid-cols-4 gap-2 pt-1 border-t border-slate-800/40 text-[10px] font-mono text-center">
-        <div className="text-rose-400/90 bg-rose-950/20 py-1 rounded border border-rose-900/30">
+      <div className="grid grid-cols-4 gap-3 pt-2 border-t border-slate-700/50 text-[10px] font-mono text-center">
+        <div className="text-rose-300 bg-rose-950/40 py-1.5 rounded-sm border border-rose-800/40 font-semibold">
           00–06 Night Surge
         </div>
-        <div className="text-blue-400/90 bg-blue-950/20 py-1 rounded border border-blue-900/30">
+        <div className="text-blue-300 bg-blue-950/40 py-1.5 rounded-sm border border-blue-800/40 font-semibold">
           06–12 Morning
         </div>
-        <div className="text-amber-400/90 bg-amber-950/20 py-1 rounded border border-amber-900/30">
+        <div className="text-amber-300 bg-amber-950/40 py-1.5 rounded-sm border border-amber-800/40 font-semibold">
           12–18 Afternoon
         </div>
-        <div className="text-purple-400/90 bg-purple-950/20 py-1 rounded border border-purple-900/30">
+        <div className="text-purple-300 bg-purple-950/40 py-1.5 rounded-sm border border-purple-800/40 font-semibold">
           18–24 Evening
         </div>
       </div>

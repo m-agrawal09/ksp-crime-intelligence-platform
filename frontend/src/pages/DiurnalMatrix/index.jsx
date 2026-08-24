@@ -67,37 +67,33 @@ export default function DiurnalMatrix() {
   };
 
   return (
-    <div className="space-y-5 animate-in fade-in duration-200 pb-12">
+    <div 
+      className="flex flex-col gap-8 animate-in fade-in duration-200 pb-16"
+      style={{ display: "flex", flexDirection: "column", gap: "32px" }}
+    >
       {/* Executive Command Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#0b1329]/80 border border-slate-800/80 rounded-2xl p-5 backdrop-blur-xl shadow-xl">
+      <div 
+        className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900/85 border border-slate-700/60 rounded-md backdrop-blur-md shadow-xl"
+        style={{ padding: "22px 24px" }}
+      >
         <div>
-          <div className="flex items-center gap-2 mb-1.5">
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center gap-1">
-              <RiTimeLine className="text-xs" />
-              <span>Spatiotemporal Diurnal Intelligence</span>
-            </span>
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-              ● Live Database Connected
-            </span>
-          </div>
-
           <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight flex items-center gap-2.5">
             <RiTimeLine className="text-amber-400 text-2xl" />
             <span>Spatiotemporal Diurnal Crime Matrix & Red-Zone Pulsing</span>
           </h1>
 
-          <p className="text-xs text-slate-400 mt-1 max-w-2xl">
-            Correlating time-of-day (00:00 to 23:00) with days of the week across Karnataka police stations to uncover diurnal crime rhythms and trigger velocity surge alerts.
+          <p className="text-xs text-slate-300 mt-1 max-w-2xl font-sans">
+            Temporal rhythm analysis & high-velocity surge detection across Karnataka police stations.
           </p>
         </div>
 
         {/* Filters Toolbar */}
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2.5">
           {/* District Select */}
           <select
             value={selectedDistrict}
             onChange={(e) => setSelectedDistrict(e.target.value)}
-            className="bg-slate-900 border border-slate-750 text-white rounded-xl px-3 py-2 text-xs font-mono focus:border-amber-500 focus:outline-none cursor-pointer"
+            className="bg-slate-950/80 border border-slate-700/70 text-slate-200 rounded-md px-3 py-2 text-xs font-mono focus:border-amber-400 focus:outline-none cursor-pointer hover:border-slate-600 transition-colors"
           >
             <option value="ALL">All Districts (Statewide)</option>
             {districts.map((dist, idx) => (
@@ -111,7 +107,7 @@ export default function DiurnalMatrix() {
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="bg-slate-900 border border-slate-750 text-white rounded-xl px-3 py-2 text-xs font-mono focus:border-amber-500 focus:outline-none cursor-pointer"
+            className="bg-slate-950/80 border border-slate-700/70 text-slate-200 rounded-md px-3 py-2 text-xs font-mono focus:border-amber-400 focus:outline-none cursor-pointer hover:border-slate-600 transition-colors"
           >
             <option value="ALL">All Crime Categories</option>
             {categories.map((cat, idx) => (
@@ -124,54 +120,66 @@ export default function DiurnalMatrix() {
           {/* Reset Button */}
           <button
             onClick={handleResetFilters}
-            className="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-750 text-slate-400 hover:text-white transition-all cursor-pointer"
+            className="p-2 rounded-md bg-slate-800/90 hover:bg-slate-700 border border-slate-700/80 text-slate-300 hover:text-white transition-all cursor-pointer"
             title="Reset Filters"
           >
-            <RiRefreshLine className="text-sm" />
+            <RiRefreshLine className="text-sm text-amber-400" />
           </button>
         </div>
       </div>
 
       {/* 4 Executive Metric Tiles */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="bg-[#0b1329]/80 border border-slate-800 rounded-2xl p-4 shadow-lg">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div 
+          className="bg-slate-900/85 border border-slate-700/60 rounded-md shadow-md flex flex-col justify-between"
+          style={{ padding: "18px 20px" }}
+        >
           <div className="flex items-center justify-between text-slate-400 mb-1">
-            <span className="text-[10px] font-mono uppercase">Total Data Points</span>
+            <span className="text-[9.5px] font-mono font-bold uppercase tracking-wider">Total Data Points</span>
             <RiTimeLine className="text-blue-400 text-base" />
           </div>
-          <p className="text-xl font-bold text-white font-mono">{matrixData.totalIncidents}</p>
-          <span className="text-[10px] text-slate-500">In Active Scope</span>
+          <p className="text-2xl font-extrabold text-white font-mono">{matrixData.totalIncidents}</p>
+          <span className="text-[9px] text-slate-400 font-sans mt-0.5">In Active Scope</span>
         </div>
 
-        <div className="bg-[#0b1329]/80 border border-slate-800 rounded-2xl p-4 shadow-lg">
+        <div 
+          className="bg-slate-900/85 border border-slate-700/60 rounded-md shadow-md flex flex-col justify-between"
+          style={{ padding: "18px 20px" }}
+        >
           <div className="flex items-center justify-between text-slate-400 mb-1">
-            <span className="text-[10px] font-mono uppercase">Active Red-Zones</span>
+            <span className="text-[9.5px] font-mono font-bold uppercase tracking-wider">Active Red-Zones</span>
             <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping" />
           </div>
-          <p className="text-xl font-bold text-rose-400 font-mono">{redZoneAlerts.length}</p>
-          <span className="text-[10px] text-rose-500/80 font-medium">&gt;25% Surge Flagged</span>
+          <p className="text-2xl font-extrabold text-rose-400 font-mono">{redZoneAlerts.length}</p>
+          <span className="text-[9px] text-rose-400/90 font-medium font-sans mt-0.5">&gt;25% Surge Flagged</span>
         </div>
 
-        <div className="bg-[#0b1329]/80 border border-slate-800 rounded-2xl p-4 shadow-lg">
+        <div 
+          className="bg-slate-900/85 border border-slate-700/60 rounded-md shadow-md flex flex-col justify-between"
+          style={{ padding: "18px 20px" }}
+        >
           <div className="flex items-center justify-between text-slate-400 mb-1">
-            <span className="text-[10px] font-mono uppercase">Peak Diurnal Hour</span>
+            <span className="text-[9.5px] font-mono font-bold uppercase tracking-wider">Peak Diurnal Hour</span>
             <RiFireLine className="text-amber-400 text-base" />
           </div>
-          <p className="text-xl font-bold text-amber-400 font-mono">
+          <p className="text-2xl font-extrabold text-amber-300 font-mono">
             {matrixData.topPeaks[0]?.hourRange || "02:00 - 04:00"}
           </p>
-          <span className="text-[10px] text-slate-500">{matrixData.topPeaks[0]?.day || "Weekends"}</span>
+          <span className="text-[9px] text-slate-400 font-sans mt-0.5">{matrixData.topPeaks[0]?.day || "Weekends"}</span>
         </div>
 
-        <div className="bg-[#0b1329]/80 border border-slate-800 rounded-2xl p-4 shadow-lg">
+        <div 
+          className="bg-slate-900/85 border border-slate-700/60 rounded-md shadow-md flex flex-col justify-between"
+          style={{ padding: "18px 20px" }}
+        >
           <div className="flex items-center justify-between text-slate-400 mb-1">
-            <span className="text-[10px] font-mono uppercase">Primary Threat Window</span>
+            <span className="text-[9.5px] font-mono font-bold uppercase tracking-wider">Primary Threat Window</span>
             <RiShieldFlashLine className="text-cyan-400 text-base" />
           </div>
-          <p className="text-xl font-bold text-cyan-300 font-mono truncate">
+          <p className="text-2xl font-extrabold text-cyan-300 font-mono truncate">
             {matrixData.topPeaks[0]?.primaryThreat || "Property Theft"}
           </p>
-          <span className="text-[10px] text-slate-500">Night Watch Shift 3</span>
+          <span className="text-[9px] text-slate-400 font-sans mt-0.5">Night Watch Shift 3</span>
         </div>
       </div>
 
