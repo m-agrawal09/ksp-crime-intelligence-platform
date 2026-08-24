@@ -391,20 +391,20 @@ const InteractiveMap = ({ incidents, selectedItem, onSelectDistrict, onSelectMar
       {/* ── Map Layer Switcher Control (Top Right) ── */}
       <div className="map-float-panel top-3 right-3">
         <div style={{
-          display: "flex", gap: 2,
+          display: "flex", gap: 6,
           background: "rgba(6,13,26,0.88)",
-          border: "1px solid rgba(51,65,85,0.25)",
-          borderRadius: 8, padding: 3,
+          border: "1px solid rgba(51,65,85,0.35)",
+          borderRadius: 8, padding: "5px 6px",
         }}>
           {Object.entries(MAP_LAYERS).map(([key, layer]) => (
             <button
               key={key}
               onClick={() => setActiveLayer(key)}
               style={{
-                padding: "4px 9px",
+                padding: "4px 10px",
                 borderRadius: 6,
                 fontFamily: "'IBM Plex Mono', monospace",
-                fontSize: 9,
+                fontSize: 10,
                 fontWeight: 700,
                 letterSpacing: "0.06em",
                 textTransform: "uppercase",
@@ -412,7 +412,7 @@ const InteractiveMap = ({ incidents, selectedItem, onSelectDistrict, onSelectMar
                 border: "none",
                 transition: "all 0.15s",
                 background: activeLayer === key ? "#2563eb" : "transparent",
-                color: activeLayer === key ? "#ffffff" : "#475569",
+                color: activeLayer === key ? "#ffffff" : "#94a3b8",
               }}
             >
               {layer.name}

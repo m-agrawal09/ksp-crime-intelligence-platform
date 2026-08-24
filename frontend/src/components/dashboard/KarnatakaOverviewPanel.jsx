@@ -445,15 +445,16 @@ const KarnatakaOverviewPanel = () => {
         <div ref={mapContainerRef} style={{ height: "100%", width: "100%" }} />
 
         {/* ── Layer Switcher (same as Crime Map) ── */}
-        <div className="absolute top-3 right-3 z-[1000] flex bg-slate-900/90 backdrop-blur-sm border border-slate-800/60 rounded p-1 shadow-xl font-mono">
+        <div className="absolute top-3 right-3 z-[1000] flex items-center gap-2 bg-slate-900/90 backdrop-blur-sm border border-slate-800/60 rounded-md p-1.5 shadow-xl font-mono">
           {Object.entries(MAP_LAYERS).map(([key, layer]) => (
             <button
               key={key}
               onClick={() => setActiveLayer(key)}
-              className={`px-2 py-1 rounded text-[8px] font-semibold transition-all duration-200 ease-in-out uppercase tracking-wider ${activeLayer === key
-                  ? "bg-slate-800 text-white shadow"
+              className={`px-3 py-1 rounded text-[10px] font-semibold transition-all duration-200 ease-in-out uppercase tracking-wider cursor-pointer ${
+                activeLayer === key
+                  ? "bg-blue-600 text-white shadow-sm shadow-blue-500/30 font-bold"
                   : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
-                }`}
+              }`}
             >
               {layer.label}
             </button>
