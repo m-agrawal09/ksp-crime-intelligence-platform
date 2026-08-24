@@ -103,21 +103,17 @@ export default function NetworkAnalysis() {
   };
 
   return (
-    <div className="space-y-4 animate-in fade-in duration-300 pb-10">
+    <div 
+      className="flex flex-col gap-6 animate-in fade-in duration-300 pb-12"
+      style={{ display: "flex", flexDirection: "column", gap: "24px" }}
+    >
       {/* Page Header Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900/85 border border-slate-700/60 rounded-xl p-5 backdrop-blur-md shadow-xl relative overflow-hidden">
+      <div 
+        className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900/85 border border-slate-700/60 rounded-md backdrop-blur-md shadow-xl relative overflow-hidden"
+        style={{ padding: "22px 24px" }}
+      >
         <div className="relative z-10">
-          <div className="flex items-center gap-2 mb-1.5">
-            <span className="px-2.5 py-0.5 rounded-md text-[10px] font-mono font-bold bg-blue-500/15 text-blue-300 border border-blue-500/30 flex items-center gap-1.5">
-              <RiSparklingFill className="text-xs text-blue-400" />
-              <span>CCTNS Criminal Intelligence & Link Matrix</span>
-            </span>
-            <span className="px-2.5 py-0.5 rounded-md text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
-              ● Live Database Connected
-            </span>
-          </div>
-
-          <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight flex items-center gap-2.5 mt-1">
+          <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight flex items-center gap-2.5">
             <RiNodeTree className="text-blue-400 text-2xl" />
             <span>Criminological Link & Network Analysis</span>
           </h1>
@@ -131,7 +127,7 @@ export default function NetworkAnalysis() {
         <div className="flex items-center gap-2 relative z-10">
           <button
             onClick={handleResetView}
-            className="px-3.5 py-2 rounded-lg bg-slate-800/90 hover:bg-slate-700 border border-slate-600/70 text-xs font-semibold text-slate-200 hover:text-white flex items-center gap-2 transition-all cursor-pointer shadow-md"
+            className="px-3.5 py-2 rounded-md bg-slate-800/90 hover:bg-slate-700 border border-slate-600/70 text-xs font-semibold text-slate-200 hover:text-white flex items-center gap-2 transition-all cursor-pointer shadow-md"
           >
             <RiRefreshLine className="text-sm text-blue-400" />
             <span>Reset Matrix</span>
@@ -140,8 +136,11 @@ export default function NetworkAnalysis() {
       </div>
 
       {/* KPI Metric Summary Strip */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        <div className="bg-slate-900/85 border border-slate-700/60 rounded-lg p-3.5 shadow-md flex flex-col justify-between">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5">
+        <div 
+          className="bg-slate-900/85 border border-slate-700/60 rounded-md shadow-md flex flex-col justify-between"
+          style={{ padding: "18px 20px" }}
+        >
           <div className="flex items-center justify-between text-slate-400 mb-1">
             <span className="text-[9.5px] font-mono font-bold uppercase tracking-wider">Total Entities</span>
             <RiNodeTree className="text-blue-400 text-base" />
@@ -150,7 +149,10 @@ export default function NetworkAnalysis() {
           <span className="text-[9px] text-slate-400 font-sans mt-0.5">In Active Scope</span>
         </div>
 
-        <div className="bg-slate-900/85 border border-slate-700/60 rounded-lg p-3.5 shadow-md flex flex-col justify-between">
+        <div 
+          className="bg-slate-900/85 border border-slate-700/60 rounded-md shadow-md flex flex-col justify-between"
+          style={{ padding: "18px 20px" }}
+        >
           <div className="flex items-center justify-between text-slate-400 mb-1">
             <span className="text-[9.5px] font-mono font-bold uppercase tracking-wider">Suspects</span>
             <RiShieldUserLine className="text-red-400 text-base" />
@@ -159,7 +161,10 @@ export default function NetworkAnalysis() {
           <span className="text-[9px] text-slate-400 font-sans mt-0.5">Accused Entities</span>
         </div>
 
-        <div className="bg-slate-900/85 border border-slate-700/60 rounded-lg p-3.5 shadow-md flex flex-col justify-between">
+        <div 
+          className="bg-slate-900/85 border border-slate-700/60 rounded-md shadow-md flex flex-col justify-between"
+          style={{ padding: "18px 20px" }}
+        >
           <div className="flex items-center justify-between text-slate-400 mb-1">
             <span className="text-[9.5px] font-mono font-bold uppercase tracking-wider">Multi-District</span>
             <RiRouteLine className="text-amber-400 text-base" />
@@ -168,7 +173,10 @@ export default function NetworkAnalysis() {
           <span className="text-[9px] text-amber-400/90 font-medium font-sans mt-0.5">Cross-Jurisdiction</span>
         </div>
 
-        <div className="bg-slate-900/85 border border-slate-700/60 rounded-lg p-3.5 shadow-md flex flex-col justify-between">
+        <div 
+          className="bg-slate-900/85 border border-slate-700/60 rounded-md shadow-md flex flex-col justify-between"
+          style={{ padding: "18px 20px" }}
+        >
           <div className="flex items-center justify-between text-slate-400 mb-1">
             <span className="text-[9.5px] font-mono font-bold uppercase tracking-wider">Crime Rings</span>
             <RiTeamLine className="text-purple-400 text-base" />
@@ -177,7 +185,10 @@ export default function NetworkAnalysis() {
           <span className="text-[9px] text-slate-400 font-sans mt-0.5">Active Syndicates</span>
         </div>
 
-        <div className="bg-slate-900/85 border border-slate-700/60 rounded-lg p-3.5 shadow-md flex flex-col justify-between">
+        <div 
+          className="bg-slate-900/85 border border-slate-700/60 rounded-md shadow-md flex flex-col justify-between"
+          style={{ padding: "18px 20px" }}
+        >
           <div className="flex items-center justify-between text-slate-400 mb-1">
             <span className="text-[9.5px] font-mono font-bold uppercase tracking-wider">Co-Accused</span>
             <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
@@ -186,7 +197,10 @@ export default function NetworkAnalysis() {
           <span className="text-[9px] text-slate-400 font-sans mt-0.5">Shared Offences</span>
         </div>
 
-        <div className="bg-slate-900/85 border border-slate-700/60 rounded-lg p-3.5 shadow-md flex flex-col justify-between">
+        <div 
+          className="bg-slate-900/85 border border-slate-700/60 rounded-md shadow-md flex flex-col justify-between"
+          style={{ padding: "18px 20px" }}
+        >
           <div className="flex items-center justify-between text-slate-400 mb-1">
             <span className="text-[9.5px] font-mono font-bold uppercase tracking-wider">Stations</span>
             <RiBuilding2Line className="text-blue-400 text-base" />

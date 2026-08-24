@@ -41,15 +41,18 @@ export default function NodeDetailsDossier({
   };
 
   return (
-    <div className="fixed right-6 bottom-6 top-24 w-[380px] sm:w-[440px] bg-slate-900/98 border border-slate-700/80 rounded-xl shadow-2xl backdrop-blur-xl z-50 flex flex-col overflow-hidden animate-in slide-in-from-right duration-300 font-sans">
+    <div className="fixed right-6 bottom-6 top-24 w-[380px] sm:w-[440px] bg-slate-900/98 border border-slate-700/80 rounded-md shadow-2xl backdrop-blur-xl z-50 flex flex-col overflow-hidden animate-in slide-in-from-right duration-300 font-sans">
       {/* Header */}
-      <div className="p-4 border-b border-slate-700/60 flex items-start justify-between bg-slate-950/80">
+      <div 
+        className="border-b border-slate-700/60 flex items-start justify-between bg-slate-950/80"
+        style={{ padding: "18px 20px" }}
+      >
         <div className="flex items-start gap-3 min-w-0">
-          <div className={`p-2 rounded-lg border ${getBadgeColor()} flex-shrink-0`}>
+          <div className={`p-2 rounded-md border ${getBadgeColor()} flex-shrink-0`}>
             {getIcon()}
           </div>
           <div className="min-w-0">
-            <span className={`inline-block px-2 py-0.5 rounded text-[9.5px] font-mono uppercase font-bold border ${getBadgeColor()} mb-1`}>
+            <span className={`inline-block px-2 py-0.5 rounded-sm text-[9.5px] font-mono uppercase font-bold border ${getBadgeColor()} mb-1`}>
               {node.colorConfig?.label || node.type}
             </span>
             <h3 className="text-base font-bold text-white tracking-wide truncate">
@@ -65,21 +68,30 @@ export default function NodeDetailsDossier({
 
         <button
           onClick={onClose}
-          className="p-1.5 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+          className="p-1.5 rounded-sm text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
         >
           <RiCloseLine className="text-lg" />
         </button>
       </div>
 
       {/* Body Scroll */}
-      <div className="flex-1 p-4 overflow-y-auto space-y-4 text-xs">
+      <div 
+        className="flex-1 overflow-y-auto space-y-4 text-xs"
+        style={{ padding: "18px 20px" }}
+      >
         {/* Quick Stats Grid */}
-        <div className="grid grid-cols-2 gap-2">
-          <div className="bg-slate-950/70 border border-slate-700/60 rounded-lg p-3">
+        <div className="grid grid-cols-2 gap-2.5">
+          <div 
+            className="bg-slate-950/70 border border-slate-700/60 rounded-md"
+            style={{ padding: "12px 14px" }}
+          >
             <p className="text-[9.5px] text-slate-400 uppercase font-mono font-semibold">Linked FIRs</p>
             <p className="text-lg font-bold text-white font-mono mt-0.5">{node.casesCount || 0}</p>
           </div>
-          <div className="bg-slate-950/70 border border-slate-700/60 rounded-lg p-3">
+          <div 
+            className="bg-slate-950/70 border border-slate-700/60 rounded-md"
+            style={{ padding: "12px 14px" }}
+          >
             <p className="text-[9.5px] text-slate-400 uppercase font-mono font-semibold">
               {isLocation ? "Connected Suspects" : "Jurisdiction Scope"}
             </p>
@@ -102,7 +114,7 @@ export default function NodeDetailsDossier({
               {node.districts.map((dist, idx) => (
                 <span
                   key={idx}
-                  className="px-2 py-0.5 rounded text-[10.5px] font-medium bg-blue-950/50 text-blue-300 border border-blue-700/50"
+                  className="px-2 py-0.5 rounded-sm text-[10.5px] font-medium bg-blue-950/50 text-blue-300 border border-blue-700/50"
                 >
                   {dist}
                 </span>
@@ -122,10 +134,11 @@ export default function NodeDetailsDossier({
               {node.coAccused.map((accusedName, idx) => (
                 <div
                   key={idx}
-                  className="p-2.5 rounded-lg bg-slate-950/60 border border-slate-700/60 flex items-center justify-between group"
+                  className="rounded-md bg-slate-950/60 border border-slate-700/60 flex items-center justify-between group"
+                  style={{ padding: "10px 12px" }}
                 >
                   <span className="text-xs font-medium text-slate-200">{accusedName}</span>
-                  <span className="text-[9.5px] text-red-300 font-mono bg-red-950/50 px-2 py-0.5 rounded border border-red-800/50 font-semibold">
+                  <span className="text-[9.5px] text-red-300 font-mono bg-red-950/50 px-2 py-0.5 rounded-sm border border-red-800/50 font-semibold">
                     Linked Associate
                   </span>
                 </div>

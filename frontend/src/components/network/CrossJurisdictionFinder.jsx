@@ -14,17 +14,20 @@ export default function CrossJurisdictionFinder({
   onSelectSuspect
 }) {
   return (
-    <div className="bg-slate-900/85 border border-slate-700/60 rounded-xl p-5 shadow-xl flex flex-col gap-3.5 backdrop-blur-md">
+    <div 
+      className="bg-slate-900/85 border border-slate-700/60 rounded-md shadow-xl flex flex-col gap-3.5 backdrop-blur-md"
+      style={{ padding: "22px 24px" }}
+    >
       {/* Header */}
       <div className="flex items-center justify-between border-b border-slate-700/50 pb-3">
         <div className="flex items-center gap-2.5">
-          <div className="p-2 bg-amber-500/15 border border-amber-500/30 rounded-lg text-amber-400">
+          <div className="p-2 bg-amber-500/15 border border-amber-500/30 rounded-md text-amber-400">
             <RiRouteLine className="text-base" />
           </div>
           <div>
             <h3 className="text-sm font-bold text-white tracking-wide flex items-center gap-2">
               Cross-Jurisdiction Connection Finder
-              <span className="px-2 py-0.5 rounded text-[9.5px] bg-red-950/50 text-red-300 border border-red-500/40 font-mono font-bold">
+              <span className="px-2 py-0.5 rounded-sm text-[9.5px] bg-red-950/50 text-red-300 border border-red-500/40 font-mono font-bold">
                 {crossDistrictSuspects.length} Multi-District Targets
               </span>
             </h3>
@@ -36,18 +39,19 @@ export default function CrossJurisdictionFinder({
       </div>
 
       {/* Suspect Multi-Jurisdiction List */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5 max-h-[220px] overflow-y-auto pr-1">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[220px] overflow-y-auto pr-1">
         {crossDistrictSuspects.map((suspect) => {
           const isSelected = selectedSuspectId === suspect.id;
           return (
             <button
               key={suspect.id}
               onClick={() => onSelectSuspect(suspect.id)}
-              className={`p-3 rounded-lg border text-left transition-all relative overflow-hidden group cursor-pointer ${
+              className={`rounded-md border text-left transition-all relative overflow-hidden group cursor-pointer ${
                 isSelected
                   ? "bg-blue-900/30 border-blue-500 shadow-md shadow-blue-500/15 ring-1 ring-blue-500/50"
                   : "bg-slate-900/60 border-slate-700/60 hover:border-slate-600 hover:bg-slate-800/80"
               }`}
+              style={{ padding: "16px 18px" }}
             >
               {/* Highlight badge on active */}
               {isSelected && (

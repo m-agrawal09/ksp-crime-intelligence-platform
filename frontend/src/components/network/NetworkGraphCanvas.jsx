@@ -366,16 +366,14 @@ export default function NetworkGraphCanvas({
   const handleMouseUp = () => {
     setIsDragging(false);
     setDraggedNode(null);
-  };
-
-  const handleWheel = (e) => {
+  };  const handleWheel = (e) => {
     e.preventDefault();
     const zoomFactor = e.deltaY < 0 ? 1.12 : 0.89;
     setZoomLevel((prev) => Math.max(0.4, Math.min(3.0, prev * zoomFactor)));
   };
 
   return (
-    <div className="relative w-full h-[640px] bg-[#040916] border border-slate-700/60 rounded-xl overflow-hidden shadow-2xl">
+    <div className="relative w-full h-[640px] bg-[#040916] border border-slate-700/60 rounded-md overflow-hidden shadow-2xl">
       {/* Background blueprint grid */}
       <div 
         className="absolute inset-0 opacity-25 pointer-events-none"
@@ -397,17 +395,20 @@ export default function NetworkGraphCanvas({
       />
 
       {/* Canvas Floating Controls */}
-      <div className="absolute left-4 bottom-4 flex items-center gap-1 bg-slate-900/90 border border-slate-700/70 rounded-lg p-1 shadow-2xl backdrop-blur-md">
+      <div 
+        className="absolute left-5 bottom-5 flex items-center gap-1.5 bg-slate-900/90 border border-slate-700/70 rounded-md shadow-2xl backdrop-blur-md"
+        style={{ padding: "6px 10px" }}
+      >
         <button
           onClick={() => setZoomLevel((z) => Math.min(3.0, z * 1.2))}
-          className="p-1.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-md transition-colors cursor-pointer"
+          className="p-1.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-sm transition-colors cursor-pointer"
           title="Zoom In"
         >
           <RiZoomInLine className="text-base" />
         </button>
         <button
           onClick={() => setZoomLevel((z) => Math.max(0.4, z / 1.2))}
-          className="p-1.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-md transition-colors cursor-pointer"
+          className="p-1.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-sm transition-colors cursor-pointer"
           title="Zoom Out"
         >
           <RiZoomOutLine className="text-base" />
@@ -417,7 +418,7 @@ export default function NetworkGraphCanvas({
             setZoomLevel(1.0);
             setPanOffset({ x: 0, y: 0 });
           }}
-          className="p-1.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-md transition-colors cursor-pointer"
+          className="p-1.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-sm transition-colors cursor-pointer"
           title="Reset Center"
         >
           <RiFocus3Line className="text-base" />
@@ -429,7 +430,10 @@ export default function NetworkGraphCanvas({
       </div>
 
       {/* Node Legend Box */}
-      <div className="absolute right-4 top-4 bg-slate-900/90 border border-slate-700/70 rounded-lg p-3 shadow-xl backdrop-blur-md text-[11px] space-y-2 hidden sm:block">
+      <div 
+        className="absolute right-5 top-5 bg-slate-900/90 border border-slate-700/70 rounded-md shadow-xl backdrop-blur-md text-[11px] space-y-2 hidden sm:block"
+        style={{ padding: "14px 16px" }}
+      >
         <p className="font-mono text-slate-300 font-bold uppercase text-[9.5px] tracking-wider mb-1">
           Graph Legend
         </p>
