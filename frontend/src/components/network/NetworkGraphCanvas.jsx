@@ -375,8 +375,8 @@ export default function NetworkGraphCanvas({
   };
 
   return (
-    <div className="relative w-full h-[640px] bg-[#050b18] border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
-      {/* Background Cyber Grid */}
+    <div className="relative w-full h-[640px] bg-[#040916] border border-slate-700/60 rounded-xl overflow-hidden shadow-2xl">
+      {/* Background blueprint grid */}
       <div 
         className="absolute inset-0 opacity-25 pointer-events-none"
         style={{
@@ -397,17 +397,17 @@ export default function NetworkGraphCanvas({
       />
 
       {/* Canvas Floating Controls */}
-      <div className="absolute left-5 bottom-5 flex items-center gap-1.5 bg-slate-900/90 border border-slate-800 rounded-2xl p-1.5 shadow-2xl backdrop-blur-md">
+      <div className="absolute left-4 bottom-4 flex items-center gap-1 bg-slate-900/90 border border-slate-700/70 rounded-lg p-1 shadow-2xl backdrop-blur-md">
         <button
           onClick={() => setZoomLevel((z) => Math.min(3.0, z * 1.2))}
-          className="p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
+          className="p-1.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-md transition-colors cursor-pointer"
           title="Zoom In"
         >
           <RiZoomInLine className="text-base" />
         </button>
         <button
           onClick={() => setZoomLevel((z) => Math.max(0.4, z / 1.2))}
-          className="p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
+          className="p-1.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-md transition-colors cursor-pointer"
           title="Zoom Out"
         >
           <RiZoomOutLine className="text-base" />
@@ -417,41 +417,41 @@ export default function NetworkGraphCanvas({
             setZoomLevel(1.0);
             setPanOffset({ x: 0, y: 0 });
           }}
-          className="p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
+          className="p-1.5 text-slate-300 hover:text-white hover:bg-slate-800 rounded-md transition-colors cursor-pointer"
           title="Reset Center"
         >
           <RiFocus3Line className="text-base" />
         </button>
-        <div className="h-4 w-[1px] bg-slate-800 mx-1" />
-        <span className="px-2 font-mono text-[10px] text-slate-400">
+        <div className="h-4 w-[1px] bg-slate-700 mx-1" />
+        <span className="px-2 font-mono text-[10px] text-slate-300 font-medium">
           {Math.round(zoomLevel * 100)}%
         </span>
       </div>
 
       {/* Node Legend Box */}
-      <div className="absolute right-5 top-5 bg-slate-900/90 border border-slate-800/80 rounded-2xl p-3.5 shadow-xl backdrop-blur-md text-[11px] space-y-2 hidden sm:block">
-        <p className="font-mono text-slate-400 font-semibold uppercase text-[10px] tracking-wider mb-1.5">
-          Intelligence Graph Legend
+      <div className="absolute right-4 top-4 bg-slate-900/90 border border-slate-700/70 rounded-lg p-3 shadow-xl backdrop-blur-md text-[11px] space-y-2 hidden sm:block">
+        <p className="font-mono text-slate-300 font-bold uppercase text-[9.5px] tracking-wider mb-1">
+          Graph Legend
         </p>
         <div className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-full bg-red-500 shadow-sm shadow-red-500/50" />
-          <span className="text-slate-200">Suspect / Accused</span>
+          <span className="w-2.5 h-2.5 rounded-full bg-red-500 shadow-sm shadow-red-500/50" />
+          <span className="text-slate-200 font-medium text-[10.5px]">Suspect / Accused</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-full bg-blue-500 shadow-sm shadow-blue-500/50" />
-          <span className="text-slate-200">Police Station / Unit</span>
+          <span className="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-sm shadow-blue-500/50" />
+          <span className="text-slate-200 font-medium text-[10.5px]">Police Station / Unit</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-full bg-green-500 shadow-sm shadow-green-500/50" />
-          <span className="text-slate-200">Complainant / Citizen</span>
+          <span className="w-2.5 h-2.5 rounded-full bg-green-500 shadow-sm shadow-green-500/50" />
+          <span className="text-slate-200 font-medium text-[10.5px]">Complainant / Citizen</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-full bg-purple-500 shadow-sm shadow-purple-500/50" />
-          <span className="text-slate-200">Organized Crime Syndicate</span>
+          <span className="w-2.5 h-2.5 rounded-full bg-purple-500 shadow-sm shadow-purple-500/50" />
+          <span className="text-slate-200 font-medium text-[10.5px]">Organized Syndicate</span>
         </div>
-        <div className="pt-2 border-t border-slate-800 text-[10px] text-amber-400 font-mono flex items-center gap-1">
-          <RiInformationLine className="text-xs" />
-          <span>Click any node to view case dossier</span>
+        <div className="pt-1.5 border-t border-slate-700/60 text-[9.5px] text-amber-300 font-mono flex items-center gap-1">
+          <RiInformationLine className="text-xs text-amber-400" />
+          <span>Click node for dossier</span>
         </div>
       </div>
     </div>

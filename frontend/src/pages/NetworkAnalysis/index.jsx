@@ -103,27 +103,27 @@ export default function NetworkAnalysis() {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-300 pb-12">
+    <div className="space-y-4 animate-in fade-in duration-300 pb-10">
       {/* Page Header Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-[#0b1329]/80 border border-slate-800/80 rounded-3xl p-6 backdrop-blur-xl shadow-2xl relative overflow-hidden">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-900/85 border border-slate-700/60 rounded-xl p-5 backdrop-blur-md shadow-xl relative overflow-hidden">
         <div className="relative z-10">
           <div className="flex items-center gap-2 mb-1.5">
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30 flex items-center gap-1">
+            <span className="px-2.5 py-0.5 rounded-md text-[10px] font-mono font-bold bg-blue-500/15 text-blue-300 border border-blue-500/30 flex items-center gap-1.5">
               <RiSparklingFill className="text-xs text-blue-400" />
               <span>CCTNS Criminal Intelligence & Link Matrix</span>
             </span>
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+            <span className="px-2.5 py-0.5 rounded-md text-[10px] font-mono font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
               ● Live Database Connected
             </span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center gap-3">
-            <RiNodeTree className="text-blue-500 text-3xl" />
+          <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight flex items-center gap-2.5 mt-1">
+            <RiNodeTree className="text-blue-400 text-2xl" />
             <span>Criminological Link & Network Analysis</span>
           </h1>
 
-          <p className="text-xs sm:text-sm text-slate-400 mt-1 max-w-2xl">
-            Visualizing interconnected crime networks, co-accused rings, and cross-jurisdictional trails across Karnataka police stations to eliminate Excel data silos.
+          <p className="text-xs text-slate-300 mt-1 max-w-2xl font-sans">
+            Cross-jurisdictional link matrix and syndicate mapping across Karnataka police stations.
           </p>
         </div>
 
@@ -131,9 +131,9 @@ export default function NetworkAnalysis() {
         <div className="flex items-center gap-2 relative z-10">
           <button
             onClick={handleResetView}
-            className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-750 text-xs font-semibold text-slate-300 hover:text-white flex items-center gap-2 transition-all cursor-pointer shadow-lg"
+            className="px-3.5 py-2 rounded-lg bg-slate-800/90 hover:bg-slate-700 border border-slate-600/70 text-xs font-semibold text-slate-200 hover:text-white flex items-center gap-2 transition-all cursor-pointer shadow-md"
           >
-            <RiRefreshLine className="text-sm" />
+            <RiRefreshLine className="text-sm text-blue-400" />
             <span>Reset Matrix</span>
           </button>
         </div>
@@ -141,58 +141,58 @@ export default function NetworkAnalysis() {
 
       {/* KPI Metric Summary Strip */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        <div className="bg-[#0b1329]/80 border border-slate-800 rounded-2xl p-4 shadow-lg">
+        <div className="bg-slate-900/85 border border-slate-700/60 rounded-lg p-3.5 shadow-md flex flex-col justify-between">
           <div className="flex items-center justify-between text-slate-400 mb-1">
-            <span className="text-[10px] font-mono uppercase">Total Entities</span>
+            <span className="text-[9.5px] font-mono font-bold uppercase tracking-wider">Total Entities</span>
             <RiNodeTree className="text-blue-400 text-base" />
           </div>
-          <p className="text-xl font-bold text-white font-mono">{metrics.totalNodes}</p>
-          <span className="text-[10px] text-slate-500">In Active Scope</span>
+          <p className="text-2xl font-extrabold text-white font-mono">{metrics.totalNodes}</p>
+          <span className="text-[9px] text-slate-400 font-sans mt-0.5">In Active Scope</span>
         </div>
 
-        <div className="bg-[#0b1329]/80 border border-slate-800 rounded-2xl p-4 shadow-lg">
+        <div className="bg-slate-900/85 border border-slate-700/60 rounded-lg p-3.5 shadow-md flex flex-col justify-between">
           <div className="flex items-center justify-between text-slate-400 mb-1">
-            <span className="text-[10px] font-mono uppercase">Suspects</span>
+            <span className="text-[9.5px] font-mono font-bold uppercase tracking-wider">Suspects</span>
             <RiShieldUserLine className="text-red-400 text-base" />
           </div>
-          <p className="text-xl font-bold text-red-400 font-mono">{metrics.suspectsCount}</p>
-          <span className="text-[10px] text-slate-500">Accused Entities</span>
+          <p className="text-2xl font-extrabold text-red-400 font-mono">{metrics.suspectsCount}</p>
+          <span className="text-[9px] text-slate-400 font-sans mt-0.5">Accused Entities</span>
         </div>
 
-        <div className="bg-[#0b1329]/80 border border-slate-800 rounded-2xl p-4 shadow-lg">
+        <div className="bg-slate-900/85 border border-slate-700/60 rounded-lg p-3.5 shadow-md flex flex-col justify-between">
           <div className="flex items-center justify-between text-slate-400 mb-1">
-            <span className="text-[10px] font-mono uppercase">Multi-District</span>
+            <span className="text-[9.5px] font-mono font-bold uppercase tracking-wider">Multi-District</span>
             <RiRouteLine className="text-amber-400 text-base" />
           </div>
-          <p className="text-xl font-bold text-amber-400 font-mono">{metrics.crossDistrictSuspectsCount}</p>
-          <span className="text-[10px] text-amber-500/80 font-medium">Cross-Jurisdiction</span>
+          <p className="text-2xl font-extrabold text-amber-300 font-mono">{metrics.crossDistrictSuspectsCount}</p>
+          <span className="text-[9px] text-amber-400/90 font-medium font-sans mt-0.5">Cross-Jurisdiction</span>
         </div>
 
-        <div className="bg-[#0b1329]/80 border border-slate-800 rounded-2xl p-4 shadow-lg">
+        <div className="bg-slate-900/85 border border-slate-700/60 rounded-lg p-3.5 shadow-md flex flex-col justify-between">
           <div className="flex items-center justify-between text-slate-400 mb-1">
-            <span className="text-[10px] font-mono uppercase">Crime Rings</span>
+            <span className="text-[9.5px] font-mono font-bold uppercase tracking-wider">Crime Rings</span>
             <RiTeamLine className="text-purple-400 text-base" />
           </div>
-          <p className="text-xl font-bold text-purple-400 font-mono">{metrics.syndicatesCount}</p>
-          <span className="text-[10px] text-slate-500">Active Syndicates</span>
+          <p className="text-2xl font-extrabold text-purple-300 font-mono">{metrics.syndicatesCount}</p>
+          <span className="text-[9px] text-slate-400 font-sans mt-0.5">Active Syndicates</span>
         </div>
 
-        <div className="bg-[#0b1329]/80 border border-slate-800 rounded-2xl p-4 shadow-lg">
+        <div className="bg-slate-900/85 border border-slate-700/60 rounded-lg p-3.5 shadow-md flex flex-col justify-between">
           <div className="flex items-center justify-between text-slate-400 mb-1">
-            <span className="text-[10px] font-mono uppercase">Co-Accused Links</span>
-            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+            <span className="text-[9.5px] font-mono font-bold uppercase tracking-wider">Co-Accused</span>
+            <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
           </div>
-          <p className="text-xl font-bold text-white font-mono">{metrics.coAccusedLinksCount}</p>
-          <span className="text-[10px] text-slate-500">Shared Offences</span>
+          <p className="text-2xl font-extrabold text-white font-mono">{metrics.coAccusedLinksCount}</p>
+          <span className="text-[9px] text-slate-400 font-sans mt-0.5">Shared Offences</span>
         </div>
 
-        <div className="bg-[#0b1329]/80 border border-slate-800 rounded-2xl p-4 shadow-lg">
+        <div className="bg-slate-900/85 border border-slate-700/60 rounded-lg p-3.5 shadow-md flex flex-col justify-between">
           <div className="flex items-center justify-between text-slate-400 mb-1">
-            <span className="text-[10px] font-mono uppercase">Police Stations</span>
+            <span className="text-[9.5px] font-mono font-bold uppercase tracking-wider">Stations</span>
             <RiBuilding2Line className="text-blue-400 text-base" />
           </div>
-          <p className="text-xl font-bold text-blue-400 font-mono">{metrics.stationsCount}</p>
-          <span className="text-[10px] text-slate-500">Precinct Nodes</span>
+          <p className="text-2xl font-extrabold text-blue-400 font-mono">{metrics.stationsCount}</p>
+          <span className="text-[9px] text-slate-400 font-sans mt-0.5">Precinct Nodes</span>
         </div>
       </div>
 
