@@ -1,14 +1,17 @@
 const ChartCard = ({ title, subtitle, badge, action, className = "", children }) => {
   return (
-    <div className={`rounded-md border border-blue-500/30 bg-slate-900/50 p-6 md:p-8 ${className}`}>
+    <div 
+      className={`rounded-md border border-slate-700/60 bg-slate-900/85 backdrop-blur-md shadow-xl ${className}`}
+      style={{ padding: "22px 24px" }}
+    >
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4 w-full">
         <div className="flex flex-col items-start">
-          <h2 className="text-[9px] font-bold uppercase tracking-[0.18em] text-slate-300 font-space">
+          <h2 className="text-[10px] font-bold uppercase tracking-[0.18em] text-white font-mono">
             {title}
           </h2>
 
           {subtitle && (
-            <p className="mt-1 text-[11px] text-slate-500 leading-relaxed font-space">
+            <p className="mt-1 text-[11px] text-slate-400 leading-relaxed font-sans">
               {subtitle}
             </p>
           )}
@@ -17,7 +20,7 @@ const ChartCard = ({ title, subtitle, badge, action, className = "", children })
         {action && <div className="flex-shrink-0">{action}</div>}
 
         {badge && (
-          <span className="rounded-[3px] bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 text-[10px] font-bold text-emerald-400 font-space">
+          <span className="rounded-sm bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-1 text-[10px] font-bold text-emerald-400 font-mono">
             {badge}
           </span>
         )}

@@ -37,14 +37,17 @@ const INSIGHTS = [
 ];
 
 const AIInsightsBanner = () => (
-  <div className="rounded-[4px] border border-slate-800/20 bg-slate-900/50 p-5 flex flex-col gap-4 animate-fade-in-up">
+  <div 
+    className="rounded-md border border-slate-700/60 bg-slate-900/85 backdrop-blur-md shadow-xl flex flex-col gap-4 animate-fade-in-up"
+    style={{ padding: "20px 22px" }}
+  >
 
     {/* Header */}
-    <div className="flex items-center justify-between">
-      <h2 className="text-[10px] font-bold text-white uppercase tracking-[0.18em] font-space">
+    <div className="flex items-center justify-between border-b border-slate-700/50 pb-3">
+      <h2 className="text-xs font-bold text-white uppercase tracking-wider font-mono">
         AI QuickML Tactical Briefing
       </h2>
-      <RiBrainLine className="text-purple-400/70 text-sm animate-pulse" />
+      <RiBrainLine className="text-purple-400 text-sm animate-pulse" />
     </div>
 
     {/* Insight rows */}
@@ -54,22 +57,23 @@ const AIInsightsBanner = () => (
         return (
           <div
             key={i}
-            className={`flex items-center justify-between gap-3 p-3 rounded-[3px] border ${item.bg} ${item.border} transition-all duration-200 hover:brightness-110`}
+            className={`flex items-center justify-between gap-3 rounded-md border ${item.bg} ${item.border} transition-all duration-200 hover:brightness-110`}
+            style={{ padding: "12px 14px" }}
           >
             <div className="flex items-center gap-3">
               <div className={`flex-shrink-0 ${item.color}`}>
                 <Icon className="text-[12px]" />
               </div>
               <div>
-                <p className="text-[11px] font-bold text-slate-200 leading-snug font-space">
+                <p className="text-[11px] font-bold text-slate-200 leading-snug font-sans">
                   {item.headline}
                 </p>
-                <p className="text-[9px] text-slate-500 mt-0.5 leading-tight">
+                <p className="text-[9.5px] text-slate-400 mt-0.5 leading-tight font-sans">
                   {item.detail}
                 </p>
               </div>
             </div>
-            <span className={`text-[10px] font-bold font-mono px-2 py-0.5 rounded border ${item.statBg} whitespace-nowrap`}>
+            <span className={`text-[10px] font-bold font-mono px-2 py-0.5 rounded-sm border ${item.statBg} whitespace-nowrap`}>
               {item.stat}
             </span>
           </div>
@@ -80,7 +84,7 @@ const AIInsightsBanner = () => (
     {/* Footer link */}
     <Link
       to="/insights-forecast"
-      className="flex items-center justify-center gap-1.5 w-full text-[9px] font-bold text-slate-500 hover:text-blue-400 transition-colors border-t border-slate-800/15 pt-3 uppercase tracking-[0.14em] font-space"
+      className="flex items-center justify-center gap-1.5 w-full text-[10px] font-bold text-slate-400 hover:text-blue-400 transition-colors border-t border-slate-700/50 pt-3 uppercase tracking-wider font-mono"
     >
       View All AI Insights <FaArrowRight className="text-[9px]" />
     </Link>

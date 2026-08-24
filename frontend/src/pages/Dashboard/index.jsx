@@ -99,74 +99,72 @@ const Dashboard = () => {
   const { kpi_metrics, crime_trends, crime_distribution, ai_alerts, recent_critical_cases } = dashboardData;
 
   return (
-    <div className="flex flex-col gap-8 font-sans px-1 sm:px-2">
+    <div className="flex flex-col gap-8 font-sans">
 
       {/* ── 1. Executive Intelligence Header ── */}
-      <div className="pb-8 border-b border-slate-800/60 flex flex-col gap-6 animate-fade-in-up">
-
-        {/* Title + Controls row */}
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-          <div className="pl-2 sm:pl-4 lg:pl-6">
-            <h1 className="text-2xl sm:text-3xl font-bold text-white leading-snug font-sans tracking-tight">
-              Executive Intelligence Dashboard
-            </h1>
-            <p className="text-xs text-slate-400 mt-2 font-sans">
-              Karnataka State Police &bull; CCTNS Analytical Briefing
-            </p>
-          </div>
-
-          {/* Top-Right Operational Status System */}
-          <div className="flex flex-wrap items-center gap-4 sm:gap-6 self-start lg:self-auto bg-slate-950/90 border border-slate-800/80 rounded-none px-6 py-3.5 shadow-md backdrop-blur-md font-mono text-[10px]">
-            {/* TELEMETRY */}
-            <div className="flex flex-col gap-1 pr-4 border-r border-slate-800/80">
-              <span className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">TELEMETRY</span>
-              <span className="flex items-center gap-1.5 text-emerald-400 font-bold tracking-wider">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                SECURE
-              </span>
-            </div>
-
-            {/* CCTNS */}
-            <div className="flex flex-col gap-1 pr-4 border-r border-slate-800/80">
-              <span className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">CCTNS</span>
-              <span className="text-slate-300 font-bold tracking-wider">CONNECTED</span>
-            </div>
-
-            {/* AI CORE */}
-            <div className="flex flex-col gap-1 pr-4 border-r border-slate-800/80">
-              <span className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">AI CORE</span>
-              <span className="text-blue-400 font-bold tracking-wider">QUICKML ONLINE</span>
-            </div>
-
-            {/* JURISDICTION */}
-            <div className="flex flex-col gap-1 pr-4 border-r border-slate-800/80">
-              <span className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">JURISDICTION</span>
-              <select
-                value={selectedDistrict}
-                onChange={(e) => setSelectedDistrict(e.target.value)}
-                className="bg-transparent text-cyan-400 hover:text-cyan-300 transition-colors duration-150 ease-in-out font-bold font-mono outline-none cursor-pointer text-[10px] tracking-wider uppercase"
-              >
-                <option value="ALL" className="bg-slate-950 text-slate-200">STATEWIDE</option>
-                {DISTRICTS.slice(1).map((d) => (
-                  <option key={d} value={d} className="bg-slate-950 text-slate-200">{d.toUpperCase()}</option>
-                ))}
-              </select>
-            </div>
-
-
-            {/* SYNC CORE Button */}
-            <button
-              onClick={() => loadData(selectedDistrict)}
-              className="flex items-center gap-2 text-cyan-400 hover:text-white transition-all duration-200 ease-in-out cursor-pointer group font-mono text-[10px] active:scale-95 py-1"
-              title="Refresh Dashboard Data"
-            >
-              <FaSyncAlt className="text-[10px] text-cyan-400 group-hover:rotate-180 transition-transform duration-300 ease-in-out" />
-              <span className="font-bold tracking-widest uppercase">SYNC</span>
-            </button>
-          </div>
+      <div 
+        className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 bg-slate-900/85 border border-slate-700/60 rounded-md backdrop-blur-md shadow-xl animate-fade-in-up"
+        style={{ padding: "22px 24px" }}
+      >
+        {/* Title row */}
+        <div>
+          <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight flex items-center gap-2.5">
+            <FaShieldAlt className="text-blue-400 text-2xl" />
+            <span>Executive Intelligence Dashboard</span>
+          </h1>
+          <p className="text-xs text-slate-300 mt-1 font-sans">
+            Karnataka State Police &bull; CCTNS Analytical Command Briefing
+          </p>
         </div>
 
+        {/* Top-Right Operational Status System */}
+        <div className="flex flex-wrap items-center gap-3 sm:gap-5 self-start lg:self-auto bg-slate-950/80 border border-slate-700/70 rounded-md px-4 py-2.5 shadow-md backdrop-blur-md font-mono text-[10px]">
+          {/* TELEMETRY */}
+          <div className="flex flex-col gap-0.5 pr-3 border-r border-slate-700/60">
+            <span className="text-[9px] text-slate-400 uppercase tracking-widest font-semibold">TELEMETRY</span>
+            <span className="flex items-center gap-1.5 text-emerald-400 font-bold tracking-wider">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              SECURE
+            </span>
+          </div>
 
+          {/* CCTNS */}
+          <div className="flex flex-col gap-0.5 pr-3 border-r border-slate-700/60">
+            <span className="text-[9px] text-slate-400 uppercase tracking-widest font-semibold">CCTNS</span>
+            <span className="text-slate-200 font-bold tracking-wider">CONNECTED</span>
+          </div>
+
+          {/* AI CORE */}
+          <div className="flex flex-col gap-0.5 pr-3 border-r border-slate-700/60">
+            <span className="text-[9px] text-slate-400 uppercase tracking-widest font-semibold">AI CORE</span>
+            <span className="text-blue-400 font-bold tracking-wider">QUICKML ONLINE</span>
+          </div>
+
+          {/* JURISDICTION */}
+          <div className="flex flex-col gap-0.5 pr-3 border-r border-slate-700/60">
+            <span className="text-[9px] text-slate-400 uppercase tracking-widest font-semibold">JURISDICTION</span>
+            <select
+              value={selectedDistrict}
+              onChange={(e) => setSelectedDistrict(e.target.value)}
+              className="bg-transparent text-cyan-400 hover:text-cyan-300 transition-colors duration-150 ease-in-out font-bold font-mono outline-none cursor-pointer text-[10px] tracking-wider uppercase"
+            >
+              <option value="ALL" className="bg-slate-950 text-slate-200">STATEWIDE</option>
+              {DISTRICTS.slice(1).map((d) => (
+                <option key={d} value={d} className="bg-slate-950 text-slate-200">{d.toUpperCase()}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* SYNC CORE Button */}
+          <button
+            onClick={() => loadData(selectedDistrict)}
+            className="flex items-center gap-1.5 text-cyan-400 hover:text-white transition-all duration-200 ease-in-out cursor-pointer group font-mono text-[10px] active:scale-95 py-1 px-1.5 rounded hover:bg-slate-800"
+            title="Refresh Dashboard Data"
+          >
+            <FaSyncAlt className="text-[10px] text-cyan-400 group-hover:rotate-180 transition-transform duration-300 ease-in-out" />
+            <span className="font-bold tracking-widest uppercase">SYNC</span>
+          </button>
+        </div>
       </div>
 
       {/* ── 2. Main Grid: Left content + Right visual sidebar ── */}

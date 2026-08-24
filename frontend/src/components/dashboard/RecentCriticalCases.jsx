@@ -33,15 +33,18 @@ const RecentCriticalCases = ({ cases }) => {
   };
 
   return (
-    <div className="rounded-md border border-slate-800/20 bg-slate-900/50 p-6 md:p-8 shadow-sm w-full">
-      <div className="flex items-center justify-between border-b border-slate-800/20 pb-6 mb-6">
+    <div 
+      className="rounded-md border border-slate-700/60 bg-slate-900/85 backdrop-blur-md shadow-xl w-full"
+      style={{ padding: "22px 24px" }}
+    >
+      <div className="flex items-center justify-between border-b border-slate-700/50 pb-4 mb-5">
         <div className="flex items-center gap-2.5">
-          <FaClipboardList className="text-blue-400/80 text-base" />
-          <h2 className="text-[10px] font-bold text-white uppercase tracking-[0.18em] font-space">
+          <FaClipboardList className="text-blue-400 text-base" />
+          <h2 className="text-xs font-bold text-white uppercase tracking-wider font-mono">
             Critical CCTNS Case Feed
           </h2>
         </div>
-        <span className="rounded-[3px] bg-slate-900/60 border border-slate-800/20 px-2.5 py-1 text-[9px] text-slate-500 uppercase tracking-wider font-space">
+        <span className="rounded-sm bg-slate-950/80 border border-slate-700/70 px-2.5 py-1 text-[10px] text-slate-300 font-mono">
           Source: CaseMaster
         </span>
       </div>

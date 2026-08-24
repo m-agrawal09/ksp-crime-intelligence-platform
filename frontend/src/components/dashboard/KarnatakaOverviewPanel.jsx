@@ -426,15 +426,18 @@ const KarnatakaOverviewPanel = () => {
   }, [incidents, zoomLevel, boundariesLoaded]);
 
   return (
-    <div className="rounded-md border border-blue-500/30 bg-slate-900/35 overflow-hidden animate-fade-in-up flex flex-col font-sans shadow-sm" style={{ boxShadow: "0 8px 24px rgba(0,0,0,0.3)" }}>
+    <div className="rounded-md border border-slate-700/60 bg-slate-900/85 backdrop-blur-md shadow-xl overflow-hidden flex flex-col font-sans">
 
       {/* ── Header ── */}
-      <div className="px-6 py-4 flex items-center justify-between border-b border-slate-800/60">
+      <div 
+        className="flex items-center justify-between border-b border-slate-700/50"
+        style={{ padding: "18px 22px" }}
+      >
         <div>
-          <h2 className="text-sm font-semibold text-white tracking-tight font-sans">
+          <h2 className="text-sm font-bold text-white tracking-tight font-sans">
             Karnataka Live Crime Map
           </h2>
-          <p className="text-[11px] text-slate-400 mt-1 font-sans">
+          <p className="text-[11px] text-slate-400 mt-0.5 font-sans">
             {zoomLevel < 8.2 ? "District Overview" : "Street-Level Incidents"} · Live Feed
           </p>
         </div>
@@ -470,17 +473,13 @@ const KarnatakaOverviewPanel = () => {
             LIVE · {incidents.length} FIRs
           </span>
         </div>
-
-        {/* ── Zoom level badge (bottom-left) ── */}
-        <div className="absolute bottom-4 left-3 z-[1000] bg-slate-950/70 backdrop-blur-sm border border-slate-800/40 rounded-sm px-2.5 py-1 pointer-events-none font-mono">
-          <span className="text-[8px] text-slate-400 uppercase tracking-wider">
-            {zoomLevel < 8.2 ? "District Overview" : "Street Level"}
-          </span>
-        </div>
       </div>
 
       {/* ── Stats Bar ── */}
-      <div className="px-6 py-3 border-t border-slate-800/60 bg-slate-900/40 grid grid-cols-3 divide-x divide-slate-800/40 font-mono text-xs">
+      <div 
+        className="border-t border-slate-700/50 bg-slate-950/60 grid grid-cols-3 divide-x divide-slate-700/50 font-mono text-xs"
+        style={{ padding: "14px 22px" }}
+      >
         <div className="pr-4">
           <span className="text-[9px] text-slate-400 uppercase tracking-wider block font-mono">ACTIVE</span>
           <span className="text-amber-400 font-bold text-sm leading-tight tabular-nums font-mono">{activeCount}</span>
@@ -496,8 +495,11 @@ const KarnatakaOverviewPanel = () => {
       </div>
 
       {/* ── Footer CTA ── */}
-      <div className="px-6 py-3 border-t border-slate-800/40 flex items-center justify-between font-mono bg-slate-950/60">
-        <span className="text-[9px] text-slate-500 uppercase tracking-wider font-semibold">COMMAND GIS OVERVIEW</span>
+      <div 
+        className="border-t border-slate-700/50 flex items-center justify-between font-mono bg-slate-950/90"
+        style={{ padding: "14px 22px" }}
+      >
+        <span className="text-[9px] text-slate-400 uppercase tracking-wider font-semibold">COMMAND GIS OVERVIEW</span>
         <Link
           to="/map"
           className="flex items-center gap-2 text-xs font-bold text-cyan-400 hover:text-cyan-300 transition-all duration-200 ease-in-out uppercase tracking-wider group"

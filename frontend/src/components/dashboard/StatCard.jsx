@@ -79,13 +79,14 @@ const StatCard = ({
 
   return (
     <div
-      className="relative overflow-hidden rounded-md border border-blue-500/30 bg-slate-900/60 transition-all duration-200 ease-in-out hover:border-blue-500/60 hover:bg-slate-900/80 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/40 shadow-sm animate-fade-in-up flex flex-col font-sans"
+      className="relative overflow-hidden rounded-md border border-slate-700/60 bg-slate-900/85 backdrop-blur-md shadow-xl transition-all duration-200 ease-in-out hover:border-slate-600 hover:bg-slate-800/80 hover:-translate-y-0.5 flex flex-col font-sans"
+      style={{ padding: "20px 22px" }}
       onMouseEnter={() => setShowMetadata(true)}
       onMouseLeave={() => setShowMetadata(false)}
     >
 
       {/* Card body */}
-      <div className="px-6 py-6 flex flex-col items-center justify-center gap-2.5 text-center font-sans">
+      <div className="flex flex-col items-center justify-center gap-2.5 text-center font-sans">
 
         {/* ── Row 1: Label + Icon ── */}
         <div className="flex items-center justify-center gap-2 w-full text-center">
@@ -120,7 +121,7 @@ const StatCard = ({
       </div>
 
       <div
-        className={`absolute inset-0 flex flex-col justify-between bg-slate-950/97 px-6 py-6 text-center transition-all duration-200 ease-in-out ${showMetadata
+        className={`absolute inset-0 flex flex-col justify-between bg-slate-950/97 p-6 text-center transition-all duration-200 ease-in-out ${showMetadata
           ? "opacity-100 translate-y-0"
           : "opacity-0 translate-y-3 pointer-events-none"
           }`}

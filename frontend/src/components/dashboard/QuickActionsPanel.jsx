@@ -164,14 +164,17 @@ const QuickActionsPanel = () => {
   return (
     <div className="w-full font-sans">
       {/* ── Interactive Operational Actions ── */}
-      <div className="rounded-md border border-slate-800/60 bg-slate-900/40 p-6 shadow-sm">
-        <div className="flex items-center justify-between pb-4 mb-6 border-b border-slate-800/60">
+      <div 
+        className="rounded-md border border-slate-700/60 bg-slate-900/85 backdrop-blur-md shadow-xl"
+        style={{ padding: "22px 24px" }}
+      >
+        <div className="flex items-center justify-between pb-4 mb-5 border-b border-slate-700/50">
           <div>
             <h2 className="text-xs font-bold text-white uppercase tracking-wider font-mono">
               Quick Actions
             </h2>
           </div>
-          <span className="text-[10px] font-mono text-emerald-400 bg-slate-950 border border-emerald-500/20 px-2.5 py-1 rounded font-bold">
+          <span className="text-[10px] font-mono text-emerald-400 bg-slate-950/80 border border-emerald-500/30 px-2.5 py-1 rounded-sm font-bold">
             Interactive Shortcuts
           </span>
         </div>
@@ -183,9 +186,12 @@ const QuickActionsPanel = () => {
             const isCurrent = runningAction === act.id;
 
             const tileInner = (
-              <div className="flex items-center justify-between p-4 rounded-md border border-slate-800/60 bg-slate-950/60 hover:bg-slate-800/50 hover:border-slate-700/80 transition-all duration-200 ease-in-out group cursor-pointer shadow-sm">
+              <div 
+                className="flex items-center justify-between rounded-md border border-slate-700/60 bg-slate-950/80 hover:bg-slate-800/80 hover:border-slate-600 transition-all duration-200 ease-in-out group cursor-pointer shadow-sm"
+                style={{ padding: "16px 18px" }}
+              >
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className={`p-2.5 rounded border flex items-center justify-center flex-shrink-0 ${act.iconColor}`}>
+                  <div className={`p-2.5 rounded-md border flex items-center justify-center flex-shrink-0 ${act.iconColor}`}>
                     {isCurrent ? (
                       <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-slate-700 border-t-cyan-400" />
                     ) : (
