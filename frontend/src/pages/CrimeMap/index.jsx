@@ -138,7 +138,7 @@ const CrimeMap = () => {
         </div>
 
         {/* Right Side: Stacked Intelligence Cards (~30% width) */}
-        <div className="lg:col-span-3 overflow-y-auto pr-0.5 space-y-4 scrollbar-thin" style={{ height: 680 }}>
+        <div className="lg:col-span-3 overflow-y-auto pr-2 flex flex-col gap-4 scrollbar-thin" style={{ height: 680 }}>
           <IntelligencePanel
             selectionName={selectedDistrict || "ALL DISTRICTS"}
             metrics={districtMetrics}

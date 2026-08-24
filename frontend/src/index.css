@@ -52,6 +52,23 @@
 }
 
 /* ====================================================
+   Custom Overrides for Dark-themed Leaflet Tooltips
+   ==================================================== */
+.dark-tooltip.leaflet-tooltip {
+  background: rgba(2, 6, 23, 0.96) !important;
+  border: 1px solid rgba(51, 65, 85, 0.8) !important;
+  border-radius: 8px !important;
+  padding: 0 !important;
+  color: #f8fafc !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6) !important;
+}
+
+.dark-tooltip.leaflet-tooltip::before {
+  border-top-color: rgba(51, 65, 85, 0.8) !important;
+  border-bottom-color: rgba(51, 65, 85, 0.8) !important;
+}
+
+/* ====================================================
    Print & Save-to-PDF Styles
    ==================================================== */
 @media print {

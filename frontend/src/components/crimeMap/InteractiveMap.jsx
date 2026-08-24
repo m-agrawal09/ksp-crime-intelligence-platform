@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { MapContainer, TileLayer, Marker, Popup, GeoJSON, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Tooltip, GeoJSON, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { FaCalendarAlt, FaUser, FaBuilding } from "react-icons/fa";
@@ -457,18 +457,93 @@ const InteractiveMap = ({ incidents, selectedItem, onSelectDistrict, onSelectMar
         {showMarkers && (
           showClusters ? (
             // Render District Cluster Markers
-            districtClusters.map((cluster) => (
-              <Marker
-                key={cluster.name}
-                position={[cluster.latLng.lat, cluster.latLng.lng]}
-                icon={createClusterIcon(cluster.name, cluster.count)}
-                eventHandlers={{
-                  click: () => {
-                    onSelectDistrict(cluster.name);
-                  }
-                }}
-              />
-            ))
+            districtClusters.map((cluster) => {
+              const districtIncs = cluster.incidents || incidents.filter(i => (i.district || "Bengaluru City") === cluster.name);
+              const categories = {};
+              districtIncs.forEach(inc => {
+                const cat = inc.type || "General";
+                categories[cat] = (categories[cat] || 0) + 1;
+              });
+              const topCategory = Object.entries(categories).sort((a,b) => b[1] - a[1])[0]?.[0] || "Property Offences";
+              const isCritical = cluster.count > 15;
+              const isHigh = cluster.count > 6;
+              const riskLabel = isCritical ? "CRITICAL" : isHigh ? "HIGH" : "MEDIUM";
+              const riskColor = isCritical ? "#ef4444" : isHigh ? "#f59e0b" : "#3b82f6";
+              const criticalInDistrict = districtIncs.filter(i => i.severity === "CRITICAL").length;
+
+              return (
+                <Marker
+                  key={cluster.name}
+                  position={[cluster.latLng.lat, cluster.latLng.lng]}
+                  icon={createClusterIcon(cluster.name, cluster.count)}
+                  eventHandlers={{
+                    click: () => {
+                      onSelectDistrict(cluster.name);
+                    }
+                  }}
+                >
+                  <Tooltip direction="top" offset={[0, -22]} opacity={1} className="dark-tooltip">
+                    <div style={{
+                      fontFamily: "'IBM Plex Mono', monospace",
+                      fontSize: 10,
+                      padding: "8px 10px",
+                      minWidth: 160,
+                      color: "#f8fafc"
+                    }}>
+                      <div style={{
+                        fontWeight: "bold",
+                        color: "#38bdf8",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.06em",
+                        borderBottom: "1px solid rgba(51,65,85,0.6)",
+                        paddingBottom: 4,
+                        marginBottom: 6,
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center"
+                      }}>
+                        <span>{cluster.name}</span>
+                        <span style={{
+                          fontSize: 8,
+                          padding: "1px 5px",
+                          borderRadius: 3,
+                          background: `${riskColor}22`,
+                          color: riskColor,
+                          border: `1px solid ${riskColor}55`,
+                          fontWeight: 700
+                        }}>
+                          {riskLabel}
+                        </span>
+                      </div>
+                      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
+                        <span style={{ color: "#94a3b8" }}>Total Cases:</span>
+                        <span style={{ fontWeight: "bold", color: "#ffffff" }}>{cluster.count} FIRs</span>
+                      </div>
+                      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
+                        <span style={{ color: "#94a3b8" }}>Top Crime:</span>
+                        <span style={{ fontWeight: "bold", color: "#fcd34d" }}>{topCategory}</span>
+                      </div>
+                      {criticalInDistrict > 0 && (
+                        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
+                          <span style={{ color: "#94a3b8" }}>Critical:</span>
+                          <span style={{ fontWeight: "bold", color: "#ef4444" }}>{criticalInDistrict} Cases</span>
+                        </div>
+                      )}
+                      <div style={{
+                        marginTop: 6,
+                        paddingTop: 4,
+                        borderTop: "1px dashed rgba(51,65,85,0.5)",
+                        fontSize: 8,
+                        color: "#64748b",
+                        textAlign: "center"
+                      }}>
+                        Click to filter district
+                      </div>
+                    </div>
+                  </Tooltip>
+                </Marker>
+              );
+            })
           ) : (
             // Render Individual Incident Pin Markers
             incidents.map((inc) => {
@@ -484,6 +559,17 @@ const InteractiveMap = ({ incidents, selectedItem, onSelectDistrict, onSelectMar
                     }
                   }}
                 >
+                  <Tooltip direction="top" offset={[0, -10]} opacity={1} className="dark-tooltip">
+                    <div style={{
+                      fontFamily: "'IBM Plex Mono', monospace",
+                      fontSize: 9,
+                      padding: "4px 8px",
+                      color: "#f8fafc",
+                      whiteSpace: "nowrap"
+                    }}>
+                      <span style={{ fontWeight: 700, color: "#93c5fd" }}>{inc.caseNo}</span> · <span style={{ color: sevStyle.text, fontWeight: 600 }}>{inc.severity}</span> · {inc.type || "Incident"}
+                    </div>
+                  </Tooltip>
                   <Popup className="dark-popup font-mono text-xs">
                     <div style={{ padding: "4px 2px", minWidth: 230, maxWidth: 260, fontFamily: "'IBM Plex Mono', monospace" }}>
                       {/* Header */}
@@ -563,17 +649,6 @@ const InteractiveMap = ({ incidents, selectedItem, onSelectDistrict, onSelectMar
             </div>
           ))}
         </div>
-      </div>
-
-      {/* ── Viewport Scale Badge (Bottom Left) ── */}
-      <div className="map-float-panel bottom-8 left-3" style={{
-        background: "rgba(6,13,26,0.82)",
-        border: "1px solid rgba(51,65,85,0.2)",
-        borderRadius: 6, padding: "4px 10px",
-        fontFamily: "'IBM Plex Mono', monospace",
-        fontSize: 9, letterSpacing: "0.08em", color: "#475569"
-      }}>
-        VIEW: <span style={{ color: "#60a5fa", fontWeight: 700 }}>{showClusters ? "DISTRICT CLUSTERS" : "STREET INCIDENTS"}</span>
       </div>
 
     </div>
