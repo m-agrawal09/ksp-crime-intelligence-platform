@@ -153,11 +153,6 @@ const Dashboard = () => {
               </select>
             </div>
 
-            {/* LAST SYNC */}
-            <div className="flex flex-col gap-1 pr-4 border-r border-slate-800/80">
-              <span className="text-[9px] text-slate-500 uppercase tracking-widest font-semibold">LAST SYNC</span>
-              <span className="text-slate-300 font-bold tracking-wider">14:26 IST</span>
-            </div>
 
             {/* SYNC CORE Button */}
             <button

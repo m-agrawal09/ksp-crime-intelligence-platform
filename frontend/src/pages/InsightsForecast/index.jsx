@@ -3,8 +3,6 @@ import ConversationSidebar from "../../components/assistant/ConversationSidebar"
 import SuggestedPrompts from "../../components/assistant/SuggestedPrompts";
 import ChatWindow from "../../components/assistant/ChatWindow";
 import ChatInput from "../../components/assistant/ChatInput";
-import TrendChart from "../../components/dashboard/TrendChart";
-import CrimeCategoryChart from "../../components/dashboard/CrimeCategoryChart";
 import AIAlertsList from "../../components/dashboard/AIAlertsList";
 import StatCard from "../../components/dashboard/StatCard";
 import PredictiveForecastingCard from "../../components/dashboard/PredictiveForecastingCard";
@@ -380,21 +378,7 @@ const InsightsForecast = () => {
                 <PredictiveForecastingCard lang={pageLang} />
               </div>
 
-              {/* Charts Section */}
-              <div>
-                <p className="text-[10px] font-mono font-bold text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
-                  <TbChartLine className="text-purple-400 text-sm" />
-                  {isKn ? "ಚಾರಿತ್ರಿಕ ಪ್ರವೃತ್ತಿ ಪಟ್ಟಿಕೆಗಳು · ಬೆಂಬಲಿತ ಮುನ್ಸೂಚನೆ ಡೇಟಾ" : "Historical Trend Charts · Supporting Forecast Data"}
-                </p>
-                <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-                  <div className="lg:col-span-2">
-                    <TrendChart data={dashboardData?.crime_trends || []} />
-                  </div>
-                  <div className="lg:col-span-1">
-                    <CrimeCategoryChart data={dashboardData?.crime_distribution || []} />
-                  </div>
-                </div>
-              </div>
+
             </div>
           )}
         </div>
