@@ -119,8 +119,8 @@ const MessageBubble = ({ message }) => {
       window.speechSynthesis.cancel();
       setIsSpeaking(false);
     } else {
-      window.speechSynthesis.cancel(); // Stop any ongoing speech
-      const textToSpeak = activeText.replace(/[*#|:-]/g, " "); // Strip markdown characters for clean speech
+      window.speechSynthesis.cancel();
+      const textToSpeak = activeText.replace(/[*#|:-]/g, " ");
       const utterance = new SpeechSynthesisUtterance(textToSpeak);
       
       if (lang === "kn") {
@@ -136,14 +136,12 @@ const MessageBubble = ({ message }) => {
     }
   };
 
-  // Clean up synthesis on unmount
   useEffect(() => {
     return () => {
       window.speechSynthesis.cancel();
     };
   }, []);
 
-  // Light-weight custom parser to format mock markdown responses into clean React nodes
   const parseMarkdown = (text) => {
     const lines = text.split("\n");
     const elements = [];
@@ -157,20 +155,20 @@ const MessageBubble = ({ message }) => {
       const bodyRows = rows.slice(2).map(r => r.split("|").map(c => c.trim()).filter(c => c));
 
       return (
-        <div key={key} className="my-3.5 overflow-x-auto border border-slate-800/80 rounded-xl bg-slate-950/40 shadow-inner">
-          <table className="w-full text-left border-collapse font-mono text-[10px]">
+        <div key={key} className="my-4 overflow-x-auto border border-slate-700/60 rounded-xl bg-slate-950/70 shadow-inner">
+          <table className="w-full text-left border-collapse font-mono text-[11px]">
             <thead>
-              <tr className="border-b border-slate-800 bg-slate-900/60 text-slate-400 font-bold uppercase tracking-wider">
-                {headerCells.map((h, idx) => (
-                  <th key={idx} className="py-2.5 px-4">{h}</th>
+              <tr className="border-b border-slate-700/60 bg-slate-900/80 text-slate-300 font-bold uppercase tracking-wider">
+                {headerCells.map((cell, idx) => (
+                  <th key={idx} className="py-3 px-5">{cell}</th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-900/40 text-slate-300">
-              {bodyRows.map((row, idx) => (
-                <tr key={idx} className="hover:bg-slate-900/20 transition-colors">
-                  {row.map((cell, cidx) => (
-                    <td key={cidx} className="py-2.5 px-4">{cell}</td>
+            <tbody className="divide-y divide-slate-800/60 text-slate-300">
+              {bodyRows.map((row, rIdx) => (
+                <tr key={rIdx} className="hover:bg-slate-900/40 transition-colors">
+                  {row.map((cell, cIdx) => (
+                    <td key={cIdx} className="py-2.5 px-5">{cell}</td>
                   ))}
                 </tr>
               ))}
@@ -181,20 +179,23 @@ const MessageBubble = ({ message }) => {
     };
 
     const parseBold = (str) => {
-      const parts = str.split("**");
-      return parts.map((part, i) => i % 2 === 1 ? <strong key={i} className="text-white font-bold">{part}</strong> : part);
+      const parts = str.split(/(\*\*.*?\*\*)/g);
+      return parts.map((part, i) => {
+        if (part.startsWith("**") && part.endsWith("**")) {
+          return <strong key={i} className="text-white font-bold">{part.slice(2, -2)}</strong>;
+        }
+        return part;
+      });
     };
 
     for (let i = 0; i < lines.length; i++) {
-      const line = lines[i].trim();
+      const line = lines[i];
 
-      if (line.startsWith("|")) {
+      if (line.includes("|") && line.trim().startsWith("|")) {
         inTable = true;
         tableRows.push(line);
         continue;
-      }
-
-      if (inTable && !line.startsWith("|")) {
+      } else if (inTable) {
         elements.push(renderTable(tableRows, `table-${i}`));
         tableRows = [];
         inTable = false;
@@ -202,33 +203,33 @@ const MessageBubble = ({ message }) => {
 
       if (line.startsWith("###")) {
         elements.push(
-          <h3 key={i} className="text-[11px] font-bold text-blue-400 tracking-wider font-mono uppercase mt-4 mb-2 border-b border-slate-800 pb-1">
+          <h3 key={i} className="text-xs font-bold text-blue-400 tracking-wider font-mono uppercase mt-4 mb-2.5 border-b border-slate-800 pb-1.5 pl-1.5">
             {parseBold(line.replace("###", "").trim())}
           </h3>
         );
       } else if (line.startsWith("####")) {
         elements.push(
-          <h4 key={i} className="text-[10px] font-bold text-slate-200 font-mono uppercase mt-3 mb-1.5">
+          <h4 key={i} className="text-[11px] font-bold text-slate-200 font-mono uppercase mt-3.5 mb-2 pl-1.5">
             {parseBold(line.replace("####", "").trim())}
           </h4>
         );
       } else if (line.startsWith("*") || line.startsWith("-")) {
         elements.push(
-          <div key={i} className="flex items-start gap-2 pl-2 text-[11px] leading-relaxed text-slate-350 my-1 font-sans">
+          <div key={i} className="flex items-start gap-3 pl-3 sm:pl-4 pr-2 text-xs leading-relaxed text-slate-300 my-1.5 font-sans">
             <span className="h-1.5 w-1.5 rounded-full bg-blue-500 mt-1.5 flex-shrink-0" />
             <span>{parseBold(line.substring(1).trim())}</span>
           </div>
         );
       } else if (line.startsWith("1.") || line.startsWith("2.") || line.startsWith("3.") || line.startsWith("4.")) {
         elements.push(
-          <div key={i} className="flex items-start gap-2 pl-2 text-[11px] leading-relaxed text-slate-355 my-1 font-sans">
+          <div key={i} className="flex items-start gap-3 pl-3 sm:pl-4 pr-2 text-xs leading-relaxed text-slate-300 my-1.5 font-sans">
             <span className="font-mono text-blue-400 font-bold flex-shrink-0">{line.slice(0, 2)}</span>
             <span>{parseBold(line.substring(2).trim())}</span>
           </div>
         );
       } else if (line) {
         elements.push(
-          <p key={i} className="text-[11px] leading-relaxed text-slate-400 my-2 font-sans">
+          <p key={i} className="text-xs leading-relaxed text-slate-300 my-2.5 pl-1.5 font-sans">
             {parseBold(line)}
           </p>
         );
@@ -243,40 +244,43 @@ const MessageBubble = ({ message }) => {
   };
 
   return (
-    <div className={`flex gap-3 w-full max-w-3xl ${isOfficer ? "ml-auto flex-row-reverse" : "mr-auto"}`}>
+    <div className={`flex gap-3.5 w-full max-w-3xl ${isOfficer ? "ml-auto flex-row-reverse" : "mr-auto"}`}>
       
       {/* Icon Avatar */}
       <div className={`h-8 w-8 rounded-lg flex items-center justify-center border flex-shrink-0 shadow-sm ${
         isOfficer 
-          ? "bg-slate-900 border-slate-800 text-slate-300"
+          ? "bg-slate-900 border-slate-700/80 text-slate-300"
           : "bg-blue-600/10 border-blue-500/30 text-blue-400"
       }`}>
         {isOfficer ? <FaUser className="text-xs" /> : <FaBrain className="text-xs animate-pulse" />}
       </div>
 
       {/* Bubble text */}
-      <div className={`flex-1 border p-4 shadow-md ${
-        isOfficer 
-          ? "bg-slate-900/60 border-slate-800/80 text-slate-200"
-          : "bg-slate-950/40 border-slate-850 text-slate-300"
-      }`} style={{ borderRadius: 0 }}>
-        <div className="flex items-center justify-between border-b border-slate-900/40 pb-1 mb-1.5 text-[9px] font-mono text-slate-500 tracking-wider">
-          <span>{isOfficer ? "INVESTIGATING OFFICER" : "AI PLATFORM CONSOLE"}</span>
+      <div 
+        className={`flex-1 border shadow-md font-sans rounded-xl ${
+          isOfficer 
+            ? "bg-slate-900/85 border-slate-700/70 text-slate-200" 
+            : "bg-slate-950/80 border-slate-700/70 text-slate-200"
+        }`} 
+        style={{ padding: "18px 22px" }}
+      >
+        <div className="flex items-center justify-between border-b border-slate-700/50 pb-2.5 mb-3 px-1 text-[10px] font-mono text-slate-400 tracking-wider">
+          <span className="font-bold">{isOfficer ? "INVESTIGATING OFFICER" : "AI PLATFORM CONSOLE"}</span>
           <div className="flex items-center gap-2">
             {!isOfficer && (
-              <div className="flex items-center gap-1 bg-slate-900/90 border border-slate-800 rounded-lg p-1 shadow-sm">
+              <div className="flex items-center gap-1 bg-slate-900/90 border border-slate-700/80 rounded-lg p-1 shadow-sm font-mono">
                 <button
                   onClick={() => { setLang("en"); window.speechSynthesis.cancel(); setIsSpeaking(false); }}
-                  className={`px-2.5 py-1 text-xs font-bold font-mono rounded-md transition-all cursor-pointer ${
-                    lang === "en" ? "bg-blue-600 text-white shadow-md shadow-blue-600/40" : "text-slate-400 hover:text-white"
+                  className={`px-2.5 py-0.5 text-[10px] font-bold rounded-md transition-all cursor-pointer ${
+                    lang === "en" ? "bg-blue-600 text-white shadow-sm" : "text-slate-400 hover:text-white"
                   }`}
                 >
                   EN
                 </button>
                 <button
                   onClick={() => { setLang("kn"); window.speechSynthesis.cancel(); setIsSpeaking(false); }}
-                  className={`px-2.5 py-1 text-xs font-bold font-mono rounded-md transition-all cursor-pointer ${
-                    lang === "kn" ? "bg-blue-600 text-white shadow-md shadow-blue-600/40" : "text-slate-400 hover:text-white"
+                  className={`px-2.5 py-0.5 text-[10px] font-bold rounded-md transition-all cursor-pointer ${
+                    lang === "kn" ? "bg-blue-600 text-white shadow-sm" : "text-slate-400 hover:text-white"
                   }`}
                 >
                   ಕನ್ನಡ
@@ -286,18 +290,18 @@ const MessageBubble = ({ message }) => {
             {!isOfficer && (
               <button 
                 onClick={handleSpeak}
-                className="flex items-center justify-center p-2 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-blue-400 hover:border-blue-500/50 transition-all cursor-pointer shadow-sm active:scale-95 ml-1"
+                className="flex items-center justify-center p-1.5 rounded-lg bg-slate-900 border border-slate-700/80 text-slate-300 hover:text-blue-400 hover:border-blue-500/50 transition-all cursor-pointer shadow-sm active:scale-95 ml-1"
                 title={isSpeaking ? "Stop Speaking" : "Read Aloud"}
               >
-                {isSpeaking ? <FaVolumeMute className="text-sm text-rose-400" /> : <FaVolumeUp className="text-sm text-blue-400" />}
+                {isSpeaking ? <FaVolumeMute className="text-xs text-rose-400" /> : <FaVolumeUp className="text-xs text-blue-400" />}
               </button>
             )}
-            <span>{new Date().toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false })}</span>
+            <span className="text-[10px] font-mono text-slate-400">{new Date().toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false })}</span>
           </div>
         </div>
         <div className="space-y-1">
           {isOfficer ? (
-            <p className="text-sm leading-relaxed font-inter font-medium">{message.text}</p>
+            <p className="text-sm leading-relaxed font-sans font-medium pl-1">{message.text}</p>
           ) : (
             parseMarkdown(activeText)
           )}

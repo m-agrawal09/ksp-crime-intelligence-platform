@@ -55,17 +55,17 @@ const PROMPTS = [
 const SuggestedPrompts = ({ onPromptClick }) => {
   return (
     <div>
-      <p className="text-[11px] font-bold font-inter text-slate-500 mb-3 tracking-wide">
+      <p className="text-[11px] font-bold font-inter text-slate-400 mb-3 px-1 tracking-wide">
         Try asking…
       </p>
-      <div className="grid gap-2.5 sm:grid-cols-2 md:grid-cols-3">
+      <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
         {PROMPTS.map((p) => {
           const Icon = p.icon;
           return (
             <button
               key={p.text}
               onClick={() => onPromptClick(p.text)}
-              className="flex items-start gap-3 text-left p-4 rounded-xl transition-all duration-200 cursor-pointer group"
+              className="flex items-start gap-3.5 text-left p-4 sm:p-5 rounded-xl transition-all duration-200 cursor-pointer group"
               style={{
                 background: "rgba(10,18,30,0.6)",
                 border: "1px solid rgba(51,65,85,0.35)",
@@ -80,21 +80,21 @@ const SuggestedPrompts = ({ onPromptClick }) => {
               }}
             >
               <div
-                className="flex-shrink-0 flex items-center justify-center rounded-lg mt-0.5"
+                className="flex-shrink-0 flex items-center justify-center rounded-xl mt-0.5"
                 style={{
-                  width: 32,
-                  height: 32,
+                  width: 34,
+                  height: 34,
                   background: p.iconBg,
                   border: `1px solid ${p.iconColor}30`,
                 }}
               >
                 <Icon style={{ color: p.iconColor, fontSize: 13 }} />
               </div>
-              <div className="min-w-0">
+              <div className="min-w-0 pl-1">
                 <p className="text-[13px] font-semibold text-white leading-snug font-inter group-hover:text-blue-300 transition-colors">
                   {p.text}
                 </p>
-                <p className="text-[11px] text-slate-500 mt-1 leading-relaxed font-inter">
+                <p className="text-[11px] text-slate-400 mt-1 leading-relaxed font-inter">
                   {p.desc}
                 </p>
               </div>

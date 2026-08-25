@@ -76,23 +76,27 @@ const InsightsForecast = () => {
   const handleClear = () => setMessages([]);
 
   return (
-    <div className="flex flex-col gap-6" style={{ minHeight: "calc(100vh - 160px)" }}>
+    <div 
+      className="flex flex-col gap-6 font-sans pb-12" 
+      style={{ minHeight: "calc(100vh - 160px)", display: "flex", flexDirection: "column", gap: "24px" }}
+    >
 
-      {/* ── Page Header ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5"
-        style={{ borderBottom: "1px solid rgba(51,65,85,0.3)" }}
+      {/* ── Page Header Banner ── */}
+      <div 
+        className="flex flex-col md:flex-row md:items-center justify-between gap-5 bg-slate-900/85 border border-slate-700/60 rounded-xl backdrop-blur-md shadow-xl animate-fade-in-up"
+        style={{ padding: "24px 28px" }}
       >
-        <div>
-          <div className="flex items-center gap-2 mb-1">
+        <div className="pl-1">
+          <div className="flex items-center gap-2 mb-1.5">
             <RiBrainLine className="text-purple-400 text-lg animate-pulse" />
-            <span className="text-[10px] font-mono font-bold text-purple-400/80 uppercase tracking-widest">
+            <span className="text-[10.5px] font-mono font-bold text-purple-400 uppercase tracking-widest">
               QuickML Engine v4.2 · Active
             </span>
           </div>
-          <h1 className="text-2xl font-bold text-white font-space tracking-tight">
+          <h1 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight leading-tight">
             {isKn ? "ಅಪರಾಧ ಮುನ್ಸೂಚನೆ ಮತ್ತು ವಿಶ್ಲೇಷಣೆ (AI Insights & Forecast)" : "AI Insights & Forecast"}
           </h1>
-          <p className="text-sm text-slate-500 font-inter mt-1">
+          <p className="text-xs sm:text-sm text-slate-300 font-sans mt-1.5 max-w-2xl leading-relaxed">
             {isKn
               ? "ನೈಸರ್ಗಿಕ ಭಾಷೆಯ ಗುಪ್ತಚರ ಹುಡುಕಾಟ, ಅಪರಾಧ ಮುನ್ಸೂಚನೆ ಮತ್ತು ವೈಪರೀತ್ಯ ಪತ್ತೆ ಸಿಸ್ಟಮ್."
               : "Natural language intelligence search, predictive crime forecasting, and automated anomaly detection."}
@@ -100,48 +104,42 @@ const InsightsForecast = () => {
         </div>
 
         {/* Live indicator & Page Translation Switcher Toggle */}
-        <div className="flex flex-wrap items-center gap-3 self-start sm:self-auto">
-          <div
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl"
-            style={{
-              background: "rgba(34,197,94,0.07)",
-              border: "1px solid rgba(34,197,94,0.2)",
-            }}
-          >
-            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-xs font-mono text-emerald-400 font-semibold">CCTNS Live Connected</span>
+        <div className="flex flex-wrap items-center gap-3 self-start md:self-auto pr-1">
+          <div className="flex items-center gap-2 px-3.5 py-2 rounded-lg border border-emerald-500/30 bg-emerald-950/40 text-emerald-300 font-mono text-xs font-semibold">
+            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span>CCTNS Live Connected</span>
           </div>
 
           {/* Global Page Language Switcher Toggle */}
-          <div className="flex items-center gap-1 bg-slate-900/90 border border-purple-500/40 rounded-xl p-1 shadow-lg">
-            <span className="text-xs font-mono text-purple-300 font-bold px-2 flex items-center gap-1">
-              <RiGlobalLine className="text-sm text-purple-400" /> Page Lang:
+          <div className="flex items-center gap-1.5 bg-slate-950/80 border border-slate-700/70 rounded-xl p-1.5 shadow-md font-mono">
+            <span className="text-xs text-purple-300 font-bold px-2.5 flex items-center gap-1.5">
+              <RiGlobalLine className="text-sm text-purple-400" /> Lang:
             </span>
             <button
               type="button"
               onClick={() => setPageLang("en")}
-              className={`px-3 py-1 text-xs font-bold font-mono rounded-lg transition-all cursor-pointer ${
-                pageLang === "en" ? "bg-purple-600 text-white shadow-md shadow-purple-600/40" : "text-slate-400 hover:text-white"
+              className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                pageLang === "en" ? "bg-purple-600 text-white shadow-sm" : "text-slate-400 hover:text-white"
               }`}
             >
-              English
+              EN
             </button>
             <button
               type="button"
               onClick={() => setPageLang("kn")}
-              className={`px-3 py-1 text-xs font-bold font-mono rounded-lg transition-all cursor-pointer ${
-                pageLang === "kn" ? "bg-purple-600 text-white shadow-md shadow-purple-600/40" : "text-slate-400 hover:text-white"
+              className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                pageLang === "kn" ? "bg-purple-600 text-white shadow-sm" : "text-slate-400 hover:text-white"
               }`}
             >
-              ಕನ್ನಡ (Kannada)
+              ಕನ್ನಡ
             </button>
           </div>
         </div>
       </div>
 
       {/* ── Tab Bar ── */}
-      <div className="flex justify-center">
-        <div className="flex items-center gap-0 p-1" style={{ background: "rgba(15,23,42,0.6)", border: "1px solid rgba(51,65,85,0.3)", borderRadius: 0 }}>
+      <div className="flex justify-center px-2">
+        <div className="flex items-center gap-2 p-1.5 rounded-xl bg-slate-900/85 border border-slate-700/60 shadow-lg">
           {TABS.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -149,16 +147,11 @@ const InsightsForecast = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`relative flex items-center gap-2.5 px-6 py-3.5 text-xs font-bold font-mono uppercase tracking-wider transition-all duration-200 cursor-pointer ${isActive ? "text-white shadow-md" : "text-slate-500 hover:text-slate-300 hover:bg-slate-800/40"
-                  }`}
-                style={{
-                  borderRadius: 0,
-                  ...(isActive ? {
-                    backgroundImage: `linear-gradient(135deg, ${tab.activeColor.includes("blue") ? "#2563eb" : tab.activeColor.includes("violet") ? "#7c3aed" : "#e11d48"}, ${tab.activeColor.includes("rose") ? "#b91c1c" : "#6d28d9"})`,
-                  } : { background: "transparent" })
-                }}
+                className={`relative flex items-center gap-2.5 px-6 py-3 text-xs font-bold font-mono uppercase tracking-wider rounded-lg transition-all duration-150 cursor-pointer ${
+                  isActive ? "bg-blue-600 text-white shadow-md shadow-blue-600/30" : "text-slate-400 hover:text-white hover:bg-slate-800/60"
+                }`}
               >
-                <Icon className="text-base" />
+                <Icon className="text-sm" />
                 {tab.label}
               </button>
             );
@@ -169,12 +162,10 @@ const InsightsForecast = () => {
       {/* ══ TAB 1: AI COPILOT ══ */}
       {activeTab === "copilot" && (
         <div
-          className="flex flex-1 rounded-2xl overflow-hidden"
+          className="flex flex-1 rounded-2xl border border-slate-700/60 bg-slate-900/85 backdrop-blur-md shadow-xl overflow-hidden"
           style={{
             height: "calc(100vh - 310px)",
             minHeight: 520,
-            border: "1px solid rgba(51,65,85,0.4)",
-            background: "rgba(6,13,26,0.8)",
           }}
         >
           {/* Sidebar: Sessions */}
@@ -182,16 +173,16 @@ const InsightsForecast = () => {
             <div
               className="flex-shrink-0 flex flex-col"
               style={{
-                width: 220,
-                borderRight: "1px solid rgba(51,65,85,0.3)",
-                background: "rgba(10,18,30,0.7)",
+                width: 240,
+                borderRight: "1px solid rgba(51,65,85,0.5)",
+                background: "rgba(10,18,30,0.85)",
               }}
             >
               {/* Sidebar header */}
-              <div className="flex items-center justify-between px-4 py-4" style={{ borderBottom: "1px solid rgba(51,65,85,0.25)" }}>
-                <div className="flex items-center gap-2">
-                  <FaHistory className="text-xs text-slate-500" />
-                  <span className="text-[11px] font-bold font-mono text-slate-400 uppercase tracking-wider">
+              <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(51,65,85,0.4)" }}>
+                <div className="flex items-center gap-2 pl-1">
+                  <FaHistory className="text-xs text-slate-400" />
+                  <span className="text-[11px] font-bold font-mono text-slate-300 uppercase tracking-wider">
                     {isKn ? "ಸೇಶನ್‌ಗಳು" : "Sessions"}
                   </span>
                 </div>
@@ -213,13 +204,13 @@ const InsightsForecast = () => {
           <div className="flex-1 flex flex-col min-w-0">
             {/* Chat top bar */}
             <div
-              className="flex items-center justify-between px-5 py-3 flex-shrink-0"
+              className="flex items-center justify-between px-6 py-3.5 flex-shrink-0"
               style={{ borderBottom: "1px solid rgba(51,65,85,0.25)" }}
             >
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3.5 pl-1">
                 <button
                   onClick={() => setSidebarOpen((p) => !p)}
-                  className="p-1.5 rounded-lg text-slate-500 hover:text-slate-300 hover:bg-slate-800/50 transition-colors cursor-pointer"
+                  className="p-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition-colors cursor-pointer"
                   title="Toggle session sidebar"
                 >
                   <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -228,12 +219,12 @@ const InsightsForecast = () => {
                     <rect x="1" y="10.5" width="12" height="1.5" rx="0.75" fill="currentColor" />
                   </svg>
                 </button>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2.5">
                   <div
-                    className="flex items-center justify-center rounded-lg"
-                    style={{ width: 28, height: 28, background: "linear-gradient(135deg,rgba(37,99,235,0.25),rgba(124,58,237,0.25))", border: "1px solid rgba(37,99,235,0.3)" }}
+                    className="flex items-center justify-center rounded-xl"
+                    style={{ width: 32, height: 32, background: "linear-gradient(135deg,rgba(37,99,235,0.25),rgba(124,58,237,0.25))", border: "1px solid rgba(37,99,235,0.3)" }}
                   >
-                    <FaRobot className="text-xs text-blue-400" />
+                    <FaRobot className="text-sm text-blue-400" />
                   </div>
                   <div>
                     <p className="text-xs font-bold text-white font-space">KSP AI Copilot</p>
@@ -248,7 +239,7 @@ const InsightsForecast = () => {
 
             {/* Suggested Prompts (shown only when empty) */}
             {messages.length === 0 && (
-              <div className="px-5 pb-3 flex-shrink-0">
+              <div className="px-6 pb-4 flex-shrink-0">
                 <SuggestedPrompts onPromptClick={handleSend} />
               </div>
             )}

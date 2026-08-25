@@ -101,26 +101,26 @@ const PROBABILITY_INSIGHTS_KN = [
 
 /* ─── Probability Bar ─── */
 const ProbBar = ({ label, probability, color, zone, basis, lang }) => (
-  <div className="space-y-3">
+  <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800/80 space-y-3 shadow-sm">
     <div className="flex items-start justify-between gap-4">
-      <div className="flex-1 min-w-0">
+      <div className="flex-1 min-w-0 pl-1">
         <p className="text-[13.5px] font-semibold text-white font-inter leading-snug">{label}</p>
-        <p className="text-xs text-slate-500 font-inter mt-1 flex items-center gap-1.5">
-          <FaMapMarkerAlt className="text-[9px] flex-shrink-0" /> {zone}
+        <p className="text-xs text-slate-400 font-inter mt-1.5 flex items-center gap-1.5">
+          <FaMapMarkerAlt className="text-[10px] flex-shrink-0 text-slate-400" /> {zone}
         </p>
       </div>
-      <span className="text-2xl font-bold font-mono flex-shrink-0" style={{ color }}>{probability}%</span>
+      <span className="text-2xl font-bold font-mono flex-shrink-0 pr-1" style={{ color }}>{probability}%</span>
     </div>
 
-    <div className="h-2.5 rounded-full overflow-hidden" style={{ background: "rgba(51,65,85,0.25)" }}>
+    <div className="h-2.5 rounded-full overflow-hidden mx-1" style={{ background: "rgba(51,65,85,0.25)" }}>
       <div
         className="h-full rounded-full"
         style={{ width: `${probability}%`, background: `linear-gradient(90deg, ${color}60 0%, ${color} 100%)`, transition: "width 0.8s cubic-bezier(0.22,1,0.36,1)" }}
       />
     </div>
 
-    <p className="text-xs text-slate-500 font-inter leading-relaxed">
-      <span className="text-slate-400 font-semibold">{lang === "kn" ? "ಡೇಟಾ ಆಧಾರ: " : "Data basis: "}</span>{basis}
+    <p className="text-xs text-slate-400 font-inter leading-relaxed pl-1">
+      <span className="text-slate-300 font-semibold">{lang === "kn" ? "ಡೇಟಾ ಆಧಾರ: " : "Data basis: "}</span>{basis}
     </p>
   </div>
 );
@@ -128,19 +128,19 @@ const ProbBar = ({ label, probability, color, zone, basis, lang }) => (
 /* ─── What-If Card ─── */
 const WhatIfCard = ({ icon: Icon, color, bg, border, title, body }) => (
   <div
-    className="rounded-2xl p-5 space-y-3"
+    className="rounded-2xl p-6 space-y-3.5 shadow-md"
     style={{ background: bg, border: `1px solid ${border}` }}
   >
-    <div className="flex items-start gap-3">
+    <div className="flex items-start gap-3.5 pl-1">
       <div
         className="flex-shrink-0 flex items-center justify-center rounded-xl"
-        style={{ width: 36, height: 36, background: `${color}20`, border: `1px solid ${color}30` }}
+        style={{ width: 38, height: 38, background: `${color}20`, border: `1px solid ${color}30` }}
       >
         <Icon style={{ color, fontSize: 14 }} />
       </div>
       <p className="text-[13.5px] font-bold text-white font-inter leading-snug pt-0.5">{title}</p>
     </div>
-    <p className="text-[12.5px] text-slate-400 font-inter leading-relaxed pl-12">{body}</p>
+    <p className="text-[12.5px] text-slate-300 font-inter leading-relaxed pl-3 sm:pl-12 pr-2">{body}</p>
   </div>
 );
 
@@ -148,60 +148,56 @@ const WhatIfCard = ({ icon: Icon, color, bg, border, title, body }) => (
 const ThreatZoneCard = ({ fc, lang }) => (
   <div
     key={fc.id}
-    className="overflow-hidden"
+    className="overflow-hidden rounded-xl border border-slate-700/60 shadow-lg"
     style={{
       background: "rgba(10,18,30,0.8)",
-      borderTop: "1px solid rgba(51,65,85,0.4)",
-      borderRight: "1px solid rgba(51,65,85,0.4)",
-      borderBottom: "1px solid rgba(51,65,85,0.4)",
-      borderLeft: "4px solid #ef4444",
-      borderRadius: 0,
+      borderLeft: "5px solid #ef4444",
     }}
   >
     {/* Card top */}
-    <div className="flex items-start justify-between gap-4 p-5 pb-4">
-      <div className="flex items-start gap-2.5 min-w-0">
+    <div className="flex items-start justify-between gap-4 p-6 pb-4">
+      <div className="flex items-start gap-3 min-w-0 pl-1">
         <FaMapMarkerAlt className="text-rose-400 text-sm mt-1 flex-shrink-0" />
         <div className="min-w-0">
           <p className="text-[13.5px] font-bold text-white font-inter leading-snug">{fc.location}</p>
-          <p className="text-xs text-slate-500 font-mono mt-1">{fc.crimeType}</p>
+          <p className="text-xs text-slate-400 font-mono mt-1">{fc.crimeType}</p>
         </div>
       </div>
-      <div className="text-right flex-shrink-0">
+      <div className="text-right flex-shrink-0 pr-1">
         <p className="text-2xl font-bold font-mono text-rose-400">{fc.probability}</p>
-        <p className="text-[9px] font-bold font-mono text-rose-400/60 uppercase tracking-wider mt-0.5">{fc.riskLevel}</p>
+        <p className="text-[9px] font-bold font-mono text-rose-400/70 uppercase tracking-wider mt-0.5">{fc.riskLevel}</p>
       </div>
     </div>
 
     {/* Time window band */}
     <div
-      className="flex items-center gap-2.5 px-5 py-2.5"
+      className="flex items-center gap-2.5 px-6 py-3"
       style={{ background: "rgba(245,158,11,0.07)", borderTop: "1px solid rgba(245,158,11,0.12)", borderBottom: "1px solid rgba(245,158,11,0.12)" }}
     >
-      <FaClock className="text-amber-400 text-xs flex-shrink-0" />
+      <FaClock className="text-amber-400 text-xs flex-shrink-0 ml-1" />
       <span className="text-xs font-mono text-amber-300 font-semibold">{fc.timeWindow}</span>
     </div>
 
     {/* Body */}
-    <div className="p-5 space-y-4">
-      <div>
+    <div className="p-6 space-y-4">
+      <div className="pl-1">
         <p className="text-[10px] font-mono font-bold text-amber-400/80 uppercase tracking-widest mb-2">
           {lang === "kn" ? "ಚಾರಿತ್ರಿಕ ಸಾಕ್ಷ್ಯಗಳು (Historical Evidence)" : "Historical Evidence"}
         </p>
-        <p className="text-[12.5px] text-slate-400 font-inter leading-relaxed">{fc.evidence}</p>
+        <p className="text-[12.5px] text-slate-300 font-inter leading-relaxed">{fc.evidence}</p>
       </div>
 
       <div
-        className="rounded-xl p-4"
+        className="rounded-xl p-5"
         style={{ background: "rgba(124,58,237,0.07)", border: "1px solid rgba(124,58,237,0.18)" }}
       >
-        <div className="flex items-start gap-3">
+        <div className="flex items-start gap-3 pl-1">
           <FaLightbulb className="text-amber-400 text-sm flex-shrink-0 mt-0.5" />
           <div>
             <p className="text-[10px] font-mono font-bold text-purple-300/80 uppercase tracking-widest mb-2">
               {lang === "kn" ? "ಕಾರ್ಯತಂತ್ರದ ಶಿಫಾರಸು (Tactical Recommendation)" : "Tactical Recommendation"}
             </p>
-            <p className="text-[12.5px] text-purple-100/80 font-inter leading-relaxed">{fc.recommendation}</p>
+            <p className="text-[12.5px] text-purple-100/90 font-inter leading-relaxed">{fc.recommendation}</p>
           </div>
         </div>
       </div>
