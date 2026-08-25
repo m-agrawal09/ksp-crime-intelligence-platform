@@ -176,56 +176,56 @@ const ManageRecords = () => {
       >
         {/* Total Registered FIRs */}
         <div
-          className="rounded-sm border border-slate-700/60 bg-slate-900/85 backdrop-blur-md shadow-xl flex items-center justify-between hover:border-blue-500/40 transition-all"
-          style={{ padding: "18px 22px", borderLeft: "4px solid #3b82f6" }}
+          className="rounded-lg border border-slate-700/60 bg-slate-900/85 backdrop-blur-md shadow-xl flex items-center justify-between hover:border-blue-500/40 transition-all"
+          style={{ padding: "20px 24px", borderLeft: "4px solid #3b82f6" }}
         >
-          <div className="pl-1">
-            <span className="text-[9px] font-mono font-bold uppercase tracking-widest text-slate-400 block mb-1">Total Registered FIRs</span>
+          <div style={{ paddingLeft: "10px" }}>
+            <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-slate-400 block mb-1">Total Registered FIRs</span>
             <h3 className="font-mono text-3xl font-extrabold text-white leading-none">{stats.total}</h3>
           </div>
-          <div className="h-10 w-10 rounded-sm bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-400 flex-shrink-0">
+          <div className="h-10 w-10 rounded-md bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-400 flex-shrink-0">
             <FaShieldAlt className="text-base" />
           </div>
         </div>
 
         {/* Active Investigations */}
         <div
-          className="rounded-sm border border-slate-700/60 bg-slate-900/85 backdrop-blur-md shadow-xl flex items-center justify-between hover:border-amber-500/40 transition-all"
-          style={{ padding: "18px 22px", borderLeft: "4px solid #f59e0b" }}
+          className="rounded-lg border border-slate-700/60 bg-slate-900/85 backdrop-blur-md shadow-xl flex items-center justify-between hover:border-amber-500/40 transition-all"
+          style={{ padding: "20px 24px", borderLeft: "4px solid #f59e0b" }}
         >
-          <div className="pl-1">
-            <span className="text-[9px] font-mono font-bold uppercase tracking-widest text-amber-400 block mb-1">Active Investigations</span>
+          <div style={{ paddingLeft: "10px" }}>
+            <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-amber-400 block mb-1">Active Investigations</span>
             <h3 className="font-mono text-3xl font-extrabold text-white leading-none">{stats.active}</h3>
           </div>
-          <div className="h-10 w-10 rounded-sm bg-amber-600/15 border border-amber-500/30 flex items-center justify-center text-amber-400 flex-shrink-0">
+          <div className="h-10 w-10 rounded-md bg-amber-600/15 border border-amber-500/30 flex items-center justify-center text-amber-400 flex-shrink-0">
             <FaUserCheck className="text-base" />
           </div>
         </div>
 
         {/* Closed / Completed Cases */}
         <div
-          className="rounded-sm border border-slate-700/60 bg-slate-900/85 backdrop-blur-md shadow-xl flex items-center justify-between hover:border-emerald-500/40 transition-all"
-          style={{ padding: "18px 22px", borderLeft: "4px solid #10b981" }}
+          className="rounded-lg border border-slate-700/60 bg-slate-900/85 backdrop-blur-md shadow-xl flex items-center justify-between hover:border-emerald-500/40 transition-all"
+          style={{ padding: "20px 24px", borderLeft: "4px solid #10b981" }}
         >
-          <div className="pl-1">
-            <span className="text-[9px] font-mono font-bold uppercase tracking-widest text-emerald-400 block mb-1">Closed / Completed Cases</span>
+          <div style={{ paddingLeft: "10px" }}>
+            <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-emerald-400 block mb-1">Closed / Completed Cases</span>
             <h3 className="font-mono text-3xl font-extrabold text-white leading-none">{stats.closed}</h3>
           </div>
-          <div className="h-10 w-10 rounded-sm bg-emerald-600/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 flex-shrink-0">
+          <div className="h-10 w-10 rounded-md bg-emerald-600/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 flex-shrink-0">
             <FaCheckCircle className="text-base" />
           </div>
         </div>
 
         {/* Critical Severity Incidents */}
         <div
-          className="rounded-sm border border-slate-700/60 bg-slate-900/85 backdrop-blur-md shadow-xl flex items-center justify-between hover:border-rose-500/40 transition-all"
-          style={{ padding: "18px 22px", borderLeft: "4px solid #f43f5e" }}
+          className="rounded-lg border border-slate-700/60 bg-slate-900/85 backdrop-blur-md shadow-xl flex items-center justify-between hover:border-rose-500/40 transition-all"
+          style={{ padding: "20px 24px", borderLeft: "4px solid #f43f5e" }}
         >
-          <div className="pl-1">
-            <span className="text-[9px] font-mono font-bold uppercase tracking-widest text-rose-400 block mb-1">Critical Severity Incidents</span>
+          <div style={{ paddingLeft: "10px" }}>
+            <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-rose-400 block mb-1">Critical Severity Incidents</span>
             <h3 className="font-mono text-3xl font-extrabold text-white leading-none">{stats.critical}</h3>
           </div>
-          <div className="h-10 w-10 rounded-sm bg-rose-600/15 border border-rose-500/30 flex items-center justify-center text-rose-400 flex-shrink-0">
+          <div className="h-10 w-10 rounded-md bg-rose-600/15 border border-rose-500/30 flex items-center justify-center text-rose-400 flex-shrink-0">
             <FaExclamationTriangle className="text-base" />
           </div>
         </div>
@@ -233,14 +233,17 @@ const ManageRecords = () => {
 
       {/* Query Filters & Search Toolbar */}
       <div className="mb-8 font-sans" style={{ marginBottom: "32px" }}>
-        <div className="flex items-center justify-between pb-3 mb-3">
-          <div className="flex items-center gap-2.5 text-xs font-bold text-slate-200 uppercase tracking-widest font-mono pl-1">
+        <div 
+          className="flex items-center justify-between pb-3 mb-3"
+          style={{ paddingLeft: "8px", paddingRight: "8px" }}
+        >
+          <div className="flex items-center gap-2.5 text-xs font-bold text-slate-200 uppercase tracking-widest font-mono">
             <FaFilter className="text-blue-400 text-sm" />
             <span>Search & Filter FIR Records</span>
           </div>
           <button
             onClick={handleResetFilters}
-            className="flex items-center gap-1.5 rounded-sm border border-slate-700/60 bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white px-3.5 py-1.5 transition-all cursor-pointer font-bold uppercase text-[9.5px] font-mono tracking-widest shadow-sm"
+            className="flex items-center gap-1.5 rounded-md border border-slate-700/60 bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white px-3.5 py-1.5 transition-all cursor-pointer font-bold uppercase text-[9.5px] font-mono tracking-widest shadow-sm"
           >
             Reset Filters
           </button>
@@ -249,15 +252,15 @@ const ManageRecords = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 text-xs font-mono">
           {/* Search Box */}
           <div className="relative sm:col-span-2 lg:col-span-2 flex items-center">
-            <FaSearch className="absolute left-3.5 text-slate-400 text-xs pointer-events-none z-10" />
+            <FaSearch className="absolute left-4 text-slate-400 text-xs pointer-events-none z-10" />
             <input
               type="text"
               name="search"
               value={filters.search}
               onChange={handleFilterChange}
               placeholder="Search by FIR No, Officer, Complainant..."
-              className="w-full h-10 rounded-sm bg-slate-950/80 border border-slate-700/60 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 font-mono transition-all"
-              style={{ paddingLeft: "42px", paddingRight: "16px" }}
+              className="w-full h-11 rounded-md bg-slate-950/80 border border-slate-700/60 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 font-mono transition-all shadow-inner"
+              style={{ paddingLeft: "44px", paddingRight: "16px" }}
             />
           </div>
 
@@ -267,7 +270,8 @@ const ManageRecords = () => {
               name="district"
               value={filters.district}
               onChange={handleFilterChange}
-              className="w-full h-10 rounded-sm bg-slate-950/80 border border-slate-700/60 px-3 text-xs text-blue-400 font-bold focus:outline-none focus:border-blue-500 font-mono transition-all cursor-pointer"
+              className="w-full h-11 rounded-md bg-slate-950/80 border border-slate-700/60 text-xs text-blue-400 font-bold focus:outline-none focus:border-blue-500 font-mono transition-all cursor-pointer shadow-inner"
+              style={{ paddingLeft: "14px", paddingRight: "14px" }}
             >
               <option value="" className="bg-slate-950 text-slate-400">-- ALL DISTRICTS --</option>
               <option value="Bengaluru City" className="bg-slate-950 text-slate-200">Bengaluru City</option>
@@ -284,7 +288,8 @@ const ManageRecords = () => {
               name="category"
               value={filters.category}
               onChange={handleFilterChange}
-              className="w-full h-10 rounded-sm bg-slate-950/80 border border-slate-700/60 px-3 text-xs text-blue-400 font-bold focus:outline-none focus:border-blue-500 font-mono transition-all cursor-pointer"
+              className="w-full h-11 rounded-md bg-slate-950/80 border border-slate-700/60 text-xs text-blue-400 font-bold focus:outline-none focus:border-blue-500 font-mono transition-all cursor-pointer shadow-inner"
+              style={{ paddingLeft: "14px", paddingRight: "14px" }}
             >
               <option value="" className="bg-slate-950 text-slate-400">-- ALL CATEGORIES --</option>
               <option value="Theft" className="bg-slate-950 text-slate-200">Theft</option>
@@ -301,7 +306,8 @@ const ManageRecords = () => {
               name="severity"
               value={filters.severity}
               onChange={handleFilterChange}
-              className="w-full h-10 rounded-sm bg-slate-950/80 border border-slate-700/60 px-3 text-xs text-blue-400 font-bold focus:outline-none focus:border-blue-500 font-mono transition-all cursor-pointer"
+              className="w-full h-11 rounded-md bg-slate-950/80 border border-slate-700/60 text-xs text-blue-400 font-bold focus:outline-none focus:border-blue-500 font-mono transition-all cursor-pointer shadow-inner"
+              style={{ paddingLeft: "14px", paddingRight: "14px" }}
             >
               <option value="" className="bg-slate-950 text-slate-400">-- ALL SEVERITIES --</option>
               <option value="CRITICAL" className="bg-slate-950 text-rose-400 font-bold">CRITICAL</option>
@@ -317,7 +323,8 @@ const ManageRecords = () => {
               name="status"
               value={filters.status}
               onChange={handleFilterChange}
-              className="w-full h-10 rounded-sm bg-slate-950/80 border border-slate-700/60 px-3 text-xs text-blue-400 font-bold focus:outline-none focus:border-blue-500 font-mono transition-all cursor-pointer"
+              className="w-full h-11 rounded-md bg-slate-950/80 border border-slate-700/60 text-xs text-blue-400 font-bold focus:outline-none focus:border-blue-500 font-mono transition-all cursor-pointer shadow-inner"
+              style={{ paddingLeft: "14px", paddingRight: "14px" }}
             >
               <option value="" className="bg-slate-950 text-slate-400">-- ALL STATUSES --</option>
               <option value="ACTIVE" className="bg-slate-950 text-slate-200">Active Cases</option>

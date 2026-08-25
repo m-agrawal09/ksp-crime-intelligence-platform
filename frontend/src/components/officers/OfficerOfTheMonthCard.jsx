@@ -1,125 +1,177 @@
 import React from "react";
-import { FaTrophy, FaAward, FaBuilding, FaIdBadge, FaStar, FaShieldAlt } from "react-icons/fa";
+import { FaAward, FaArrowRight, FaFileAlt, FaPercentage, FaHourglassHalf, FaClipboardList, FaMedal } from "react-icons/fa";
 
-const OfficerOfTheMonthCard = ({ officer }) => {
+const OfficerOfTheMonthCard = ({ officer, onSelectProfile }) => {
   if (!officer) return null;
 
-  // Calculate performance score out of 100 based on metrics
-  const performanceScore = Math.min(
-    100,
-    Math.round((officer.clearanceRate * 0.6) + (officer.detectionRate * 0.4))
-  );
+  const empId = officer.empId || `EMP-${officer.badgeNumber ? officer.badgeNumber.replace(/\D/g, "") || "2568" : "2568"}`;
 
   return (
-    <div
-      className="relative overflow-hidden rounded-sm border border-slate-700/60 shadow-xl backdrop-blur-md font-sans"
-      style={{
-        padding: "26px 28px",
-        background: "linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(26, 20, 10, 0.85) 50%, rgba(15, 23, 42, 0.95) 100%)",
-        borderLeft: "5px solid #f59e0b",
-      }}
-    >
-      <div className="flex flex-col lg:flex-row items-stretch justify-between gap-8 relative z-10">
+    <div className="rounded-xl border border-slate-800 bg-[#0c1425]/90 backdrop-blur-md shadow-2xl p-6 font-sans">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
         
-        {/* LEFT COLUMN: Hero Recognition Spotlight */}
-        <div className="flex-1 flex flex-col md:flex-row items-center md:items-start gap-7">
+        {/* LEFT COLUMN: Featured Officer Dossier (7 cols) */}
+        <div className="lg:col-span-7 flex flex-col justify-between space-y-4">
           
-          {/* Avatar Frame with Gold Accent Borders */}
-          <div className="relative flex-shrink-0">
-            <div className="h-32 w-32 rounded-sm overflow-hidden border-2 border-amber-500/80 bg-slate-950 p-1 flex-shrink-0 shadow-xl">
-              <img
-                src={officer.avatar}
-                alt={officer.name}
-                className="h-full w-full object-cover rounded-sm"
-              />
-            </div>
-            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-amber-500 text-slate-950 px-3 py-0.5 rounded-sm text-[9px] font-mono font-extrabold uppercase tracking-widest flex items-center gap-1.5 shadow-md whitespace-nowrap">
-              <FaTrophy className="text-[10px]" /> Spotlight Hero
-            </div>
-          </div>
-
-          {/* Details & Citation */}
-          <div className="text-center md:text-left space-y-3.5 flex-1 pl-1">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-sm bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[9.5px] font-mono font-bold uppercase tracking-widest">
-              <FaAward className="text-amber-400 text-sm" />
-              <span>Officer of the Month Commendation</span>
-            </div>
-
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-sans">
-                {officer.name}
-              </h2>
-              
-              <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-3 gap-y-1.5 text-xs font-mono text-slate-300 mt-2">
-                <span className="text-amber-400 font-bold uppercase tracking-widest">{officer.rank}</span>
-                <span className="text-slate-600">•</span>
-                <span className="flex items-center gap-1.5 text-slate-300">
-                  <FaBuilding className="text-amber-400 text-xs flex-shrink-0" /> {officer.unit}
-                </span>
-                <span className="text-slate-600">•</span>
-                <span className="flex items-center gap-1.5 text-slate-300">
-                  <FaIdBadge className="text-amber-400 text-xs flex-shrink-0" /> Badge: <span className="text-white font-bold">{officer.badgeNumber}</span>
-                </span>
-                <span className="text-slate-600">•</span>
-                <span>Exp: <span className="text-white font-bold">{officer.yearsOfService} Years</span></span>
-                <span className="text-slate-600">•</span>
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-sm bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-[9px] font-semibold">
-                  ● Active On Duty
-                </span>
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5">
+            {/* Officer Photo & Active Tag */}
+            <div className="flex flex-col items-center gap-2 flex-shrink-0">
+              <div className="h-28 w-28 rounded-lg overflow-hidden border border-slate-700 bg-slate-950 p-0.5 shadow-md">
+                <img
+                  src={officer.avatar}
+                  alt={officer.name}
+                  className="h-full w-full object-cover rounded-md"
+                />
+              </div>
+              <div className="flex items-center gap-1.5 text-[10px] font-mono font-bold text-emerald-400 tracking-wider uppercase">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span>ACTIVE</span>
               </div>
             </div>
 
-            {/* Specialization Block */}
-            <div className="text-xs text-slate-300 font-sans border-l-2 border-amber-500/60 pl-3 py-0.5">
-              <span className="text-amber-400 font-mono font-bold uppercase tracking-wide text-[9.5px] block mb-0.5">Core Specialization</span>
-              {officer.specialArea}
-            </div>
+            {/* Officer Info Details */}
+            <div className="space-y-2 text-center sm:text-left flex-1 min-w-0">
+              {/* Gold Commissionerate Badge */}
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded border border-amber-500/40 bg-amber-500/10 text-amber-300 text-[9px] font-mono font-bold uppercase tracking-wider">
+                <span>OFFICER OF THE NORTH COMMISSIONERATE</span>
+              </div>
 
-            {/* Citation block */}
-            <div className="bg-amber-500/5 border border-amber-500/20 p-3.5 rounded-sm pl-4">
-              <span className="text-[9.5px] font-mono font-bold text-amber-400 uppercase tracking-wider block mb-1">Official Citation Record</span>
-              <p className="text-xs italic text-amber-100/90 leading-relaxed font-sans">
-                "{officer.commendation}"
+              {/* Name & Subtitle */}
+              <div>
+                <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+                  {officer.name}
+                </h2>
+                <p className="text-xs text-slate-400 font-sans mt-0.5">
+                  {officer.rank || "Police Sub-Inspector"} • <span className="text-slate-300">{officer.unit || "Vehicle Section"}</span>
+                </p>
+              </div>
+
+              {/* 4 Metadata Columns Row */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 font-mono text-xs">
+                <div>
+                  <span className="text-[9.5px] text-slate-400 block">Employee ID</span>
+                  <span className="font-bold text-white">{empId}</span>
+                </div>
+                <div>
+                  <span className="text-[9.5px] text-slate-400 block">Badge No.</span>
+                  <span className="font-bold text-white">{officer.badgeNumber}</span>
+                </div>
+                <div>
+                  <span className="text-[9.5px] text-slate-400 block">Experience</span>
+                  <span className="font-bold text-white">{officer.yearsOfService} Years</span>
+                </div>
+                <div>
+                  <span className="text-[9.5px] text-slate-400 block">Rank</span>
+                  <span className="font-bold text-white">{officer.rank || "PSI"}</span>
+                </div>
+              </div>
+
+              {/* Action */}
+              <div className="pt-1">
+                <button
+                  type="button"
+                  onClick={() => onSelectProfile && onSelectProfile(officer.badgeNumber)}
+                  className="inline-flex items-center gap-1 text-xs text-blue-400 hover:text-blue-300 font-semibold cursor-pointer transition-colors"
+                >
+                  <span>View Full Profile</span>
+                  <FaArrowRight className="text-[10px]" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Special Citation Award */}
+          <div className="bg-amber-500/5 border border-amber-500/20 px-4 py-2.5 rounded-lg flex items-center gap-3">
+            <div className="h-7 w-7 rounded-full bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 flex-shrink-0">
+              <FaAward className="text-xs" />
+            </div>
+            <div className="text-xs">
+              <span className="font-bold text-amber-400 font-mono text-[10px] uppercase tracking-wider block">
+                SPECIAL CITATION AWARD
+              </span>
+              <p className="text-slate-300 text-xs italic font-sans mt-0.5 leading-snug">
+                "{officer.commendation || "Awarded Director General's Honor Star for highest case resolution and investigation efficiency in previous month."}"
               </p>
             </div>
           </div>
+
         </div>
 
-        {/* RIGHT COLUMN: Top Performance Metrics */}
-        <div className="w-full lg:w-[320px] flex flex-col justify-center gap-3">
-          <span className="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-widest text-center lg:text-left block mb-1 pl-1">Performance Highlights</span>
-          
-          <div className="grid grid-cols-2 gap-3 font-mono">
-            {/* Cases Solved */}
-            <div className="bg-slate-950/70 border border-slate-700/60 rounded-sm p-4 text-center hover:border-amber-500/40 transition-colors shadow-sm">
-              <span className="text-[8.5px] text-amber-400 font-bold uppercase tracking-wider block mb-1.5">Cases Solved</span>
-              <span className="text-2xl font-bold text-white block leading-none">{officer.casesSolvedMonth}</span>
-              <span className="text-[8px] text-slate-400 uppercase tracking-widest block mt-2">Previous Month</span>
+        {/* RIGHT COLUMN: Performance Highlights (5 cols, 2x2 grid) */}
+        <div className="lg:col-span-5 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-slate-800 pt-4 lg:pt-0 lg:pl-6">
+          <div className="mb-2">
+            <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest">
+              PERFORMANCE HIGHLIGHTS
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 flex-1">
+            {/* 1. Cases Solved with Sparkline */}
+            <div className="bg-slate-950/60 border border-slate-800 rounded-lg p-3.5 flex flex-col justify-between hover:border-slate-700 transition-colors">
+              <div className="flex items-start justify-between">
+                <div className="h-8 w-8 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                  <FaFileAlt className="text-xs" />
+                </div>
+                {/* SVG Mini Sparkline */}
+                <svg className="w-14 h-6 text-emerald-400" viewBox="0 0 60 24" fill="none">
+                  <path d="M2 18 L15 14 L28 17 L42 8 L58 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+              <div className="mt-2">
+                <span className="text-[9.5px] text-slate-400 font-mono font-bold uppercase tracking-wider block">CASES SOLVED</span>
+                <span className="text-2xl font-extrabold text-white font-mono block leading-tight">{officer.casesSolvedMonth || 12}</span>
+                <span className="text-[10px] text-slate-400 font-sans block mt-0.5">All Time</span>
+              </div>
             </div>
 
-            {/* Clearance Rate */}
-            <div className="bg-slate-950/70 border border-slate-700/60 rounded-sm p-4 text-center hover:border-amber-500/40 transition-colors shadow-sm">
-              <span className="text-[8.5px] text-amber-400 font-bold uppercase tracking-wider block mb-1.5">Clearance Rate</span>
-              <span className="text-2xl font-bold text-amber-400 block leading-none">{officer.clearanceRate}%</span>
-              <span className="text-[8px] text-slate-400 uppercase tracking-widest block mt-2">Trial Filing Rate</span>
+            {/* 2. Clearance Rate */}
+            <div className="bg-slate-950/60 border border-slate-800 rounded-lg p-3.5 flex flex-col justify-between hover:border-slate-700 transition-colors">
+              <div className="h-8 w-8 rounded-full bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                <FaPercentage className="text-xs" />
+              </div>
+              <div className="mt-2">
+                <span className="text-[9.5px] text-slate-400 font-mono font-bold uppercase tracking-wider block">CLEARANCE RATE</span>
+                <span className="text-2xl font-extrabold text-white font-mono block leading-tight">{officer.clearanceRate || 85}%</span>
+                <div className="flex items-center gap-1 text-[10px] text-slate-400 mt-0.5">
+                  <span>vs Last Month 78%</span>
+                  <span className="text-emerald-400 font-bold font-mono">↑ 7%</span>
+                </div>
+              </div>
             </div>
 
-            {/* Career Closures */}
-            <div className="bg-slate-950/70 border border-slate-700/60 rounded-sm p-4 text-center hover:border-amber-500/40 transition-colors shadow-sm">
-              <span className="text-[8.5px] text-amber-400 font-bold uppercase tracking-wider block mb-1.5">Career Closures</span>
-              <span className="text-2xl font-bold text-white block leading-none">{officer.totalCasesClosed}</span>
-              <span className="text-[8px] text-slate-400 uppercase tracking-widest block mt-2">CCTNS Logged</span>
+            {/* 3. Cases in Queue */}
+            <div className="bg-slate-950/60 border border-slate-800 rounded-lg p-3.5 flex flex-col justify-between hover:border-slate-700 transition-colors">
+              <div className="h-8 w-8 rounded-full bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400">
+                <FaHourglassHalf className="text-xs" />
+              </div>
+              <div className="mt-2">
+                <span className="text-[9.5px] text-slate-400 font-mono font-bold uppercase tracking-wider block">CASES IN QUEUE</span>
+                <span className="text-2xl font-extrabold text-white font-mono block leading-tight">6</span>
+                <div className="flex items-center gap-1 text-[10px] text-slate-400 mt-0.5">
+                  <span>vs Last Month 8</span>
+                  <span className="text-emerald-400 font-bold font-mono">↓ 2</span>
+                </div>
+              </div>
             </div>
 
-            {/* Performance Score */}
-            <div className="bg-slate-950/70 border border-slate-700/60 rounded-sm p-4 text-center hover:border-amber-500/40 transition-colors shadow-sm">
-              <span className="text-[8.5px] text-amber-400 font-bold uppercase tracking-wider block mb-1.5">Performance Score</span>
-              <span className="text-2xl font-extrabold text-white block leading-none flex items-center justify-center gap-0.5">
-                {performanceScore}<span className="text-xs font-bold text-amber-400">/100</span>
-              </span>
-              <span className="text-[8px] text-slate-400 uppercase tracking-widest block mt-2">Audit Telemetry</span>
+            {/* 4. Pending Tasks */}
+            <div className="bg-slate-950/60 border border-slate-800 rounded-lg p-3.5 flex flex-col justify-between hover:border-slate-700 transition-colors">
+              <div className="h-8 w-8 rounded-full bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-400">
+                <FaClipboardList className="text-xs" />
+              </div>
+              <div className="mt-2">
+                <span className="text-[9.5px] text-slate-400 font-mono font-bold uppercase tracking-wider block">PENDING TASKS</span>
+                <span className="text-2xl font-extrabold text-white font-mono block leading-tight">
+                  87 <span className="text-xs font-normal text-slate-400">/ 200</span>
+                </span>
+                <div className="flex items-center gap-1 text-[10px] text-slate-400 mt-0.5">
+                  <span>vs Last Month 120</span>
+                  <span className="text-emerald-400 font-bold font-mono">↓ 33</span>
+                </div>
+              </div>
             </div>
           </div>
+
         </div>
 
       </div>

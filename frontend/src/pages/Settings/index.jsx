@@ -10,13 +10,18 @@ import {
   FaSave,
   FaCheckCircle,
   FaExclamationCircle,
-  FaPhoneAlt,
-  FaMapMarkerAlt,
-  FaUserEdit,
-  FaImage,
-  FaIdCard,
   FaUpload,
-  FaUser
+  FaUser,
+  FaEye,
+  FaEyeSlash,
+  FaSearch,
+  FaCopy,
+  FaCheck,
+  FaFingerprint,
+  FaBuilding,
+  FaUserShield,
+  FaSyncAlt,
+  FaImages
 } from "react-icons/fa";
 
 const PRESET_AVATARS = [
@@ -35,6 +40,7 @@ const Settings = () => {
 
   // Admin Security PIN State
   const [newPin, setNewPin] = useState("");
+  const [showPin, setShowPin] = useState(false);
   const [pinSuccess, setPinSuccess] = useState("");
   const [pinError, setPinError] = useState("");
 
@@ -50,8 +56,28 @@ const Settings = () => {
     confirmPassword: ""
   });
 
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showAvatarModal, setShowAvatarModal] = useState(false);
   const [profileSuccess, setProfileSuccess] = useState("");
   const [profileError, setProfileError] = useState("");
+
+  // Admin Officer Password Reset State
+  const [selectedUserId, setSelectedUserId] = useState("");
+  const [officerNewPassword, setOfficerNewPassword] = useState("");
+  const [officerPwdSuccess, setOfficerPwdSuccess] = useState("");
+  const [officerPwdError, setOfficerPwdError] = useState("");
+  const [officerSearch, setOfficerSearch] = useState("");
+  const [copiedKey, setCopiedKey] = useState("");
+
+  const [usersList, setUsersList] = useState([]);
+
+  // Copy helper
+  const handleCopy = (text, key) => {
+    navigator.clipboard.writeText(text);
+    setCopiedKey(key);
+    setTimeout(() => setCopiedKey(""), 2000);
+  };
 
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
@@ -78,14 +104,6 @@ const Settings = () => {
     };
     reader.readAsDataURL(file);
   };
-
-  // Admin Officer Password Reset State
-  const [selectedUserId, setSelectedUserId] = useState("");
-  const [officerNewPassword, setOfficerNewPassword] = useState("");
-  const [officerPwdSuccess, setOfficerPwdSuccess] = useState("");
-  const [officerPwdError, setOfficerPwdError] = useState("");
-
-  const [usersList, setUsersList] = useState([]);
 
   // Sync state with current user session and fetch online database officers
   useEffect(() => {
@@ -123,7 +141,7 @@ const Settings = () => {
 
     try {
       const updated = updatePin(cleanPin);
-      setPinSuccess(`Manage Records Security PIN successfully updated to '${updated}'!`);
+      setPinSuccess(`Records Security PIN successfully updated to '${updated}'!`);
       setNewPin("");
     } catch (err) {
       setPinError(err.message || "Failed to update Security PIN.");
@@ -236,300 +254,414 @@ const Settings = () => {
     }
   };
 
+  // Filter officers directory
+  const filteredOfficers = usersList.filter((u) => {
+    const q = officerSearch.toLowerCase().trim();
+    if (!q) return true;
+    return (
+      (u.name || "").toLowerCase().includes(q) ||
+      (u.username || "").toLowerCase().includes(q) ||
+      (u.rank || "").toLowerCase().includes(q) ||
+      (u.kgid || "").toLowerCase().includes(q) ||
+      (u.unit || "").toLowerCase().includes(q)
+    );
+  });
+
+  const today = new Date().toLocaleDateString("en-IN", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
+
   return (
-    <div className="w-full max-w-5xl font-inter relative pb-16 flex flex-col gap-8">
-      {/* Header and Officer Hero Card Group */}
-      <div className="flex flex-col gap-5 relative z-10">
-        {/* Title Header */}
-        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between border-b border-slate-800/80 pb-6">
-          <div>
-            <h1 className="text-3xl font-bold text-white font-space tracking-tight leading-tight">
-              Settings & Profile Management
-            </h1>
-            <p className="mt-2 text-sm text-slate-455 font-inter font-normal">
-              Manage security PIN, officer profile information, contact details, and account credentials.
-            </p>
+    <div className="w-full font-inter relative pb-24 flex flex-col gap-9 px-1 sm:px-2 animate-fade-in">
+      
+      {/* 1. TOP COMMAND BAR */}
+      <div 
+        className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 bg-slate-900/85 border border-slate-700/60 rounded-2xl backdrop-blur-md shadow-2xl"
+        style={{ padding: "24px 32px" }}
+      >
+        <div style={{ paddingLeft: "6px" }}>
+          <div className="flex items-center gap-2.5">
+            <span className="h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
+            <span className="text-[10px] font-mono font-bold tracking-widest text-blue-400 uppercase">
+              SECURITY & SYSTEM GOVERNANCE
+            </span>
           </div>
-          <div className="rounded-[4px] border border-slate-800 bg-[#081220] px-4 py-2.5 text-xs font-mono text-slate-400 flex-shrink-0 self-start mt-2 md:mt-0 shadow-sm">
-            {new Date().toLocaleDateString("en-IN", {
-              weekday: "long",
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-            })}
-          </div>
+          <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight leading-tight mt-1.5 font-space">
+            Settings & Profile Management
+          </h1>
+          <p className="mt-1 text-xs text-slate-300 font-normal font-inter">
+            Configure officer identity, authentication credentials, security PINs, and station assignments.
+          </p>
         </div>
 
-        {/* SECTION 1: Officer Hero Card (Structured Flow, Increased Padding and Image Size) */}
-        <div className="bg-[#081220] rounded-[4px] border border-[rgba(255,255,255,0.05)] p-10 sm:p-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 items-start shadow-sm relative overflow-hidden">
-
-          {/* Subtle logo watermark */}
-          <div className="absolute right-0 bottom-0 opacity-[0.015] text-[180px] pointer-events-none translate-y-12 translate-x-12 select-none">
-            🛡️
+        {/* Live Status Telemetry Chips */}
+        <div className="flex flex-wrap items-center gap-6 font-mono text-[10px] pr-2">
+          <div className="flex items-center gap-2 text-slate-300">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse flex-shrink-0" />
+            <span>SESSION: <strong className="text-emerald-400 font-bold">ENCRYPTED</strong></span>
           </div>
+          <div className="h-4 w-px bg-slate-700/60 hidden sm:block" />
+          <div className="flex items-center gap-2 text-slate-400">
+            <span className="text-slate-300 font-semibold">{today}</span>
+          </div>
+        </div>
+      </div>
 
-          {/* Group 1: Photo & Uploader */}
-          <div className="flex flex-col items-center gap-4">
-            <div className="relative h-32 w-32 rounded-[4px] overflow-hidden border border-slate-700/50 bg-slate-950 shadow-sm flex-shrink-0">
-              <img
-                src={profileForm.avatar || PRESET_AVATARS[0].url}
-                alt="Officer Avatar"
-                className="h-full w-full object-cover"
-              />
+      {/* 2. OFFICER HERO DOSSIER CARD */}
+      <div 
+        className="bg-gradient-to-r from-slate-900/90 via-[#081220] to-slate-900/90 rounded-2xl border border-blue-500/25 shadow-xl relative overflow-hidden backdrop-blur-md"
+        style={{ padding: "38px 44px" }}
+      >
+        {/* Subtle Cyber Watermark Accent */}
+        <div className="absolute right-0 bottom-0 opacity-[0.03] text-[220px] pointer-events-none translate-y-16 translate-x-16 select-none font-mono">
+          🛡️
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-9 items-center relative z-10 font-inter">
+          
+          {/* Group 1: Avatar & Photo Controls */}
+          <div className="flex flex-col items-center gap-3.5">
+            <div className="relative group">
+              <div className="h-32 w-32 rounded-xl overflow-hidden border-2 border-blue-500/40 bg-slate-950 shadow-2xl flex-shrink-0 transition-transform duration-300 group-hover:scale-105">
+                <img
+                  src={profileForm.avatar || PRESET_AVATARS[0].url}
+                  alt="Officer Avatar"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div className="absolute -bottom-2 -right-2 bg-blue-600 text-white p-1.5 rounded-full border-2 border-slate-900 shadow-lg">
+                <FaUserShield className="text-xs" />
+              </div>
             </div>
 
-            <label htmlFor="avatar-upload-hero" className="cursor-pointer bg-[#0b1220] border border-slate-800 rounded-[4px] px-4 py-2 text-[11px] font-semibold text-white flex items-center gap-1.5 hover:bg-slate-800 transition-colors shadow-sm font-inter">
-              <FaUpload className="text-[10px]" /> Change Photo
-            </label>
-            <input
-              type="file"
-              id="avatar-upload-hero"
-              accept="image/png, image/jpeg, image/jpg"
-              onChange={handleFileChange}
-              className="hidden"
-            />
+            <div className="flex items-center gap-2 mt-1">
+              <label 
+                htmlFor="avatar-upload-hero" 
+                className="cursor-pointer bg-slate-950/80 border border-slate-700/80 rounded-lg px-3 py-1.5 text-[11px] font-semibold text-slate-200 flex items-center gap-1.5 hover:bg-slate-800 hover:border-blue-500/50 hover:text-white transition-all shadow-sm font-inter"
+              >
+                <FaUpload className="text-[10px] text-blue-400" /> Upload
+              </label>
+              <input
+                type="file"
+                id="avatar-upload-hero"
+                accept="image/png, image/jpeg, image/jpg"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+
+              <button
+                type="button"
+                onClick={() => setShowAvatarModal(!showAvatarModal)}
+                className="bg-slate-950/80 border border-slate-700/80 rounded-lg px-3 py-1.5 text-[11px] font-semibold text-slate-200 flex items-center gap-1.5 hover:bg-slate-800 hover:border-blue-500/50 hover:text-white transition-all shadow-sm font-inter cursor-pointer"
+              >
+                <FaImages className="text-[10px] text-blue-400" /> Presets
+              </button>
+            </div>
           </div>
 
           {/* Group 2: Identity */}
-          <div className="flex flex-col space-y-4">
-            <span className="text-[11px] font-bold text-slate-500 uppercase tracking-widest font-inter">
-              Identity
+          <div className="flex flex-col space-y-3" style={{ paddingLeft: "18px" }}>
+            <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
+              <FaUser className="text-blue-400 text-xs" /> OFFICER IDENTITY
             </span>
-            <div className="space-y-2.5">
-              <h2 className="text-xl font-bold font-space text-white leading-snug">
+            <div className="space-y-1.5">
+              <h2 className="text-xl font-bold font-space text-white leading-tight">
                 {currentUser?.name || "Commanding Officer"}
               </h2>
-              <span className="inline-block text-[9px] font-bold text-[#2563eb] bg-[#2563eb]/10 border border-[#2563eb]/20 px-2.5 py-0.5 rounded-[4px] uppercase tracking-wider font-mono font-space">
+              <span className="inline-block text-[10.5px] font-bold text-blue-400 uppercase tracking-wider font-mono">
                 {currentUser?.rank || "Officer Rank"}
               </span>
             </div>
           </div>
 
           {/* Group 3: Organization */}
-          <div className="flex flex-col space-y-4">
-            <span className="text-[11px] font-bold text-slate-500 uppercase tracking-widest font-inter">
-              Organization
+          <div className="flex flex-col space-y-3" style={{ paddingLeft: "18px" }}>
+            <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
+              <FaBuilding className="text-blue-400 text-xs" /> ASSIGNMENT UNIT
             </span>
-            <div className="space-y-4 text-[13px] text-slate-355 font-inter">
-              <div className="flex items-start gap-2.5">
-                <FaUser className="text-[18px] text-[#2563eb] flex-shrink-0 mt-0.5" />
-                <div>
-                  <span className="text-slate-500 text-[9px] block font-mono leading-none mb-1">ASSIGNED UNIT</span>
-                  <span className="font-semibold text-slate-200">{currentUser?.unit || "N/A"}</span>
-                </div>
+            <div className="space-y-3 text-[12px]">
+              <div>
+                <span className="text-slate-400 text-[9px] block font-mono uppercase leading-none mb-1">STATION / UNIT</span>
+                <span className="font-semibold text-white">{currentUser?.unit || "KSP Intelligence HQ"}</span>
               </div>
-              <div className="flex items-start gap-2.5">
-                <FaIdCard className="text-[18px] text-[#2563eb] flex-shrink-0 mt-0.5" />
-                <div>
-                  <span className="text-slate-500 text-[9px] block font-mono leading-none mb-1">KGID NUMBER</span>
-                  <span className="font-semibold font-mono text-slate-200">{currentUser?.kgid || "N/A"}</span>
-                </div>
+              <div>
+                <span className="text-slate-400 text-[9px] block font-mono uppercase leading-none mb-1">KGID NUMBER</span>
+                <button
+                  type="button"
+                  onClick={() => handleCopy(currentUser?.kgid || "KSP-ADMIN-01", "kgid")}
+                  className="font-semibold font-mono text-cyan-300 hover:text-cyan-200 flex items-center gap-1.5 transition-colors cursor-pointer"
+                  title="Click to copy KGID"
+                >
+                  <span>{currentUser?.kgid || "KSP-ADMIN-01"}</span>
+                  {copiedKey === "kgid" ? <FaCheck className="text-emerald-400 text-[10px]" /> : <FaCopy className="text-[10px] opacity-60 hover:opacity-100" />}
+                </button>
               </div>
             </div>
           </div>
 
           {/* Group 4: Security Clearance */}
-          <div className="flex flex-col space-y-4">
-            <span className="text-[11px] font-bold text-slate-500 uppercase tracking-widest font-inter">
-              Security Clearance
+          <div className="flex flex-col space-y-3" style={{ paddingLeft: "18px" }}>
+            <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
+              <FaFingerprint className="text-blue-400 text-xs" /> CLEARANCE LEVEL
             </span>
-            <div className="space-y-3.5">
-              <div className="inline-flex items-center gap-1.5 text-xs text-[#22c55e] font-bold font-mono tracking-wider bg-[#22c55e]/5 border border-[#22c55e]/15 px-2.5 py-1 rounded-[4px]">
-                <FaShieldAlt className="text-xs" /> LEVEL 1 AUTHORIZED
+            <div className="space-y-2.5">
+              <div className="inline-flex items-center gap-2 text-xs text-emerald-400 font-bold font-mono tracking-wider bg-emerald-950/40 border border-emerald-800/60 px-3 py-1.5 rounded-md shadow-inner">
+                <FaShieldAlt className="text-xs text-emerald-400" /> LEVEL 1 AUTHORIZED
               </div>
-              <div className="text-[10px] text-slate-555 font-mono">
-                <span className="block text-[8px] text-slate-500 uppercase">Granted On</span>
-                12 Mar 2024
+              <div className="text-[10px] text-slate-400 font-mono">
+                <span className="block text-[8.5px] text-slate-400 uppercase">ACCESS GRANTED</span>
+                State Security Grid Active
               </div>
             </div>
           </div>
 
-          {/* Group 5: Status */}
-          <div className="flex flex-col space-y-4">
-            <span className="text-[11px] font-bold text-slate-500 uppercase tracking-widest font-inter">
-              Status
+          {/* Group 5: Operational Status */}
+          <div className="flex flex-col space-y-3" style={{ paddingLeft: "18px" }}>
+            <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1.5">
+              <FaSyncAlt className="text-blue-400 text-xs" /> NETWORK STATUS
             </span>
-            <div className="space-y-3.5">
-              <div>
-                <span className="inline-block text-[9px] text-[#2563eb] bg-[#2563eb]/10 border border-[#2563eb]/20 px-2.5 py-0.5 rounded-[4px] font-bold font-mono">
-                  ACTIVE
+            <div className="space-y-2.5">
+              <div className="inline-flex items-center gap-2 bg-blue-950/50 border border-blue-800/40 px-3 py-1 rounded-md">
+                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-[10px] font-bold text-blue-300 font-mono tracking-wide">
+                  ACTIVE ON-GRID
                 </span>
               </div>
-              <div className="flex items-center gap-1.5 text-[10px] text-slate-555 font-mono">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#22c55e] animate-pulse flex-shrink-0"></span>
-                CatXay Secure
+              <div className="text-[10px] text-slate-400 font-mono">
+                CCTNS Node #BLR-HQ-09
               </div>
             </div>
           </div>
 
         </div>
+
+        {/* Preset Avatars Drawer Modal */}
+        {showAvatarModal && (
+          <div className="mt-7 pt-7 border-t border-slate-800/80 animate-fade-in">
+            <div className="flex items-center justify-between mb-4 font-inter">
+              <span className="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                <FaImages className="text-blue-400" /> Select an Officer Avatar Preset
+              </span>
+              <button
+                type="button"
+                onClick={() => setShowAvatarModal(false)}
+                className="text-xs text-slate-400 hover:text-white font-mono cursor-pointer"
+              >
+                ✕ Close
+              </button>
+            </div>
+            <div className="grid grid-cols-4 sm:grid-cols-8 gap-3.5">
+              {PRESET_AVATARS.map((av, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => {
+                    setProfileForm((prev) => ({ ...prev, avatar: av.url }));
+                    setProfileSuccess(`Selected ${av.label}. Click 'Update Profile' to save.`);
+                  }}
+                  className={`relative rounded-lg overflow-hidden border-2 transition-all p-0.5 cursor-pointer group ${
+                    profileForm.avatar === av.url ? "border-blue-500 shadow-lg scale-105" : "border-slate-800 hover:border-slate-600 opacity-80 hover:opacity-100"
+                  }`}
+                >
+                  <img src={av.url} alt={av.label} className="h-14 w-full object-cover rounded-md" />
+                  <span className="text-[8px] font-mono text-center block text-slate-400 group-hover:text-white truncate mt-1">
+                    {av.label}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
       </div>
 
-      {/* SECTION 2: Main Settings Area (5-4-3 Grid on Desktop, smooth visual gap-3 between cards) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 z-10 relative">
+      {/* 3. MAIN CONFIGURATION CARDS (Plus Jakarta Sans Exclusively Applied Here) */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 z-10 relative font-jakarta">
 
-        {/* Profile & Credentials form spans 9 columns if admin, 12 columns if not */}
+        {/* Profile & Credentials form spans 9 columns if admin, 12 columns if officer */}
         <form
           onSubmit={handleProfileUpdate}
-          className={`grid grid-cols-1 gap-3 ${isAdmin ? "lg:col-span-9 lg:grid-cols-9" : "lg:col-span-12 lg:grid-cols-12"}`}
+          className={`grid grid-cols-1 gap-8 ${isAdmin ? "lg:col-span-9 lg:grid-cols-9" : "lg:col-span-12 lg:grid-cols-12"}`}
         >
-          {/* Left Card: Account Profile Details (5 Columns if Admin, 7 if Not) */}
+          {/* Card 1: Account Profile Details */}
           <div
             id="profile-details-section"
-            className={`flex flex-col justify-between bg-[#081220] rounded-[4px] border border-[rgba(255,255,255,0.05)] p-8 sm:p-10 shadow-sm ${isAdmin ? "lg:col-span-5" : "lg:col-span-7"
-              }`}
+            className={`flex flex-col justify-between bg-slate-900/60 rounded-2xl border border-slate-800 p-8 sm:p-10 lg:p-12 shadow-xl backdrop-blur-sm ${
+              isAdmin ? "lg:col-span-5" : "lg:col-span-7"
+            }`}
           >
-            <div>
+            <div className="px-3 sm:px-4">
               {/* Header */}
-              <div className="flex items-center gap-2.5 mb-4 border-b border-slate-800/40 pb-3">
-                <FaUserEdit className="text-[18px] text-[#2563eb] flex-shrink-0" />
+              <div 
+                className="flex items-center gap-3 border-b border-slate-800/60 pb-4 mb-6"
+                style={{ paddingLeft: "10px", paddingRight: "10px", paddingTop: "4px" }}
+              >
+                <div className="h-2.5 w-2.5 rounded-full bg-blue-500 animate-pulse" />
                 <div>
-                  <h4 className="text-sm font-semibold font-space text-white tracking-wider">
+                  <h4 className="text-xs sm:text-sm font-bold text-white tracking-wide">
                     {isOfficer ? "Officer Profile & Station Details" : "Account Profile Details"}
                   </h4>
-                  <p className="text-[11px] text-slate-455 mt-0.5 font-light leading-normal">
+                  <p className="text-[11px] text-slate-400 font-normal mt-0.5 leading-normal">
                     Update profile, contacts, address, and assigned station.
                   </p>
                 </div>
               </div>
 
               {profileSuccess && (
-                <div className="p-4 mb-5 rounded-[4px] bg-[#22c55e]/10 border border-[#22c55e]/30 text-[#22c55e] text-xs flex items-center gap-2.5">
-                  <FaCheckCircle className="text-[#22c55e] text-sm" />
+                <div className="p-3.5 mb-5 rounded-xl bg-emerald-950/40 border border-emerald-800/60 text-emerald-300 text-xs flex items-center gap-2.5 animate-fade-in font-medium">
+                  <FaCheckCircle className="text-emerald-400 text-sm flex-shrink-0" />
                   <span>{profileSuccess}</span>
                 </div>
               )}
 
               {profileError && (
-                <div className="p-4 mb-5 rounded-[4px] bg-[#ef4444]/10 border border-[#ef4444]/30 text-[#ef4444] text-xs flex items-center gap-2.5">
-                  <FaExclamationCircle className="text-[#ef4444] text-sm" />
+                <div className="p-3.5 mb-5 rounded-xl bg-red-950/40 border border-red-800/60 text-red-300 text-xs flex items-center gap-2.5 animate-fade-in font-medium">
+                  <FaExclamationCircle className="text-red-400 text-sm flex-shrink-0" />
                   <span>{profileError}</span>
                 </div>
               )}
 
-              {/* Grid Inputs */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                <div className="space-y-1.5">
-                  <label className="block text-[11px] font-medium text-slate-400 font-inter tracking-wider">
-                    Officer Full Name *
+              {/* Grid Inputs with Plus Jakarta Sans */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-6 mt-5 px-2 sm:px-3">
+                <div className="space-y-2">
+                  <label className="block text-[11px] font-semibold text-slate-300 tracking-normal" style={{ paddingLeft: "6px" }}>
+                    Officer Full Name <span className="text-blue-400">*</span>
                   </label>
-                  <input
-                    type="text"
-                    value={profileForm.name}
-                    onChange={(e) => setProfileForm((prev) => ({ ...prev, name: e.target.value }))}
-                    required
-                    className="w-full h-12 rounded-[4px] bg-[#0c182a] border border-slate-800 px-6 text-xs text-white outline-none focus:border-[#2563eb] transition-all font-inter placeholder-slate-600"
-                  />
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={profileForm.name}
+                      onChange={(e) => setProfileForm((prev) => ({ ...prev, name: e.target.value }))}
+                      required
+                      className="w-full h-12 rounded-xl bg-slate-950/80 border border-slate-700/70 text-[13px] text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all placeholder-slate-500 shadow-inner font-medium"
+                      style={{ paddingLeft: "18px", paddingRight: "18px" }}
+                    />
+                  </div>
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="block text-[11px] font-medium text-slate-400 font-inter tracking-wider">
+                <div className="space-y-2">
+                  <label className="block text-[11px] font-semibold text-slate-300 tracking-normal" style={{ paddingLeft: "6px" }}>
                     Phone Contact Number
                   </label>
-                  <input
-                    type="text"
-                    value={profileForm.phone}
-                    onChange={(e) => setProfileForm((prev) => ({ ...prev, phone: e.target.value }))}
-                    className="w-full h-12 rounded-[4px] bg-[#0c182a] border border-slate-800 px-6 text-xs text-white outline-none focus:border-[#2563eb] transition-all font-inter placeholder-slate-655"
-                  />
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={profileForm.phone}
+                      onChange={(e) => setProfileForm((prev) => ({ ...prev, phone: e.target.value }))}
+                      className="w-full h-12 rounded-xl bg-slate-950/80 border border-slate-700/70 text-[13px] text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all placeholder-slate-500 shadow-inner font-medium"
+                      style={{ paddingLeft: "18px", paddingRight: "18px" }}
+                    />
+                  </div>
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="block text-[11px] font-medium text-slate-400 font-inter tracking-wider">
+                <div className="space-y-2">
+                  <label className="block text-[11px] font-semibold text-slate-300 tracking-normal" style={{ paddingLeft: "6px" }}>
                     Division / Range
                   </label>
                   <input
                     type="text"
                     value="Bengaluru City Police"
                     readOnly
-                    className="w-full h-12 rounded-[4px] bg-[#0c182a]/50 border border-slate-800/80 px-6 text-xs text-slate-455 outline-none cursor-not-allowed font-inter"
+                    className="w-full h-12 rounded-xl bg-slate-950/40 border border-slate-800/80 text-[13px] text-slate-400 outline-none cursor-not-allowed shadow-inner font-medium"
+                    style={{ paddingLeft: "18px", paddingRight: "18px" }}
                   />
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="block text-[11px] font-medium text-slate-400 font-inter tracking-wider">
+                <div className="space-y-2">
+                  <label className="block text-[11px] font-semibold text-slate-300 tracking-normal" style={{ paddingLeft: "6px" }}>
                     Address / Station Quarters
                   </label>
                   <input
                     type="text"
                     value={profileForm.address}
                     onChange={(e) => setProfileForm((prev) => ({ ...prev, address: e.target.value }))}
-                    className="w-full h-12 rounded-[4px] bg-[#0c182a] border border-slate-800 px-6 text-xs text-white outline-none focus:border-[#2563eb] transition-all font-inter placeholder-slate-655"
+                    className="w-full h-12 rounded-xl bg-slate-950/80 border border-slate-700/70 text-[13px] text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all placeholder-slate-500 shadow-inner font-medium"
+                    style={{ paddingLeft: "18px", paddingRight: "18px" }}
                   />
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="block text-[11px] font-medium text-slate-400 font-inter tracking-wider">
+                <div className="space-y-2">
+                  <label className="block text-[11px] font-semibold text-slate-300 tracking-normal" style={{ paddingLeft: "6px" }}>
                     District
                   </label>
                   <input
                     type="text"
                     value="Bengaluru Urban"
                     readOnly
-                    className="w-full h-12 rounded-[4px] bg-[#0c182a]/50 border border-slate-800/80 px-6 text-xs text-slate-455 outline-none cursor-not-allowed font-inter"
+                    className="w-full h-12 rounded-xl bg-slate-950/40 border border-slate-800/80 text-[13px] text-slate-400 outline-none cursor-not-allowed shadow-inner font-medium"
+                    style={{ paddingLeft: "18px", paddingRight: "18px" }}
                   />
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="block text-[11px] font-medium text-slate-400 font-inter tracking-wider">
+                <div className="space-y-2">
+                  <label className="block text-[11px] font-semibold text-slate-300 tracking-normal" style={{ paddingLeft: "6px" }}>
                     Assigned Unit / Station
                   </label>
                   <input
                     type="text"
                     value={profileForm.unit}
                     onChange={(e) => setProfileForm((prev) => ({ ...prev, unit: e.target.value }))}
-                    className="w-full h-12 rounded-[4px] bg-[#0c182a] border border-slate-800 px-6 text-xs text-white outline-none focus:border-[#2563eb] transition-all font-inter placeholder-slate-655"
+                    className="w-full h-12 rounded-xl bg-slate-950/80 border border-slate-700/70 text-[13px] text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all placeholder-slate-500 shadow-inner font-medium"
+                    style={{ paddingLeft: "18px", paddingRight: "18px" }}
                   />
                 </div>
 
-                <div className="space-y-1.5 sm:col-span-2">
-                  <label className="block text-[11px] font-medium text-slate-400 font-inter tracking-wider">
-                    Email (Official)
+                <div className="space-y-2 sm:col-span-2">
+                  <label className="block text-[11px] font-semibold text-slate-300 tracking-normal" style={{ paddingLeft: "6px" }}>
+                    Email (Official CCTNS ID)
                   </label>
                   <input
                     type="email"
-                    value={`${currentUser?.username || "officer"}@ksp.gov.in`}
+                    value={currentUser?.email || "officer@ksp.gov.in"}
                     readOnly
-                    className="w-full h-12 rounded-[4px] bg-[#0c182a]/50 border border-slate-800/80 px-6 text-xs text-slate-455 outline-none cursor-not-allowed font-inter"
+                    className="w-full h-12 rounded-xl bg-slate-950/40 border border-slate-800/80 text-[13px] text-slate-400 outline-none cursor-not-allowed shadow-inner font-medium"
+                    style={{ paddingLeft: "18px", paddingRight: "18px" }}
                   />
                 </div>
               </div>
             </div>
 
-            <div className="mt-6 pt-4 border-t border-slate-800/40">
+            <div className="mt-8 pt-5 border-t border-slate-800/50 px-3 sm:px-4">
               <button
                 type="submit"
-                className="h-12 w-full rounded-[4px] bg-[#2563eb] hover:bg-blue-600 text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer border-none outline-none font-space"
+                className="h-12 w-full rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-[0.99] text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer border-none outline-none shadow-lg shadow-blue-600/20 font-jakarta"
               >
-                <FaSave /> Update Profile
+                <FaSave /> Save Profile Changes
               </button>
             </div>
           </div>
 
-          {/* Center Card: Manage Login Credentials (4 Columns if Admin, 5 if Not) */}
+          {/* Card 2: Manage Login Credentials */}
           <div
             id="login-credentials-section"
-            className={`flex flex-col justify-between bg-[#081220] rounded-[4px] border border-[rgba(255,255,255,0.05)] p-8 sm:p-10 shadow-sm ${isAdmin ? "lg:col-span-4" : "lg:col-span-5"
-              }`}
+            className={`flex flex-col justify-between bg-slate-900/60 rounded-2xl border border-slate-800 p-8 sm:p-10 lg:p-12 shadow-xl backdrop-blur-sm ${
+              isAdmin ? "lg:col-span-4" : "lg:col-span-5"
+            }`}
           >
-            <div>
+            <div className="px-3 sm:px-4">
               {/* Header */}
-              <div className="flex items-center gap-2.5 mb-4 border-b border-slate-800/40 pb-3">
-                <FaKey className="text-[18px] text-[#2563eb] flex-shrink-0" />
+              <div 
+                className="flex items-center gap-3 border-b border-slate-800/60 pb-4 mb-6"
+                style={{ paddingLeft: "10px", paddingRight: "10px", paddingTop: "4px" }}
+              >
+                <div className="h-2.5 w-2.5 rounded-full bg-blue-500 animate-pulse" />
                 <div>
-                  <h4 className="text-sm font-semibold font-space text-white tracking-wider">
-                    Manage Login Credentials
+                  <h4 className="text-xs sm:text-sm font-bold text-white tracking-wide">
+                    Login Credentials
                   </h4>
-                  <p className="text-[11px] text-slate-450 mt-0.5 font-light leading-normal">
+                  <p className="text-[11px] text-slate-400 font-normal mt-0.5 leading-normal">
                     Configure login identifier and security passphrase updates.
                   </p>
                 </div>
               </div>
 
               {/* Form Inputs */}
-              <div className="space-y-4 mt-4">
-                <div className="space-y-1.5">
-                  <label className="block text-[11px] font-medium text-slate-400 font-inter tracking-wider">
+              <div className="space-y-5 mt-5 px-2 sm:px-3">
+                <div className="space-y-2">
+                  <label className="block text-[11px] font-semibold text-slate-300 tracking-normal" style={{ paddingLeft: "6px" }}>
                     Login Username
                   </label>
                   <input
@@ -537,42 +669,63 @@ const Settings = () => {
                     value={profileForm.username}
                     onChange={(e) => setProfileForm((prev) => ({ ...prev, username: e.target.value }))}
                     required
-                    className="w-full h-12 rounded-[4px] bg-[#0c182a] border border-slate-800 px-6 text-xs text-white outline-none focus:border-[#2563eb] transition-all font-semibold font-inter placeholder-slate-650"
+                    className="w-full h-12 rounded-xl bg-slate-950/80 border border-slate-700/70 text-[13px] text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all font-semibold font-mono placeholder-slate-650 shadow-inner"
+                    style={{ paddingLeft: "18px", paddingRight: "18px" }}
                   />
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="block text-[11px] font-medium text-slate-400 font-inter tracking-wider">
+                <div className="space-y-2">
+                  <label className="block text-[11px] font-semibold text-slate-300 tracking-normal" style={{ paddingLeft: "6px" }}>
                     New Password (Optional)
                   </label>
-                  <input
-                    type="password"
-                    value={profileForm.newPassword}
-                    onChange={(e) => setProfileForm((prev) => ({ ...prev, newPassword: e.target.value }))}
-                    placeholder="Leave blank to keep current"
-                    className="w-full h-12 rounded-[4px] bg-[#0c182a] border border-slate-800 px-6 text-xs text-white outline-none focus:border-[#2563eb] transition-all font-inter placeholder-slate-655"
-                  />
+                  <div className="relative">
+                    <input
+                      type={showNewPassword ? "text" : "password"}
+                      value={profileForm.newPassword}
+                      onChange={(e) => setProfileForm((prev) => ({ ...prev, newPassword: e.target.value }))}
+                      placeholder="Leave blank to keep current"
+                      className="w-full h-12 rounded-xl bg-slate-950/80 border border-slate-700/70 text-[13px] text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all font-mono placeholder-slate-600 shadow-inner font-medium"
+                      style={{ paddingLeft: "18px", paddingRight: "44px" }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 text-xs cursor-pointer p-1"
+                    >
+                      {showNewPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  </div>
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="block text-[11px] font-medium text-slate-400 font-inter tracking-wider">
+                <div className="space-y-2">
+                  <label className="block text-[11px] font-semibold text-slate-300 tracking-normal" style={{ paddingLeft: "6px" }}>
                     Confirm New Password
                   </label>
-                  <input
-                    type="password"
-                    value={profileForm.confirmPassword}
-                    onChange={(e) => setProfileForm((prev) => ({ ...prev, confirmPassword: e.target.value }))}
-                    placeholder="Re-enter new password"
-                    className="w-full h-12 rounded-[4px] bg-[#0c182a] border border-slate-800 px-6 text-xs text-white outline-none focus:border-[#2563eb] transition-all font-inter placeholder-slate-655"
-                  />
+                  <div className="relative">
+                    <input
+                      type={showConfirmPassword ? "text" : "password"}
+                      value={profileForm.confirmPassword}
+                      onChange={(e) => setProfileForm((prev) => ({ ...prev, confirmPassword: e.target.value }))}
+                      placeholder="Re-enter new password"
+                      className="w-full h-12 rounded-xl bg-slate-950/80 border border-slate-700/70 text-[13px] text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all font-mono placeholder-slate-600 shadow-inner font-medium"
+                      style={{ paddingLeft: "18px", paddingRight: "44px" }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 text-xs cursor-pointer p-1"
+                    >
+                      {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="mt-6 pt-4 border-t border-slate-800/40">
+            <div className="mt-8 pt-5 border-t border-slate-800/50 px-3 sm:px-4">
               <button
                 type="submit"
-                className="h-12 w-full rounded-[4px] bg-[#2563eb] hover:bg-blue-600 text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer border-none outline-none font-space"
+                className="h-12 w-full rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-[0.99] text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer border-none outline-none shadow-lg shadow-blue-600/20 font-jakarta"
               >
                 <FaKey /> Update Credentials
               </button>
@@ -580,62 +733,78 @@ const Settings = () => {
           </div>
         </form>
 
-        {/* Right Card: Records Security PIN Configuration (3 Columns, Admin Only) */}
+        {/* Card 3: Records Security PIN Configuration (Admin Only) */}
         {isAdmin && (
           <div
             id="pin-config-section"
-            className="lg:col-span-3 flex flex-col justify-between bg-[#081220] rounded-[4px] border border-[rgba(255,255,255,0.05)] p-8 sm:p-10 shadow-sm"
+            className="lg:col-span-3 flex flex-col justify-between bg-slate-900/60 rounded-2xl border border-slate-800 p-8 sm:p-10 lg:p-12 shadow-xl backdrop-blur-sm"
           >
-            <form onSubmit={handlePinUpdate} className="h-full flex flex-col justify-between">
+            <form onSubmit={handlePinUpdate} className="h-full flex flex-col justify-between px-3 sm:px-4">
               <div>
                 {/* Header */}
-                <div className="flex items-center gap-2.5 mb-4 border-b border-slate-800/40 pb-3">
-                  <FaLock className="text-[18px] text-[#2563eb] flex-shrink-0" />
+                <div 
+                  className="flex items-center gap-3 border-b border-slate-800/60 pb-4 mb-6"
+                  style={{ paddingLeft: "10px", paddingRight: "10px", paddingTop: "4px" }}
+                >
+                  <div className="h-2.5 w-2.5 rounded-full bg-blue-500 animate-pulse" />
                   <div>
-                    <h4 className="text-sm font-semibold font-space text-white tracking-wider">
+                    <h4 className="text-xs sm:text-sm font-bold text-white tracking-wide">
                       Records Security PIN
                     </h4>
-                    <p className="text-[11px] text-slate-455 mt-0.5 font-light leading-normal">
-                      PIN required for adding, editing, or deleting FIR records.
+                    <p className="text-[11px] text-slate-400 font-normal mt-0.5 leading-normal">
+                      Required for modifying FIR records.
                     </p>
                   </div>
                 </div>
 
                 {pinSuccess && (
-                  <div className="p-4 mb-5 rounded-[4px] bg-[#22c55e]/10 border border-[#22c55e]/30 text-[#22c55e] text-xs flex items-center gap-2.5">
-                    <FaCheckCircle className="text-[#22c55e] text-sm" />
+                  <div className="p-3.5 mb-5 rounded-xl bg-emerald-950/40 border border-emerald-800/60 text-emerald-300 text-xs flex items-center gap-2.5 animate-fade-in font-medium">
+                    <FaCheckCircle className="text-emerald-400 text-sm flex-shrink-0" />
                     <span>{pinSuccess}</span>
                   </div>
                 )}
 
                 {pinError && (
-                  <div className="p-4 mb-5 rounded-[4px] bg-[#ef4444]/10 border border-[#ef4444]/30 text-[#ef4444] text-xs flex items-center gap-2.5">
-                    <FaExclamationCircle className="text-[#ef4444] text-sm" />
+                  <div className="p-3.5 mb-5 rounded-xl bg-red-950/40 border border-red-800/60 text-red-300 text-xs flex items-center gap-2.5 animate-fade-in font-medium">
+                    <FaExclamationCircle className="text-red-400 text-sm flex-shrink-0" />
                     <span>{pinError}</span>
                   </div>
                 )}
 
                 {/* PIN Input */}
-                <div className="space-y-1.5 mt-4">
-                  <label className="block text-[11px] font-medium text-slate-400 font-inter tracking-wider">
-                    Enter new PIN (e.g., 4321)
+                <div className="space-y-2.5 mt-5 px-2 sm:px-3">
+                  <label className="block text-[11px] font-semibold text-slate-300 tracking-normal" style={{ paddingLeft: "6px" }}>
+                    Enter New PIN (4-6 Digits)
                   </label>
-                  <input
-                    type="password"
-                    maxLength={6}
-                    value={newPin}
-                    onChange={(e) => setNewPin(e.target.value)}
-                    placeholder="••••"
-                    required
-                    className="w-full h-12 rounded-[4px] bg-[#0c182a] border border-slate-800 px-6 text-xs text-white outline-none focus:border-[#2563eb] transition-all font-mono placeholder-slate-600"
-                  />
+                  <div className="relative">
+                    <input
+                      type={showPin ? "text" : "password"}
+                      maxLength={6}
+                      value={newPin}
+                      onChange={(e) => setNewPin(e.target.value)}
+                      placeholder="••••"
+                      required
+                      className="w-full h-12 rounded-xl bg-slate-950/80 border border-slate-700/70 text-[13px] text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all font-mono tracking-widest placeholder-slate-600 shadow-inner"
+                      style={{ paddingLeft: "18px", paddingRight: "44px" }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPin(!showPin)}
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200 text-xs cursor-pointer p-1"
+                    >
+                      {showPin ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                  </div>
+                  <p className="text-[11px] text-slate-400 leading-relaxed mt-1" style={{ paddingLeft: "6px" }}>
+                    Used as the cryptographic authorization lock when editing or deleting FIRs.
+                  </p>
                 </div>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-slate-800/40">
+              <div className="mt-8 pt-5 border-t border-slate-800/50 px-3 sm:px-4">
                 <button
                   type="submit"
-                  className="h-12 w-full rounded-[4px] bg-[#2563eb] hover:bg-blue-600 text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer border-none outline-none font-space"
+                  className="h-12 w-full rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-[0.99] text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer border-none outline-none shadow-lg shadow-blue-600/20 font-jakarta"
                 >
                   <FaLock /> Update PIN
                 </button>
@@ -646,124 +815,174 @@ const Settings = () => {
 
       </div>
 
-      {/* SECTION 3: Officer Directory & Password Override (Admin Only, distinct table borders like Wikipedia) */}
+      {/* 4. POLICE OFFICERS DIRECTORY & CREDENTIAL RESET (Reverted to Original font-space / font-inter / font-mono) */}
       {isAdmin && (
-        <div className="bg-[#081220] rounded-[4px] border border-[rgba(255,255,255,0.05)] p-8 sm:p-10 space-y-6 shadow-sm z-10 relative">
+        <div className="bg-slate-900/60 rounded-2xl border border-slate-800 p-8 sm:p-10 lg:p-12 space-y-7 shadow-xl backdrop-blur-sm z-10 relative font-inter">
 
-          {/* Header info */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-800/50 pb-4">
+          {/* Header & Search Filter */}
+          <div 
+            className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-slate-800/60 pb-5" 
+            style={{ paddingLeft: "16px", paddingRight: "16px", paddingTop: "4px" }}
+          >
             <div>
-              <h3 className="text-base font-semibold font-space text-white uppercase tracking-wider flex items-center gap-2">
-                <FaUserCheck className="text-[#2563eb] text-[18px] flex-shrink-0" />
-                Police Officers Directory & Credential Reset
-              </h3>
-              <p className="text-xs text-slate-455 mt-0.5">
-                View registered police officer accounts or override an officer's password.
+              <div className="flex items-center gap-3">
+                <div className="h-2.5 w-2.5 rounded-full bg-blue-500 animate-pulse" />
+                <h3 className="text-sm font-bold font-space text-white uppercase tracking-wider flex items-center gap-2">
+                  <FaUserCheck className="text-blue-400 text-base" />
+                  Police Officers Directory & Credential Reset
+                </h3>
+              </div>
+              <p className="text-xs text-slate-400 mt-1 font-sans" style={{ paddingLeft: "22px" }}>
+                Active CCTNS personnel accounts, access authorizations, and credentials override console.
               </p>
+            </div>
+
+            {/* Quick Search */}
+            <div className="relative w-full md:w-72">
+              <FaSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs" />
+              <input
+                type="text"
+                placeholder="Search by name, KGID, unit..."
+                value={officerSearch}
+                onChange={(e) => setOfficerSearch(e.target.value)}
+                className="w-full h-10 rounded-lg bg-slate-950/80 border border-slate-800 text-xs text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all font-inter placeholder-slate-600 shadow-inner"
+                style={{ paddingLeft: "36px", paddingRight: "14px" }}
+              />
             </div>
           </div>
 
           {officerPwdSuccess && (
-            <div className="p-4 mb-5 rounded-[4px] bg-[#22c55e]/10 border border-[#22c55e]/30 text-[#22c55e] text-xs flex items-center gap-2.5">
-              <FaCheckCircle className="text-[#22c55e] text-sm" />
+            <div className="p-3.5 rounded-lg bg-emerald-950/40 border border-emerald-800/60 text-emerald-300 text-xs flex items-center gap-2.5 animate-fade-in">
+              <FaCheckCircle className="text-emerald-400 text-sm flex-shrink-0" />
               <span>{officerPwdSuccess}</span>
             </div>
           )}
 
           {officerPwdError && (
-            <div className="p-4 mb-5 rounded-[4px] bg-[#ef4444]/10 border border-[#ef4444]/30 text-[#ef4444] text-xs flex items-center gap-2.5">
-              <FaExclamationCircle className="text-[#ef4444] text-sm" />
+            <div className="p-3.5 rounded-lg bg-red-950/40 border border-red-800/60 text-red-300 text-xs flex items-center gap-2.5 animate-fade-in">
+              <FaExclamationCircle className="text-red-400 text-sm flex-shrink-0" />
               <span>{officerPwdError}</span>
             </div>
           )}
 
-          {/* Redesigned Premium Wikipedia-Style Fully Bordered Table */}
-          <div className="overflow-hidden rounded-[4px] border border-slate-700 shadow-inner">
+          {/* Premium Wikipedia/CCTNS Style Fully Bordered Table */}
+          <div className="overflow-hidden rounded-xl border border-slate-800 shadow-xl">
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs font-inter border-collapse border border-slate-700">
+              <table className="w-full text-left text-xs font-inter border-collapse border border-slate-800">
                 <thead>
-                  <tr className="bg-[#111c30] text-slate-100 font-bold border-b border-slate-700 uppercase text-[10px] tracking-wider font-space">
-                    <th className="py-4 px-6 border border-slate-700">Officer Name</th>
-                    <th className="py-4 px-6 border border-slate-700">Rank & KGID</th>
-                    <th className="py-4 px-6 border border-slate-700">Login Username</th>
-                    <th className="py-4 px-6 border border-slate-700">Current Password</th>
-                    <th className="py-4 px-6 border border-slate-700">Station / Unit</th>
+                  <tr className="bg-slate-950 text-slate-300 font-bold border-b border-slate-800 uppercase text-[10px] tracking-wider font-space">
+                    <th className="py-3.5 px-6 border border-slate-800">Officer Name</th>
+                    <th className="py-3.5 px-6 border border-slate-800">Rank & KGID</th>
+                    <th className="py-3.5 px-6 border border-slate-800">Login Username</th>
+                    <th className="py-3.5 px-6 border border-slate-800">Active Passphrase</th>
+                    <th className="py-3.5 px-6 border border-slate-800">Assigned Unit</th>
                   </tr>
                 </thead>
-                <tbody className="text-slate-355">
-                  {usersList.map((off) => (
-                    <tr key={off.id} className="odd:bg-[#081220] even:bg-[#0c1626] hover:bg-[#2563eb]/5 transition-colors duration-150">
-                      <td className="py-4 px-6 border border-slate-700 font-semibold text-white">
-                        <div className="flex items-center gap-4">
-                          <img
-                            src={off.avatar || PRESET_AVATARS[0].url}
-                            alt={off.name}
-                            className="h-8 w-8 rounded-[2px] object-cover border border-slate-700/60 shadow-sm"
-                          />
-                          <span>{off.name}</span>
-                        </div>
+                <tbody className="divide-y divide-slate-800/60">
+                  {filteredOfficers.length > 0 ? (
+                    filteredOfficers.map((off) => (
+                      <tr 
+                        key={off.id} 
+                        className="bg-slate-900/40 hover:bg-slate-800/50 transition-colors duration-150"
+                      >
+                        <td className="py-3.5 px-6 border border-slate-800 font-semibold text-white">
+                          <div className="flex items-center gap-3.5">
+                            <img
+                              src={off.avatar || PRESET_AVATARS[0].url}
+                              alt={off.name}
+                              className="h-8 w-8 rounded-lg object-cover border border-slate-700/80 shadow-md flex-shrink-0"
+                            />
+                            <span className="font-semibold text-slate-100">{off.name}</span>
+                          </div>
+                        </td>
+                        <td className="py-3.5 px-6 border border-slate-800 font-medium text-slate-300 font-mono text-[11px]">
+                          {off.rank} • <span className="text-cyan-400 font-semibold">{off.kgid}</span>
+                        </td>
+                        <td className="py-3.5 px-6 border border-slate-800 font-mono text-blue-400 font-semibold">
+                          <button
+                            type="button"
+                            onClick={() => handleCopy(off.username, `user_${off.id}`)}
+                            className="bg-slate-950/80 px-2.5 py-1 rounded border border-slate-800 hover:border-slate-600 transition-all flex items-center gap-1.5 cursor-pointer"
+                            title="Click to copy username"
+                          >
+                            <span>{off.username}</span>
+                            {copiedKey === `user_${off.id}` ? <FaCheck className="text-emerald-400 text-[10px]" /> : <FaCopy className="text-[10px] opacity-40 hover:opacity-100" />}
+                          </button>
+                        </td>
+                        <td className="py-3.5 px-6 border border-slate-800 font-mono text-emerald-400 font-bold">
+                          <button
+                            type="button"
+                            onClick={() => handleCopy(off.password || "officer123", `pwd_${off.id}`)}
+                            className="bg-emerald-950/30 text-emerald-300 px-2.5 py-1 rounded border border-emerald-800/40 hover:border-emerald-700 transition-all flex items-center gap-1.5 cursor-pointer"
+                            title="Click to copy password"
+                          >
+                            <span>{off.password || "officer123"}</span>
+                            {copiedKey === `pwd_${off.id}` ? <FaCheck className="text-emerald-400 text-[10px]" /> : <FaCopy className="text-[10px] opacity-40 hover:opacity-100" />}
+                          </button>
+                        </td>
+                        <td className="py-3.5 px-6 border border-slate-800 text-slate-300 font-sans">
+                          {off.unit || "General Unit"}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={5} className="text-center py-8 text-slate-500 italic font-mono text-xs border border-slate-800">
+                        No officers matched your search query "{officerSearch}".
                       </td>
-                      <td className="py-4 px-6 border border-slate-700 font-medium text-slate-300">{off.rank} • {off.kgid}</td>
-                      <td className="py-4 px-6 border border-slate-700 font-mono text-[#60a5fa] font-semibold">
-                        <code className="bg-slate-950/80 px-2.5 py-1 rounded border border-slate-800">
-                          {off.username}
-                        </code>
-                      </td>
-                      <td className="py-4 px-6 border border-slate-700 font-mono text-emerald-400 font-bold">
-                        <code className="bg-emerald-950/40 text-emerald-300 px-2.5 py-1 rounded border border-emerald-800/60">
-                          {off.password || "officer123"}
-                        </code>
-                      </td>
-                      <td className="py-4 px-6 border border-slate-700 text-slate-400">{off.unit}</td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
             </div>
           </div>
 
-          {/* Officer Password Override Form */}
-          <form onSubmit={handleOfficerPasswordReset} className="pt-2 grid grid-cols-1 sm:grid-cols-3 gap-6 items-end">
-            <div className="space-y-2">
-              <label className="block text-[11px] font-medium text-slate-400 font-inter tracking-wider">
-                Select Officer Account
-              </label>
-              <div className="relative">
-                <select
-                  value={selectedUserId}
-                  onChange={(e) => setSelectedUserId(e.target.value)}
-                  className="w-full h-12 rounded-[4px] bg-[#0b1220] border border-slate-800 px-6 pr-10 text-xs text-slate-200 outline-none focus:border-[#2563eb] transition-all cursor-pointer appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%2522%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M7%209l3%203%203-3%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25rem_1.25rem] bg-[right_0.75rem_center] bg-no-repeat font-inter"
-                >
-                  <option value="">-- Choose Officer --</option>
-                  {usersList.map((off) => (
-                    <option key={off.id} value={off.id}>
-                      {off.name} (Username: {off.username} | Password: {off.password || "officer123"})
-                    </option>
-                  ))}
-                </select>
+          {/* Quick Override Password Action Console */}
+          <div className="pt-2">
+            <form onSubmit={handleOfficerPasswordReset} className="grid grid-cols-1 sm:grid-cols-3 gap-5 items-end bg-slate-950/60 border border-slate-800/80 p-5 rounded-xl">
+              <div className="space-y-1.5">
+                <label className="block text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400" style={{ paddingLeft: "4px" }}>
+                  Select Officer Account
+                </label>
+                <div className="relative">
+                  <select
+                    value={selectedUserId}
+                    onChange={(e) => setSelectedUserId(e.target.value)}
+                    className="w-full h-11 rounded-lg bg-slate-900 border border-slate-800 pr-10 text-xs text-slate-200 outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all cursor-pointer appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%2522%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M7%209l3%203%203-3%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.25rem_1.25rem] bg-[right_0.75rem_center] bg-no-repeat font-inter shadow-inner"
+                    style={{ paddingLeft: "16px" }}
+                  >
+                    <option value="">-- Choose Officer Account --</option>
+                    {usersList.map((off) => (
+                      <option key={off.id} value={off.id}>
+                        {off.name} (Username: {off.username} | Password: {off.password || "officer123"})
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
-            </div>
 
-            <div className="space-y-2">
-              <label className="block text-[11px] font-medium text-slate-400 font-inter tracking-wider">
-                Set Override Password
-              </label>
-              <input
-                type="text"
-                value={officerNewPassword}
-                onChange={(e) => setOfficerNewPassword(e.target.value)}
-                placeholder="New override password"
-                className="w-full h-12 rounded-[4px] bg-[#0b1220] border border-slate-800 px-6 text-xs text-white outline-none focus:border-[#2563eb] transition-all placeholder-slate-655 font-inter"
-              />
-            </div>
+              <div className="space-y-1.5">
+                <label className="block text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400" style={{ paddingLeft: "4px" }}>
+                  Set New Override Password
+                </label>
+                <input
+                  type="text"
+                  value={officerNewPassword}
+                  onChange={(e) => setOfficerNewPassword(e.target.value)}
+                  placeholder="Enter new passphrase..."
+                  className="w-full h-11 rounded-lg bg-slate-900 border border-slate-800 text-xs text-white outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition-all font-mono placeholder-slate-600 shadow-inner"
+                  style={{ paddingLeft: "16px", paddingRight: "16px" }}
+                />
+              </div>
 
-            <button
-              type="submit"
-              className="h-12 rounded-[4px] bg-[#2563eb] hover:bg-blue-600 text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer border-none outline-none font-space"
-            >
-              <FaKey /> Override Password
-            </button>
-          </form>
+              <button
+                type="submit"
+                className="h-11 rounded-lg bg-blue-600 hover:bg-blue-500 active:scale-[0.99] text-white text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer border-none outline-none font-space shadow-lg shadow-blue-600/20"
+              >
+                <FaKey /> Override Password
+              </button>
+            </form>
+          </div>
         </div>
       )}
 

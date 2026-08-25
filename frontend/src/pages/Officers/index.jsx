@@ -1,18 +1,14 @@
 import React, { useState, useEffect, useMemo } from "react";
 import PageHeader from "../../components/dashboard/PageHeader";
-import OfficerHeader from "../../components/officers/OfficerHeader";
-import OfficerFilters from "../../components/officers/OfficerFilters";
 import OfficerOfTheMonthCard from "../../components/officers/OfficerOfTheMonthCard";
-import OfficerKpis from "../../components/officers/OfficerKpis";
+import OfficerFilters from "../../components/officers/OfficerFilters";
+import OfficerHeader from "../../components/officers/OfficerHeader";
 import OfficerCharts from "../../components/officers/OfficerCharts";
-import OfficerTimeline from "../../components/officers/OfficerTimeline";
 import OfficerWorkload from "../../components/officers/OfficerWorkload";
-import OfficerSummary from "../../components/officers/OfficerSummary";
 import AddOfficerModal from "../../components/officers/AddOfficerModal";
 import { officerService } from "../../services/officerService";
-import { recordService } from "../../services/recordService";
 import { useAuth } from "../../context/AuthContext";
-import { FaUserPlus } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 
 const Officers = () => {
   const [officerList, setOfficerList] = useState([]);
@@ -94,17 +90,12 @@ const Officers = () => {
   }, [selectedBadge]);
 
   const handleAddOfficer = async (formData) => {
-    // 1. Create officer profile in database (await online Catalyst API POST)
     const newProfile = await officerService.addOfficer(formData);
-
-    // 2. Register officer user account in auth service
     registerOfficer({
       ...formData,
       badge: newProfile.badgeNumber,
       kgid: newProfile.badgeNumber
     });
-
-    // 3. Reload list & select new officer
     reloadOfficerList();
     setSelectedBadge(newProfile.badgeNumber);
   };
@@ -170,28 +161,36 @@ const Officers = () => {
   }
 
   return (
-    <div className="space-y-6 md:space-y-8">
-      {/* Page Title Header */}
+    <div className="space-y-5 sm:space-y-6">
+      
+      {/* 1. Header Row */}
       <PageHeader
         title="Officer Performance Center"
-        subtitle="Operational evaluation of investigation case logs, trial schedules, and resolution metrics"
+        subtitle="Operational evaluation of investigation case logs, task schedules, and resolution metrics"
         action={
           isAdmin ? (
             <button
               onClick={() => setIsAddModalOpen(true)}
-              className="flex items-center gap-2 rounded-sm bg-blue-600 hover:bg-blue-500 px-4 py-2 text-xs font-mono font-bold uppercase tracking-wider text-white transition-all active:scale-95 border border-blue-500/40 shadow-md hover:shadow-blue-600/30 cursor-pointer flex-shrink-0"
+              className="flex items-center gap-2 rounded-md bg-blue-600 hover:bg-blue-500 px-4 py-2 text-xs font-semibold text-white transition-all active:scale-95 shadow-md shadow-blue-600/30 cursor-pointer flex-shrink-0"
             >
-              <FaUserPlus className="text-sm" />
+              <FaPlus className="text-xs" />
               <span>Add New Officer</span>
             </button>
           ) : null
         }
       />
 
-      {/* Officer of the Month Spotlight Banner */}
-      <OfficerOfTheMonthCard officer={officerOfTheMonth} />
+      {/* 2. Top Hero: Featured Officer + Performance Highlights */}
+      <OfficerOfTheMonthCard 
+        officer={officerOfTheMonth} 
+        onSelectProfile={(badge) => {
+          if (badge) {
+            setSelectedBadge(badge);
+          }
+        }} 
+      />
 
-      {/* Multi-Criteria Filters Bar (Admin & Officer view) */}
+      {/* 3. Compact Filter Bar */}
       <OfficerFilters
         filters={filters}
         onFilterChange={handleFilterChange}
@@ -200,45 +199,35 @@ const Officers = () => {
         units={uniqueUnits}
       />
 
-      {/* 1. Officer Dossier Profile & Selector (Merged with KPIs) */}
-      <OfficerHeader
-        profile={profile}
-        officerList={filteredOfficerList}
-        onOfficerChange={setSelectedBadge}
-        allowSelector={isAdmin}
-      />
+      {/* 4. Middle Dual Grid: Selected Officer + KPI Grid (Left) & Charts (Right) */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 items-stretch">
+        
+        {/* Left Column: Selected Officer Dossier + 2x3 KPI Grid */}
+        <OfficerHeader
+          profile={profile}
+          officerList={filteredOfficerList}
+          onOfficerChange={setSelectedBadge}
+          allowSelector={isAdmin}
+        />
 
-      {/* 2. Case Resolutions Trends & Category Breakdown with Navy Radial Glow */}
-      <div className="relative">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(30,58,138,0.12)_0%,transparent_75%)] pointer-events-none" />
-        <div className="relative z-10">
-          <OfficerCharts
-            monthlyTrend={profile.monthlyTrend}
-            categoryDistribution={profile.categoryDistribution}
-          />
-        </div>
-      </div>
-
-      {/* 4. Timeline, Workload, & Evaluation Panels */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-        {/* Timeline of Investigation lifecycle */}
-        <OfficerTimeline timeline={profile.timeline} />
-
-        {/* Current cases, pending, and court dockets */}
-        <OfficerWorkload workload={profile.workload} />
-
-        {/* Intelligence summary evaluation */}
-        <OfficerSummary summary={profile.summary} />
+        {/* Right Column: Case Resolution Trend + Performance Snapshot */}
+        <OfficerCharts
+          monthlyTrend={profile.monthlyTrend}
+          categoryDistribution={profile.categoryDistribution}
+        />
 
       </div>
 
-      {/* Add New Officer Modal (Admin right) */}
+      {/* 5. Bottom Full-Width Table: Active Workload & Court Dockets */}
+      <OfficerWorkload workload={profile.workload} />
+
+      {/* Add New Officer Modal */}
       <AddOfficerModal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         onAdd={handleAddOfficer}
       />
+
     </div>
   );
 };
