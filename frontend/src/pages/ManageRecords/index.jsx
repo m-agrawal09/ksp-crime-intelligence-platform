@@ -152,25 +152,30 @@ const ManageRecords = () => {
   return (
     <div className="flex flex-col font-inter">
       {/* Title Header */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between pb-6 mb-6 border-b border-slate-700/60">
+      <div className="mb-8" style={{ marginBottom: "32px" }}>
         <PageHeader
           title="CCTNS Manage Records & FIR Console"
           subtitle="Register new First Information Reports, update case timelines, allocate investigating officers, and mark completed case closures"
+          action={
+            <button
+              onClick={handleOpenCreateModal}
+              className="inline-flex items-center justify-center gap-3.5 rounded-lg bg-blue-600 hover:bg-blue-500 border border-blue-400/60 text-sm font-mono font-bold uppercase tracking-wider text-white transition-all cursor-pointer shadow-lg hover:shadow-blue-500/30 active:scale-[0.98] flex-shrink-0 whitespace-nowrap"
+              style={{ paddingLeft: "36px", paddingRight: "36px", paddingTop: "14px", paddingBottom: "14px", borderRadius: "10px" }}
+            >
+              <FaFolderPlus className="text-base text-white" />
+              <span>Register New FIR</span>
+            </button>
+          }
         />
-
-        <button
-          onClick={handleOpenCreateModal}
-          className="h-11 rounded-sm bg-blue-600 hover:bg-blue-500 border border-blue-500/40 px-5 text-xs font-mono font-bold uppercase tracking-wider text-white flex items-center gap-2 transition-all cursor-pointer shadow-lg self-start md:self-auto active:scale-95 flex-shrink-0"
-        >
-          <FaFolderPlus className="text-sm" />
-          <span>Register New FIR</span>
-        </button>
       </div>
 
       {/* KPI Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div 
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8"
+        style={{ marginBottom: "32px" }}
+      >
         {/* Total Registered FIRs */}
-        <div 
+        <div
           className="rounded-sm border border-slate-700/60 bg-slate-900/85 backdrop-blur-md shadow-xl flex items-center justify-between hover:border-blue-500/40 transition-all"
           style={{ padding: "18px 22px", borderLeft: "4px solid #3b82f6" }}
         >
@@ -184,7 +189,7 @@ const ManageRecords = () => {
         </div>
 
         {/* Active Investigations */}
-        <div 
+        <div
           className="rounded-sm border border-slate-700/60 bg-slate-900/85 backdrop-blur-md shadow-xl flex items-center justify-between hover:border-amber-500/40 transition-all"
           style={{ padding: "18px 22px", borderLeft: "4px solid #f59e0b" }}
         >
@@ -198,7 +203,7 @@ const ManageRecords = () => {
         </div>
 
         {/* Closed / Completed Cases */}
-        <div 
+        <div
           className="rounded-sm border border-slate-700/60 bg-slate-900/85 backdrop-blur-md shadow-xl flex items-center justify-between hover:border-emerald-500/40 transition-all"
           style={{ padding: "18px 22px", borderLeft: "4px solid #10b981" }}
         >
@@ -212,7 +217,7 @@ const ManageRecords = () => {
         </div>
 
         {/* Critical Severity Incidents */}
-        <div 
+        <div
           className="rounded-sm border border-slate-700/60 bg-slate-900/85 backdrop-blur-md shadow-xl flex items-center justify-between hover:border-rose-500/40 transition-all"
           style={{ padding: "18px 22px", borderLeft: "4px solid #f43f5e" }}
         >
@@ -227,11 +232,8 @@ const ManageRecords = () => {
       </div>
 
       {/* Query Filters & Search Toolbar */}
-      <div 
-        className="rounded-sm border border-slate-700/60 shadow-xl bg-slate-900/85 backdrop-blur-md mb-6 font-sans"
-        style={{ padding: "18px 22px" }}
-      >
-        <div className="flex items-center justify-between border-b border-slate-700/60 pb-3.5 mb-4">
+      <div className="mb-8 font-sans" style={{ marginBottom: "32px" }}>
+        <div className="flex items-center justify-between pb-3 mb-3">
           <div className="flex items-center gap-2.5 text-xs font-bold text-slate-200 uppercase tracking-widest font-mono pl-1">
             <FaFilter className="text-blue-400 text-sm" />
             <span>Search & Filter FIR Records</span>
@@ -246,15 +248,16 @@ const ManageRecords = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 text-xs font-mono">
           {/* Search Box */}
-          <div className="relative sm:col-span-2 lg:col-span-2">
-            <FaSearch className="absolute left-3.5 top-3 text-slate-400 text-xs" />
+          <div className="relative sm:col-span-2 lg:col-span-2 flex items-center">
+            <FaSearch className="absolute left-3.5 text-slate-400 text-xs pointer-events-none z-10" />
             <input
               type="text"
               name="search"
               value={filters.search}
               onChange={handleFilterChange}
               placeholder="Search by FIR No, Officer, Complainant..."
-              className="w-full h-10 rounded-sm bg-slate-950/80 border border-slate-700/60 pl-9 pr-4 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 font-mono transition-all"
+              className="w-full h-10 rounded-sm bg-slate-950/80 border border-slate-700/60 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 font-mono transition-all"
+              style={{ paddingLeft: "42px", paddingRight: "16px" }}
             />
           </div>
 
@@ -398,15 +401,15 @@ const ManageRecords = () => {
                       <td className="py-4 px-4 font-mono">
                         <div className="flex flex-col gap-1.5 items-start">
                           <span className={`text-[9px] font-bold px-2.5 py-0.5 rounded-sm border uppercase tracking-wider font-mono ${isClosed
-                              ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30"
-                              : "bg-amber-500/15 text-amber-400 border-amber-500/30"
+                            ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30"
+                            : "bg-amber-500/15 text-amber-400 border-amber-500/30"
                             }`}>
                             {isClosed ? "CLOSED / COMPLETED" : r.status}
                           </span>
 
                           <span className={`text-[8.5px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider font-mono border ${r.severity === "CRITICAL" ? "bg-rose-500/15 text-rose-400 border-rose-500/30" :
-                              r.severity === "HIGH" ? "bg-amber-500/15 text-amber-400 border-amber-500/30" :
-                                "bg-blue-500/15 text-blue-400 border-blue-500/30"
+                            r.severity === "HIGH" ? "bg-amber-500/15 text-amber-400 border-amber-500/30" :
+                              "bg-blue-500/15 text-blue-400 border-blue-500/30"
                             }`}>
                             {r.severity}
                           </span>
@@ -447,8 +450,8 @@ const ManageRecords = () => {
                           <button
                             onClick={() => handleToggleCaseClosed(r.id)}
                             className={`p-2 rounded-sm border transition-all shadow-sm cursor-pointer ${isClosed
-                                ? "border-slate-700/60 bg-slate-950/80 text-amber-400 hover:bg-slate-900 hover:border-amber-500/50"
-                                : "border-slate-700/60 bg-slate-950/80 text-emerald-400 hover:bg-slate-900 hover:border-emerald-500/50"
+                              ? "border-slate-700/60 bg-slate-950/80 text-amber-400 hover:bg-slate-900 hover:border-amber-500/50"
+                              : "border-slate-700/60 bg-slate-950/80 text-emerald-400 hover:bg-slate-900 hover:border-emerald-500/50"
                               }`}
                             title={isClosed ? "Re-open Case Investigation" : "Mark Case Closed / Completed"}
                           >

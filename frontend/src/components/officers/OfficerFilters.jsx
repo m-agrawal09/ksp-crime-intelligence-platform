@@ -19,16 +19,17 @@ const OfficerFilters = ({
       style={{ padding: "18px 22px" }}
     >
       {/* Search Input on the Left */}
-      <div className="flex-1 max-w-md relative">
+      <div className="flex-1 max-w-md relative flex items-center">
         <input
           type="text"
           name="search"
           placeholder="Filter officers by name or badge ID..."
           value={filters.search || ""}
           onChange={handleSelectChange}
-          className="w-full bg-slate-950/80 border border-slate-700/60 rounded-sm pl-9 pr-4 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 font-mono transition-all"
+          className="w-full bg-slate-950/80 border border-slate-700/60 rounded-sm py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 font-mono transition-all"
+          style={{ paddingLeft: "42px", paddingRight: "16px" }}
         />
-        <FaSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs text-slate-400" />
+        <FaSearch className="absolute left-3.5 text-xs text-slate-400 pointer-events-none z-10" />
       </div>
 
       {/* Select Dropdowns in the Center/Right */}

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const PageHeader = ({ title, subtitle }) => {
+const PageHeader = ({ title, subtitle, action, children }) => {
   const today = new Date().toLocaleDateString("en-IN", {
     weekday: "long",
     day: "numeric",
@@ -38,7 +38,7 @@ const PageHeader = ({ title, subtitle }) => {
       </div>
 
       {/* Right meta group */}
-      <div className="flex items-center gap-4 self-start md:self-auto flex-shrink-0 font-mono">
+      <div className="flex flex-wrap items-center gap-5 sm:gap-6 self-start md:self-auto flex-shrink-0 font-mono pr-1">
         {/* Live status */}
         <div className="flex items-center gap-2 text-[10px]">
           <span className="live-dot h-2 w-2 rounded-full bg-emerald-400 inline-block flex-shrink-0 animate-pulse" />
@@ -54,6 +54,15 @@ const PageHeader = ({ title, subtitle }) => {
         <div className="text-[11px] text-slate-300">
           {today}
         </div>
+
+        {(action || children) && (
+          <>
+            <div className="h-5 w-px bg-slate-700/60" />
+            <div className="flex items-center">
+              {action || children}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

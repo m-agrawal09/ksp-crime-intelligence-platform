@@ -137,14 +137,14 @@ const Reports = () => {
   };
 
   return (
-    <div className="space-y-6 md:space-y-8">
+    <div>
       {/* Page Title Header */}
       <PageHeader
         title="Intelligence Report Center"
         subtitle="Configure, compile, and export operational police logs, trial briefs, and executive summaries"
       />
 
-
+      <div style={{ height: "32px" }} />
 
       {/* Main Core Columns Workspace */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
