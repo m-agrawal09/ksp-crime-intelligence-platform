@@ -180,7 +180,7 @@ const IntelligencePanel = ({ selectionName, metrics, selectedMarker, onDossierCl
       {/* 3. Severity Breakdown */}
       <IntelCard>
         <SectionHeader icon={FaInfoCircle} label="Severity Breakdown" accentColor="#ef4444" iconColor="text-red-400" />
-        <div className="space-y-2.5 font-mono text-xs">
+        <div className="flex flex-col gap-3 font-mono text-xs" style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           {[
             { label: "CRITICAL", count: metrics.sevBreakdown.CRITICAL || 0, color: "#f87171", bg: "rgba(239,68,68,0.14)", border: "rgba(239,68,68,0.35)" },
             { label: "HIGH",     count: metrics.sevBreakdown.HIGH || 0,     color: "#fbbf24", bg: "rgba(245,158,11,0.14)", border: "rgba(245,158,11,0.35)" },
@@ -189,15 +189,15 @@ const IntelligencePanel = ({ selectionName, metrics, selectedMarker, onDossierCl
           ].map(({ label, count, color, bg, border }) => {
             const pct = metrics.total > 0 ? Math.round((count / metrics.total) * 100) : 0;
             return (
-              <div key={label} style={{ background: bg, border: `1px solid ${border}`, borderRadius: 6, padding: "8px 12px" }}
-                className="flex items-center justify-between">
-                <div className="flex items-center gap-2.5">
+              <div key={label} style={{ background: bg, border: `1px solid ${border}`, borderRadius: 6, padding: "10px 14px" }}
+                className="flex items-center justify-between transition-all duration-150">
+                <div className="flex items-center gap-3">
                   <span style={{ width: 6, height: 6, borderRadius: "50%", background: color, display: "inline-block", flexShrink: 0 }} />
-                  <span style={{ color: color, fontSize: 9.5, fontWeight: 700, letterSpacing: "0.1em" }}>{label}</span>
+                  <span style={{ color: color, fontSize: 10, fontWeight: 700, letterSpacing: "0.1em" }}>{label}</span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                   <span className="text-base font-extrabold text-white">{count}</span>
-                  <span className="text-slate-400 text-[9.5px] font-medium">{pct}%</span>
+                  <span className="text-slate-400 text-[10px] font-medium tracking-wide">{pct}%</span>
                 </div>
               </div>
             );

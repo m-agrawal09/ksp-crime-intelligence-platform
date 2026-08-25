@@ -14,13 +14,13 @@ const MapFilters = ({ filters, onFilterChange, onReset }) => {
   };
 
   return (
-    <div className="cmd-toolbar px-4 py-2.5 animate-fade-in-up">
-      <div className="flex flex-wrap items-center gap-2.5">
+    <div className="cmd-toolbar rounded-md px-5 py-3 animate-fade-in-up" style={{ padding: "14px 18px" }}>
+      <div className="flex flex-wrap items-center gap-3">
 
         {/* Label */}
-        <div className="flex items-center gap-2 pr-3 border-r border-slate-700/30 mr-0.5 flex-shrink-0">
-          <div className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse" />
-          <span className="text-[9px] font-mono font-bold tracking-[0.14em] text-slate-500 uppercase whitespace-nowrap">
+        <div className="flex items-center gap-2.5 pl-1 pr-3.5 border-r border-slate-700/40 mr-0.5 flex-shrink-0">
+          <div className="h-1.5 w-1.5 rounded-full bg-blue-400 animate-pulse" />
+          <span className="text-[10px] font-mono font-bold tracking-[0.14em] text-slate-400 uppercase whitespace-nowrap">
             Intel Filters
           </span>
         </div>
@@ -42,7 +42,7 @@ const MapFilters = ({ filters, onFilterChange, onReset }) => {
 
         {/* Police Unit Search */}
         <div className="flex-1 min-w-[130px] relative">
-          <FaSearch className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[9px] text-slate-600 pointer-events-none" />
+          <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-[10px] text-slate-500 pointer-events-none" />
           <input
             type="text"
             name="unit"

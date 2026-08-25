@@ -571,16 +571,16 @@ const InteractiveMap = ({ incidents, selectedItem, onSelectDistrict, onSelectMar
                     </div>
                   </Tooltip>
                   <Popup className="dark-popup font-mono text-xs">
-                    <div style={{ padding: "4px 2px", minWidth: 230, maxWidth: 260, fontFamily: "'IBM Plex Mono', monospace" }}>
+                    <div style={{ padding: "10px 12px", minWidth: 240, maxWidth: 270, fontFamily: "'IBM Plex Mono', monospace" }}>
                       {/* Header */}
                       <div style={{
                         display: "flex", justifyContent: "space-between",
                         paddingBottom: 8, marginBottom: 10,
-                        borderBottom: "1px solid rgba(51,65,85,0.25)"
+                        borderBottom: "1px solid rgba(51,65,85,0.4)"
                       }}>
                         <span style={{ fontSize: 11, fontWeight: 700, color: "#93c5fd" }}>{inc.caseNo}</span>
                         <span style={{
-                          fontSize: 8, fontWeight: 700, letterSpacing: "0.08em",
+                          fontSize: 8.5, fontWeight: 700, letterSpacing: "0.08em",
                           textTransform: "uppercase", padding: "2px 7px", borderRadius: 4,
                           background: sevStyle.bg, border: `1px solid ${sevStyle.border}`, color: sevStyle.text
                         }}>
@@ -590,30 +590,30 @@ const InteractiveMap = ({ incidents, selectedItem, onSelectDistrict, onSelectMar
 
                       {/* Details */}
                       <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 10 }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                          <span style={{ fontSize: 8, color: "#475569", width: 14, flexShrink: 0 }}>📍</span>
-                          <span style={{ fontSize: 10, color: "#cbd5e1" }}>{inc.unit}</span>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                          <FaBuilding className="text-slate-400 text-[10px] flex-shrink-0" />
+                          <span style={{ fontSize: 10.5, color: "#cbd5e1" }}>{inc.unit}</span>
                         </div>
-                        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                          <span style={{ fontSize: 8, color: "#475569", width: 14, flexShrink: 0 }}>📅</span>
-                          <span style={{ fontSize: 10, color: "#94a3b8" }}>{inc.date}</span>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                          <FaCalendarAlt className="text-slate-400 text-[10px] flex-shrink-0" />
+                          <span style={{ fontSize: 10.5, color: "#94a3b8" }}>{inc.date}</span>
                         </div>
-                        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                          <span style={{ fontSize: 8, color: "#475569", width: 14, flexShrink: 0 }}>👤</span>
-                          <span style={{ fontSize: 10, color: "#94a3b8" }}>{inc.assignedOfficer.name}</span>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                          <FaUser className="text-slate-400 text-[10px] flex-shrink-0" />
+                          <span style={{ fontSize: 10.5, color: "#94a3b8" }}>{inc.assignedOfficer?.name || "Unassigned"}</span>
                         </div>
                       </div>
 
                       {/* Brief Facts */}
                       <div style={{
-                        background: "rgba(2,6,23,0.6)", borderRadius: 6,
-                        border: "1px solid rgba(51,65,85,0.2)", padding: "7px 9px", marginBottom: 8
+                        background: "rgba(2,6,23,0.8)", borderRadius: 6,
+                        border: "1px solid rgba(51,65,85,0.4)", padding: "8px 10px", marginBottom: 8
                       }}>
                         <span style={{
                           display: "block", fontSize: 8, fontWeight: 700,
-                          color: "#475569", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 4
+                          color: "#94a3b8", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 4
                         }}>Brief Facts</span>
-                        <p style={{ fontSize: 9, lineHeight: 1.55, color: "#64748b", fontFamily: "Inter, sans-serif",
+                        <p style={{ fontSize: 9.5, lineHeight: 1.55, color: "#cbd5e1", fontFamily: "Inter, sans-serif",
                           display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden"
                         }}>
                           {inc.briefFacts}
@@ -621,8 +621,8 @@ const InteractiveMap = ({ incidents, selectedItem, onSelectDistrict, onSelectMar
                       </div>
 
                       {/* Status footer */}
-                      <div style={{ display: "flex", justifyContent: "flex-end", fontSize: 8, color: "#475569" }}>
-                        Status: <span style={{ color: "#94a3b8", fontWeight: 700, marginLeft: 4 }}>{inc.status}</span>
+                      <div style={{ display: "flex", justifyContent: "flex-end", fontSize: 8.5, color: "#64748b" }}>
+                        Status: <span style={{ color: "#cbd5e1", fontWeight: 700, marginLeft: 4 }}>{inc.status}</span>
                       </div>
                     </div>
                   </Popup>
@@ -635,17 +635,17 @@ const InteractiveMap = ({ incidents, selectedItem, onSelectDistrict, onSelectMar
 
       {/* ── Floating Severity Legend (Bottom Right, above attribution) ── */}
       <div className="map-float-panel bottom-8 right-3">
-        <div className="map-severity-legend">
-          <div style={{ color: "#475569", marginBottom: 6, fontSize: 8, letterSpacing: "0.1em" }}>Severity Index</div>
+        <div className="map-severity-legend" style={{ padding: "10px 14px" }}>
+          <div style={{ color: "#94a3b8", marginBottom: 6, fontSize: 8.5, letterSpacing: "0.1em", textTransform: "uppercase", fontWeight: 700 }}>Severity Index</div>
           {[
             { label: "Critical", color: "#ef4444" },
             { label: "High",     color: "#f59e0b" },
             { label: "Medium",   color: "#3b82f6" },
             { label: "Low",      color: "#475569" },
           ].map(({ label, color }) => (
-            <div key={label} style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
+            <div key={label} style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 4 }}>
               <span style={{ width: 6, height: 6, borderRadius: "50%", background: color, display: "inline-block", flexShrink: 0 }} />
-              <span style={{ color: "#64748b", fontSize: 9 }}>{label}</span>
+              <span style={{ color: "#cbd5e1", fontSize: 9.5 }}>{label}</span>
             </div>
           ))}
         </div>
