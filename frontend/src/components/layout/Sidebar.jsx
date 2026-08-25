@@ -126,15 +126,19 @@ function Sidebar() {
                     key={item.path}
                     to={item.path}
                     className={({ isActive }) =>
-                      `flex h-[44px] items-center gap-3.5 rounded-lg px-3 text-[14px] font-medium transition-all duration-200 ${
+                      `flex h-[42px] items-center gap-3 rounded-sm px-3 text-[13.5px] font-medium transition-all duration-150 group ${
                         isActive
-                          ? "bg-blue-600/25 text-white font-semibold border-l-4 border-blue-500 shadow-sm shadow-blue-500/10"
+                          ? "bg-blue-600/25 text-white font-semibold border-l-4 border-blue-500 shadow-sm shadow-blue-500/15"
                           : "text-slate-300 hover:bg-slate-800/50 hover:text-white"
                       }`
                     }
                   >
-                    <Icon className="text-[20px] flex-shrink-0 text-slate-400 group-hover:text-cyan-400 transition-colors" />
-                    <span className="truncate tracking-wide">{item.name}</span>
+                    {({ isActive }) => (
+                      <>
+                        <Icon className={`text-[19px] flex-shrink-0 transition-colors ${isActive ? "text-blue-400" : "text-slate-400 group-hover:text-blue-300"}`} />
+                        <span className="truncate tracking-wide">{item.name}</span>
+                      </>
+                    )}
                   </NavLink>
                 );
               })}

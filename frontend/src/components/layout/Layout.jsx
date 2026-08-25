@@ -88,22 +88,24 @@ function Layout() {
             <nav className="flex-1 px-3 py-6 space-y-1.5 overflow-y-auto">
               {menuItems.map((item) => {
                 const Icon = item.icon;
-                return (
                   <NavLink
                     key={item.path}
                     to={item.path}
                     className={({ isActive }) =>
-                      `flex h-[48px] items-center gap-3.5 rounded-lg px-4 text-sm font-medium transition-all ${
+                      `flex h-[44px] items-center gap-3.5 rounded-sm px-3.5 text-sm font-medium transition-all group ${
                         isActive
-                          ? "bg-blue-600 text-white font-semibold shadow-lg shadow-blue-600/30"
+                          ? "bg-blue-600/30 text-white font-semibold border-l-4 border-blue-500 shadow-sm shadow-blue-500/20"
                           : "text-slate-400 hover:bg-slate-800/60 hover:text-white"
                       }`
                     }
                   >
-                    <Icon className="text-xl flex-shrink-0" />
-                    <span>{item.name}</span>
+                    {({ isActive }) => (
+                      <>
+                        <Icon className={`text-xl flex-shrink-0 transition-colors ${isActive ? "text-blue-400" : "text-slate-400"}`} />
+                        <span>{item.name}</span>
+                      </>
+                    )}
                   </NavLink>
-                );
               })}
             </nav>
 

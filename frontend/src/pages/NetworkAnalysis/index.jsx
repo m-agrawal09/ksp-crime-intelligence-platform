@@ -127,10 +127,11 @@ export default function NetworkAnalysis() {
         <div className="flex items-center gap-2 relative z-10">
           <button
             onClick={handleResetView}
-            className="px-3.5 py-2 rounded-md bg-slate-800/90 hover:bg-slate-700 border border-slate-600/70 text-xs font-semibold text-slate-200 hover:text-white flex items-center gap-2 transition-all cursor-pointer shadow-md"
+            className="flex items-center gap-2 text-cyan-400 hover:text-white transition-all duration-200 ease-in-out cursor-pointer group font-mono text-xs active:scale-95 py-1.5 px-3 rounded hover:bg-slate-800/60"
+            title="Reset Matrix View"
           >
-            <RiRefreshLine className="text-sm text-blue-400" />
-            <span>Reset Matrix</span>
+            <RiRefreshLine className="text-sm text-cyan-400 group-hover:rotate-180 transition-transform duration-300 ease-in-out" />
+            <span className="font-bold tracking-wider uppercase text-[11px]">Reset Matrix</span>
           </button>
         </div>
       </div>
