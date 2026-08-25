@@ -101,25 +101,33 @@ const PROBABILITY_INSIGHTS_KN = [
 
 /* ─── Probability Bar ─── */
 const ProbBar = ({ label, probability, color, zone, basis, lang }) => (
-  <div className="p-5 rounded-xl bg-slate-900/60 border border-slate-800/80 space-y-3 shadow-sm">
-    <div className="flex items-start justify-between gap-4">
-      <div className="flex-1 min-w-0 pl-1">
-        <p className="text-[13.5px] font-semibold text-white font-inter leading-snug">{label}</p>
-        <p className="text-xs text-slate-400 font-inter mt-1.5 flex items-center gap-1.5">
-          <FaMapMarkerAlt className="text-[10px] flex-shrink-0 text-slate-400" /> {zone}
+  <div 
+    className="rounded-sm bg-slate-950/80 border border-slate-700/70 shadow-sm transition-all"
+    style={{ 
+      padding: "20px 22px", 
+      display: "flex", 
+      flexDirection: "column", 
+      gap: "12px" 
+    }}
+  >
+    <div className="flex items-start justify-between gap-4 pl-1 pr-1 pt-0.5">
+      <div className="flex-1 min-w-0">
+        <p className="text-[14px] font-bold text-white font-sans leading-snug">{label}</p>
+        <p className="text-xs text-slate-300 font-sans mt-1.5 flex items-center gap-1.5">
+          <FaMapMarkerAlt className="text-[11px] flex-shrink-0 text-slate-400" /> {zone}
         </p>
       </div>
-      <span className="text-2xl font-bold font-mono flex-shrink-0 pr-1" style={{ color }}>{probability}%</span>
+      <span className="text-2xl font-bold font-mono flex-shrink-0 pt-0.5" style={{ color }}>{probability}%</span>
     </div>
 
-    <div className="h-2.5 rounded-full overflow-hidden mx-1" style={{ background: "rgba(51,65,85,0.25)" }}>
+    <div className="h-2 rounded-sm overflow-hidden mx-1 my-0.5" style={{ background: "rgba(51,65,85,0.4)" }}>
       <div
-        className="h-full rounded-full"
+        className="h-full rounded-sm"
         style={{ width: `${probability}%`, background: `linear-gradient(90deg, ${color}60 0%, ${color} 100%)`, transition: "width 0.8s cubic-bezier(0.22,1,0.36,1)" }}
       />
     </div>
 
-    <p className="text-xs text-slate-400 font-inter leading-relaxed pl-1">
+    <p className="text-xs text-slate-400 font-sans leading-relaxed pl-1 pr-1 pb-0.5">
       <span className="text-slate-300 font-semibold">{lang === "kn" ? "ಡೇಟಾ ಆಧಾರ: " : "Data basis: "}</span>{basis}
     </p>
   </div>
@@ -128,19 +136,26 @@ const ProbBar = ({ label, probability, color, zone, basis, lang }) => (
 /* ─── What-If Card ─── */
 const WhatIfCard = ({ icon: Icon, color, bg, border, title, body }) => (
   <div
-    className="rounded-2xl p-6 space-y-3.5 shadow-md"
-    style={{ background: bg, border: `1px solid ${border}` }}
+    className="rounded-sm shadow-md transition-all"
+    style={{ 
+      background: bg, 
+      border: `1px solid ${border}`,
+      padding: "22px 24px",
+      display: "flex",
+      flexDirection: "column",
+      gap: "14px"
+    }}
   >
-    <div className="flex items-start gap-3.5 pl-1">
+    <div className="flex items-center gap-3.5 pl-1 pt-0.5">
       <div
-        className="flex-shrink-0 flex items-center justify-center rounded-xl"
-        style={{ width: 38, height: 38, background: `${color}20`, border: `1px solid ${color}30` }}
+        className="flex-shrink-0 flex items-center justify-center rounded-sm shadow-sm"
+        style={{ width: 40, height: 40, background: `${color}25`, border: `1px solid ${color}45` }}
       >
-        <Icon style={{ color, fontSize: 14 }} />
+        <Icon style={{ color, fontSize: 16 }} />
       </div>
-      <p className="text-[13.5px] font-bold text-white font-inter leading-snug pt-0.5">{title}</p>
+      <p className="text-[14px] font-bold text-white font-sans leading-snug">{title}</p>
     </div>
-    <p className="text-[12.5px] text-slate-300 font-inter leading-relaxed pl-3 sm:pl-12 pr-2">{body}</p>
+    <p className="text-[13px] text-slate-300 font-sans leading-relaxed pl-1 pr-1 pb-0.5">{body}</p>
   </div>
 );
 
@@ -148,56 +163,60 @@ const WhatIfCard = ({ icon: Icon, color, bg, border, title, body }) => (
 const ThreatZoneCard = ({ fc, lang }) => (
   <div
     key={fc.id}
-    className="overflow-hidden rounded-xl border border-slate-700/60 shadow-lg"
+    className="overflow-hidden rounded-sm border border-slate-700/70 shadow-md transition-all"
     style={{
-      background: "rgba(10,18,30,0.8)",
+      background: "rgba(10,18,30,0.85)",
       borderLeft: "5px solid #ef4444",
     }}
   >
     {/* Card top */}
-    <div className="flex items-start justify-between gap-4 p-6 pb-4">
-      <div className="flex items-start gap-3 min-w-0 pl-1">
+    <div className="flex items-start justify-between gap-4" style={{ padding: "22px 24px 16px" }}>
+      <div className="flex items-start gap-3.5 min-w-0 pl-1 pt-0.5">
         <FaMapMarkerAlt className="text-rose-400 text-sm mt-1 flex-shrink-0" />
         <div className="min-w-0">
-          <p className="text-[13.5px] font-bold text-white font-inter leading-snug">{fc.location}</p>
-          <p className="text-xs text-slate-400 font-mono mt-1">{fc.crimeType}</p>
+          <p className="text-[14px] font-bold text-white font-sans leading-snug">{fc.location}</p>
+          <p className="text-xs text-slate-300 font-mono mt-1.5">{fc.crimeType}</p>
         </div>
       </div>
-      <div className="text-right flex-shrink-0 pr-1">
+      <div className="text-right flex-shrink-0 pr-1 pt-0.5">
         <p className="text-2xl font-bold font-mono text-rose-400">{fc.probability}</p>
-        <p className="text-[9px] font-bold font-mono text-rose-400/70 uppercase tracking-wider mt-0.5">{fc.riskLevel}</p>
+        <p className="text-[9.5px] font-bold font-mono text-rose-400/80 uppercase tracking-wider mt-0.5">{fc.riskLevel}</p>
       </div>
     </div>
 
     {/* Time window band */}
     <div
-      className="flex items-center gap-2.5 px-6 py-3"
-      style={{ background: "rgba(245,158,11,0.07)", borderTop: "1px solid rgba(245,158,11,0.12)", borderBottom: "1px solid rgba(245,158,11,0.12)" }}
+      className="flex items-center gap-3"
+      style={{ background: "rgba(245,158,11,0.08)", borderTop: "1px solid rgba(245,158,11,0.15)", borderBottom: "1px solid rgba(245,158,11,0.15)", padding: "12px 24px" }}
     >
       <FaClock className="text-amber-400 text-xs flex-shrink-0 ml-1" />
       <span className="text-xs font-mono text-amber-300 font-semibold">{fc.timeWindow}</span>
     </div>
 
     {/* Body */}
-    <div className="p-6 space-y-4">
-      <div className="pl-1">
-        <p className="text-[10px] font-mono font-bold text-amber-400/80 uppercase tracking-widest mb-2">
+    <div className="space-y-4" style={{ padding: "22px 24px" }}>
+      <div className="pl-1 pr-1 pt-0.5">
+        <p className="text-[10.5px] font-mono font-bold text-amber-400 uppercase tracking-widest mb-2">
           {lang === "kn" ? "ಚಾರಿತ್ರಿಕ ಸಾಕ್ಷ್ಯಗಳು (Historical Evidence)" : "Historical Evidence"}
         </p>
-        <p className="text-[12.5px] text-slate-300 font-inter leading-relaxed">{fc.evidence}</p>
+        <p className="text-[13px] text-slate-300 font-sans leading-relaxed">{fc.evidence}</p>
       </div>
 
       <div
-        className="rounded-xl p-5"
-        style={{ background: "rgba(124,58,237,0.07)", border: "1px solid rgba(124,58,237,0.18)" }}
+        className="rounded-sm"
+        style={{ 
+          background: "rgba(124,58,237,0.08)", 
+          border: "1px solid rgba(124,58,237,0.25)",
+          padding: "20px 22px"
+        }}
       >
-        <div className="flex items-start gap-3 pl-1">
+        <div className="flex items-start gap-3.5 pl-1 pr-1 pt-0.5">
           <FaLightbulb className="text-amber-400 text-sm flex-shrink-0 mt-0.5" />
           <div>
-            <p className="text-[10px] font-mono font-bold text-purple-300/80 uppercase tracking-widest mb-2">
+            <p className="text-[10.5px] font-mono font-bold text-purple-300 uppercase tracking-widest mb-2">
               {lang === "kn" ? "ಕಾರ್ಯತಂತ್ರದ ಶಿಫಾರಸು (Tactical Recommendation)" : "Tactical Recommendation"}
             </p>
-            <p className="text-[12.5px] text-purple-100/90 font-inter leading-relaxed">{fc.recommendation}</p>
+            <p className="text-[13px] text-purple-100 font-sans leading-relaxed">{fc.recommendation}</p>
           </div>
         </div>
       </div>
@@ -279,39 +298,39 @@ const PredictiveForecastingCard = ({ lang = "en" }) => {
   const totalRecords = recordService.getRecords().length;
 
   return (
-    <div className="space-y-10 font-inter">
+    <div className="space-y-8 font-sans">
 
       {/* ── Header ── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 pb-2">
+        <div className="flex items-center gap-4 pl-1 pt-1">
           <div
-            className="flex items-center justify-center rounded-2xl flex-shrink-0"
-            style={{ width: 48, height: 48, background: "linear-gradient(135deg, rgba(124,58,237,0.22) 0%, rgba(37,99,235,0.22) 100%)", border: "1px solid rgba(124,58,237,0.35)" }}
+            className="flex items-center justify-center rounded-sm flex-shrink-0 shadow-md"
+            style={{ width: 46, height: 46, background: "linear-gradient(135deg, rgba(124,58,237,0.25) 0%, rgba(37,99,235,0.25) 100%)", border: "1px solid rgba(124,58,237,0.4)" }}
           >
             <RiBrainLine className="text-2xl text-purple-400 animate-pulse" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white font-space tracking-tight leading-tight">
+            <h2 className="text-lg font-bold text-white tracking-tight leading-tight">
               {isKn ? "ಎಐ ಅಪರಾಧ ಮುನ್ಸೂಚನೆ ಎಂಜಿನ್ (AI Predictive Forecasting Engine)" : "AI Predictive Crime Forecasting Engine"}
             </h2>
-            <p className="text-xs text-slate-500 font-inter mt-1">
+            <p className="text-xs text-slate-300 font-sans mt-1">
               {isKn ? `ಕ್ವಿಕ್‌ಎಮ್‌ಎಲ್ v4.2 · ಮರುಕಳಿಸುವಿಕೆಯ ಮಾದರಿ · ${totalRecords} ಸಕ್ರಿಯ ಪ್ರಕರಣಗಳು` : `QuickML v4.2 · Multi-variable spatio-temporal recurrence model · ${totalRecords} active CCTNS records`}
             </p>
           </div>
         </div>
 
         {/* Filters */}
-        <div className="flex flex-wrap gap-2.5">
+        <div className="flex flex-wrap gap-2.5 pt-1">
           {[
             { value: selectedDistrict, onChange: setSelectedDistrict, color: "#c084fc", options: [["ALL", isKn ? "ಎಲ್ಲಾ ಜಿಲ್ಲೆಗಳು" : "All Districts"], ...DISTRICTS.slice(1).map(d => [d, d])] },
             { value: selectedCategory, onChange: setSelectedCategory, color: "#60a5fa", options: [["ALL", isKn ? "ಎಲ್ಲಾ ವಿಭಾಗಗಳು" : "All Categories"], ["Property Offences", isKn ? "ಆಸ್ತಿ ಅಪರಾಧಗಳು" : "Property Offences"], ["Offences Against Body", isKn ? "ದೈಹಿಕ ಅಪರಾಧಗಳು" : "Body Offences"], ["Cyber Crimes", isKn ? "ಸೈಬರ್ ಅಪರಾಧಗಳು" : "Cyber Crimes"], ["Financial Fraud", isKn ? "ಹಣಕಾಸು ವಂಚನೆ" : "Financial Fraud"], ["Narcotics", isKn ? "ಮಾದಕದ್ರವ್ಯ" : "Narcotics"]] },
           ].map((sel, i) => (
-            <div key={i} className="flex items-center gap-2 px-3.5 py-2 rounded-xl" style={{ background: "rgba(10,18,30,0.8)", border: "1px solid rgba(51,65,85,0.4)" }}>
+            <div key={i} className="flex items-center gap-2 px-3.5 py-2 rounded-sm" style={{ background: "rgba(10,18,30,0.85)", border: "1px solid rgba(71,85,105,0.6)" }}>
               {i === 0 && <FaFilter className="text-[10px] text-purple-400" />}
               <select
                 value={sel.value}
                 onChange={(e) => sel.onChange(e.target.value)}
-                className="bg-transparent text-xs font-semibold outline-none cursor-pointer font-mono"
+                className="bg-transparent text-xs font-semibold outline-none cursor-pointer font-mono pl-1"
                 style={{ color: sel.color }}
               >
                 {sel.options.map(([val, label]) => <option key={val} value={val} className="bg-slate-950 text-white">{label}</option>)}
@@ -325,47 +344,53 @@ const PredictiveForecastingCard = ({ lang = "en" }) => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
         {/* LEFT: Threat Zone Forecasts */}
-        <div className="space-y-6">
-          <div className="flex items-center gap-2.5 pb-3" style={{ borderBottom: "1px solid rgba(51,65,85,0.25)" }}>
+        <div
+          className="rounded-sm border border-slate-700/60 shadow-lg flex flex-col"
+          style={{ background: "rgba(10,18,30,0.85)", padding: "24px 26px" }}
+        >
+          <div className="flex items-center gap-2.5 mb-5 pb-3.5 border-b border-slate-700/60 pl-1">
             <FaSkull className="text-rose-400" />
-            <h3 className="text-sm font-bold text-white uppercase tracking-widest font-space">
+            <h3 className="text-sm font-bold text-white uppercase tracking-widest font-mono">
               {isKn ? "ಸಕ್ರಿಯ ಬೆದರಿಕೆ ವಲಯಗಳ ಮುನ್ಸೂಚನೆ (Active Threat Zone Forecasts)" : "Active Threat Zone Forecasts"}
             </h3>
           </div>
 
-          <div className="flex flex-col" style={{ gap: "1.5rem" }}>
+          <div className="flex flex-col gap-5">
             {forecastAlerts.map((fc) => <ThreatZoneCard key={fc.id} fc={fc} lang={lang} />)}
           </div>
         </div>
 
         {/* RIGHT: Probability + What-Ifs */}
-        <div className="flex flex-col" style={{ gap: "1.7rem" }}>
+        <div className="flex flex-col gap-6">
 
           {/* Probability Index */}
           <div
-            className="rounded-2xl p-6"
-            style={{ background: "rgba(10,18,30,0.8)", border: "1px solid rgba(51,65,85,0.4)" }}
+            className="rounded-sm p-6 border border-slate-700/60 shadow-lg"
+            style={{ background: "rgba(10,18,30,0.85)" }}
           >
-            <div className="flex items-center gap-2.5 mb-6 pb-4" style={{ borderBottom: "1px solid rgba(51,65,85,0.25)" }}>
+            <div className="flex items-center gap-2.5 mb-5 pb-3.5 border-b border-slate-700/60 pl-1">
               <FaPercent className="text-blue-400" />
-              <h3 className="text-sm font-bold text-white uppercase tracking-widest font-space">
+              <h3 className="text-sm font-bold text-white uppercase tracking-widest font-mono">
                 {isKn ? "ಅಪರಾಧ ಸಂಭವನೀಯತೆಯ ಸೂಚ್ಯಂಕ (Incident Probability Index)" : "Incident Probability Index"}
               </h3>
             </div>
-            <div className="space-y-6">
+            <div className="flex flex-col gap-5">
               {probabilities.map((item) => <ProbBar key={item.label} {...item} lang={lang} />)}
             </div>
           </div>
 
           {/* What-If Scenarios */}
-          <div>
-            <div className="flex items-center gap-2.5 mb-5 pb-3" style={{ borderBottom: "1px solid rgba(51,65,85,0.25)" }}>
+          <div
+            className="rounded-sm border border-slate-700/60 shadow-lg"
+            style={{ background: "rgba(10,18,30,0.85)", padding: "24px 26px" }}
+          >
+            <div className="flex items-center gap-2.5 mb-5 pb-3.5 border-b border-slate-700/60 pl-1">
               <FaQuestionCircle className="text-purple-400" />
-              <h3 className="text-sm font-bold text-white uppercase tracking-widest font-space">
+              <h3 className="text-sm font-bold text-white uppercase tracking-widest font-mono">
                 {isKn ? "ಸಂಭಾವ್ಯ ಸನ್ನಿವೇಶಗಳ ವಿಶ್ಲೇಷಣೆ (What-If Scenario Analysis)" : "What-If Scenario Analysis"}
               </h3>
             </div>
-            <div className="space-y-4">
+            <div className="flex flex-col gap-5">
               {whatIfs.map((s, i) => <WhatIfCard key={i} {...s} />)}
             </div>
           </div>
@@ -375,14 +400,13 @@ const PredictiveForecastingCard = ({ lang = "en" }) => {
 
       {/* Footer */}
       <div
-        className="flex items-center justify-between pt-5"
-        style={{ borderTop: "1px solid rgba(51,65,85,0.2)" }}
+        className="flex items-center justify-between pt-5 px-1 border-t border-slate-700/50"
       >
-        <span className="flex items-center gap-2 text-xs font-inter text-slate-500">
+        <span className="flex items-center gap-2 text-xs font-sans text-slate-400">
           <FaCheckCircle className="text-emerald-400" />
           {isKn ? `${totalRecords} ಸಕ್ರಿಯ ಸಿಸಿಟಿಎನ್‌ಎಸ್ ಪ್ರಕರಣಗಳೊಂದಿಗೆ ಸಂಯೋಜಿಸಲಾಗಿದೆ` : `Correlated with ${totalRecords} active CCTNS CaseMaster logs`}
         </span>
-        <span className="text-xs font-mono text-slate-500">88.4% Confidence Index · QuickML v4.2</span>
+        <span className="text-xs font-mono text-slate-400">88.4% Confidence Index · QuickML v4.2</span>
       </div>
     </div>
   );

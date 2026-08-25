@@ -311,16 +311,13 @@ const InsightsForecast = () => {
 
               {/* Executive Forecast Narrative */}
               <div
-                className="rounded-none p-6 sm:p-8"
-                style={{
-                  background: "linear-gradient(135deg, rgba(124,58,237,0.06) 0%, rgba(37,99,235,0.06) 100%)",
-                  border: "1px solid rgba(124,58,237,0.2)",
-                }}
+                className="rounded-md border border-slate-700/60 bg-slate-900/85 backdrop-blur-md shadow-xl"
+                style={{ padding: "22px 24px" }}
               >
                 <div className="flex items-start gap-4">
                   <div
-                    className="flex-shrink-0 flex items-center justify-center rounded-none"
-                    style={{ width: 44, height: 44, background: "rgba(124,58,237,0.15)", border: "1px solid rgba(124,58,237,0.3)" }}
+                    className="flex-shrink-0 flex items-center justify-center rounded-sm shadow-md"
+                    style={{ width: 44, height: 44, background: "rgba(124,58,237,0.2)", border: "1px solid rgba(124,58,237,0.4)" }}
                   >
                     <RiBrainLine className="text-xl text-purple-400" />
                   </div>
@@ -329,27 +326,27 @@ const InsightsForecast = () => {
                       <p className="text-[10px] font-mono font-bold text-purple-400 uppercase tracking-widest mb-1">
                         {isKn ? "ಕಾರ್ಯನಿರ್ವಾಹಕ ಮುನ್ಸೂಚನೆ ಸಾರಾಂಶ · ಕ್ವಿಕ್‌ಎಮ್‌ಎಲ್ ವರದಿ" : "Executive Forecast Summary · QuickML Intelligence Report"}
                       </p>
-                      <h3 className="text-base font-bold text-white font-space">
+                      <h3 className="text-base font-bold text-white tracking-tight">
                         {isKn ? "ರಾಜ್ಯವ್ಯಾಪಿ ಅಪರಾಧ ಮುನ್ಸೂಚನೆ — ತ್ರೈಮಾಸಿಕ 2025" : "Statewide Crime Outlook — Q3 2025"}
                       </h3>
                     </div>
                     {isKn ? (
-                      <p className="text-sm text-slate-300 font-inter leading-relaxed">
+                      <p className="text-sm text-slate-300 font-sans leading-relaxed">
                         ಕ್ವಿಕ್‌ಎಮ್‌ಎಲ್ ಮುನ್ಸೂಚಕ ವಿಶ್ಲೇಷಣೆ ಎಂಜಿನ್ ಬಹು-ವರ್ಷಗಳ ಸಿಸಿಟಿಎನ್‌ಎಸ್ ಪ್ರಕರಣಗಳ ಡೇಟಾವನ್ನು ನಕ್ಷೆ ಮಾಡುತ್ತದೆ. ಮುಂಬರುವ ವಾರಾಂತ್ಯಗಳಲ್ಲಿ ನಗರ ಪೊಲೀಸ್ ವ್ಯಾಪ್ತಿಯಲ್ಲಿ ಆಸ್ತಿ ಕಳ್ಳತನದ ಘಟನೆಗಳು <strong className="text-white">18.4%</strong> ಹೆಚ್ಚಾಗುವ ಮುನ್ಸೂಚನೆಯಿದೆ. ಬೆಂಗಳೂರು ಪೂರ್ವದಲ್ಲಿ ಸೈಬರ್ ವಂಚನೆ ಹೆಚ್ಚಳವು ಮಾಸಿಕ <strong className="text-white">+14.2%</strong> ರಷ್ಟಿದೆ. ಕೋರಮಂಗಲ (<strong className="text-white">86% ಕಳ್ಳತನದ ಸಂಭವನೀಯತೆ</strong>), ಮಂಗಳೂರು ಬಂದರು ವಲಯ (<strong className="text-white">ಮಾದಕದ್ರವ್ಯ 61%</strong>), ಮತ್ತು ಬೆಂಗಳೂರು ಪೂರ್ವ ಸೈಬರ್ ಕಾರಿಡಾರ್ (<strong className="text-white">74%</strong>) ಹೆಚ್ಚಿನ ಅಪಾಯಕಾರಿ ವಲಯಗಳಾಗಿವೆ.
                       </p>
                     ) : (
                       <>
-                        <p className="text-sm text-slate-400 font-inter leading-relaxed">
+                        <p className="text-sm text-slate-300 font-sans leading-relaxed">
                           The QuickML predictive analytics engine correlates multi-year CCTNS{" "}
-                          <code className="text-purple-300/80 font-mono text-[11px] bg-purple-900/20 px-1 rounded">CaseMaster</code>{" "}
+                          <code className="text-purple-300 font-mono text-[11px] bg-purple-900/30 border border-purple-500/30 px-1.5 py-0.5 rounded">CaseMaster</code>{" "}
                           timestamps with geographic unit boundaries (
-                          <code className="text-purple-300/80 font-mono text-[11px] bg-purple-900/20 px-1 rounded">UnitID</code>
+                          <code className="text-purple-300 font-mono text-[11px] bg-purple-900/30 border border-purple-500/30 px-1.5 py-0.5 rounded">UnitID</code>
                           ). Based on seasonal variance and repeat Offence Section spikes, property theft incidents in urban
                           police ranges are projected to rise by <strong className="text-white">18.4%</strong> over upcoming weekends.
                           Cyber fraud escalation in Bengaluru East follows an accelerating +14.2% monthly trend driven by AePS
                           cloning operations. Tactical deployment recommendations have been dispatched to precinct shift supervisors.
                         </p>
-                        <p className="text-sm text-slate-400 font-inter leading-relaxed">
+                        <p className="text-sm text-slate-300 font-sans leading-relaxed">
                           High confidence zones include <strong className="text-white">Koramangala (86% theft probability)</strong>,{" "}
                           <strong className="text-white">Mangaluru Port Zone (narcotics, 61%)</strong>, and{" "}
                           <strong className="text-white">Bengaluru East cyber corridor (74%)</strong>. All predictions are
@@ -363,8 +360,8 @@ const InsightsForecast = () => {
 
               {/* Forecast Intelligence Card (Probabilities + What-Ifs + Threat Zones) */}
               <div
-                className="rounded-lg p-6 sm:p-8"
-                style={{ background: "rgba(8,18,32,0.6)", border: "1px solid rgba(51,65,85,0.35)" }}
+                className="rounded-md border border-slate-700/60 bg-slate-900/85 backdrop-blur-md shadow-xl"
+                style={{ padding: "24px 28px" }}
               >
                 <PredictiveForecastingCard lang={pageLang} />
               </div>
