@@ -130,12 +130,12 @@ const ChatInput = ({ onSend, onClear, disabled }) => {
         </div>
 
         {/* Voice Language Toggle */}
-        <div className="flex items-center gap-1.5 bg-slate-900/80 border border-slate-800 rounded-lg p-1">
+        <div className="flex items-center gap-1.5 bg-slate-900/80 border border-slate-800 rounded-none p-1">
           <span className="text-[10px] font-mono text-slate-400 px-1.5">Mic Lang:</span>
           <button
             type="button"
             onClick={() => setVoiceLang("en-IN")}
-            className={`px-2 py-0.5 text-[10px] font-bold rounded-md transition-colors cursor-pointer ${
+            className={`px-2 py-0.5 text-[10px] font-bold rounded-none transition-colors cursor-pointer ${
               voiceLang === "en-IN" ? "bg-blue-600 text-white" : "text-slate-400 hover:text-white"
             }`}
           >
@@ -144,7 +144,7 @@ const ChatInput = ({ onSend, onClear, disabled }) => {
           <button
             type="button"
             onClick={() => setVoiceLang("kn-IN")}
-            className={`px-2 py-0.5 text-[10px] font-bold rounded-md transition-colors cursor-pointer ${
+            className={`px-2 py-0.5 text-[10px] font-bold rounded-none transition-colors cursor-pointer ${
               voiceLang === "kn-IN" ? "bg-blue-600 text-white" : "text-slate-400 hover:text-white"
             }`}
           >
@@ -155,7 +155,7 @@ const ChatInput = ({ onSend, onClear, disabled }) => {
 
       {/* Listening Status Banner */}
       {isListening && (
-        <div className="mb-2.5 flex items-center gap-2 px-3.5 py-2 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-inter animate-pulse">
+        <div className="mb-2.5 flex items-center gap-2 px-3.5 py-2 rounded-none bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-inter animate-pulse">
           <span className="h-2 w-2 rounded-full bg-rose-500 animate-ping" />
           <span>Listening ({voiceLang === "kn-IN" ? "ಕನ್ನಡ Voice Input" : "English Voice Input"})... Speak now</span>
         </div>
@@ -164,7 +164,7 @@ const ChatInput = ({ onSend, onClear, disabled }) => {
       {/* Input container */}
       <form onSubmit={handleSubmit}>
         <div
-          className="flex items-end gap-3 rounded-xl transition-all duration-200"
+          className="flex items-end gap-3 rounded-none transition-all duration-200"
           style={{
             padding: "12px 18px",
             background: "rgba(15,23,42,0.9)",
@@ -199,7 +199,7 @@ const ChatInput = ({ onSend, onClear, disabled }) => {
             <button
               type="button"
               onClick={toggleListening}
-              className={`p-2.5 rounded-lg transition-all cursor-pointer ${
+              className={`p-2.5 rounded-none transition-all cursor-pointer ${
                 isListening
                   ? "bg-rose-600 text-white shadow-lg shadow-rose-600/50 animate-pulse"
                   : "text-slate-400 hover:text-white hover:bg-slate-800/60"
@@ -212,7 +212,7 @@ const ChatInput = ({ onSend, onClear, disabled }) => {
             <button
               type="button"
               onClick={onClear}
-              className="p-2.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer"
+              className="p-2.5 rounded-none text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer"
               title="Clear conversation"
             >
               <FaTrash className="text-sm" />
@@ -222,7 +222,7 @@ const ChatInput = ({ onSend, onClear, disabled }) => {
             <button
               type="submit"
               disabled={!canSend}
-              className="flex items-center gap-2 rounded-lg px-4 py-2.5 text-xs font-bold font-mono uppercase tracking-wider transition-all duration-150 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 rounded-none px-4 py-2.5 text-xs font-bold font-mono uppercase tracking-wider transition-all duration-150 cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
               style={{
                 background: canSend
                   ? "linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)"
@@ -237,13 +237,6 @@ const ChatInput = ({ onSend, onClear, disabled }) => {
             </button>
           </div>
         </div>
-
-        <p className="text-[11px] font-sans text-slate-500 mt-2.5 text-center">
-          <kbd className="bg-slate-800/80 px-1.5 py-0.5 rounded text-slate-400 font-mono text-[10px]">Enter</kbd>
-          {" "}to send · {" "}
-          <kbd className="bg-slate-800/80 px-1.5 py-0.5 rounded text-slate-400 font-mono text-[10px]">Shift+Enter</kbd>
-          {" "}for new line
-        </p>
       </form>
     </div>
   );

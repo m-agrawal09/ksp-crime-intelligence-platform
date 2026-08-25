@@ -83,7 +83,7 @@ const InsightsForecast = () => {
 
       {/* ── Page Header Banner ── */}
       <div 
-        className="flex flex-col md:flex-row md:items-center justify-between gap-5 bg-slate-900/85 border border-slate-700/60 rounded-xl backdrop-blur-md shadow-xl animate-fade-in-up"
+        className="flex flex-col md:flex-row md:items-center justify-between gap-5 bg-slate-900/85 border border-slate-700/60 rounded-none backdrop-blur-md shadow-xl animate-fade-in-up"
         style={{ padding: "24px 28px" }}
       >
         <div className="pl-1">
@@ -105,20 +105,20 @@ const InsightsForecast = () => {
 
         {/* Live indicator & Page Translation Switcher Toggle */}
         <div className="flex flex-wrap items-center gap-3 self-start md:self-auto pr-1">
-          <div className="flex items-center gap-2 px-3.5 py-2 rounded-lg border border-emerald-500/30 bg-emerald-950/40 text-emerald-300 font-mono text-xs font-semibold">
+          <div className="flex items-center gap-2 px-3 py-2 bg-transparent text-emerald-400 font-mono text-xs font-semibold">
             <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
             <span>CCTNS Live Connected</span>
           </div>
 
           {/* Global Page Language Switcher Toggle */}
-          <div className="flex items-center gap-1.5 bg-slate-950/80 border border-slate-700/70 rounded-xl p-1.5 shadow-md font-mono">
+          <div className="flex items-center gap-1.5 bg-slate-950/80 border border-slate-700/70 rounded-none p-1.5 shadow-md font-mono">
             <span className="text-xs text-purple-300 font-bold px-2.5 flex items-center gap-1.5">
               <RiGlobalLine className="text-sm text-purple-400" /> Lang:
             </span>
             <button
               type="button"
               onClick={() => setPageLang("en")}
-              className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+              className={`px-3 py-1.5 text-xs font-bold rounded-none transition-all cursor-pointer ${
                 pageLang === "en" ? "bg-purple-600 text-white shadow-sm" : "text-slate-400 hover:text-white"
               }`}
             >
@@ -127,7 +127,7 @@ const InsightsForecast = () => {
             <button
               type="button"
               onClick={() => setPageLang("kn")}
-              className={`px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+              className={`px-3 py-1.5 text-xs font-bold rounded-none transition-all cursor-pointer ${
                 pageLang === "kn" ? "bg-purple-600 text-white shadow-sm" : "text-slate-400 hover:text-white"
               }`}
             >
@@ -139,7 +139,7 @@ const InsightsForecast = () => {
 
       {/* ── Tab Bar ── */}
       <div className="flex justify-center px-2">
-        <div className="flex items-center gap-2 p-1.5 rounded-xl bg-slate-900/85 border border-slate-700/60 shadow-lg">
+        <div className="flex items-center gap-3 p-2 rounded-none bg-slate-900/85 border border-slate-700/60 shadow-lg">
           {TABS.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -147,7 +147,7 @@ const InsightsForecast = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`relative flex items-center gap-2.5 px-6 py-3 text-xs font-bold font-mono uppercase tracking-wider rounded-lg transition-all duration-150 cursor-pointer ${
+                className={`relative flex items-center gap-3 px-8 py-3.5 text-xs font-bold font-mono uppercase tracking-wider rounded-none transition-all duration-150 cursor-pointer ${
                   isActive ? "bg-blue-600 text-white shadow-md shadow-blue-600/30" : "text-slate-400 hover:text-white hover:bg-slate-800/60"
                 }`}
               >
@@ -162,7 +162,7 @@ const InsightsForecast = () => {
       {/* ══ TAB 1: AI COPILOT ══ */}
       {activeTab === "copilot" && (
         <div
-          className="flex flex-1 rounded-2xl border border-slate-700/60 bg-slate-900/85 backdrop-blur-md shadow-xl overflow-hidden"
+          className="flex flex-1 rounded-none border border-slate-700/60 bg-slate-900/85 backdrop-blur-md shadow-xl overflow-hidden"
           style={{
             height: "calc(100vh - 310px)",
             minHeight: 520,
@@ -179,8 +179,8 @@ const InsightsForecast = () => {
               }}
             >
               {/* Sidebar header */}
-              <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(51,65,85,0.4)" }}>
-                <div className="flex items-center gap-2 pl-1">
+              <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: "1px solid rgba(51,65,85,0.4)" }}>
+                <div className="flex items-center gap-2.5 pl-2">
                   <FaHistory className="text-xs text-slate-400" />
                   <span className="text-[11px] font-bold font-mono text-slate-300 uppercase tracking-wider">
                     {isKn ? "ಸೇಶನ್‌ಗಳು" : "Sessions"}
@@ -204,10 +204,10 @@ const InsightsForecast = () => {
           <div className="flex-1 flex flex-col min-w-0">
             {/* Chat top bar */}
             <div
-              className="flex items-center justify-between px-6 py-3.5 flex-shrink-0"
+              className="flex items-center justify-between px-7 py-4 flex-shrink-0"
               style={{ borderBottom: "1px solid rgba(51,65,85,0.25)" }}
             >
-              <div className="flex items-center gap-3.5 pl-1">
+              <div className="flex items-center gap-3.5 pl-2">
                 <button
                   onClick={() => setSidebarOpen((p) => !p)}
                   className="p-2 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition-colors cursor-pointer"
@@ -311,7 +311,7 @@ const InsightsForecast = () => {
 
               {/* Executive Forecast Narrative */}
               <div
-                className="rounded-2xl p-6 sm:p-8"
+                className="rounded-none p-6 sm:p-8"
                 style={{
                   background: "linear-gradient(135deg, rgba(124,58,237,0.06) 0%, rgba(37,99,235,0.06) 100%)",
                   border: "1px solid rgba(124,58,237,0.2)",
@@ -319,7 +319,7 @@ const InsightsForecast = () => {
               >
                 <div className="flex items-start gap-4">
                   <div
-                    className="flex-shrink-0 flex items-center justify-center rounded-xl"
+                    className="flex-shrink-0 flex items-center justify-center rounded-none"
                     style={{ width: 44, height: 44, background: "rgba(124,58,237,0.15)", border: "1px solid rgba(124,58,237,0.3)" }}
                   >
                     <RiBrainLine className="text-xl text-purple-400" />
@@ -363,7 +363,7 @@ const InsightsForecast = () => {
 
               {/* Forecast Intelligence Card (Probabilities + What-Ifs + Threat Zones) */}
               <div
-                className="rounded-2xl p-6 sm:p-8"
+                className="rounded-lg p-6 sm:p-8"
                 style={{ background: "rgba(8,18,32,0.6)", border: "1px solid rgba(51,65,85,0.35)" }}
               >
                 <PredictiveForecastingCard lang={pageLang} />

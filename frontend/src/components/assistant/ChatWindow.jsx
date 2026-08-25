@@ -15,7 +15,7 @@ const ChatWindow = ({ messages, isTyping }) => {
       className="flex-1 overflow-y-auto"
       style={{
         minHeight: 0,
-        padding: "24px 32px 20px",
+        padding: "28px 36px 22px",
         display: "flex",
         flexDirection: "column",
         gap: "18px",

@@ -155,7 +155,7 @@ const MessageBubble = ({ message }) => {
       const bodyRows = rows.slice(2).map(r => r.split("|").map(c => c.trim()).filter(c => c));
 
       return (
-        <div key={key} className="my-4 overflow-x-auto border border-slate-700/60 rounded-xl bg-slate-950/70 shadow-inner">
+        <div key={key} className="my-4 overflow-x-auto border border-slate-700/60 rounded-none bg-slate-950/70 shadow-inner">
           <table className="w-full text-left border-collapse font-mono text-[11px]">
             <thead>
               <tr className="border-b border-slate-700/60 bg-slate-900/80 text-slate-300 font-bold uppercase tracking-wider">
@@ -247,7 +247,7 @@ const MessageBubble = ({ message }) => {
     <div className={`flex gap-3.5 w-full max-w-3xl ${isOfficer ? "ml-auto flex-row-reverse" : "mr-auto"}`}>
       
       {/* Icon Avatar */}
-      <div className={`h-8 w-8 rounded-lg flex items-center justify-center border flex-shrink-0 shadow-sm ${
+      <div className={`h-8 w-8 rounded-none flex items-center justify-center border flex-shrink-0 shadow-sm ${
         isOfficer 
           ? "bg-slate-900 border-slate-700/80 text-slate-300"
           : "bg-blue-600/10 border-blue-500/30 text-blue-400"
@@ -257,7 +257,7 @@ const MessageBubble = ({ message }) => {
 
       {/* Bubble text */}
       <div 
-        className={`flex-1 border shadow-md font-sans rounded-xl ${
+        className={`flex-1 border shadow-md font-sans rounded-none ${
           isOfficer 
             ? "bg-slate-900/85 border-slate-700/70 text-slate-200" 
             : "bg-slate-950/80 border-slate-700/70 text-slate-200"
@@ -268,10 +268,10 @@ const MessageBubble = ({ message }) => {
           <span className="font-bold">{isOfficer ? "INVESTIGATING OFFICER" : "AI PLATFORM CONSOLE"}</span>
           <div className="flex items-center gap-2">
             {!isOfficer && (
-              <div className="flex items-center gap-1 bg-slate-900/90 border border-slate-700/80 rounded-lg p-1 shadow-sm font-mono">
+              <div className="flex items-center gap-1 bg-slate-900/90 border border-slate-700/80 rounded-none p-1 shadow-sm font-mono">
                 <button
                   onClick={() => { setLang("en"); window.speechSynthesis.cancel(); setIsSpeaking(false); }}
-                  className={`px-2.5 py-0.5 text-[10px] font-bold rounded-md transition-all cursor-pointer ${
+                  className={`px-2.5 py-0.5 text-[10px] font-bold rounded-none transition-all cursor-pointer ${
                     lang === "en" ? "bg-blue-600 text-white shadow-sm" : "text-slate-400 hover:text-white"
                   }`}
                 >
@@ -279,7 +279,7 @@ const MessageBubble = ({ message }) => {
                 </button>
                 <button
                   onClick={() => { setLang("kn"); window.speechSynthesis.cancel(); setIsSpeaking(false); }}
-                  className={`px-2.5 py-0.5 text-[10px] font-bold rounded-md transition-all cursor-pointer ${
+                  className={`px-2.5 py-0.5 text-[10px] font-bold rounded-none transition-all cursor-pointer ${
                     lang === "kn" ? "bg-blue-600 text-white shadow-sm" : "text-slate-400 hover:text-white"
                   }`}
                 >
@@ -290,7 +290,7 @@ const MessageBubble = ({ message }) => {
             {!isOfficer && (
               <button 
                 onClick={handleSpeak}
-                className="flex items-center justify-center p-1.5 rounded-lg bg-slate-900 border border-slate-700/80 text-slate-300 hover:text-blue-400 hover:border-blue-500/50 transition-all cursor-pointer shadow-sm active:scale-95 ml-1"
+                className="flex items-center justify-center p-1.5 rounded-none bg-slate-900 border border-slate-700/80 text-slate-300 hover:text-blue-400 hover:border-blue-500/50 transition-all cursor-pointer shadow-sm active:scale-95 ml-1"
                 title={isSpeaking ? "Stop Speaking" : "Read Aloud"}
               >
                 {isSpeaking ? <FaVolumeMute className="text-xs text-rose-400" /> : <FaVolumeUp className="text-xs text-blue-400" />}
