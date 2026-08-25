@@ -172,7 +172,7 @@ const Officers = () => {
   return (
     <div className="space-y-6 md:space-y-8">
       {/* Page Title Header */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between px-6">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <PageHeader
           title="Officer Performance Center"
           subtitle="Operational evaluation of investigation case logs, trial schedules, and resolution metrics"
@@ -181,9 +181,9 @@ const Officers = () => {
         {isAdmin && (
           <button
             onClick={() => setIsAddModalOpen(true)}
-            className="flex items-center gap-2 rounded-[4px] bg-purple-600 px-6 py-3 text-xs font-mono font-bold uppercase tracking-wider text-white hover:bg-purple-500 transition-all self-start md:self-auto active:scale-95 border-none outline-none cursor-pointer"
+            className="flex items-center gap-2 rounded-sm bg-blue-600 hover:bg-blue-500 px-5 py-2.5 text-xs font-mono font-bold uppercase tracking-wider text-white transition-all self-start md:self-auto active:scale-95 border border-blue-500/40 shadow-lg cursor-pointer flex-shrink-0"
           >
-            <FaUserPlus className="text-base" />
+            <FaUserPlus className="text-sm" />
             <span>Add New Officer</span>
           </button>
         )}
