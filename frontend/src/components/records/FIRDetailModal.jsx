@@ -10,12 +10,12 @@ const FIRDetailModal = ({ isOpen, onClose, record, onToggleStatus }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4 overflow-y-auto">
-      <div className="w-full max-w-3xl rounded-2xl border border-slate-800 bg-slate-950 shadow-2xl overflow-hidden my-8 font-sans">
+      <div className="w-full max-w-3xl rounded-sm border border-slate-700/60 bg-slate-950 shadow-2xl overflow-hidden my-8 font-sans">
         
         {/* Header */}
-        <div className="px-6 py-4 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
+        <div className="px-6 py-4 bg-slate-900 border-b border-slate-700/60 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400">
+            <div className="h-9 w-9 rounded-sm bg-blue-600/20 border border-blue-500/30 flex items-center justify-center text-blue-400">
               <FaShieldAlt className="text-base" />
             </div>
             <div>
@@ -23,10 +23,10 @@ const FIRDetailModal = ({ isOpen, onClose, record, onToggleStatus }) => {
                 <h2 className="text-base font-mono font-bold text-white tracking-wider uppercase">
                   FIR RECORD: {record.crimeNo}
                 </h2>
-                <span className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded border uppercase ${
+                <span className={`text-[9px] font-mono font-bold px-2 py-0.5 rounded-sm border uppercase ${
                   isClosed
-                    ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
-                    : "bg-amber-500/10 text-amber-400 border-amber-500/30"
+                    ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30"
+                    : "bg-amber-500/15 text-amber-400 border-amber-500/30"
                 }`}>
                   {record.status}
                 </span>
@@ -40,14 +40,14 @@ const FIRDetailModal = ({ isOpen, onClose, record, onToggleStatus }) => {
           <div className="flex items-center gap-2">
             <button
               onClick={() => window.print()}
-              className="text-slate-400 hover:text-white p-2 transition-colors rounded-lg hover:bg-slate-800"
+              className="text-slate-400 hover:text-white p-2 transition-colors rounded-sm hover:bg-slate-800 cursor-pointer"
               title="Print Dossier"
             >
               <FaPrint className="text-sm" />
             </button>
             <button
               onClick={onClose}
-              className="text-slate-400 hover:text-white p-2 transition-colors rounded-lg hover:bg-slate-800"
+              className="text-slate-400 hover:text-white p-2 transition-colors rounded-sm hover:bg-slate-800 cursor-pointer"
             >
               <FaTimes className="text-base" />
             </button>

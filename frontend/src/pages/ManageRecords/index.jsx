@@ -152,7 +152,7 @@ const ManageRecords = () => {
   return (
     <div className="flex flex-col font-inter">
       {/* Title Header */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between border-b border-slate-800/80 pb-6 mb-6 px-6">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between pb-6 mb-6 border-b border-slate-700/60">
         <PageHeader
           title="CCTNS Manage Records & FIR Console"
           subtitle="Register new First Information Reports, update case timelines, allocate investigating officers, and mark completed case closures"
@@ -160,7 +160,7 @@ const ManageRecords = () => {
 
         <button
           onClick={handleOpenCreateModal}
-          className="h-11 rounded-[4px] bg-[#2563eb] hover:bg-blue-600 px-6 text-xs font-bold uppercase tracking-wider text-white flex items-center gap-2 transition-all cursor-pointer shadow-sm border-none outline-none font-space self-start md:self-auto active:scale-95"
+          className="h-11 rounded-sm bg-blue-600 hover:bg-blue-500 border border-blue-500/40 px-5 text-xs font-mono font-bold uppercase tracking-wider text-white flex items-center gap-2 transition-all cursor-pointer shadow-lg self-start md:self-auto active:scale-95 flex-shrink-0"
         >
           <FaFolderPlus className="text-sm" />
           <span>Register New FIR</span>
@@ -170,76 +170,91 @@ const ManageRecords = () => {
       {/* KPI Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {/* Total Registered FIRs */}
-        <div className="h-[96px] rounded-[4px] border-t-2 border-t-[#2563eb] border-r border-b border-l border-slate-800 bg-[#081220] pt-[18px] pb-[18px] px-6 flex items-center justify-between shadow-sm">
-          <div>
-            <span className="text-[9px] font-medium uppercase tracking-widest text-slate-400">Total Registered FIRs</span>
-            <h3 className="font-mono text-3xl sm:text-[34px] font-bold text-white mt-1 leading-none">{stats.total}</h3>
+        <div 
+          className="rounded-sm border border-slate-700/60 bg-slate-900/85 backdrop-blur-md shadow-xl flex items-center justify-between hover:border-blue-500/40 transition-all"
+          style={{ padding: "18px 22px", borderLeft: "4px solid #3b82f6" }}
+        >
+          <div className="pl-1">
+            <span className="text-[9px] font-mono font-bold uppercase tracking-widest text-slate-400 block mb-1">Total Registered FIRs</span>
+            <h3 className="font-mono text-3xl font-extrabold text-white leading-none">{stats.total}</h3>
           </div>
-          <div className="h-8 w-8 rounded-[2px] bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-400 flex-shrink-0 self-center">
-            <FaShieldAlt className="text-sm" />
+          <div className="h-10 w-10 rounded-sm bg-blue-600/15 border border-blue-500/30 flex items-center justify-center text-blue-400 flex-shrink-0">
+            <FaShieldAlt className="text-base" />
           </div>
         </div>
 
         {/* Active Investigations */}
-        <div className="h-[96px] rounded-[4px] border-t-2 border-t-[#d97706] border-r border-b border-l border-slate-800 bg-[#081220] pt-[18px] pb-[18px] px-6 flex items-center justify-between shadow-sm">
-          <div>
-            <span className="text-[9px] font-medium uppercase tracking-widest text-amber-400">Active Investigations</span>
-            <h3 className="font-mono text-3xl sm:text-[34px] font-bold text-white mt-1 leading-none">{stats.active}</h3>
+        <div 
+          className="rounded-sm border border-slate-700/60 bg-slate-900/85 backdrop-blur-md shadow-xl flex items-center justify-between hover:border-amber-500/40 transition-all"
+          style={{ padding: "18px 22px", borderLeft: "4px solid #f59e0b" }}
+        >
+          <div className="pl-1">
+            <span className="text-[9px] font-mono font-bold uppercase tracking-widest text-amber-400 block mb-1">Active Investigations</span>
+            <h3 className="font-mono text-3xl font-extrabold text-white leading-none">{stats.active}</h3>
           </div>
-          <div className="h-8 w-8 rounded-[2px] bg-amber-600/10 border border-amber-500/20 flex items-center justify-center text-amber-400 flex-shrink-0 self-center">
-            <FaUserCheck className="text-sm" />
+          <div className="h-10 w-10 rounded-sm bg-amber-600/15 border border-amber-500/30 flex items-center justify-center text-amber-400 flex-shrink-0">
+            <FaUserCheck className="text-base" />
           </div>
         </div>
 
         {/* Closed / Completed Cases */}
-        <div className="h-[96px] rounded-[4px] border-t-2 border-t-[#059669] border-r border-b border-l border-slate-800 bg-[#081220] pt-[18px] pb-[18px] px-6 flex items-center justify-between shadow-sm">
-          <div>
-            <span className="text-[9px] font-medium uppercase tracking-widest text-emerald-400">Closed / Completed Cases</span>
-            <h3 className="font-mono text-3xl sm:text-[34px] font-bold text-white mt-1 leading-none">{stats.closed}</h3>
+        <div 
+          className="rounded-sm border border-slate-700/60 bg-slate-900/85 backdrop-blur-md shadow-xl flex items-center justify-between hover:border-emerald-500/40 transition-all"
+          style={{ padding: "18px 22px", borderLeft: "4px solid #10b981" }}
+        >
+          <div className="pl-1">
+            <span className="text-[9px] font-mono font-bold uppercase tracking-widest text-emerald-400 block mb-1">Closed / Completed Cases</span>
+            <h3 className="font-mono text-3xl font-extrabold text-white leading-none">{stats.closed}</h3>
           </div>
-          <div className="h-8 w-8 rounded-[2px] bg-emerald-600/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 flex-shrink-0 self-center">
-            <FaCheckCircle className="text-sm" />
+          <div className="h-10 w-10 rounded-sm bg-emerald-600/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 flex-shrink-0">
+            <FaCheckCircle className="text-base" />
           </div>
         </div>
 
         {/* Critical Severity Incidents */}
-        <div className="h-[96px] rounded-[4px] border-t-2 border-t-[#e11d48] border-r border-b border-l border-slate-800 bg-[#081220] pt-[18px] pb-[18px] px-6 flex items-center justify-between shadow-sm">
-          <div>
-            <span className="text-[9px] font-medium uppercase tracking-widest text-rose-400">Critical Severity Incidents</span>
-            <h3 className="font-mono text-3xl sm:text-[34px] font-bold text-white mt-1 leading-none">{stats.critical}</h3>
+        <div 
+          className="rounded-sm border border-slate-700/60 bg-slate-900/85 backdrop-blur-md shadow-xl flex items-center justify-between hover:border-rose-500/40 transition-all"
+          style={{ padding: "18px 22px", borderLeft: "4px solid #f43f5e" }}
+        >
+          <div className="pl-1">
+            <span className="text-[9px] font-mono font-bold uppercase tracking-widest text-rose-400 block mb-1">Critical Severity Incidents</span>
+            <h3 className="font-mono text-3xl font-extrabold text-white leading-none">{stats.critical}</h3>
           </div>
-          <div className="h-8 w-8 rounded-[2px] bg-rose-600/10 border border-rose-500/20 flex items-center justify-center text-rose-400 flex-shrink-0 self-center">
-            <FaExclamationTriangle className="text-sm" />
+          <div className="h-10 w-10 rounded-sm bg-rose-600/15 border border-rose-500/30 flex items-center justify-center text-rose-400 flex-shrink-0">
+            <FaExclamationTriangle className="text-base" />
           </div>
         </div>
       </div>
 
-      {/* Query Filters & Search Toolbar (Dedicated Section) */}
-      <div className="bg-[#081220] rounded-[4px] border border-[rgba(255,255,255,0.05)] pt-[18px] pb-[18px] px-6 space-y-6 shadow-sm mb-6">
-        <div className="flex items-center justify-between border-b border-slate-800/80 pb-4">
-          <div className="flex items-center gap-2 text-xs font-bold text-slate-200 uppercase tracking-widest font-space">
-            <FaFilter className="text-[#2563eb] text-sm" />
+      {/* Query Filters & Search Toolbar */}
+      <div 
+        className="rounded-sm border border-slate-700/60 shadow-xl bg-slate-900/85 backdrop-blur-md mb-6 font-sans"
+        style={{ padding: "18px 22px" }}
+      >
+        <div className="flex items-center justify-between border-b border-slate-700/60 pb-3.5 mb-4">
+          <div className="flex items-center gap-2.5 text-xs font-bold text-slate-200 uppercase tracking-widest font-mono pl-1">
+            <FaFilter className="text-blue-400 text-sm" />
             <span>Search & Filter FIR Records</span>
           </div>
           <button
             onClick={handleResetFilters}
-            className="text-[11px] font-semibold text-[#2563eb] hover:text-blue-400 transition-colors uppercase tracking-wider font-space cursor-pointer"
+            className="flex items-center gap-1.5 rounded-sm border border-slate-700/60 bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white px-3.5 py-1.5 transition-all cursor-pointer font-bold uppercase text-[9.5px] font-mono tracking-widest shadow-sm"
           >
             Reset Filters
           </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6 text-xs font-mono">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 text-xs font-mono">
           {/* Search Box */}
           <div className="relative sm:col-span-2 lg:col-span-2">
-            <FaSearch className="absolute left-3.5 top-3.5 text-slate-500" />
+            <FaSearch className="absolute left-3.5 top-3 text-slate-400 text-xs" />
             <input
               type="text"
               name="search"
               value={filters.search}
               onChange={handleFilterChange}
               placeholder="Search by FIR No, Officer, Complainant..."
-              className="w-full h-11 rounded-[4px] bg-[#0c182a] border border-slate-800 pl-10 pr-4 text-xs text-white outline-none focus:border-[#2563eb] placeholder-slate-500 transition-all font-inter"
+              className="w-full h-10 rounded-sm bg-slate-950/80 border border-slate-700/60 pl-9 pr-4 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 font-mono transition-all"
             />
           </div>
 
@@ -249,14 +264,14 @@ const ManageRecords = () => {
               name="district"
               value={filters.district}
               onChange={handleFilterChange}
-              className="w-full h-11 rounded-[4px] bg-[#0c182a] border border-slate-800 px-4 text-xs text-slate-300 outline-none focus:border-[#2563eb] transition-all font-mono"
+              className="w-full h-10 rounded-sm bg-slate-950/80 border border-slate-700/60 px-3 text-xs text-blue-400 font-bold focus:outline-none focus:border-blue-500 font-mono transition-all cursor-pointer"
             >
-              <option value="">All District Ranges</option>
-              <option value="Bengaluru City">Bengaluru City</option>
-              <option value="Mangaluru City">Mangaluru City</option>
-              <option value="Mysuru City">Mysuru City</option>
-              <option value="Hubballi-Dharwad">Hubballi-Dharwad</option>
-              <option value="Belagavi District">Belagavi District</option>
+              <option value="" className="bg-slate-950 text-slate-400">-- ALL DISTRICTS --</option>
+              <option value="Bengaluru City" className="bg-slate-950 text-slate-200">Bengaluru City</option>
+              <option value="Mangaluru City" className="bg-slate-950 text-slate-200">Mangaluru City</option>
+              <option value="Mysuru City" className="bg-slate-950 text-slate-200">Mysuru City</option>
+              <option value="Hubballi-Dharwad" className="bg-slate-950 text-slate-200">Hubballi-Dharwad</option>
+              <option value="Belagavi District" className="bg-slate-950 text-slate-200">Belagavi District</option>
             </select>
           </div>
 
@@ -266,14 +281,14 @@ const ManageRecords = () => {
               name="category"
               value={filters.category}
               onChange={handleFilterChange}
-              className="w-full h-11 rounded-[4px] bg-[#0c182a] border border-slate-800 px-4 text-xs text-slate-300 outline-none focus:border-[#2563eb] transition-all font-mono"
+              className="w-full h-10 rounded-sm bg-slate-950/80 border border-slate-700/60 px-3 text-xs text-blue-400 font-bold focus:outline-none focus:border-blue-500 font-mono transition-all cursor-pointer"
             >
-              <option value="">All Crime Categories</option>
-              <option value="Theft">Theft</option>
-              <option value="Assault">Assault</option>
-              <option value="Murder">Murder</option>
-              <option value="Property Related">Property Related</option>
-              <option value="Cyber Crime">Cyber Crime</option>
+              <option value="" className="bg-slate-950 text-slate-400">-- ALL CATEGORIES --</option>
+              <option value="Theft" className="bg-slate-950 text-slate-200">Theft</option>
+              <option value="Assault" className="bg-slate-950 text-slate-200">Assault</option>
+              <option value="Murder" className="bg-slate-950 text-slate-200">Murder</option>
+              <option value="Property Related" className="bg-slate-950 text-slate-200">Property Related</option>
+              <option value="Cyber Crime" className="bg-slate-950 text-slate-200">Cyber Crime</option>
             </select>
           </div>
 
@@ -283,13 +298,13 @@ const ManageRecords = () => {
               name="severity"
               value={filters.severity}
               onChange={handleFilterChange}
-              className="w-full h-11 rounded-[4px] bg-[#0c182a] border border-slate-800 px-4 text-xs text-slate-300 outline-none focus:border-[#2563eb] transition-all font-mono"
+              className="w-full h-10 rounded-sm bg-slate-950/80 border border-slate-700/60 px-3 text-xs text-blue-400 font-bold focus:outline-none focus:border-blue-500 font-mono transition-all cursor-pointer"
             >
-              <option value="">All Severity Levels</option>
-              <option value="CRITICAL">CRITICAL</option>
-              <option value="HIGH">HIGH</option>
-              <option value="MEDIUM">MEDIUM</option>
-              <option value="LOW">LOW</option>
+              <option value="" className="bg-slate-950 text-slate-400">-- ALL SEVERITIES --</option>
+              <option value="CRITICAL" className="bg-slate-950 text-rose-400 font-bold">CRITICAL</option>
+              <option value="HIGH" className="bg-slate-950 text-amber-400 font-bold">HIGH</option>
+              <option value="MEDIUM" className="bg-slate-950 text-blue-400 font-bold">MEDIUM</option>
+              <option value="LOW" className="bg-slate-950 text-emerald-400 font-bold">LOW</option>
             </select>
           </div>
 
@@ -299,33 +314,33 @@ const ManageRecords = () => {
               name="status"
               value={filters.status}
               onChange={handleFilterChange}
-              className="w-full h-11 rounded-[4px] bg-[#0c182a] border border-slate-800 px-4 text-xs text-slate-300 outline-none focus:border-[#2563eb] transition-all font-mono"
+              className="w-full h-10 rounded-sm bg-slate-950/80 border border-slate-700/60 px-3 text-xs text-blue-400 font-bold focus:outline-none focus:border-blue-500 font-mono transition-all cursor-pointer"
             >
-              <option value="">All Case Statuses</option>
-              <option value="ACTIVE">Active Cases</option>
-              <option value="CLOSED">Case Closed / Completed</option>
-              <option value="Under Investigation">Under Investigation</option>
-              <option value="Suspect Apprehended">Suspect Apprehended</option>
-              <option value="Charge-sheet Submitted">Charge-sheet Submitted</option>
+              <option value="" className="bg-slate-950 text-slate-400">-- ALL STATUSES --</option>
+              <option value="ACTIVE" className="bg-slate-950 text-slate-200">Active Cases</option>
+              <option value="CLOSED" className="bg-slate-950 text-slate-200">Case Closed / Completed</option>
+              <option value="Under Investigation" className="bg-slate-950 text-slate-200">Under Investigation</option>
+              <option value="Suspect Apprehended" className="bg-slate-950 text-slate-200">Suspect Apprehended</option>
+              <option value="Charge-sheet Submitted" className="bg-slate-950 text-slate-200">Charge-sheet Submitted</option>
             </select>
           </div>
         </div>
       </div>
 
       {/* Main FIR Data Table */}
-      <div className="rounded-[4px] border border-slate-800 bg-[#081220] overflow-hidden shadow-sm">
+      <div className="rounded-sm border border-slate-700/60 bg-slate-900/85 backdrop-blur-md overflow-hidden shadow-xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse font-sans text-xs">
             <thead>
-              <tr className="bg-[#0c1626] font-space text-[10px] font-bold text-slate-300 uppercase tracking-wider border-b border-slate-700">
-                <th className="py-3.5 pl-6 pr-4 border-b border-slate-700">Crime No & Date</th>
-                <th className="py-3.5 px-4 border-b border-slate-700">Jurisdiction</th>
-                <th className="py-3.5 px-4 border-b border-slate-700">Crime Category & Section</th>
-                <th className="py-3.5 px-4 border-b border-slate-700">Complainant</th>
-                <th className="py-3.5 px-4 border-b border-slate-700">Allotted Officer</th>
-                <th className="py-3.5 px-4 border-b border-slate-700">Accused / Suspect</th>
-                <th className="py-3.5 px-4 border-b border-slate-700">Status & Severity</th>
-                <th className="py-3.5 pl-4 pr-6 border-b border-slate-700 text-right">Actions</th>
+              <tr className="bg-slate-950/90 font-mono text-[10px] font-bold text-slate-300 uppercase tracking-wider border-b border-slate-700/70">
+                <th className="py-4 pl-6 pr-4">Crime No & Date</th>
+                <th className="py-4 px-4">Jurisdiction</th>
+                <th className="py-4 px-4">Crime Category & Section</th>
+                <th className="py-4 px-4">Complainant</th>
+                <th className="py-4 px-4">Allotted Officer</th>
+                <th className="py-4 px-4">Accused / Suspect</th>
+                <th className="py-4 px-4">Status & Severity</th>
+                <th className="py-4 pl-4 pr-6 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800/60 text-slate-300">
@@ -336,62 +351,62 @@ const ManageRecords = () => {
                   </td>
                 </tr>
               ) : (
-                records.map((r) => {
+                records.map((r, index) => {
                   const isClosed = r.status === "Case Closed / Completed";
 
                   return (
-                    <tr key={r.id} className="odd:bg-[#081220] even:bg-[#0b1424] hover:bg-[#2563eb]/5 transition-colors duration-150">
+                    <tr key={r.id ? `${r.id}-${index}` : index} className="odd:bg-slate-900/40 even:bg-slate-950/40 hover:bg-blue-600/10 transition-colors duration-150">
                       {/* Crime No & Date */}
-                      <td className="py-3.5 pl-6 pr-4 font-mono border-b border-slate-800/40">
+                      <td className="py-4 pl-6 pr-4 font-mono">
                         <div className="font-bold text-blue-400 hover:text-blue-300 cursor-pointer transition-colors text-xs" onClick={() => handleOpenDetailModal(r)}>
                           {r.crimeNo}
                         </div>
-                        <div className="text-[10px] text-slate-500 font-mono mt-1">Reg: {r.regDate}</div>
+                        <div className="text-[10px] text-slate-400 font-mono mt-1">Reg: {r.regDate}</div>
                       </td>
 
                       {/* Jurisdiction */}
-                      <td className="py-3.5 px-4 border-b border-slate-800/40">
-                        <div className="font-bold text-slate-200 text-xs">{r.unit}</div>
-                        <div className="text-[10px] text-slate-500 font-mono mt-0.5">{r.district}</div>
+                      <td className="py-4 px-4">
+                        <div className="font-bold text-white text-xs">{r.unit}</div>
+                        <div className="text-[10px] text-slate-400 font-mono mt-0.5">{r.district}</div>
                       </td>
 
                       {/* Category & Section */}
-                      <td className="py-3.5 px-4 border-b border-slate-800/40">
-                        <div className="font-bold text-slate-200 text-xs">{r.crimeHead}</div>
-                        <div className="text-[10px] font-mono text-purple-400 mt-1">{r.actSections}</div>
+                      <td className="py-4 px-4">
+                        <div className="font-bold text-white text-xs">{r.crimeHead}</div>
+                        <div className="text-[10px] font-mono text-purple-400 mt-1 font-semibold">{r.actSections}</div>
                       </td>
 
                       {/* Complainant */}
-                      <td className="py-3.5 px-4 border-b border-slate-800/40">
+                      <td className="py-4 px-4">
                         <div className="font-bold text-slate-200 text-xs">{r.complainantName}</div>
-                        <div className="text-[10px] text-slate-500 font-mono mt-0.5">{r.complainantPhone || "N/A"}</div>
+                        <div className="text-[10px] text-slate-400 font-mono mt-0.5">{r.complainantPhone || "N/A"}</div>
                       </td>
 
                       {/* Allotted Officer */}
-                      <td className="py-3.5 px-4 border-b border-slate-800/40 font-mono">
+                      <td className="py-4 px-4 font-mono">
                         <div className="font-bold text-slate-200 text-xs">{r.allottedOfficerName}</div>
-                        <div className="text-[10px] text-slate-500 font-mono mt-0.5">{r.allottedOfficerRank} • {r.allottedOfficerKgid}</div>
+                        <div className="text-[10px] text-slate-400 font-mono mt-0.5">{r.allottedOfficerRank} • {r.allottedOfficerKgid}</div>
                       </td>
 
                       {/* Suspect */}
-                      <td className="py-3.5 px-4 border-b border-slate-800/40">
+                      <td className="py-4 px-4">
                         <div className="font-bold text-slate-200 text-xs">{r.accusedName}</div>
-                        <div className="text-[10px] font-mono text-amber-500 mt-0.5">{r.accusedStatus}</div>
+                        <div className="text-[10px] font-mono text-amber-400 mt-0.5">{r.accusedStatus}</div>
                       </td>
 
                       {/* Status & Severity */}
-                      <td className="py-3.5 px-4 border-b border-slate-800/40 font-mono">
+                      <td className="py-4 px-4 font-mono">
                         <div className="flex flex-col gap-1.5 items-start">
-                          <span className={`text-[9px] font-bold px-2.5 py-0.5 rounded-[4px] border uppercase tracking-wider font-mono ${isClosed
-                              ? "bg-emerald-500/5 text-emerald-400 border-emerald-500/20"
-                              : "bg-amber-500/5 text-amber-400 border-amber-500/20"
+                          <span className={`text-[9px] font-bold px-2.5 py-0.5 rounded-sm border uppercase tracking-wider font-mono ${isClosed
+                              ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30"
+                              : "bg-amber-500/15 text-amber-400 border-amber-500/30"
                             }`}>
                             {isClosed ? "CLOSED / COMPLETED" : r.status}
                           </span>
 
-                          <span className={`text-[8px] font-bold px-2 py-0.5 rounded-[4px] uppercase tracking-wider font-mono border ${r.severity === "CRITICAL" ? "bg-rose-500/5 text-rose-400 border-rose-500/20" :
-                              r.severity === "HIGH" ? "bg-amber-500/5 text-amber-400 border-amber-500/20" :
-                                "bg-blue-500/5 text-blue-400 border-blue-500/20"
+                          <span className={`text-[8.5px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider font-mono border ${r.severity === "CRITICAL" ? "bg-rose-500/15 text-rose-400 border-rose-500/30" :
+                              r.severity === "HIGH" ? "bg-amber-500/15 text-amber-400 border-amber-500/30" :
+                                "bg-blue-500/15 text-blue-400 border-blue-500/30"
                             }`}>
                             {r.severity}
                           </span>
@@ -399,12 +414,12 @@ const ManageRecords = () => {
                       </td>
 
                       {/* Actions */}
-                      <td className="py-3.5 pl-4 pr-6 text-right font-mono border-b border-slate-800/40">
-                        <div className="flex items-center justify-end gap-2.5">
+                      <td className="py-4 pl-4 pr-6 text-right font-mono">
+                        <div className="flex items-center justify-end gap-2">
                           {/* View Detail */}
                           <button
                             onClick={() => handleOpenDetailModal(r)}
-                            className="p-2 rounded-[4px] border border-slate-800 bg-[#0c182a] text-slate-400 hover:text-blue-400 hover:bg-[#11223c] hover:border-slate-700 transition-colors"
+                            className="p-2 rounded-sm border border-slate-700/60 bg-slate-950/80 text-slate-400 hover:text-blue-400 hover:border-blue-500/50 hover:bg-slate-900 transition-all shadow-sm cursor-pointer"
                             title="Inspect Full FIR Dossier"
                           >
                             <FaEye />
@@ -413,7 +428,7 @@ const ManageRecords = () => {
                           {/* Edit Record */}
                           <button
                             onClick={() => handleOpenEditModal(r)}
-                            className="p-2 rounded-[4px] border border-slate-800 bg-[#0c182a] text-slate-400 hover:text-purple-400 hover:bg-[#1b1932] hover:border-slate-700 transition-colors"
+                            className="p-2 rounded-sm border border-slate-700/60 bg-slate-950/80 text-slate-400 hover:text-purple-400 hover:border-purple-500/50 hover:bg-slate-900 transition-all shadow-sm cursor-pointer"
                             title="Edit Record Fields"
                           >
                             <FaEdit />
@@ -422,7 +437,7 @@ const ManageRecords = () => {
                           {/* View in Network Matrix */}
                           <Link
                             to={`/network-analysis`}
-                            className="p-2 rounded-[4px] border border-slate-800 bg-[#0c182a] text-slate-400 hover:text-amber-400 hover:bg-[#201d14] hover:border-slate-700 transition-colors"
+                            className="p-2 rounded-sm border border-slate-700/60 bg-slate-950/80 text-slate-400 hover:text-amber-400 hover:border-amber-500/50 hover:bg-slate-900 transition-all shadow-sm cursor-pointer"
                             title="Explore Suspect in Link & Network Graph"
                           >
                             <FaProjectDiagram />
@@ -431,9 +446,9 @@ const ManageRecords = () => {
                           {/* Toggle Closed Status */}
                           <button
                             onClick={() => handleToggleCaseClosed(r.id)}
-                            className={`p-2 rounded-[4px] border transition-colors ${isClosed
-                                ? "border-slate-800 bg-[#0c182a] text-amber-400 hover:bg-[#201d24] hover:border-slate-700"
-                                : "border-slate-800 bg-[#0c182a] text-emerald-400 hover:bg-[#0f2122] hover:border-slate-700"
+                            className={`p-2 rounded-sm border transition-all shadow-sm cursor-pointer ${isClosed
+                                ? "border-slate-700/60 bg-slate-950/80 text-amber-400 hover:bg-slate-900 hover:border-amber-500/50"
+                                : "border-slate-700/60 bg-slate-950/80 text-emerald-400 hover:bg-slate-900 hover:border-emerald-500/50"
                               }`}
                             title={isClosed ? "Re-open Case Investigation" : "Mark Case Closed / Completed"}
                           >
@@ -443,7 +458,7 @@ const ManageRecords = () => {
                           {/* Delete Record */}
                           <button
                             onClick={() => handleDeletePrompt(r.id)}
-                            className="p-2 rounded-[4px] border border-slate-800 bg-[#0c182a] text-slate-400 hover:text-rose-400 hover:bg-[#24131d] hover:border-slate-700 transition-colors"
+                            className="p-2 rounded-sm border border-slate-700/60 bg-slate-950/80 text-slate-400 hover:text-rose-400 hover:border-rose-500/50 hover:bg-slate-900 transition-all shadow-sm cursor-pointer"
                             title="Delete FIR Record"
                           >
                             <FaTrash />
@@ -462,7 +477,7 @@ const ManageRecords = () => {
       {/* Delete Confirmation Modal */}
       {deleteConfirmId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4">
-          <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-slate-950 p-6 space-y-4 shadow-2xl font-sans">
+          <div className="w-full max-w-md rounded-sm border border-slate-700/60 bg-slate-950 p-6 space-y-4 shadow-2xl font-sans">
             <div className="flex items-center gap-3 text-rose-500">
               <FaExclamationTriangle className="text-2xl" />
               <h3 className="text-base font-mono font-bold uppercase text-white">Delete FIR Record?</h3>
@@ -473,13 +488,13 @@ const ManageRecords = () => {
             <div className="flex items-center justify-end gap-3 pt-2">
               <button
                 onClick={() => setDeleteConfirmId(null)}
-                className="px-4 py-2 rounded-lg border border-slate-800 text-slate-400 hover:text-white text-xs font-mono"
+                className="px-4 py-2 rounded-sm border border-slate-700/60 text-slate-400 hover:text-white hover:bg-slate-900 text-xs font-mono transition-all cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 onClick={() => handleDeleteRecord(deleteConfirmId)}
-                className="px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-mono font-bold uppercase"
+                className="px-4 py-2 rounded-sm bg-rose-600 hover:bg-rose-500 text-white text-xs font-mono font-bold uppercase shadow-lg transition-all cursor-pointer"
               >
                 Delete Record
               </button>
