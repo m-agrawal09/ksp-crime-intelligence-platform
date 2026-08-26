@@ -9,7 +9,7 @@ const RecentReports = ({ recentReports, generationQueue, onDownload }) => {
   ];
 
   return (
-    <div className="bg-slate-900/40 border border-blue-500/30 rounded-xl p-6 flex flex-col h-[750px] shadow-lg space-y-6">
+    <div className="bg-slate-900/85 border border-slate-700/60 rounded-2xl backdrop-blur-md shadow-2xl p-6 flex flex-col h-[750px] space-y-6">
       
       {/* 1. Infrastructure Status */}
       <div className="space-y-3">

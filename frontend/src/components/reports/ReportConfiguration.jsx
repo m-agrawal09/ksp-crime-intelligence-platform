@@ -14,7 +14,7 @@ const ReportConfiguration = ({ config, onConfigChange, onGeneratePreview, isGene
   };
 
   return (
-    <div className="bg-slate-900/60 border border-slate-800 p-6 sm:p-7 rounded-xl shadow-lg space-y-5">
+    <div className="bg-slate-900/85 border border-slate-700/60 rounded-2xl backdrop-blur-md shadow-2xl p-6 sm:p-7 space-y-5">
       <div 
         className="flex items-center gap-3 border-b border-slate-800/60" 
         style={{ paddingLeft: "18px", paddingRight: "18px", paddingTop: "8px", paddingBottom: "14px", marginBottom: "18px" }}

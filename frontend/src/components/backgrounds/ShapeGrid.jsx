@@ -1,201 +1,426 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
+import './ShapeGrid.css';
 
 const ShapeGrid = ({
-  direction = 'right',
-  speed = 0.18,
-  borderColor = 'rgba(30, 58, 138, 0.12)',
-  squareSize = 63,
-  hoverFillColor = 'rgba(30, 58, 138, 0.08)',
+  direction = 'diagonal',
+  speed = 0.45,
+  borderColor = '#2a0a62',
+  squareSize,
+  size = 36,
+  hoverFillColor = '#222',
   shape = 'square',
-  hoverTrailAmount = 4,
+  hoverTrailAmount = 5,
   className = ''
 }) => {
+  const effectiveSquareSize = squareSize || size || 36;
   const canvasRef = useRef(null);
   const requestRef = useRef(null);
+  const numSquaresX = useRef();
+  const numSquaresY = useRef();
   const gridOffset = useRef({ x: 0, y: 0 });
-  const mouseRef = useRef({ x: -1000, y: -1000 });
+  const hoveredSquare = useRef(null);
   const trailCells = useRef([]);
+  const cellOpacities = useRef(new Map());
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    const isHex = shape === 'hexagon';
+    const isTri = shape === 'triangle';
+    const hexHoriz = effectiveSquareSize * 1.5;
+    const hexVert = effectiveSquareSize * Math.sqrt(3);
+
     const resizeCanvas = () => {
-      canvas.width = canvas.clientWidth;
-      canvas.height = canvas.clientHeight;
+      if (!canvas) return;
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      numSquaresX.current = Math.ceil(canvas.width / effectiveSquareSize) + 1;
+      numSquaresY.current = Math.ceil(canvas.height / effectiveSquareSize) + 1;
     };
 
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    const handleMouseMove = (e) => {
-      const rect = canvas.getBoundingClientRect();
-      mouseRef.current = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top
-      };
-    };
-
-    const handleMouseLeave = () => {
-      mouseRef.current = { x: -1000, y: -1000 };
-    };
-
-    canvas.addEventListener('mousemove', handleMouseMove);
-    canvas.addEventListener('mouseleave', handleMouseLeave);
-
-    const drawHex = (cx, cy, r) => {
+    const drawHex = (cx, cy, s) => {
       ctx.beginPath();
       for (let i = 0; i < 6; i++) {
-        const angle = (Math.PI / 3) * i + Math.PI / 6;
-        const vx = cx + r * Math.cos(angle);
-        const vy = cy + r * Math.sin(angle);
+        const angle = (Math.PI / 3) * i;
+        const vx = cx + s * Math.cos(angle);
+        const vy = cy + s * Math.sin(angle);
         if (i === 0) ctx.moveTo(vx, vy);
         else ctx.lineTo(vx, vy);
       }
       ctx.closePath();
     };
 
-    const drawCircle = (cx, cy, r) => {
+    const drawCircle = (cx, cy, s) => {
       ctx.beginPath();
-      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.arc(cx, cy, s / 2, 0, Math.PI * 2);
       ctx.closePath();
     };
 
-    const drawTriangle = (cx, cy, r, flip) => {
+    const drawTriangle = (cx, cy, s, flip) => {
       ctx.beginPath();
       if (flip) {
-        ctx.moveTo(cx, cy + r);
-        ctx.lineTo(cx + r * Math.cos(Math.PI / 6), cy - r * Math.sin(Math.PI / 6));
-        ctx.lineTo(cx - r * Math.cos(Math.PI / 6), cy - r * Math.sin(Math.PI / 6));
+        ctx.moveTo(cx, cy + s / 2);
+        ctx.lineTo(cx + s / 2, cy - s / 2);
+        ctx.lineTo(cx - s / 2, cy - s / 2);
       } else {
-        ctx.moveTo(cx, cy - r);
-        ctx.lineTo(cx + r * Math.cos(Math.PI / 6), cy + r * Math.sin(Math.PI / 6));
-        ctx.lineTo(cx - r * Math.cos(Math.PI / 6), cy - r * Math.sin(Math.PI / 6));
+        ctx.moveTo(cx, cy - s / 2);
+        ctx.lineTo(cx + s / 2, cy + s / 2);
+        ctx.lineTo(cx - s / 2, cy + s / 2);
       }
       ctx.closePath();
     };
 
-    const render = () => {
+    const drawGrid = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // 1. Update Scroll Offset
-      const dx = direction === 'right' || direction === 'diagonal' ? 1 : direction === 'left' ? -1 : 0;
-      const dy = direction === 'down' || direction === 'diagonal' ? 1 : direction === 'up' ? -1 : 0;
+      if (isHex) {
+        const colShift = Math.floor(gridOffset.current.x / hexHoriz);
+        const offsetX = ((gridOffset.current.x % hexHoriz) + hexHoriz) % hexHoriz;
+        const offsetY = ((gridOffset.current.y % hexVert) + hexVert) % hexVert;
 
-      gridOffset.current.x += speed * dx;
-      gridOffset.current.y += speed * dy;
+        const cols = Math.ceil(canvas.width / hexHoriz) + 3;
+        const rows = Math.ceil(canvas.height / hexVert) + 3;
 
-      // Keep offsets bounded by squareSize
-      gridOffset.current.x = (gridOffset.current.x + squareSize) % squareSize;
-      gridOffset.current.y = (gridOffset.current.y + squareSize) % squareSize;
+        for (let col = -2; col < cols; col++) {
+          for (let row = -2; row < rows; row++) {
+            const cx = col * hexHoriz + offsetX;
+            const cy = row * hexVert + ((col + colShift) % 2 !== 0 ? hexVert / 2 : 0) + offsetY;
 
-      // Calculate number of rows/cols needed to cover viewport plus buffer
-      const cols = Math.ceil(canvas.width / squareSize) + 2;
-      const rows = Math.ceil(canvas.height / squareSize) + 2;
+            const cellKey = `${col},${row}`;
+            const alpha = cellOpacities.current.get(cellKey);
+            if (alpha) {
+              ctx.globalAlpha = alpha;
+              drawHex(cx, cy, effectiveSquareSize);
+              ctx.fillStyle = hoverFillColor;
+              ctx.fill();
+              ctx.globalAlpha = 1;
+            }
 
-      // 2. Track Mouse Hover
-      const mx = mouseRef.current.x;
-      const my = mouseRef.current.y;
-      
-      let currentHoveredCell = null;
-      if (mx >= 0 && my >= 0) {
-        const hoverCol = Math.floor((mx - gridOffset.current.x) / squareSize);
-        const hoverRow = Math.floor((my - gridOffset.current.y) / squareSize);
-        currentHoveredCell = `${hoverCol},${hoverRow}`;
+            drawHex(cx, cy, effectiveSquareSize);
+            ctx.strokeStyle = borderColor;
+            ctx.stroke();
+          }
+        }
+      } else if (isTri) {
+        const halfW = effectiveSquareSize / 2;
+        const colShift = Math.floor(gridOffset.current.x / halfW);
+        const rowShift = Math.floor(gridOffset.current.y / effectiveSquareSize);
+        const offsetX = ((gridOffset.current.x % halfW) + halfW) % halfW;
+        const offsetY = ((gridOffset.current.y % effectiveSquareSize) + effectiveSquareSize) % effectiveSquareSize;
 
-        // If hovered cell changed, add to trail
-        if (trailCells.current.length === 0 || trailCells.current[0] !== currentHoveredCell) {
-          trailCells.current.unshift(currentHoveredCell);
-          if (trailCells.current.length > hoverTrailAmount) {
-            trailCells.current.pop();
+        const cols = Math.ceil(canvas.width / halfW) + 4;
+        const rows = Math.ceil(canvas.height / effectiveSquareSize) + 4;
+
+        for (let col = -2; col < cols; col++) {
+          for (let row = -2; row < rows; row++) {
+            const cx = col * halfW + offsetX;
+            const cy = row * effectiveSquareSize + effectiveSquareSize / 2 + offsetY;
+            const flip = ((col + colShift + row + rowShift) % 2 + 2) % 2 !== 0;
+
+            const cellKey = `${col},${row}`;
+            const alpha = cellOpacities.current.get(cellKey);
+            if (alpha) {
+              ctx.globalAlpha = alpha;
+              drawTriangle(cx, cy, effectiveSquareSize, flip);
+              ctx.fillStyle = hoverFillColor;
+              ctx.fill();
+              ctx.globalAlpha = 1;
+            }
+
+            drawTriangle(cx, cy, effectiveSquareSize, flip);
+            ctx.strokeStyle = borderColor;
+            ctx.stroke();
+          }
+        }
+      } else if (shape === 'circle') {
+        const offsetX = ((gridOffset.current.x % effectiveSquareSize) + effectiveSquareSize) % effectiveSquareSize;
+        const offsetY = ((gridOffset.current.y % effectiveSquareSize) + effectiveSquareSize) % effectiveSquareSize;
+
+        const cols = Math.ceil(canvas.width / effectiveSquareSize) + 3;
+        const rows = Math.ceil(canvas.height / effectiveSquareSize) + 3;
+
+        for (let col = -2; col < cols; col++) {
+          for (let row = -2; row < rows; row++) {
+            const cx = col * effectiveSquareSize + effectiveSquareSize / 2 + offsetX;
+            const cy = row * effectiveSquareSize + effectiveSquareSize / 2 + offsetY;
+
+            const cellKey = `${col},${row}`;
+            const alpha = cellOpacities.current.get(cellKey);
+            if (alpha) {
+              ctx.globalAlpha = alpha;
+              drawCircle(cx, cy, effectiveSquareSize);
+              ctx.fillStyle = hoverFillColor;
+              ctx.fill();
+              ctx.globalAlpha = 1;
+            }
+
+            drawCircle(cx, cy, effectiveSquareSize);
+            ctx.strokeStyle = borderColor;
+            ctx.stroke();
           }
         }
       } else {
-        // Slowly decay trail if mouse leaves
-        if (Math.random() < 0.1 && trailCells.current.length > 0) {
-          trailCells.current.pop();
+        const offsetX = ((gridOffset.current.x % effectiveSquareSize) + effectiveSquareSize) % effectiveSquareSize;
+        const offsetY = ((gridOffset.current.y % effectiveSquareSize) + effectiveSquareSize) % effectiveSquareSize;
+
+        const cols = Math.ceil(canvas.width / effectiveSquareSize) + 3;
+        const rows = Math.ceil(canvas.height / effectiveSquareSize) + 3;
+
+        for (let col = -2; col < cols; col++) {
+          for (let row = -2; row < rows; row++) {
+            const sx = col * effectiveSquareSize + offsetX;
+            const sy = row * effectiveSquareSize + offsetY;
+
+            const cellKey = `${col},${row}`;
+            const alpha = cellOpacities.current.get(cellKey);
+            if (alpha) {
+              ctx.globalAlpha = alpha;
+              ctx.fillStyle = hoverFillColor;
+              ctx.fillRect(sx, sy, effectiveSquareSize, effectiveSquareSize);
+              ctx.globalAlpha = 1;
+            }
+
+            ctx.strokeStyle = borderColor;
+            ctx.strokeRect(sx, sy, effectiveSquareSize, effectiveSquareSize);
+          }
         }
       }
 
-      // 3. Draw Grid
-      ctx.strokeStyle = borderColor;
-      ctx.lineWidth = 0.5;
+      const gradient = ctx.createRadialGradient(
+        canvas.width / 2,
+        canvas.height / 2,
+        0,
+        canvas.width / 2,
+        canvas.height / 2,
+        Math.sqrt(canvas.width ** 2 + canvas.height ** 2) / 2
+      );
+      gradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
 
-      for (let c = -1; c < cols; c++) {
-        for (let r = -1; r < rows; r++) {
-          const cx = c * squareSize + gridOffset.current.x + squareSize / 2;
-          const cy = r * squareSize + gridOffset.current.y + squareSize / 2;
-
-          const cellKey = `${c},${r}`;
-          const trailIdx = trailCells.current.indexOf(cellKey);
-          const isHovered = currentHoveredCell === cellKey;
-
-          // Fill color logic
-          if (isHovered) {
-            ctx.fillStyle = hoverFillColor;
-            ctx.beginPath();
-            if (shape === 'square') {
-              ctx.rect(cx - squareSize / 2, cy - squareSize / 2, squareSize, squareSize);
-            } else if (shape === 'hexagon') {
-              drawHex(cx, cy, squareSize / 2);
-            } else if (shape === 'circle') {
-              drawCircle(cx, cy, squareSize / 3);
-            } else if (shape === 'triangle') {
-              drawTriangle(cx, cy, squareSize / 2, (c + r) % 2 === 0);
-            }
-            ctx.fill();
-          } else if (trailIdx !== -1 && hoverTrailAmount > 0) {
-            const alpha = 1 - (trailIdx + 1) / (hoverTrailAmount + 1);
-            ctx.fillStyle = hoverFillColor.replace(/rgba?\(([^)]+)\)/, (match, parts) => {
-              const channels = parts.split(',');
-              channels[3] = ` ${(parseFloat(channels[3] || '1') * alpha).toFixed(3)}`;
-              return `rgba(${channels.join(',')})`;
-            });
-            ctx.beginPath();
-            if (shape === 'square') {
-              ctx.rect(cx - squareSize / 2, cy - squareSize / 2, squareSize, squareSize);
-            } else if (shape === 'hexagon') {
-              drawHex(cx, cy, squareSize / 2);
-            } else if (shape === 'circle') {
-              drawCircle(cx, cy, squareSize / 3);
-            } else if (shape === 'triangle') {
-              drawTriangle(cx, cy, squareSize / 2, (c + r) % 2 === 0);
-            }
-            ctx.fill();
-          }
-
-          // Draw outline
-          ctx.beginPath();
-          if (shape === 'square') {
-            ctx.rect(cx - squareSize / 2, cy - squareSize / 2, squareSize, squareSize);
-          } else if (shape === 'hexagon') {
-            drawHex(cx, cy, squareSize / 2);
-          } else if (shape === 'circle') {
-            drawCircle(cx, cy, squareSize / 3);
-          } else if (shape === 'triangle') {
-            drawTriangle(cx, cy, squareSize / 2, (c + r) % 2 === 0);
-          }
-          ctx.stroke();
-        }
-      }
-
-      requestRef.current = requestAnimationFrame(render);
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
     };
 
-    render();
+    const updateAnimation = () => {
+      const effectiveSpeed = Math.max(speed, 0.1);
+      const wrapX = isHex ? hexHoriz * 2 : effectiveSquareSize;
+      const wrapY = isHex ? hexVert : isTri ? effectiveSquareSize * 2 : effectiveSquareSize;
+
+      switch (direction) {
+        case 'right':
+          gridOffset.current.x = (gridOffset.current.x - effectiveSpeed + wrapX) % wrapX;
+          break;
+        case 'left':
+          gridOffset.current.x = (gridOffset.current.x + effectiveSpeed + wrapX) % wrapX;
+          break;
+        case 'up':
+          gridOffset.current.y = (gridOffset.current.y + effectiveSpeed + wrapY) % wrapY;
+          break;
+        case 'down':
+          gridOffset.current.y = (gridOffset.current.y - effectiveSpeed + wrapY) % wrapY;
+          break;
+        case 'diagonal':
+          gridOffset.current.x = (gridOffset.current.x - effectiveSpeed + wrapX) % wrapX;
+          gridOffset.current.y = (gridOffset.current.y - effectiveSpeed + wrapY) % wrapY;
+          break;
+        default:
+          break;
+      }
+
+      updateCellOpacities();
+      drawGrid();
+      requestRef.current = requestAnimationFrame(updateAnimation);
+    };
+
+    const updateCellOpacities = () => {
+      const targets = new Map();
+
+      if (hoveredSquare.current) {
+        targets.set(`${hoveredSquare.current.x},${hoveredSquare.current.y}`, 1);
+      }
+
+      if (hoverTrailAmount > 0) {
+        for (let i = 0; i < trailCells.current.length; i++) {
+          const t = trailCells.current[i];
+          const key = `${t.x},${t.y}`;
+          if (!targets.has(key)) {
+            targets.set(key, (trailCells.current.length - i) / (trailCells.current.length + 1));
+          }
+        }
+      }
+
+      for (const [key] of targets) {
+        if (!cellOpacities.current.has(key)) {
+          cellOpacities.current.set(key, 0);
+        }
+      }
+
+      for (const [key, opacity] of cellOpacities.current) {
+        const target = targets.get(key) || 0;
+        const next = opacity + (target - opacity) * 0.15;
+        if (next < 0.005) {
+          cellOpacities.current.delete(key);
+        } else {
+          cellOpacities.current.set(key, next);
+        }
+      }
+    };
+
+    const handleMouseMove = event => {
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = event.clientX - rect.left;
+      const mouseY = event.clientY - rect.top;
+
+      if (isHex) {
+        const colShift = Math.floor(gridOffset.current.x / hexHoriz);
+        const offsetX = ((gridOffset.current.x % hexHoriz) + hexHoriz) % hexHoriz;
+        const offsetY = ((gridOffset.current.y % hexVert) + hexVert) % hexVert;
+        const adjustedX = mouseX - offsetX;
+        const adjustedY = mouseY - offsetY;
+
+        const col = Math.round(adjustedX / hexHoriz);
+        const rowOffset = (col + colShift) % 2 !== 0 ? hexVert / 2 : 0;
+        const row = Math.round((adjustedY - rowOffset) / hexVert);
+
+        if (
+          !hoveredSquare.current ||
+          hoveredSquare.current.x !== col ||
+          hoveredSquare.current.y !== row
+        ) {
+          if (hoveredSquare.current && hoverTrailAmount > 0) {
+            trailCells.current.unshift({ ...hoveredSquare.current });
+            if (trailCells.current.length > hoverTrailAmount) trailCells.current.length = hoverTrailAmount;
+          }
+          hoveredSquare.current = { x: col, y: row };
+        }
+      } else if (isTri) {
+        const halfW = effectiveSquareSize / 2;
+        const colShift = Math.floor(gridOffset.current.x / halfW);
+        const rowShift = Math.floor(gridOffset.current.y / effectiveSquareSize);
+        const offsetX = ((gridOffset.current.x % halfW) + halfW) % halfW;
+        const offsetY = ((gridOffset.current.y % effectiveSquareSize) + effectiveSquareSize) % effectiveSquareSize;
+
+        const adjustedX = mouseX - offsetX;
+        const adjustedY = mouseY - offsetY;
+
+        const col = Math.round(adjustedX / halfW);
+        const row = Math.floor(adjustedY / effectiveSquareSize);
+
+        if (
+          !hoveredSquare.current ||
+          hoveredSquare.current.x !== col ||
+          hoveredSquare.current.y !== row
+        ) {
+          if (hoveredSquare.current && hoverTrailAmount > 0) {
+            trailCells.current.unshift({ ...hoveredSquare.current });
+            if (trailCells.current.length > hoverTrailAmount) trailCells.current.length = hoverTrailAmount;
+          }
+          hoveredSquare.current = { x: col, y: row };
+        }
+      } else if (shape === 'circle') {
+        const offsetX = ((gridOffset.current.x % effectiveSquareSize) + effectiveSquareSize) % effectiveSquareSize;
+        const offsetY = ((gridOffset.current.y % effectiveSquareSize) + effectiveSquareSize) % effectiveSquareSize;
+
+        const adjustedX = mouseX - offsetX;
+        const adjustedY = mouseY - offsetY;
+
+        const col = Math.round(adjustedX / effectiveSquareSize);
+        const row = Math.round(adjustedY / effectiveSquareSize);
+
+        if (
+          !hoveredSquare.current ||
+          hoveredSquare.current.x !== col ||
+          hoveredSquare.current.y !== row
+        ) {
+          if (hoveredSquare.current && hoverTrailAmount > 0) {
+            trailCells.current.unshift({ ...hoveredSquare.current });
+            if (trailCells.current.length > hoverTrailAmount) trailCells.current.length = hoverTrailAmount;
+          }
+          hoveredSquare.current = { x: col, y: row };
+        }
+      } else {
+        const offsetX = ((gridOffset.current.x % effectiveSquareSize) + effectiveSquareSize) % effectiveSquareSize;
+        const offsetY = ((gridOffset.current.y % effectiveSquareSize) + effectiveSquareSize) % effectiveSquareSize;
+
+        const adjustedX = mouseX - offsetX;
+        const adjustedY = mouseY - offsetY;
+
+        const col = Math.floor(adjustedX / effectiveSquareSize);
+        const row = Math.floor(adjustedY / effectiveSquareSize);
+
+        if (
+          !hoveredSquare.current ||
+          hoveredSquare.current.x !== col ||
+          hoveredSquare.current.y !== row
+        ) {
+          if (hoveredSquare.current && hoverTrailAmount > 0) {
+            trailCells.current.unshift({ ...hoveredSquare.current });
+            if (trailCells.current.length > hoverTrailAmount) trailCells.current.length = hoverTrailAmount;
+          }
+          hoveredSquare.current = { x: col, y: row };
+        }
+      }
+    };
+
+    const handleMouseLeave = () => {
+      if (hoveredSquare.current && hoverTrailAmount > 0) {
+        trailCells.current.unshift({ ...hoveredSquare.current });
+        if (trailCells.current.length > hoverTrailAmount) trailCells.current.length = hoverTrailAmount;
+      }
+      hoveredSquare.current = null;
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseleave', handleMouseLeave);
+
+    let isVisible = true;
+    let isPageVisible = !document.hidden;
+
+    const tryStart = () => {
+      if (isVisible && isPageVisible && !requestRef.current) {
+        requestRef.current = requestAnimationFrame(updateAnimation);
+      }
+    };
+    const tryStop = () => {
+      if (requestRef.current) {
+        cancelAnimationFrame(requestRef.current);
+        requestRef.current = null;
+      }
+    };
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        isVisible ? tryStart() : tryStop();
+      },
+      { threshold: 0 }
+    );
+    io.observe(canvas);
+
+    const onVisibility = () => {
+      isPageVisible = !document.hidden;
+      isPageVisible ? tryStart() : tryStop();
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+
+    tryStart();
 
     return () => {
       window.removeEventListener('resize', resizeCanvas);
-      canvas.removeEventListener('mousemove', handleMouseMove);
-      canvas.removeEventListener('mouseleave', handleMouseLeave);
-      if (requestRef.current) cancelAnimationFrame(requestRef.current);
+      tryStop();
+      io.disconnect();
+      document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseleave', handleMouseLeave);
     };
-  }, [direction, speed, borderColor, squareSize, hoverFillColor, shape, hoverTrailAmount]);
+  }, [direction, speed, borderColor, hoverFillColor, effectiveSquareSize, shape, hoverTrailAmount]);
 
-  return <canvas ref={canvasRef} className={`w-full h-full block ${className}`} />;
+  return <canvas ref={canvasRef} className={`shapegrid-canvas ${className}`}></canvas>;
 };
 
 export default ShapeGrid;

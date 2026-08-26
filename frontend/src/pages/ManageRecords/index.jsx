@@ -232,12 +232,15 @@ const ManageRecords = () => {
       </div>
 
       {/* Query Filters & Search Toolbar */}
-      <div className="mb-8 font-sans" style={{ marginBottom: "32px" }}>
+      <div 
+        className="bg-slate-900/85 border border-slate-700/60 rounded-md backdrop-blur-md shadow-xl mb-8 font-sans" 
+        style={{ padding: "20px 24px", marginBottom: "32px" }}
+      >
         <div 
-          className="flex items-center justify-between pb-3 mb-3"
-          style={{ paddingLeft: "8px", paddingRight: "8px" }}
+          className="flex items-center justify-between pb-3.5 mb-3.5 border-b border-slate-800/60"
+          style={{ paddingLeft: "4px", paddingRight: "4px" }}
         >
-          <div className="flex items-center gap-2.5 text-xs font-bold text-slate-200 uppercase tracking-widest font-mono">
+          <div className="flex items-center gap-2.5 text-xs font-bold text-white uppercase tracking-widest font-mono">
             <FaFilter className="text-blue-400 text-sm" />
             <span>Search & Filter FIR Records</span>
           </div>

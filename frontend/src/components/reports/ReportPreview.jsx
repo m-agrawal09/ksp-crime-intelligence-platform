@@ -4,8 +4,8 @@ import { FaFilePdf, FaFileExcel, FaShieldAlt } from "react-icons/fa";
 const ReportPreview = ({ reportData, onExport, onShare, onSchedule }) => {
   if (!reportData) {
     return (
-      <div className="bg-slate-900/40 border border-blue-500/30 rounded-xl p-20 shadow-lg text-center flex flex-col items-center justify-center gap-3 text-slate-500 font-space text-xs">
-        <FaShieldAlt className="text-3xl text-slate-700 animate-pulse" />
+      <div className="bg-slate-900/85 border border-slate-700/60 rounded-2xl backdrop-blur-md shadow-2xl p-20 text-center flex flex-col items-center justify-center gap-3 text-slate-400 font-space text-xs">
+        <FaShieldAlt className="text-3xl text-slate-600 animate-pulse" />
         <span>Awaiting parameter compilation. Click 'Preview Report' to generate.</span>
       </div>
     );
@@ -20,7 +20,7 @@ const ReportPreview = ({ reportData, onExport, onShare, onSchedule }) => {
       
       {/* 1. Confidential Document Sheet */}
       <div 
-        className="bg-slate-900/35 border border-blue-500/30 rounded-xl w-full shadow-2xl relative overflow-hidden font-space text-xs text-slate-300 leading-relaxed selection:bg-blue-500/20"
+        className="bg-slate-900/85 border border-slate-700/60 rounded-2xl backdrop-blur-md shadow-2xl w-full relative overflow-hidden font-space text-xs text-slate-300 leading-relaxed selection:bg-blue-500/20"
         style={{ padding: "40px 48px" }}
       >
         
@@ -216,7 +216,7 @@ const ReportPreview = ({ reportData, onExport, onShare, onSchedule }) => {
 
       {/* 2. Actions Strip */}
       <div 
-        className="bg-slate-900/40 border border-blue-500/30 rounded-xl flex flex-wrap gap-4 justify-center items-center w-full shadow-md"
+        className="bg-slate-900/85 border border-slate-700/60 rounded-2xl backdrop-blur-md shadow-2xl flex flex-wrap gap-4 justify-center items-center w-full"
         style={{ padding: "18px 24px" }}
       >
         <button

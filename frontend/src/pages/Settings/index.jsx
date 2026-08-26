@@ -489,7 +489,7 @@ const Settings = () => {
           {/* Card 1: Account Profile Details */}
           <div
             id="profile-details-section"
-            className={`flex flex-col justify-between bg-slate-900/60 rounded-2xl border border-slate-800 p-8 sm:p-10 lg:p-12 shadow-xl backdrop-blur-sm ${
+            className={`flex flex-col justify-between bg-slate-900/85 border border-slate-700/60 rounded-2xl backdrop-blur-md shadow-2xl p-8 sm:p-10 lg:p-12 ${
               isAdmin ? "lg:col-span-5" : "lg:col-span-7"
             }`}
           >
@@ -637,7 +637,7 @@ const Settings = () => {
           {/* Card 2: Manage Login Credentials */}
           <div
             id="login-credentials-section"
-            className={`flex flex-col justify-between bg-slate-900/60 rounded-2xl border border-slate-800 p-8 sm:p-10 lg:p-12 shadow-xl backdrop-blur-sm ${
+            className={`flex flex-col justify-between bg-slate-900/85 border border-slate-700/60 rounded-2xl backdrop-blur-md shadow-2xl p-8 sm:p-10 lg:p-12 ${
               isAdmin ? "lg:col-span-4" : "lg:col-span-5"
             }`}
           >
@@ -737,7 +737,7 @@ const Settings = () => {
         {isAdmin && (
           <div
             id="pin-config-section"
-            className="lg:col-span-3 flex flex-col justify-between bg-slate-900/60 rounded-2xl border border-slate-800 p-8 sm:p-10 lg:p-12 shadow-xl backdrop-blur-sm"
+            className="lg:col-span-3 flex flex-col justify-between bg-slate-900/85 border border-slate-700/60 rounded-2xl backdrop-blur-md shadow-2xl p-8 sm:p-10 lg:p-12"
           >
             <form onSubmit={handlePinUpdate} className="h-full flex flex-col justify-between px-3 sm:px-4">
               <div>
@@ -817,7 +817,7 @@ const Settings = () => {
 
       {/* 4. POLICE OFFICERS DIRECTORY & CREDENTIAL RESET (Reverted to Original font-space / font-inter / font-mono) */}
       {isAdmin && (
-        <div className="bg-slate-900/60 rounded-2xl border border-slate-800 p-8 sm:p-10 lg:p-12 space-y-7 shadow-xl backdrop-blur-sm z-10 relative font-inter">
+        <div className="bg-slate-900/85 border border-slate-700/60 rounded-2xl backdrop-blur-md shadow-2xl p-8 sm:p-10 lg:p-12 space-y-7 z-10 relative font-inter">
 
           {/* Header & Search Filter */}
           <div 

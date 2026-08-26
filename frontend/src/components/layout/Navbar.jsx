@@ -18,31 +18,34 @@ function Navbar({ onToggleMobileMenu }) {
   };
 
   return (
-    <header className="sticky top-0 z-50 flex h-20 items-center justify-between border-b border-slate-800 bg-slate-950/98 px-4 sm:px-8 font-inter shadow-sm shadow-black/20">
+    <header 
+      className="sticky top-0 z-50 flex h-20 items-center justify-between border-b border-slate-800 bg-slate-950/98 font-inter shadow-sm shadow-black/20"
+      style={{ paddingLeft: "36px", paddingRight: "36px" }}
+    >
 
       {/* Left Header Section */}
-      <div className="flex items-center gap-3 sm:gap-4">
+      <div className="flex items-center gap-4 sm:gap-6">
 
-        {/* Hamburger Menu Toggle for Mobile & Responsive */}
+        {/* Hamburger Menu Toggle for Mobile & Tablet (Hidden on Desktop) */}
         <button
           onClick={onToggleMobileMenu}
-          className="flex items-center justify-center h-10 w-10 sm:h-11 sm:w-11 rounded-xl border border-slate-700/70 bg-slate-900/90 hover:bg-slate-800/90 hover:border-blue-500/60 text-slate-200 hover:text-blue-400 transition-all duration-200 shadow-sm active:scale-95 cursor-pointer"
+          className="flex lg:hidden items-center justify-center h-10 w-10 sm:h-11 sm:w-11 rounded-xl border border-slate-700/70 bg-slate-900/90 hover:bg-slate-800/90 hover:border-blue-500/60 text-slate-200 hover:text-blue-400 transition-all duration-200 shadow-sm active:scale-95 cursor-pointer flex-shrink-0"
           title="Toggle Navigation Menu"
         >
           <HiBars3 className="text-xl sm:text-2xl" />
         </button>
 
-        <div className="flex items-center gap-2.5 sm:gap-4">
+        <div className="flex items-center gap-3 sm:gap-4 pl-2 sm:pl-3">
           <img
             src={kspLogo}
             alt="Karnataka State Police Emblem"
-            className="w-9 h-9 sm:w-12 sm:h-12 object-contain flex-shrink-0"
+            className="w-10 h-10 sm:w-12 sm:h-12 object-contain flex-shrink-0"
           />
           <div>
-            <h1 className="text-xs sm:text-lg font-bold tracking-wider text-white uppercase leading-tight mb-0.5 sm:mb-1.5 font-sans">
+            <h1 className="text-sm sm:text-lg font-bold tracking-wider text-white uppercase leading-tight mb-0.5 sm:mb-1.5 font-sans">
               Karnataka State Police
             </h1>
-            <p className="text-[8px] sm:text-[11px] uppercase tracking-[0.14em] sm:tracking-[0.18em] text-blue-400 font-sans leading-normal">
+            <p className="text-[9px] sm:text-[11px] uppercase tracking-[0.14em] sm:tracking-[0.18em] text-blue-400 font-sans leading-normal">
               AI Crime Intelligence Platform
             </p>
           </div>

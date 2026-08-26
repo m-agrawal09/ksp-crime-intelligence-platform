@@ -3,6 +3,7 @@ import { Outlet, useLocation, NavLink } from "react-router-dom";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 import FloatingChatWidget from "../assistant/FloatingChatWidget";
+import ShapeGrid from "../backgrounds/ShapeGrid";
 import { recordService } from "../../services/recordService";
 import { useAuth } from "../../context/AuthContext";
 
@@ -51,8 +52,23 @@ function Layout() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[var(--color-background)] text-[var(--color-text)] overflow-x-hidden">
-      <Navbar onToggleMobileMenu={() => setMobileMenuOpen((prev) => !prev)} />
+    <div className="min-h-screen bg-[var(--color-background)] text-[var(--color-text)] overflow-x-hidden relative">
+      {/* Dynamic Animated ShapeGrid Background (React Bits) */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-75">
+        <ShapeGrid 
+          speed={0.45}
+          squareSize={36}
+          size={36}
+          direction="diagonal"
+          borderColor="#2a0a62"
+          hoverFillColor="#222"
+          shape="square"
+          hoverTrailAmount={5}
+        />
+      </div>
+
+      <div className="relative z-10">
+        <Navbar onToggleMobileMenu={() => setMobileMenuOpen((prev) => !prev)} />
 
       {/* Mobile Navigation Drawer Overlay */}
       {mobileMenuOpen && (
@@ -145,6 +161,7 @@ function Layout() {
 
       {/* Floating AI Copilot Widget */}
       <FloatingChatWidget />
+      </div>
     </div>
   );
 }
