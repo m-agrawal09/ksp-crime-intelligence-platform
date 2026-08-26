@@ -106,23 +106,29 @@ const Login = () => {
         {/* Spacing spacer block to force noticeable vertical spacing in flex container */}
         <div className="h-14 sm:h-16 pointer-events-none" />
 
-        {/* Inner Authentication Card (max-w-[350px], bg-[#050a12]/90) */}
-        <div className="w-full max-w-[350px] rounded-[6px] border border-white/[0.08] bg-[#050a12]/90 shadow-xl p-7 space-y-6">
+        {/* Inner Authentication Card (Expanded & Spaced) */}
+        <div className="w-full max-w-[450px] rounded-xl border border-white/[0.08] bg-[#050a12]/92 shadow-2xl p-8 sm:p-9 space-y-6">
 
           {/* Card Command Header */}
-          <div className="flex flex-col space-y-1 mb-2 border-b border-slate-900/60 pb-3">
-            <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400">Identity Verification</h3>
+          <div className="flex flex-col space-y-1.5 border-b border-slate-800/80 pb-4">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300 font-mono">
+              Identity Verification
+            </h3>
+            <p className="text-[11px] text-slate-400 font-sans">
+              Select access role and enter authorized credentials
+            </p>
           </div>
 
           {/* Tab Selection */}
-          <div className="grid grid-cols-2 gap-1.5 p-1.5 rounded bg-slate-950/80 border border-slate-900/80 font-sans text-xs">
+          <div className="grid grid-cols-2 gap-2 p-1.5 rounded-lg bg-slate-950/90 border border-slate-800/80 font-sans text-xs">
             <button
               type="button"
               onClick={() => handleTabSwitch("admin")}
-              className={`h-11 rounded-[4px] flex items-center justify-center gap-2 font-bold uppercase transition-all duration-150 ${activeTab === "admin"
+              className={`h-11 rounded-md flex items-center justify-center gap-2 font-bold uppercase transition-all duration-150 cursor-pointer ${
+                activeTab === "admin"
                   ? "bg-[#2563eb] text-white shadow-md border border-[#60a5fa]/30"
-                  : "bg-[#050a12] text-slate-400 hover:text-slate-200 hover:bg-[#2563eb]/10 border border-transparent"
-                }`}
+                  : "bg-transparent text-slate-400 hover:text-slate-200 hover:bg-[#2563eb]/10 border border-transparent"
+              }`}
             >
               <FaUserShield className="text-sm" />
               <span>Admin Login</span>
@@ -131,10 +137,11 @@ const Login = () => {
             <button
               type="button"
               onClick={() => handleTabSwitch("officer")}
-              className={`h-11 rounded-[4px] flex items-center justify-center gap-2 font-bold uppercase transition-all duration-150 ${activeTab === "officer"
+              className={`h-11 rounded-md flex items-center justify-center gap-2 font-bold uppercase transition-all duration-150 cursor-pointer ${
+                activeTab === "officer"
                   ? "bg-[#2563eb] text-white shadow-md border border-[#60a5fa]/30"
-                  : "bg-[#050a12] text-slate-400 hover:text-slate-200 hover:bg-[#2563eb]/10 border border-transparent"
-                }`}
+                  : "bg-transparent text-slate-400 hover:text-slate-200 hover:bg-[#2563eb]/10 border border-transparent"
+              }`}
             >
               <FaUserCheck className="text-sm" />
               <span>Officer Login</span>
@@ -143,17 +150,17 @@ const Login = () => {
 
           {/* Error Alert */}
           {error && (
-            <div className="p-3 rounded-lg bg-rose-950/30 border border-rose-900/50 text-rose-300 text-xs font-sans flex items-start gap-2.5">
+            <div className="p-3.5 rounded-xl bg-rose-950/40 border border-rose-900/60 text-rose-300 text-xs font-sans flex items-start gap-2.5 animate-fade-in">
               <FaExclamationCircle className="text-sm flex-shrink-0 text-rose-400 mt-0.5" />
               <span>{error}</span>
             </div>
           )}
 
           {/* Login Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1.5">
-                {activeTab === "admin" ? "Admin ID / Username" : "Officer Username"}
+          <form onSubmit={handleSubmit} className="space-y-5 pt-1">
+            <div className="space-y-2">
+              <label className="block text-[11px] font-semibold text-slate-300 tracking-wide font-sans">
+                {activeTab === "admin" ? "Admin ID / Username" : "Officer Username"} <span className="text-blue-400">*</span>
               </label>
               <div className="relative">
                 <FaLock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm pointer-events-none" />
@@ -163,15 +170,15 @@ const Login = () => {
                   onChange={(e) => setUsername(e.target.value)}
                   placeholder={activeTab === "admin" ? "admin" : "e.g. ksp.ramesh"}
                   required
-                  className="w-full h-12 rounded-[4px] bg-slate-950/60 border border-blue-900/30 pr-4 py-0 text-xs text-white outline-none focus:border-[#60a5fa] focus:shadow-[0_0_10px_rgba(96,165,250,0.15)] focus:bg-slate-950 transition-all placeholder-slate-600"
+                  className="w-full h-12 rounded-lg bg-slate-950/80 border border-blue-900/40 pr-4 text-xs text-white outline-none focus:border-[#60a5fa] focus:ring-1 focus:ring-[#60a5fa]/30 focus:bg-slate-950 transition-all placeholder-slate-500 shadow-inner font-mono font-medium"
                   style={{ paddingLeft: "3.25rem" }}
                 />
               </div>
             </div>
 
-            <div>
-              <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1.5">
-                Password
+            <div className="space-y-2">
+              <label className="block text-[11px] font-semibold text-slate-300 tracking-wide font-sans">
+                Security Password <span className="text-blue-400">*</span>
               </label>
               <div className="relative">
                 <FaKey className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-sm pointer-events-none" />
@@ -181,7 +188,7 @@ const Login = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter password"
                   required
-                  className="w-full h-12 rounded-[4px] bg-slate-950/60 border border-blue-900/30 pr-4 py-0 text-xs text-white outline-none focus:border-[#60a5fa] focus:shadow-[0_0_10px_rgba(96,165,250,0.15)] focus:bg-slate-950 transition-all placeholder-slate-600"
+                  className="w-full h-12 rounded-lg bg-slate-950/80 border border-blue-900/40 pr-4 text-xs text-white outline-none focus:border-[#60a5fa] focus:ring-1 focus:ring-[#60a5fa]/30 focus:bg-slate-950 transition-all placeholder-slate-500 shadow-inner font-mono font-medium"
                   style={{ paddingLeft: "3.25rem" }}
                 />
               </div>
@@ -190,33 +197,33 @@ const Login = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full h-12 rounded-[4px] font-bold uppercase tracking-wider text-white transition-all duration-200 bg-[#2563eb] hover:bg-blue-600 active:scale-[0.98] border border-blue-500/30 shadow-[0_0_20px_rgba(37,99,235,0.15)] hover:shadow-[0_0_25px_rgba(37,99,235,0.25)] hover:-translate-y-[1px] disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full h-12 rounded-lg font-bold uppercase tracking-wider text-white text-xs transition-all duration-200 bg-[#2563eb] hover:bg-blue-600 active:scale-[0.98] border border-blue-500/40 shadow-[0_0_20px_rgba(37,99,235,0.25)] hover:shadow-[0_0_25px_rgba(37,99,235,0.35)] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed mt-2"
             >
               {isSubmitting ? "Authenticating..." : `Sign In as ${activeTab === "admin" ? "Administrator" : "Police Officer"}`}
             </button>
           </form>
 
           {/* Demo Helper / Credential Section */}
-          <div className="rounded-[4px] border border-white/[0.08] bg-[#050a12]/90 p-4 text-[10px] space-y-2">
-            <div className="flex items-center justify-between text-slate-500 font-bold border-b border-white/[0.05] pb-2 tracking-widest uppercase">
+          <div className="rounded-lg border border-slate-800/80 bg-slate-950/80 p-4 text-[11px] space-y-2.5 font-mono shadow-inner">
+            <div className="flex items-center justify-between text-slate-400 font-bold border-b border-slate-800/60 pb-2 tracking-wider uppercase text-[10px]">
               <span>Command Access Credentials</span>
-              <span className="text-[#60a5fa] font-extrabold font-mono">PIN: 1122</span>
+              <span className="text-[#60a5fa] font-extrabold">PIN: 1122</span>
             </div>
 
-            <div className="space-y-1.5 pt-1">
-              <div className="flex justify-between items-center text-slate-400">
-                <span className="font-semibold text-blue-500/80">🛡️ Admin Role:</span>
-                <span className="font-mono"><code className="text-slate-300">admin</code> / <code className="text-slate-300">admin</code></span>
+            <div className="space-y-2 pt-1 text-xs">
+              <div className="flex justify-between items-center text-slate-300">
+                <span className="font-semibold text-blue-400 font-sans">🛡️ Admin Role:</span>
+                <span><code className="text-white bg-slate-900 px-1.5 py-0.5 rounded border border-slate-800">admin</code> / <code className="text-white bg-slate-900 px-1.5 py-0.5 rounded border border-slate-800">admin</code></span>
               </div>
-              <div className="flex justify-between items-center text-slate-400">
-                <span className="font-semibold text-blue-500/80">👮 Officer Role:</span>
-                <span className="font-mono"><code className="text-slate-300">ksp.ramesh</code> / <code className="text-slate-300">Officer@123</code></span>
+              <div className="flex justify-between items-center text-slate-300">
+                <span className="font-semibold text-blue-400 font-sans">👮 Officer Role:</span>
+                <span><code className="text-white bg-slate-900 px-1.5 py-0.5 rounded border border-slate-800">ksp.ramesh</code> / <code className="text-white bg-slate-900 px-1.5 py-0.5 rounded border border-slate-800">Officer@123</code></span>
               </div>
             </div>
           </div>
 
           {/* Footer info */}
-          <div className="text-center font-sans text-[10px] text-slate-600 pt-1">
+          <div className="text-center font-sans text-[10.5px] text-slate-500 pt-2 border-t border-slate-800/50">
             Karnataka State Police CCTNS Portal • Encrypted Gateway v4.2
           </div>
 
