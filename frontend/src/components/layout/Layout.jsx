@@ -56,11 +56,11 @@ function Layout() {
       {/* Dynamic Animated ShapeGrid Background (React Bits) */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-75">
         <ShapeGrid 
-          speed={0.45}
+          speed={0.18}
           squareSize={36}
           size={36}
           direction="diagonal"
-          borderColor="#2a0a62"
+          borderColor="#1c0c3b"
           hoverFillColor="#222"
           shape="square"
           hoverTrailAmount={5}

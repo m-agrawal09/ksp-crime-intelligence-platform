@@ -3,8 +3,8 @@ import './ShapeGrid.css';
 
 const ShapeGrid = ({
   direction = 'diagonal',
-  speed = 0.45,
-  borderColor = '#2a0a62',
+  speed = 0.18,
+  borderColor = '#1c0c3b',
   squareSize,
   size = 36,
   hoverFillColor = '#222',
