@@ -35,6 +35,7 @@ const PANEL_ZOOM = 6.5;
 const createClusterIcon = (districtName, count) => {
   const isCritical = count > 15;
   const isHigh = count > 6;
+  const isMedium = count > 2;
 
   let outerSize, innerSize, bg, borderColor, textColor, outerBg, innerShadow, pulseClass;
 
@@ -54,13 +55,21 @@ const createClusterIcon = (districtName, count) => {
     outerBg = "rgba(245,158,11,0.12)";
     innerShadow = "0 2px 8px rgba(245,158,11,0.25), 0 1px 4px rgba(0,0,0,0.7), inset 0 0.5px 0 rgba(255,255,255,0.05)";
     pulseClass = "";
-  } else {
+  } else if (isMedium) {
     outerSize = 34; innerSize = 24;
     bg = "rgba(23,52,130,0.92)";
     borderColor = "rgba(59,130,246,0.45)";
     textColor = "#93c5fd";
     outerBg = "rgba(59,130,246,0.1)";
     innerShadow = "0 2px 6px rgba(59,130,246,0.2), 0 1px 4px rgba(0,0,0,0.7), inset 0 0.5px 0 rgba(255,255,255,0.05)";
+    pulseClass = "";
+  } else {
+    outerSize = 28; innerSize = 20;
+    bg = "rgba(30,41,59,0.92)";
+    borderColor = "rgba(100,116,139,0.45)";
+    textColor = "#cbd5e1";
+    outerBg = "rgba(100,116,139,0.1)";
+    innerShadow = "0 2px 5px rgba(100,116,139,0.2), 0 1px 3px rgba(0,0,0,0.7), inset 0 0.5px 0 rgba(255,255,255,0.05)";
     pulseClass = "";
   }
 
@@ -387,8 +396,9 @@ const KarnatakaOverviewPanel = () => {
         const topCategory = Object.entries(categories).sort((a,b) => b[1] - a[1])[0]?.[0] || "Property Offences";
         const isCritical = data.count > 15;
         const isHigh = data.count > 6;
-        const riskLabel = isCritical ? "CRITICAL" : isHigh ? "HIGH" : "MEDIUM";
-        const riskColor = isCritical ? "#ef4444" : isHigh ? "#f59e0b" : "#3b82f6";
+        const isMedium = data.count > 2;
+        const riskLabel = isCritical ? "CRITICAL" : isHigh ? "HIGH" : isMedium ? "MEDIUM" : "LOW";
+        const riskColor = isCritical ? "#ef4444" : isHigh ? "#f59e0b" : isMedium ? "#3b82f6" : "#94a3b8";
 
         const tooltipHTML = `
           <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;padding:6px 8px;background:rgba(2,6,23,0.96);border:1px solid rgba(51,65,85,0.8);border-radius:4px;color:#f8fafc;min-width:150px;box-shadow:0 10px 25px rgba(0,0,0,0.5);">

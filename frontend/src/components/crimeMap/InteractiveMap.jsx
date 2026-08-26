@@ -62,10 +62,60 @@ const createCustomMarker = (incident) => {
   });
 };
 
-// Premium cluster icon — crimson red circular badge with radial aura
+// Premium cluster icon — styled by severity/activity level (CRITICAL > 15, HIGH > 6, MEDIUM > 2, LOW <= 2)
 const createClusterIcon = (districtName, count) => {
-  const outerSize = 52;
-  const innerSize = 36;
+  const isCritical = count > 15;
+  const isHigh = count > 6;
+  const isMedium = count > 2;
+
+  let outerSize, innerSize, outerBg, innerBg, borderColor, abbrColor, shadow, pulseClass, numFontSize, abbrFontSize;
+
+  if (isCritical) {
+    outerSize = 52;
+    innerSize = 36;
+    outerBg = "rgba(239,68,68,0.28)";
+    innerBg = "rgba(185,28,28,0.92)";
+    borderColor = "rgba(254,202,202,0.75)";
+    abbrColor = "#fca5a5";
+    shadow = "0 4px 20px rgba(239,68,68,0.4), 0 2px 8px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.2)";
+    pulseClass = "situation-pulse";
+    numFontSize = "12px";
+    abbrFontSize = "6.5px";
+  } else if (isHigh) {
+    outerSize = 46;
+    innerSize = 32;
+    outerBg = "rgba(245,158,11,0.25)";
+    innerBg = "rgba(180,83,9,0.92)";
+    borderColor = "rgba(253,230,138,0.75)";
+    abbrColor = "#fde68a";
+    shadow = "0 4px 16px rgba(245,158,11,0.35), 0 2px 8px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.2)";
+    pulseClass = "";
+    numFontSize = "11px";
+    abbrFontSize = "6px";
+  } else if (isMedium) {
+    outerSize = 40;
+    innerSize = 28;
+    outerBg = "rgba(59,130,246,0.25)";
+    innerBg = "rgba(29,78,216,0.92)";
+    borderColor = "rgba(191,219,254,0.75)";
+    abbrColor = "#bfdbfe";
+    shadow = "0 4px 14px rgba(59,130,246,0.35), 0 2px 8px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.2)";
+    pulseClass = "";
+    numFontSize = "10.5px";
+    abbrFontSize = "5.5px";
+  } else {
+    // LOW (e.g. 1-2 cases)
+    outerSize = 34;
+    innerSize = 24;
+    outerBg = "rgba(100,116,139,0.22)";
+    innerBg = "rgba(51,65,85,0.92)";
+    borderColor = "rgba(203,213,225,0.65)";
+    abbrColor = "#cbd5e1";
+    shadow = "0 4px 12px rgba(100,116,139,0.25), 0 2px 6px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.15)";
+    pulseClass = "";
+    numFontSize = "10px";
+    abbrFontSize = "5px";
+  }
 
   const abbrMap = {
     "Bengaluru City": "BEN",
@@ -81,13 +131,16 @@ const createClusterIcon = (districtName, count) => {
     "Chikkamagaluru": "CHI",
     "Bidar": "BID",
     "Mandya": "MAN",
-    "Ballari": "BAL"
+    "Ballari": "BAL",
+    "Dakshina Kannada": "DAK",
+    "Hassan": "HAS",
+    "Uttara Kannada": "UTT"
   };
 
   const abbr = abbrMap[districtName] || districtName.slice(0, 3).toUpperCase();
 
   return L.divIcon({
-    className: "custom-cluster-icon situation-pulse",
+    className: `custom-cluster-icon ${pulseClass}`.trim(),
     html: `
       <div style="
         position:relative;
@@ -96,18 +149,18 @@ const createClusterIcon = (districtName, count) => {
         justify-content:center;
         width:${outerSize}px;height:${outerSize}px;
         border-radius:50%;
-        background:rgba(239,68,68,0.28);
+        background:${outerBg};
       ">
         <div style="
           display:flex;flex-direction:column;align-items:center;justify-content:center;
           width:${innerSize}px;height:${innerSize}px;
           border-radius:50%;
-          background:rgba(185,28,28,0.92);
-          border:1.5px solid rgba(254,202,202,0.7);
-          box-shadow:0 4px 20px rgba(239,68,68,0.4), 0 2px 8px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.2);
+          background:${innerBg};
+          border:1.5px solid ${borderColor};
+          box-shadow:${shadow};
         ">
-          <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:800;color:#ffffff;line-height:1;letter-spacing:-0.02em;">${count}</span>
-          <span style="font-family:'IBM Plex Mono',monospace;font-size:6.5px;font-weight:700;text-transform:uppercase;color:#fca5a5;letter-spacing:0.08em;margin-top:1.5px;">${abbr}</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:${numFontSize};font-weight:800;color:#ffffff;line-height:1;letter-spacing:-0.02em;">${count}</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:${abbrFontSize};font-weight:700;text-transform:uppercase;color:${abbrColor};letter-spacing:0.08em;margin-top:1.5px;">${abbr}</span>
         </div>
       </div>
     `,
@@ -467,8 +520,9 @@ const InteractiveMap = ({ incidents, selectedItem, onSelectDistrict, onSelectMar
               const topCategory = Object.entries(categories).sort((a,b) => b[1] - a[1])[0]?.[0] || "Property Offences";
               const isCritical = cluster.count > 15;
               const isHigh = cluster.count > 6;
-              const riskLabel = isCritical ? "CRITICAL" : isHigh ? "HIGH" : "MEDIUM";
-              const riskColor = isCritical ? "#ef4444" : isHigh ? "#f59e0b" : "#3b82f6";
+              const isMedium = cluster.count > 2;
+              const riskLabel = isCritical ? "CRITICAL" : isHigh ? "HIGH" : isMedium ? "MEDIUM" : "LOW";
+              const riskColor = isCritical ? "#ef4444" : isHigh ? "#f59e0b" : isMedium ? "#3b82f6" : "#94a3b8";
               const criticalInDistrict = districtIncs.filter(i => i.severity === "CRITICAL").length;
 
               return (
