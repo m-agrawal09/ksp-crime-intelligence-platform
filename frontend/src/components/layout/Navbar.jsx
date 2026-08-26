@@ -19,8 +19,7 @@ function Navbar({ onToggleMobileMenu }) {
 
   return (
     <header 
-      className="sticky top-0 z-50 flex h-20 items-center justify-between border-b border-slate-800 bg-slate-950/98 font-inter shadow-sm shadow-black/20"
-      style={{ paddingLeft: "36px", paddingRight: "36px" }}
+      className="sticky top-0 z-50 flex h-20 items-center justify-between border-b border-slate-800 bg-slate-950/98 font-inter shadow-sm shadow-black/20 px-4 sm:px-6 md:px-8"
     >
 
       {/* Left Header Section */}
