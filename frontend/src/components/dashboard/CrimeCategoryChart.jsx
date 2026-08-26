@@ -80,6 +80,7 @@ const CrimeCategoryChart = ({ data, className = "" }) => {
   return (
     <ChartCard
       title="Crime Category Distribution"
+      centerTitle={true}
       className={`h-full flex flex-col ${className}`}
     >
       <div className="flex flex-col gap-6 flex-1 justify-between pt-2">

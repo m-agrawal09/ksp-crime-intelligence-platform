@@ -29,6 +29,48 @@
 }
 
 /* ====================================================
+   Layout Workspace Framing & Side Margins
+   ==================================================== */
+.main-workspace-layout {
+  flex: 1 1 0%;
+  height: calc(100vh - 80px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 24px 20px 60px 20px !important;
+}
+
+@media (min-width: 768px) {
+  .main-workspace-layout {
+    padding: 28px 28px 70px 28px !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .main-workspace-layout {
+    padding: 30px 36px 80px 36px !important;
+  }
+}
+
+@media (min-width: 1600px) {
+  .main-workspace-layout {
+    padding: 32px 48px 80px 48px !important;
+  }
+}
+
+.main-content-boundary {
+  width: 100%;
+  max-width: 1320px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  z-index: 10;
+}
+
+/* ====================================================
    Custom Overrides for Dark-themed Leaflet Popups
    ==================================================== */
 .dark-popup .leaflet-popup-content-wrapper {

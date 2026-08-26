@@ -149,7 +149,7 @@ const NotificationDropdown = () => {
       {/* Panel */}
       {isOpen && (
         <div
-          className="absolute right-0 top-full mt-3 z-50 flex flex-col"
+          className="notification-dropdown-panel absolute right-0 top-full mt-3 z-50 flex flex-col"
           style={{
             width: "420px",
             background: "linear-gradient(180deg, #0a1628 0%, #060d1a 100%)",

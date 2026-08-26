@@ -136,8 +136,8 @@ function Layout() {
         <Sidebar />
 
         {/* Dynamic Main Workspace Container */}
-        <main className="flex-grow h-[calc(100vh-80px)] overflow-y-auto pt-6 sm:pt-8 md:pt-10 pl-8 sm:pl-10 md:pl-12 lg:pl-16 pr-6 sm:pr-8 md:pr-10 pb-12 flex justify-center bg-blueprint relative w-full min-w-0">
-          <div className="w-full max-w-[1320px] relative z-10">
+        <main className="main-workspace-layout bg-blueprint">
+          <div className="main-content-boundary">
             <Outlet />
           </div>
         </main>

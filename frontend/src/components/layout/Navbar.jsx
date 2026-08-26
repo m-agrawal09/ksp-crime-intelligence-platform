@@ -1,13 +1,15 @@
 import { Link, useNavigate } from "react-router-dom";
 import { HiBars3 } from "react-icons/hi2";
-import { FiSettings } from "react-icons/fi";
+import { FiSettings, FiSun, FiMoon } from "react-icons/fi";
 import { FaUserShield, FaUserCheck, FaSignOutAlt } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
+import { useTheme } from "../../context/ThemeContext";
 import NotificationDropdown from "./NotificationDropdown";
 import kspLogo from "../../assets/images/ksp-emblem.png";
 
 function Navbar({ onToggleMobileMenu }) {
   const { currentUser, isAdmin, logout } = useAuth();
+  const { theme, toggleTheme, isDark } = useTheme();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -65,6 +67,20 @@ function Navbar({ onToggleMobileMenu }) {
             </div>
           </div>
         )}
+
+        {/* Theme Toggle Button (Light/Dark mode) */}
+        <button
+          onClick={toggleTheme}
+          aria-label={isDark ? "Switch to Light Theme" : "Switch to Dark Theme"}
+          title={isDark ? "Switch to Light Theme" : "Switch to Dark Theme"}
+          className="flex items-center justify-center h-10 w-10 sm:h-11 sm:w-11 rounded-xl border border-slate-700/70 bg-slate-900/90 hover:border-amber-400/60 hover:bg-slate-800/90 text-amber-400 hover:text-amber-300 transition-all duration-200 shadow-sm active:scale-95 cursor-pointer group"
+        >
+          {isDark ? (
+            <FiSun className="text-lg sm:text-xl transition-transform duration-300 group-hover:rotate-45" />
+          ) : (
+            <FiMoon className="text-lg sm:text-xl text-indigo-500 hover:text-indigo-600 transition-transform duration-300 group-hover:-rotate-12" />
+          )}
+        </button>
 
         {/* Interactive Notification Bell Dropdown */}
         <NotificationDropdown />
