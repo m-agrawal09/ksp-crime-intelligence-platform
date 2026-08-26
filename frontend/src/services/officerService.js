@@ -218,20 +218,24 @@ export const officerService = {
     const liveStats = recordService.getOfficerAnalytics(updatedName);
 
     return {
-      categoryDistribution: [
-        { name: "Property Offences", value: 12, color: "#3b82f6" },
-        { name: "Cyber Crimes", value: 8, color: "#a855f7" },
-        { name: "Financial Fraud", value: 4, color: "#f59e0b" }
-      ],
-      monthlyTrend: [
-        { month: "Jan", assigned: 4, resolved: 3 },
-        { month: "Feb", assigned: 5, resolved: 4 },
-        { month: "Mar", assigned: 3, resolved: 4 },
-        { month: "Apr", assigned: 6, resolved: 5 },
-        { month: "May", assigned: 4, resolved: 4 },
-        { month: "Jun", assigned: 5, resolved: 4 }
-      ],
       ...base,
+      categoryDistribution: liveStats.categoryDistribution && liveStats.categoryDistribution.length > 0 
+        ? liveStats.categoryDistribution 
+        : (base.categoryDistribution || [
+            { name: "Property Offences", value: 12, color: "#3b82f6" },
+            { name: "Cyber Crimes", value: 8, color: "#a855f7" },
+            { name: "Financial Fraud", value: 4, color: "#f59e0b" }
+          ]),
+      monthlyTrend: liveStats.monthlyTrend && liveStats.monthlyTrend.length > 0
+        ? liveStats.monthlyTrend
+        : (base.monthlyTrend || [
+            { month: "Jan", assigned: 4, resolved: 3 },
+            { month: "Feb", assigned: 5, resolved: 4 },
+            { month: "Mar", assigned: 3, resolved: 4 },
+            { month: "Apr", assigned: 6, resolved: 5 },
+            { month: "May", assigned: 4, resolved: 4 },
+            { month: "Jun", assigned: 5, resolved: 4 }
+          ]),
       name: updatedName,
       unit: updatedUnit,
       rank: updatedRank,
@@ -246,6 +250,7 @@ export const officerService = {
       },
       workload: {
         ...base.workload,
+        dockets: liveStats.dockets || base.workload.dockets || [],
         highPriority: liveStats.highPriority.length > 0 ? liveStats.highPriority : base.workload.highPriority,
         pending: liveStats.pending.length > 0 ? liveStats.pending : base.workload.pending,
         recent: liveStats.recent.length > 0 ? liveStats.recent : base.workload.recent
