@@ -247,9 +247,9 @@ cp .env.example .env
 Review or configure your credentials in `.env`:
 ```env
 PORT=3000
-QUICKML_ENDPOINT=https://api.catalyst.zoho.in/quickml/v1/project/56116000000017001/glm/chat
-QUICKML_ACCESS_TOKEN=1000.0e26964d6e4af7a82438935cde1f3d98.77d250c9050d46c136223b403c654026
-CATALYST_ORG_ID=60077759815
+QUICKML_ENDPOINT=https://api.catalyst.zoho.in/quickml/v1/project/<PROJECT_ID>/glm/chat
+QUICKML_ACCESS_TOKEN=<YOUR_QUICKML_ACCESS_TOKEN>
+CATALYST_ORG_ID=<YOUR_CATALYST_ORG_ID>
 ```
 
 ### 4. Run the Application
@@ -287,7 +287,7 @@ catalyst login
 cd frontend && npm run build && cd ..
 
 # 3. Associate with your Catalyst project ID
-catalyst project:use 56116000000017001
+catalyst project:use <YOUR_PROJECT_ID>
 
 # 4. Deploy full serverless stack (Functions + Web Client + Data Store)
 catalyst deploy
